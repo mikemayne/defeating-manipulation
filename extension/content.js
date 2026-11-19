@@ -44,12 +44,13 @@
  function textBoundary(previous, current) {
    if (!previous) return "";
    const a = previous.node, b = current.node;
-   if (a.parentElement.closest("br") || b.parentElement.closest("br")) return "\n";
-   const first = blockAncestor(a), second = blockAncestor(b);
-   // Inline elements such as strong/em/span belong to the same sentence.
-   if (first === second) return "";
-   // Separate paragraphs/list items/headings so the matcher sees sentence boundaries.
-   return "\n";
+   if (blockAncestor(a) !== blockAncestor(b)) return "\n";
+   // <br> has no text children, so checking the text nodes' ancestors
+   // misses explicit line breaks within a paragraph.
+   const between = document.createRange();
+   between.setStartAfter(a);
+   between.setEndBefore(b);
+   return between.cloneContents().querySelector("br") ? "\n" : "";
  }
  function selectionSnapshot() {
    const selection = window.getSelection();

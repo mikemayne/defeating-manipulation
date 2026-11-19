@@ -70,4 +70,31 @@ for (const rule of extensionPatterns.patterns) {
   for (const expression of rule.expressions) assert.doesNotThrow(() => new RegExp(expression, 'i'), 'Pattern compiles for ' + rule.id);
 }
 
-console.log('Build and fallacy pattern tests passed.');
+// The extension sees selected DOM text with line and paragraph separators.
+// A complete argument must still be considered one candidate for matching.
+const { windows } = await import('../extension/src/text-windows.mjs');
+const multilineCases = [
+ ['bandwagon', 'Everyone believes this,\nso it must be true.'],
+ ['bandwagon', 'Everyone believes this.\nSo it must be true.'],
+ ['ad_hominem', "Your argument is wrong because\nyou're an idiot."],
+ ['false_dilemma', "You're either with us\nor against us."],
+ ['straw_man', "You want less homework,\nso you clearly don't care about education."],
+ ['slippery_slope', 'If we allow phones in class,\nsoon nobody will pay attention,\nand schools will completely fail.']
+];
+for (const [id, example] of multilineCases) {
+ const candidates = windows(example);
+ assert.ok(candidates.some(part => ruleMap.get(id).some(regex => regex.test(part.text))),
+  'Multiline selection preserves ' + id + ' match: ' + JSON.stringify(example));
+ for (const part of candidates) {
+  assert.ok(part.start >= 0 && part.end <= example.length && part.end > part.start,
+   'Highlight coordinates remain within the original selected text');
+  assert.equal(example.slice(part.start, part.end).replace(/\s+/g, ' '), part.contextual
+   ? example.slice(part.start, part.end).replace(/\s+/g, ' ')
+   : part.text, 'Source offsets must survive normalisation');
+ }
+}
+assert.equal(windows('Heading\nA short note\nThis is another line.')[0].text,
+ 'Heading A short note This is another line.',
+ 'Line breaks are whitespace within a continuous statement');
+
+console.log('Build, fallacy and multiline matching tests passed.');
