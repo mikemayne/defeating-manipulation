@@ -764,6 +764,59 @@
       "references": [
         "da2020"
       ]
+    },
+    {
+      "id": "exaggeration_minimisation",
+      "title": "Exaggeration and minimisation",
+      "category": "Framing",
+      "summary": "Representing an event, risk, result or piece of evidence as substantially larger or smaller than the information supports.",
+      "tags": [
+        "overstatement",
+        "understatement",
+        "scale",
+        "proportionality"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text amplifies or downplays the scale, severity, certainty or importance of something. This may happen through evaluative wording, selective comparisons, numerical presentation or omission of relevant context.",
+      "observable_features": [
+        "Describing a limited event as widespread or unprecedented without supporting figures.",
+        "Using extreme terms such as 'catastrophic', 'total', 'massive' or 'insignificant' where the evidence is more limited.",
+        "Presenting a small number as trivial without a meaningful comparison or denominator.",
+        "Comparisons use different time periods, populations or measures.",
+        "The headline gives a more extreme impression than the figures or article body."
+      ],
+      "example": "The headline says 'Crime explodes' while the article reports a small increase from an unusually low baseline.",
+      "reader_effect": "Can distort readers' perception of scale, risk or importance and make a conclusion feel stronger or weaker than the evidence supports.",
+      "references": [
+        "da2020",
+        "mm2023",
+        "tymbay2022"
+      ]
+    },
+    {
+      "id": "criminalising_dissent",
+      "title": "Criminalising dissent",
+      "category": "Framing",
+      "summary": "Framing disagreement, protest or criticism as criminal or inherently dangerous without establishing that the conduct meets the relevant description.",
+      "tags": [
+        "criminalisation",
+        "labelling",
+        "law and order framing"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text uses criminal labels or law-and-order language to associate a viewpoint or group with illegality, sometimes blurring the distinction between lawful dissent, alleged offences and proven criminal conduct.",
+      "observable_features": [
+        "Protesters or critics are collectively described as criminals without individualised evidence.",
+        "Lawful protest is conflated with violence or property damage.",
+        "An allegation or investigation is described as proof of criminality.",
+        "The article uses criminal labels before explaining the conduct or legal status."
+      ],
+      "example": "The phrase 'the protest movement's criminal agenda' is used to describe a lawful demonstration without identifying a relevant offence.",
+      "reader_effect": "Can make readers view a position as illegitimate or threatening without examining what participants actually did.",
+      "references": [
+        "da2020",
+        "tymbay2022"
+      ]
     }
   ]
 }
