@@ -1,0 +1,23 @@
+# Technique title
+
+**Category:**
+
+## What it is
+Define the technique in terms of observable language, structure or presentation.
+
+## How it works
+Explain the possible influence on interpretation without claiming that every reader will respond the same way.
+
+## What to look for
+- Observable feature.
+- Observable feature.
+- Observable feature.
+
+## Example
+Use a short fictional example. Label it as illustrative.
+
+## What it does not establish
+Explain what cannot be concluded from identifying this technique. Include relevant alternative explanations and legitimate uses.
+
+## References
+List sources that have been checked. Explain which part of the definition each source supports.
