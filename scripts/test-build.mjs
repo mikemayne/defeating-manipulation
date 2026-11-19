@@ -208,6 +208,22 @@ for (let i = 0; i < 800; i++) {
  assert.ok(testCase.expected.every(id => extensionCatalogue.techniques.some(t => t.id === id)),
   'Generated cases keep valid expected technique labels');
 }
+// Reported first-run failures: all seven involved two techniques in one
+// selected passage. Validate the same generated dataset and deterministic seed.
+const overlapFailures = [];
+for (let i = 0; i < 1000; i++) {
+ const testCase = generatedCase(testSeeds, i, 2026);
+ const matches = await matchingCore.matchText(testCase.text,
+  { techniques: extensionCatalogue.techniques, rules: compiled });
+ const predicted = [...new Set(matches.map(item => item.technique.id))].sort();
+ const expected = [...new Set(testCase.expected)].sort();
+ if (JSON.stringify(predicted) !== JSON.stringify(expected)) {
+  overlapFailures.push({ index: i, expected, predicted });
+ }
+}
+assert.deepEqual(overlapFailures, [],
+ 'The reproducible 1,000-case mixed-technique regression must pass');
+
 for (const script of [
  'extension/src/benchmark-worker.js',
  'extension/src/benchmark-ui.mjs',
