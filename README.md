@@ -37,6 +37,10 @@ A finding should show:
 
 The catalogue is an aid to recognition, not an invitation to endless analysis. Once the technique is recognised and the content has been reported where appropriate, move on.
 
+Each detailed catalogue entry can include a definition, observable textual features, an illustrative example, the effect the pattern can have on a reader, and supporting references. The generated explainer pages are built directly from `techniques.json`, so the machine-readable catalogue and public explanations stay aligned.
+
+The initial expansion also maps relevant patterns from the companion `surviving-a-psyop` guide to their online-language equivalents. Interpersonal, physical, technical and multi-event patterns are recorded separately where they cannot be identified from a single article's text. See [`docs/source-pattern-mapping.md`](docs/source-pattern-mapping.md) for the mapping and exclusions.
+
 ## Planned structure
 
 - `index.html` — project homepage and searchable technique catalogue.
