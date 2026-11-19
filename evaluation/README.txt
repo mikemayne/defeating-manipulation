@@ -58,3 +58,51 @@ The runner's `--semantic` option uses the real model. By contrast the standard
 `--strict` run checks rule behaviour without the model; neither test needs the
 Firefox browser UI. Exact selected-text highlighting and DOM extraction still
 need a few manual in-browser smoke checks after significant UI changes.
+
+## Local graphical benchmark
+
+The optional Matcher Test Lab webpage uses the **exact matching-core JavaScript
+module** imported by the Firefox extension. It runs the matcher in a separate
+Web Worker and does not send test text or results to an online service.
+
+On a machine with Node.js installed:
+
+    cd extension
+    npm install
+    npm run benchmark:dev
+
+Open http://127.0.0.1:4173/extension/benchmark.html in Firefox. Leave the
+terminal running while you use the lab. Ctrl+C stops the local server.
+The single command builds both the extension worker and the benchmark worker,
+then serves only the necessary files on loopback. There is no need to reload
+the Firefox extension for each test.
+
+Choose *Rules only* for quick bulk regression testing, or *Rules + local AI*
+to exercise the same quantised MiniLM model used by the extension. The latter
+downloads model weights on its first run and caches them in the browser. The
+browser needs sufficient local memory and processing time for the test size.
+
+By default the page lazily generates cases from 51 manually labelled fictional
+seed statements; it allows up to 1,000,000 generated cases, without holding
+them all in memory. The user interface displays a progress counter, then only
+aggregate accuracy statistics, a table of common classification mistakes, and
+a **Copy failure details** button. For large runs the clipboard report includes
+every confusion count and the first 500 complete failures (not every failure).
+You can stop a run and inspect partial results.
+
+You can also import a local .json or .jsonl file containing manually labelled
+cases of the shape:
+
+    {"id":"example-1","text":"Everyone believes it, so it must be true.","expected":["bandwagon"]}
+    {"id":"example-2","text":"The document was published on Tuesday.","expected":[]}
+
+For .json files use either an array of these objects or {"cases":[...]}.
+The uploaded file is analysed as-is, without synthetic expansion. The input
+file stays in the browser; it is never uploaded by the test lab.
+
+**Accuracy caveat:** Repeating a few hand-labelled sentences in many contexts
+is excellent for catching regressions, missing matches and interference between
+lines, but it does not establish accuracy on novel writing. As the library
+grows, add more independently written, reviewed examples and keep some aside
+as a held-out test set for genuine generalisation measurements. The local lab
+is intentionally *not* copied into the public GitHub Pages deployment.
