@@ -169,7 +169,7 @@ assert.ok(!selectionScript.includes('Match confidence: 100%'),
 // Both the browser worker and evaluator use exactly this matching core.
 const matchingCore = await import('../extension/src/matching-core.mjs');
 const compiled = matchingCore.compilePatternRules(extensionCatalogue, extensionPatterns);
-const multiExample = "You're either with us or against us.\\nEveryone believes this, so it must be true.";
+const multiExample = "You're either with us or against us.\nEveryone believes this, so it must be true.";
 const multiMatches = await matchingCore.matchText(multiExample,
  { techniques: extensionCatalogue.techniques, rules: compiled });
 assert.deepEqual([...new Set(multiMatches.map(item => item.technique.id))].sort(),
