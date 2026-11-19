@@ -66,15 +66,20 @@ export async function matchText(text, { techniques, rules, prototypes = [], embe
 
  const semantic = [];
  if (embed && prototypes.length) {
-  const candidates = parts.filter(part =>
-   isSemanticCandidate(part.text, techniques) &&
-   !patterned.some(match => match.start < part.sourceEnd && match.end > part.sourceStart));
-  const embedded = candidates.length ? await embed(candidates.map(part => part.text)) : [];
-  for (let i = 0; i < candidates.length; i++) {
-   const result = selectSemanticTechnique(embedded[i], prototypes, cosineSimilarity);
-   if (result) semantic.push({ start: candidates[i].start, end: candidates[i].end,
-    technique: techniques[result.techniqueIndex], score: result.score,
-    method: "semantic", strength: semanticMatchStrength(result.score, result.margin) });
+  try {
+   const candidates = parts.filter(part =>
+    isSemanticCandidate(part.text, techniques) &&
+    !patterned.some(match => match.start < part.sourceEnd && match.end > part.sourceStart));
+   const embedded = candidates.length ? await embed(candidates.map(part => part.text)) : [];
+   for (let i = 0; i < candidates.length; i++) {
+    const result = selectSemanticTechnique(embedded[i], prototypes, cosineSimilarity);
+    if (result) semantic.push({ start: candidates[i].start, end: candidates[i].end,
+     technique: techniques[result.techniqueIndex], score: result.score,
+     method: "semantic", strength: semanticMatchStrength(result.score, result.margin) });
+   }
+  } catch (error) {
+   // A model error must not erase exact matches already found by the rules.
+   console.warn("Semantic match failed; keeping deterministic matches:", error);
   }
  }
 
