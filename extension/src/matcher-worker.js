@@ -11,17 +11,30 @@ const MODEL = "Xenova/all-MiniLM-L6-v2";
 let extractor, techniques = [], rules = [], prototypes = [], initialising;
 
 async function embed(texts) {
- const output = await extractor(texts, { pooling: "mean", normalize: true });
- return embeddingRows(output, texts.length);
+ const result = [];
+ // Batching avoids a large selection exhausting the local inference runtime.
+ for (let i = 0; i < texts.length; i += 24) {
+  const batch = texts.slice(i, i + 24);
+  const output = await extractor(batch, { pooling: "mean", normalize: true });
+  result.push(...embeddingRows(output, batch.length));
+ }
+ return result;
 }
 
 async function initialise(catalogue, patternCatalogue) {
  techniques = catalogue.techniques || [];
  rules = compilePatternRules(catalogue, patternCatalogue);
- extractor = await pipeline("feature-extraction", MODEL, { dtype: "q8" });
- const entries = prototypeEntries(techniques);
- const vectors = await embed(entries.map(entry => entry.text));
- prototypes = entries.map((entry, index) => ({ ...entry, vector: vectors[index] }));
+ try {
+  extractor = await pipeline("feature-extraction", MODEL, { dtype: "q8" });
+  const entries = prototypeEntries(techniques);
+  const vectors = await embed(entries.map(entry => entry.text));
+  prototypes = entries.map((entry, index) => ({ ...entry, vector: vectors[index] }));
+ } catch (error) {
+  // Explicit rules remain useful if model download or initialisation fails.
+  console.warn("Local model unavailable; using deterministic rules only:", error);
+  extractor = null;
+  prototypes = [];
+ }
  self.postMessage({ type: "ready" });
 }
 
@@ -35,7 +48,8 @@ self.addEventListener("message", async event => {
  if (data.type !== "match") return;
  try {
   await initialising;
-  const matches = await matchText(data.text, { techniques, rules, prototypes, embed });
+  const matches = await matchText(data.text, { techniques, rules, prototypes,
+   embed: extractor ? embed : null });
   self.postMessage({ id: data.id, matches });
  } catch (error) {
   self.postMessage({ id: data.id, error: String(error?.message || error) });
