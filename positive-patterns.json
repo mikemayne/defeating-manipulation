@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "description": "A separate library of constructive communication patterns that support understanding, agency and independent judgement. Entries describe observable communicative behaviours, not assumptions about a speaker's motives.",
+  "patterns": [
+    {
+      "id": "restoring_agency",
+      "title": "Restoring agency",
+      "category": "Autonomy",
+      "summary": "Making clear that a person retains meaningful choice and control over their own decisions.",
+      "definition": "The wording explicitly leaves the decision with the person affected.",
+      "observable_features": [
+        "The wording explicitly leaves the decision with the person affected."
+      ],
+      "example": "“You have the information. Take the time you need, and make the choice that is right for you.”",
+      "reader_effect": "Supports a person's sense of control and reduces unnecessary pressure.",
+      "tags": [
+        "autonomy"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "welcoming_disagreement",
+      "title": "Welcoming disagreement",
+      "category": "Open discussion",
+      "summary": "Treating disagreement as a legitimate contribution rather than a personal challenge.",
+      "definition": "The speaker invites objections and engages with their substance without ridicule or penalty.",
+      "observable_features": [
+        "The speaker invites objections and engages with their substance without ridicule or penalty."
+      ],
+      "example": "“I see it differently, but I'd like to understand why you disagree.”",
+      "reader_effect": "Makes it easier to raise concerns and examine competing interpretations.",
+      "tags": [
+        "open discussion"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "separating_observation_from_interpretation",
+      "title": "Separating observation from interpretation",
+      "category": "Clarity and evidence",
+      "summary": "Distinguishing what was directly observed from the meaning or explanation someone assigns to it.",
+      "definition": "The account labels observations, inferences and unanswered questions separately.",
+      "observable_features": [
+        "The account labels observations, inferences and unanswered questions separately."
+      ],
+      "example": "“I saw the door open. I don't know who opened it or why.”",
+      "reader_effect": "Helps listeners assess what is known without inheriting unsupported conclusions.",
+      "tags": [
+        "clarity and evidence"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "acknowledging_uncertainty",
+      "title": "Acknowledging uncertainty",
+      "category": "Intellectual honesty",
+      "summary": "Stating the limits of one's knowledge instead of presenting an uncertain conclusion as established.",
+      "definition": "The speaker identifies what they do not know and calibrates confidence to the available information.",
+      "observable_features": [
+        "The speaker identifies what they do not know and calibrates confidence to the available information."
+      ],
+      "example": "“That's my best reading, but I don't have enough information to be certain.”",
+      "reader_effect": "Preserves room for further evidence and correction.",
+      "tags": [
+        "intellectual honesty"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "respecting_boundaries",
+      "title": "Respecting boundaries",
+      "category": "Consent and boundaries",
+      "summary": "Accepting a person's stated limit without repeatedly challenging, punishing or bargaining against it.",
+      "definition": "After a boundary is stated, the speaker changes course or ends that line of discussion.",
+      "observable_features": [
+        "After a boundary is stated, the speaker changes course or ends that line of discussion."
+      ],
+      "example": "“Understood. We can leave that subject there.”",
+      "reader_effect": "Reinforces that consent and personal limits will be taken seriously.",
+      "tags": [
+        "consent and boundaries"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "proportionate_response",
+      "title": "Proportionate response",
+      "category": "Perspective",
+      "summary": "Matching the urgency and scale of a response to the significance and evidence of the issue.",
+      "definition": "The language avoids inflating a minor problem and proposes a response appropriate to its likely impact.",
+      "observable_features": [
+        "The language avoids inflating a minor problem and proposes a response appropriate to its likely impact."
+      ],
+      "example": "“It's worth fixing, but it isn't urgent. Let's deal with it tomorrow.”",
+      "reader_effect": "Helps preserve perspective and prevents avoidable escalation.",
+      "tags": [
+        "perspective"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "encouraging_independent_thought",
+      "title": "Encouraging independent thought",
+      "category": "Autonomy",
+      "summary": "Inviting someone to evaluate information and reach their own conclusion rather than adopting the speaker's view.",
+      "definition": "The speaker offers reasons or information while explicitly allowing independent assessment.",
+      "observable_features": [
+        "The speaker offers reasons or information while explicitly allowing independent assessment."
+      ],
+      "example": "“Here are the sources I used. Have a look and see what conclusion you reach.”",
+      "reader_effect": "Strengthens critical thinking and confidence in one's own judgement.",
+      "tags": [
+        "autonomy"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "validating_emotional_experience",
+      "title": "Validating emotional experience",
+      "category": "Emotional understanding",
+      "summary": "Recognising that another person's feelings are real and understandable without prescribing what they must think happened.",
+      "definition": "The response acknowledges the feeling and its impact without asserting an unverified explanation.",
+      "observable_features": [
+        "The response acknowledges the feeling and its impact without asserting an unverified explanation."
+      ],
+      "example": "“I can see that was upsetting, and I want to understand what it was like for you.”",
+      "reader_effect": "Can help someone feel heard while keeping interpretation open.",
+      "tags": [
+        "emotional understanding"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "transparent_reasoning",
+      "title": "Transparent reasoning",
+      "category": "Clarity and evidence",
+      "summary": "Making the reasoning behind a view or recommendation visible so another person can inspect it.",
+      "definition": "The speaker explains the evidence, assumptions and steps leading to their conclusion.",
+      "observable_features": [
+        "The speaker explains the evidence, assumptions and steps leading to their conclusion."
+      ],
+      "example": "“I'm recommending this because of these two constraints; if either is wrong, my recommendation changes.”",
+      "reader_effect": "Allows others to scrutinise, challenge and improve the reasoning.",
+      "tags": [
+        "clarity and evidence"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "supporting_informed_choice",
+      "title": "Supporting informed choice",
+      "category": "Autonomy",
+      "summary": "Providing relevant information, options and practical consequences so a person can make a considered decision.",
+      "definition": "The communication presents meaningful alternatives and material trade-offs without hiding inconvenient information.",
+      "observable_features": [
+        "The communication presents meaningful alternatives and material trade-offs without hiding inconvenient information."
+      ],
+      "example": "“These are the available options, what each involves, and where you can check the details.”",
+      "reader_effect": "Improves the quality of decisions while preserving the decision-maker's control.",
+      "tags": [
+        "autonomy"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "taking_responsibility",
+      "title": "Taking responsibility",
+      "category": "Accountability",
+      "summary": "Acknowledging one's own actions and their effects without shifting blame or making excuses.",
+      "definition": "The speaker identifies what they did, recognises the impact and states a practical corrective step.",
+      "observable_features": [
+        "The speaker identifies what they did, recognises the impact and states a practical corrective step."
+      ],
+      "example": "“I interrupted you. That wasn't fair. I'll let you finish.”",
+      "reader_effect": "Makes repair possible and reduces the need for the other person to argue for basic acknowledgement.",
+      "tags": [
+        "accountability"
+      ],
+      "status": "starter"
+    },
+    {
+      "id": "respecting_attention",
+      "title": "Respecting attention",
+      "category": "Boundaries and attention",
+      "summary": "Allowing another person to direct their time and attention without manufacturing urgency or demanding immediate engagement.",
+      "definition": "The speaker makes the request clear, gives a reasonable timeframe and accepts that the person may respond later or decline.",
+      "observable_features": [
+        "The speaker makes the request clear, gives a reasonable timeframe and accepts that the person may respond later or decline."
+      ],
+      "example": "“No need to answer now. Let me know if and when you have time.”",
+      "reader_effect": "Reduces unnecessary pressure and supports deliberate rather than reactive decisions.",
+      "tags": [
+        "boundaries and attention"
+      ],
+      "status": "starter"
+    }
+  ]
+}
