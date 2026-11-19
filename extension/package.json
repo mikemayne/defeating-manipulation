@@ -1,10 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "build": "node build.mjs && esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js",
+    "build": "node build.mjs && esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js && esbuild src/benchmark-worker.js --bundle --format=esm --platform=browser --outfile=benchmark-worker.js",
     "dev": "npm run build && web-ext run --source-dir .",
     "evaluate": "node evaluate.mjs --strict",
-    "evaluate:ai": "node evaluate.mjs --semantic"
+    "evaluate:ai": "node evaluate.mjs --semantic",
+    "benchmark": "node ../scripts/serve-benchmark.mjs",
+    "benchmark:dev": "npm run build && npm run benchmark"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.7.2"
