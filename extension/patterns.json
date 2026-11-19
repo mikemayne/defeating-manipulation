@@ -12,9 +12,9 @@
     {
       "id": "straw_man",
       "expressions": [
-        "\\byou want .{1,100}, so you (?:clearly|obviously) (?:don't|do not) care about .{1,80}\\b",
+        "\\byou want .{1,100}, so you (?:clearly|obviously) (?:don't|do not) care about [^.!?]{1,80}\\b",
         "\\byou (?:want|think|believe|are saying) .{0,100}\\bso you (?:obviously|clearly) (?:want|think|believe) .{0,100}\\b(?:no freedom|nothing|never|always|everything)\\b",
-        "\\bso you (?:think|want|believe|are saying) .{0,120}\\b(?:never|nothing|all|every|completely|at all)\\b"
+        "\\bso you (?:think|want|believe|are saying) .{0,120}\\b(?:never|nothing|all|every|everything|completely|at all)\\b"
       ]
     },
     {
