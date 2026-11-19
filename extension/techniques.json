@@ -41,7 +41,13 @@
         "oversimplification"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "We can either accept the proposal exactly as written or watch the entire service collapse.",
+        "You're either with us or against us.",
+        "There are only two options: support the policy or lose everything.",
+        "Either you support the plan or you want the project to fail. There's no middle ground."
+      ]
     },
     {
       "id": "straw_man",
