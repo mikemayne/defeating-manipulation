@@ -84,7 +84,7 @@
     {
       "id": "tu_quoque",
       "expressions": [
-        "\\byou can'?t tell me to .{0,80}\\bwhen you .{0,50}\\b(?:yourself|too)\\b",
+        "\\byou (?:can't|cannot) tell me to .{0,80}\\bwhen you .{0,50}\\b(?:yourself|too)\\b",
         "\\bwhy should i listen to you when you (?:do|did) the same thing\\b",
         "\\byou do it too\\b"
       ]
