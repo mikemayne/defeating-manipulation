@@ -10,7 +10,12 @@
     "https://raw.githubusercontent.com/*"
   ],
   "browser_action": {
-    "default_title": "Toggle manipulation-pattern highlighting"
+    "default_title": "Toggle manipulation-pattern highlighting",
+    "default_icon": {
+      "16": "icons/green-flag.svg",
+      "32": "icons/green-flag.svg",
+      "48": "icons/green-flag.svg"
+    }
   },
   "background": {
     "scripts": [
@@ -25,5 +30,8 @@
       "id": "pattern-highlighter@defeating-manipulation.org",
       "strict_min_version": "109.0"
     }
+  },
+  "icons": {
+    "48": "icons/green-flag.svg"
   }
 }
