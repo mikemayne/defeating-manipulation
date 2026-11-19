@@ -1,6 +1,6 @@
 import { pipeline, env } from "@huggingface/transformers";
 import { windows } from "./text-windows.mjs";
-import { isSemanticCandidate, selectSemanticTechnique } from "./semantic-policy.mjs";
+import { isSemanticCandidate, selectSemanticTechnique, semanticMatchStrength } from "./semantic-policy.mjs";
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
 env.useBrowserCache = true;
@@ -86,7 +86,8 @@ self.addEventListener("message", async event => {
    const best = selectSemanticTechnique(embedded[i], prototypes, dot);
    if (best) {
     semantic.push({ ...semanticParts[i], technique: techniques[best.techniqueIndex],
-     score: best.score, method: "semantic" });
+     score: best.score, method: "semantic",
+     strength: semanticMatchStrength(best.score, best.margin) });
    }
   }
 
