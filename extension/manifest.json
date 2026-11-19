@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "Defeating Manipulation — Local Semantic Highlighter",
+  "name": "Defeating Manipulation — Selected Text Analyser",
   "version": "0.2.0",
   "description": "Locally compares short passages with the Defeating Manipulation technique library.",
   "permissions": ["activeTab", "tabs", "storage", "https://huggingface.co/*", "https://cdn-lfs.huggingface.co/*", "https://*.xethub.hf.co/*"],
   "browser_action": {
-    "default_title": "Toggle manipulation-pattern highlighting",
+    "default_title": "Analyse selected text for manipulation patterns",
     "default_icon": {"16":"icons/green-flag.svg","32":"icons/green-flag.svg","48":"icons/green-flag.svg"}
   },
   "background": {"page":"background.html"},
