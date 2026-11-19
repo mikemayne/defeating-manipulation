@@ -242,6 +242,556 @@
       ],
       "status": "starter",
       "references": []
+    },
+    {
+      "id": "allegation_laundering",
+      "title": "Allegation laundering",
+      "category": "Evidence and sourcing",
+      "summary": "Repeating an allegation in a way that gradually removes its original uncertainty or attribution.",
+      "tags": [
+        "presupposition",
+        "repetition",
+        "attribution"
+      ],
+      "status": "research-informed-starter",
+      "definition": "An allegation is first reported as a claim, suspicion or accusation. Later references restate it as though the underlying event has been established. The wording changes the status of the information without adding independent evidence.",
+      "observable_features": [
+        "An initial claim is attributed to a named or unnamed source, followed by later unqualified references to the alleged event.",
+        "A headline or later paragraph drops terms such as 'alleged', 'claimed' or 'according to'.",
+        "The same allegation is repeated across paragraphs or articles without new corroboration.",
+        "A source's assertion is treated as a factual premise in subsequent sentences."
+      ],
+      "example": "First: 'A campaign group alleges that the council concealed the report.' Later: 'The concealed report has prompted questions.'",
+      "reader_effect": "Can make an unverified allegation feel established through repetition and the gradual loss of attribution.",
+      "references": [
+        "da2019",
+        "da2020",
+        "mm2023"
+      ]
+    },
+    {
+      "id": "insinuation_by_juxtaposition",
+      "title": "Insinuation by juxtaposition",
+      "category": "Framing",
+      "summary": "Placing facts, images or quotations together so that readers infer a connection or accusation that the article does not explicitly establish.",
+      "tags": [
+        "insinuation",
+        "juxtaposition",
+        "implication"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The article presents separate details in close proximity, allowing their arrangement to suggest a causal, moral or factual connection. The implied conclusion is carried by the juxtaposition rather than demonstrated by evidence.",
+      "observable_features": [
+        "Two people, events or facts are placed side by side without explaining the relevance of the connection.",
+        "A suggestive question or transition invites an inference that is not stated as a claim.",
+        "A sequence of individually accurate details implies wrongdoing without establishing the link between them.",
+        "The article relies on insinuation where a direct evidential statement would be expected."
+      ],
+      "example": "The article reports that a public figure attended an event and, in the next sentence, describes an unrelated investigation without establishing any connection.",
+      "reader_effect": "Can lead readers to infer guilt, causation or association from proximity rather than evidence.",
+      "references": [
+        "da2019",
+        "tymbay2022"
+      ]
+    },
+    {
+      "id": "blame_reversal",
+      "title": "Blame reversal",
+      "category": "Framing",
+      "summary": "Shifting attention from the conduct being discussed to the reaction or behaviour of the person who raised it.",
+      "tags": [
+        "victim blaming",
+        "responsibility framing",
+        "blame"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The account makes the complainant's response the main issue, while the original conduct receives less attention or is treated as justified by that response.",
+      "observable_features": [
+        "The article focuses on a complainant's anger, tone or persistence rather than the substance of the complaint.",
+        "A reaction is presented as the cause of the dispute while preceding conduct is omitted or minimised.",
+        "The person reporting harm is described as the aggressor without explaining the basis for the reversal.",
+        "Responsibility is assigned to the complainant for consequences attributed to another party's actions."
+      ],
+      "example": "Coverage describes a protester's angry response in detail but gives little information about the event that prompted the protest.",
+      "reader_effect": "Can redirect scrutiny away from the original issue and encourage readers to judge the complainant instead.",
+      "references": [
+        "da2020",
+        "tohidi2025"
+      ]
+    },
+    {
+      "id": "retaliatory_discrediting",
+      "title": "Retaliatory discrediting of complainants",
+      "category": "Evidence and sourcing",
+      "summary": "Undermining a source's credibility by emphasising the act of reporting, complaining or seeking redress rather than addressing the reported facts.",
+      "tags": [
+        "poisoning the well",
+        "source credibility",
+        "complaint"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The article frames a person as unreliable, malicious or troublesome because they made a complaint or report. The fact that a report is disputed or unsubstantiated is treated as evidence that it was knowingly false.",
+      "observable_features": [
+        "A complaint is described as a 'vendetta', 'smear' or 'witch hunt' without evidence supporting that characterisation.",
+        "The article treats lack of substantiation as proof of fabrication.",
+        "The source's decision to report is presented as suspicious in itself.",
+        "Personal attacks displace examination of the specific claims and available evidence."
+      ],
+      "example": "The article calls a whistleblower's report a 'malicious campaign' but does not examine the documents the report relies on.",
+      "reader_effect": "Can discourage scrutiny of the reported issue and cause readers to dismiss evidence based on the source's act of reporting.",
+      "references": [
+        "da2019",
+        "da2020"
+      ]
+    },
+    {
+      "id": "manufactured_consensus",
+      "title": "Manufactured consensus",
+      "category": "Social influence",
+      "summary": "Presenting a claim as widely accepted by the public when the article provides little evidence of the scale or representativeness of that agreement.",
+      "tags": [
+        "bandwagon",
+        "social proof",
+        "consensus"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text uses selected reactions, vague references to public opinion or unsupported claims of widespread agreement to create an impression of consensus.",
+      "observable_features": [
+        "Phrases such as 'everyone knows', 'the public has had enough' or 'people are saying' without representative evidence.",
+        "A small number of comments or interviews are presented as representative of a population.",
+        "Repeated quotations from similar sources create an impression of independent agreement.",
+        "The article does not explain how the views were sampled or measured."
+      ],
+      "example": "After quoting three social-media posts, an article says: 'The public has clearly rejected the proposal.'",
+      "reader_effect": "Can make a position appear more widely supported than the evidence establishes.",
+      "references": [
+        "da2020",
+        "da2019"
+      ]
+    },
+    {
+      "id": "guilt_appeal",
+      "title": "Appeal to guilt",
+      "category": "Emotional appeals",
+      "summary": "Using implied or explicit moral responsibility for another person's suffering to push readers towards a conclusion or action.",
+      "tags": [
+        "guilt",
+        "moral appeal",
+        "emotional framing"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text connects disagreement, inaction or a particular choice with guilt for harm to others, without adequately establishing the reader's responsibility or the effectiveness of the proposed response.",
+      "observable_features": [
+        "Questions such as 'How can anyone live with themselves if…?'",
+        "A proposed policy is framed as the only way to show compassion or avoid being responsible for suffering.",
+        "Emotive references to victims substitute for evidence that the proposed action will help.",
+        "Readers are assigned collective blame without a clear account of causation or responsibility."
+      ],
+      "example": " 'If we do nothing, we are all responsible for what happens next.'",
+      "reader_effect": "Can make readers feel morally compelled to accept a position before assessing whether the proposed response is justified or effective.",
+      "references": [
+        "da2020",
+        "da2019"
+      ]
+    },
+    {
+      "id": "obfuscation",
+      "title": "Obfuscation and strategic vagueness",
+      "category": "Framing",
+      "summary": "Using unclear, abstract or evasive wording that makes it difficult to identify what is being claimed.",
+      "tags": [
+        "ambiguity",
+        "vagueness",
+        "evasion"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text obscures the relevant actor, action, evidence or degree of certainty through vague language, nominalisations, passive constructions or undefined terms.",
+      "observable_features": [
+        "Important actors are omitted through passive constructions such as 'mistakes were made'.",
+        "Abstract phrases replace specific descriptions of what happened.",
+        "Key terms are repeated without being defined.",
+        "The text shifts between different meanings of the same word.",
+        "A claim is phrased so broadly that it is difficult to test."
+      ],
+      "example": " 'Appropriate measures were taken following concerns about certain activities.'",
+      "reader_effect": "Can make a claim sound substantial while leaving readers unable to identify exactly what happened or what evidence supports it.",
+      "references": [
+        "mm2023",
+        "da2019"
+      ]
+    },
+    {
+      "id": "semantic_diversion",
+      "title": "Semantic diversion",
+      "category": "Argumentation",
+      "summary": "Focusing on a minor wording dispute instead of addressing the clear substance of a statement or argument.",
+      "tags": [
+        "literalism",
+        "nitpicking",
+        "deflection"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text isolates a literal interpretation of a word or phrase, then uses that interpretation to dismiss the wider point. The disputed wording becomes a substitute for engaging with the underlying evidence.",
+      "observable_features": [
+        "A figurative or approximate expression is treated as a precise factual claim.",
+        "A minor imprecision is used to dismiss an otherwise supported argument.",
+        "The response concentrates on terminology while leaving the substantive point unanswered.",
+        "The article quotes a phrase without its context and criticises the wording rather than the claim."
+      ],
+      "example": "A report says a service is 'constantly failing'; a response focuses entirely on the fact that it did not fail every single day.",
+      "reader_effect": "Can divert attention from the substance of an argument and make a weak rebuttal appear decisive.",
+      "references": [
+        "da2019"
+      ]
+    },
+    {
+      "id": "moving_goalposts",
+      "title": "Moving the goalposts",
+      "category": "Argumentation",
+      "summary": "Changing the standard of proof or success after the original standard has been met.",
+      "tags": [
+        "shifting standards",
+        "evidence",
+        "inconsistency"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The article or argument introduces a criterion, receives evidence meeting it, and then replaces it with a more demanding or different criterion without explaining why the change is justified.",
+      "observable_features": [
+        "A claim is declared unproven after the specific evidence previously requested is supplied.",
+        "The required standard changes during the argument.",
+        "A conclusion is protected by introducing new conditions whenever earlier ones are met.",
+        "The article applies different evidential thresholds to comparable claims."
+      ],
+      "example": "After a source document is produced, the article says that only a signed original would count, although that requirement was not previously stated.",
+      "reader_effect": "Can make a claim appear impossible to establish or allow a preferred conclusion to survive contrary evidence.",
+      "references": [
+        "da2019"
+      ]
+    },
+    {
+      "id": "double_standards",
+      "title": "Double standards",
+      "category": "Argumentation",
+      "summary": "Applying different standards of evidence, conduct or judgement to comparable people, groups or situations.",
+      "tags": [
+        "inconsistent standards",
+        "selective framing",
+        "bias"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text treats similar actions differently depending on who performs them, or demands evidence from one side while accepting weaker support from another.",
+      "observable_features": [
+        "Comparable conduct is described with markedly different evaluative language.",
+        "One side's claims are treated as established while the other's are described as unverified without a consistent reason.",
+        "The article condemns a practice in one group but excuses it in another.",
+        "Different standards are applied to sources with similar reliability."
+      ],
+      "example": "The same tactic is called 'robust campaigning' when used by one group and 'intimidation' when used by its opponent.",
+      "reader_effect": "Can create a distorted comparison and steer judgement through inconsistent evaluation.",
+      "references": [
+        "tohidi2025",
+        "da2019"
+      ]
+    },
+    {
+      "id": "poisoning_the_well",
+      "title": "Poisoning the well",
+      "category": "Evidence and sourcing",
+      "summary": "Discrediting a person or source in advance so that their later claims are discounted before they are considered.",
+      "tags": [
+        "pre-emptive discrediting",
+        "ad hominem",
+        "source attack"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text introduces a source using a negative label or allegation that encourages readers to reject what the source says, without evaluating the substance of the evidence.",
+      "observable_features": [
+        "A source is characterised as corrupt, extremist, dishonest or self-interested before their evidence is presented.",
+        "A personal allegation is used as a substitute for examining a claim.",
+        "The article implies that no statement from the source could be credible.",
+        "Discrediting language is not supported by relevant evidence."
+      ],
+      "example": " 'The disgraced activist, known for stirring controversy, says the documents show…'",
+      "reader_effect": "Can bias readers against information before they have assessed its content or supporting evidence.",
+      "references": [
+        "da2019",
+        "da2020"
+      ]
+    },
+    {
+      "id": "criminalising_dissent",
+      "title": "Criminalising dissent",
+      "category": "Framing",
+      "summary": "Framing disagreement, protest or criticism as criminal or inherently dangerous without establishing that the conduct meets the relevant description.",
+      "tags": [
+        "criminalisation",
+        "labelling",
+        "law and order framing"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text uses criminal labels or law-and-order language to associate a viewpoint or group with illegality, sometimes blurring the distinction between lawful dissent, alleged offences and proven criminal conduct.",
+      "observable_features": [
+        "Protesters or critics are collectively described as criminals without individualised evidence.",
+        "Lawful protest is conflated with violence or property damage.",
+        "An allegation or investigation is described as proof of criminality.",
+        "The article uses criminal labels before explaining the conduct or legal status."
+      ],
+      "example": " 'The protest movement's criminal agenda' is used to describe a lawful demonstration without identifying a relevant offence.",
+      "reader_effect": "Can make readers view a position as illegitimate or threatening without examining what participants actually did.",
+      "references": [
+        "da2020",
+        "tymbay2022"
+      ]
+    },
+    {
+      "id": "appearance_based_attack",
+      "title": "Appearance-based personal attack",
+      "category": "Argumentation",
+      "summary": "Using a person's physical appearance, body or manner as a reason to dismiss their argument or character.",
+      "tags": [
+        "body shaming",
+        "ad hominem",
+        "ridicule"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text directs ridicule or contempt at appearance rather than engaging with the person's claims or conduct relevant to the issue.",
+      "observable_features": [
+        "Descriptions of weight, clothing, facial features or bodily characteristics are used to discredit a source.",
+        "A photograph or caption is selected to invite ridicule unrelated to the subject's argument.",
+        "Appearance-based labels replace relevant criticism.",
+        "The article uses bodily disgust as a proxy for moral judgement."
+      ],
+      "example": "A commentary dismisses a campaigner as 'scruffy and overweight' instead of addressing the campaign's evidence.",
+      "reader_effect": "Can provoke ridicule and prejudice while diverting attention from the substance of the person's position.",
+      "references": [
+        "da2019"
+      ]
+    },
+    {
+      "id": "disgust_appeal",
+      "title": "Appeal to disgust",
+      "category": "Emotional appeals",
+      "summary": "Using disgust-related language or imagery to produce revulsion towards a person, group, practice or proposal.",
+      "tags": [
+        "disgust",
+        "loaded language",
+        "dehumanising rhetoric"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text relies on descriptions associated with dirt, contamination, bodily functions or repulsiveness to influence judgement beyond what the factual account establishes.",
+      "observable_features": [
+        "Repeated use of words such as 'filthy', 'vile', 'rotten' or 'disgusting' as evaluative substitutes.",
+        "A person's bodily characteristics are used to suggest moral inferiority.",
+        "Graphic or repellent details are emphasised without clear informational relevance.",
+        "Disgust is used to frame a policy or group rather than explain its actual consequences."
+      ],
+      "example": " 'The proposal is a rotten, disgusting attack on ordinary people.'",
+      "reader_effect": "Can trigger immediate rejection or contempt before readers consider the evidence and reasoning.",
+      "references": [
+        "da2020",
+        "da2019"
+      ]
+    },
+    {
+      "id": "threat_framing",
+      "title": "Threat framing",
+      "category": "Emotional appeals",
+      "summary": "Presenting a position or choice through an explicit or implied threat of serious consequences.",
+      "tags": [
+        "appeal to fear",
+        "coercion",
+        "threat"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text uses warnings, predictions of punishment or threatening language to make a particular response seem necessary. The consequence may be real, exaggerated, speculative or unsupported.",
+      "observable_features": [
+        "A reader or group is told that they will 'pay', 'regret it' or face consequences if they disagree or fail to comply.",
+        "A policy choice is framed around a frightening consequence without explaining its likelihood.",
+        "The article implies that dissent will lead to personal or collective harm.",
+        "Threatening language substitutes for evidence about the proposed outcome."
+      ],
+      "example": " 'Those who oppose the plan will have to answer for what happens next.'",
+      "reader_effect": "Can narrow perceived choices by making disagreement feel dangerous or personally costly.",
+      "references": [
+        "da2020",
+        "da2019"
+      ]
+    },
+    {
+      "id": "premature_closure",
+      "title": "Premature closure",
+      "category": "Argumentation",
+      "summary": "Presenting a disputed question as settled or an investigation as complete before the available evidence justifies that conclusion.",
+      "tags": [
+        "false finality",
+        "certainty",
+        "closure"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text uses definitive language to close down further examination, despite unresolved evidence, unanswered questions or acknowledged uncertainty.",
+      "observable_features": [
+        "Phrases such as 'case closed', 'the truth is now clear' or 'there is nothing more to discuss'.",
+        "A provisional finding is described as a final conclusion.",
+        "Relevant unanswered questions are omitted while the article declares the matter settled.",
+        "The article treats absence of further evidence as proof that no issue remains."
+      ],
+      "example": " 'The report settles the matter once and for all' even though it identifies unresolved questions.",
+      "reader_effect": "Can discourage further scrutiny and make an incomplete account appear conclusive.",
+      "references": [
+        "da2019",
+        "tymbay2022"
+      ]
+    },
+    {
+      "id": "narrative_reframing",
+      "title": "Narrative reframing",
+      "category": "Framing",
+      "summary": "Reorganising events into a story that changes how readers interpret the roles, causes or significance of the people involved.",
+      "tags": [
+        "narrative framing",
+        "selection",
+        "causation"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The article selects a starting point, sequence, protagonists and causal links that create a particular account of events. The individual details may be accurate while the overall narrative gives them a selective meaning.",
+      "observable_features": [
+        "The account begins at a point that omits relevant preceding events.",
+        "Events are arranged to imply a simple hero, villain or turning point.",
+        "A complex sequence is reduced to a single cause or personal motive.",
+        "The same facts would support a materially different interpretation if presented in another order or context."
+      ],
+      "example": "The article begins with a confrontation but omits the earlier decision that prompted it.",
+      "reader_effect": "Can shape the reader's understanding of responsibility and causation through selection and sequence.",
+      "references": [
+        "tohidi2025",
+        "tymbay2022"
+      ]
+    },
+    {
+      "id": "quote_recontextualisation",
+      "title": "Quote recontextualisation",
+      "category": "Evidence and sourcing",
+      "summary": "Using a quotation in a new context that changes the impression it gives of the speaker's meaning.",
+      "tags": [
+        "quote mining",
+        "context collapse",
+        "selective quotation"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The article selects a phrase, sentence or excerpt but omits surrounding context, qualifications or the question it answered. This can make a limited or conditional statement appear broader or more definite.",
+      "observable_features": [
+        "A short quotation is presented without the question or preceding explanation.",
+        "Qualifying words before or after the excerpt are omitted.",
+        "A statement about a hypothetical situation is presented as a statement of fact.",
+        "The headline uses a quotation more categorically than the full passage supports."
+      ],
+      "example": "A speaker says, 'I would support it if the safeguards worked'; the article quotes only, 'I would support it'.",
+      "reader_effect": "Can alter how readers understand a source's position without changing the quoted words themselves.",
+      "references": [
+        "da2019",
+        "tymbay2022"
+      ]
+    },
+    {
+      "id": "public_shaming",
+      "title": "Public shaming",
+      "category": "Social influence",
+      "summary": "Using public ridicule, exposure or hostile labels to punish a person socially and influence how an audience views them.",
+      "tags": [
+        "name and shame",
+        "ridicule",
+        "social punishment"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text invites readers to condemn or mock an identifiable person, often by foregrounding humiliating details or presenting social rejection as deserved.",
+      "observable_features": [
+        "A person's embarrassment or humiliation is treated as the main point of the story.",
+        "The article invites readers to mock, shame or ostracise an individual.",
+        "Personal details unrelated to the public issue are highlighted for ridicule.",
+        "A crowd's contempt is presented as a reason the target deserves condemnation."
+      ],
+      "example": "A headline invites readers to laugh at an individual's personal failure rather than explain the public issue involved.",
+      "reader_effect": "Can intensify social punishment and encourage readers to join in condemnation rather than assess the underlying issue.",
+      "references": [
+        "da2019"
+      ]
+    },
+    {
+      "id": "paternalistic_coercion_framing",
+      "title": "Paternalistic coercion framing",
+      "category": "Framing",
+      "summary": "Presenting restrictive or coercive measures as unquestionably benevolent by describing them as being for people's own good.",
+      "tags": [
+        "benevolent framing",
+        "authority",
+        "selective presentation"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text uses protective language to frame a restriction, punishment or demand as care, while giving little attention to consent, proportionality, alternatives or the interests of those affected.",
+      "observable_features": [
+        "A restriction is justified mainly by saying it is 'for their own good'.",
+        "Objections are characterised as irresponsible or ungrateful rather than addressed.",
+        "The article assumes the authority knows what is best without explaining the evidence.",
+        "Benefits are emphasised while costs, rights or less restrictive alternatives are omitted."
+      ],
+      "example": " 'The restrictions are necessary for their own protection' is asserted without explaining why less restrictive options would not work.",
+      "reader_effect": "Can make readers accept a loss of choice or rights as benevolent without weighing the full consequences.",
+      "references": [
+        "tohidi2025",
+        "da2019"
+      ]
+    },
+    {
+      "id": "incitement_to_violence",
+      "title": "Incitement to violence",
+      "category": "Emotional appeals",
+      "summary": "Language that directly encourages, endorses or calls for violence against a person or group.",
+      "tags": [
+        "violence",
+        "call to action",
+        "dehumanisation"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text urges, endorses or legitimises violent action against an identifiable person, group or category of people. It may use direct commands, calls for action, celebration of violence or language that presents violence as necessary or deserved.",
+      "observable_features": [
+        "Direct commands or calls for readers or others to attack, harm or kill.",
+        "Explicit endorsement or celebration of violence against a target.",
+        "Violence is presented as justified, inevitable or deserved without meaningful qualification.",
+        "A target group is described in terms that remove ordinary moral restraints on harming them."
+      ],
+      "example": " 'They should be driven out by force' or 'The only answer is to attack them.'",
+      "reader_effect": "Can normalise violence, lower resistance to violent action or encourage hostility towards the people being targeted.",
+      "references": [
+        "da2020"
+      ]
+    },
+    {
+      "id": "exaggeration_minimisation",
+      "title": "Exaggeration and minimisation",
+      "category": "Framing",
+      "summary": "Representing an event, risk, result or piece of evidence as substantially larger or smaller than the information supports.",
+      "tags": [
+        "overstatement",
+        "understatement",
+        "scale",
+        "proportionality"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text amplifies or downplays the scale, severity, certainty or importance of something. This may happen through evaluative wording, selective comparisons, numerical presentation or omission of relevant context.",
+      "observable_features": [
+        "Describing a limited event as widespread or unprecedented without supporting figures.",
+        "Using extreme terms such as 'catastrophic', 'total', 'massive' or 'insignificant' where the evidence is more limited.",
+        "Presenting a small number as trivial without a meaningful comparison or denominator.",
+        "Comparisons use different time periods, populations or measures.",
+        "The headline gives a more extreme impression than the figures or article body."
+      ],
+      "example": "The headline says 'Crime explodes' while the article reports a small increase from an unusually low baseline.",
+      "reader_effect": "Can distort readers' perception of scale, risk or importance and make a conclusion feel stronger or weaker than the evidence supports.",
+      "references": [
+        "da2020",
+        "mm2023",
+        "tymbay2022"
+      ]
     }
   ]
 }

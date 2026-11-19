@@ -1,5 +1,46 @@
 {
   "schema_version": 1,
   "description": "References supporting technique definitions. Add only sources that have been checked and accurately represented.",
-  "references": []
+  "references": [
+    {
+      "id": "da2020",
+      "title": "SemEval-2020 Task 11: Detection of Propaganda Techniques in News Articles",
+      "authors": "Da San Martino et al.",
+      "year": 2020,
+      "url": "https://aclanthology.org/2020.semeval-1.186/",
+      "notes": "A shared-task taxonomy and annotated dataset covering techniques including loaded language, repetition, exaggeration or minimisation, doubt, appeal to fear or prejudice, causal oversimplification, slogans, authority appeals and false dilemmas."
+    },
+    {
+      "id": "da2019",
+      "title": "Fine-Grained Analysis of Propaganda in News Articles",
+      "authors": "Da San Martino et al.",
+      "year": 2019,
+      "url": "https://aclanthology.org/D19-1565/",
+      "notes": "Research on identifying and explaining propaganda techniques at passage level in news articles."
+    },
+    {
+      "id": "mm2023",
+      "title": "Multilingual Multifaceted Understanding of Online News",
+      "authors": "ACL 2023 authors",
+      "year": 2023,
+      "url": "https://aclanthology.org/2023.acl-long.169/",
+      "notes": "A taxonomy for online news including loaded language, obfuscation or intentional vagueness, exaggeration or minimisation and repetition."
+    },
+    {
+      "id": "tohidi2025",
+      "title": "Rethinking news framing with large language models",
+      "authors": "Tohidi, Haider and Watts",
+      "year": 2025,
+      "url": "https://www.nature.com/articles/s41598-025-29519-9",
+      "notes": "Experimental research on how selective presentation and tone in otherwise accurate news can shift readers' views and emotional responses."
+    },
+    {
+      "id": "tymbay2022",
+      "title": "Manipulative use of political headlines in western and Russian online sources",
+      "authors": "Tymbay",
+      "year": 2022,
+      "url": "https://doi.org/10.1177/17504813221101824",
+      "notes": "Study of headline/article discrepancies, expressive language, selective citation and distortions in online political reporting."
+    }
+  ]
 }
