@@ -13,7 +13,7 @@ if errorlevel 1 (
 
 echo.
 echo Launching Firefox with web-ext...
-call npx.cmd web-ext run --source-dir . --start-url "https://chatgpt.com/?q=give+me+1000+examples+of+fallacies"
+call npx.cmd web-ext run --source-dir . --start-url "https://chatgpt.com/?q=give+me+10+examples+of+fallacies"
 if errorlevel 1 (
     echo.
     echo web-ext exited with an error.
