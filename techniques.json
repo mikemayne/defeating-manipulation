@@ -792,31 +792,6 @@
         "mm2023",
         "tymbay2022"
       ]
-    },
-    {
-      "id": "criminalising_dissent",
-      "title": "Criminalising dissent",
-      "category": "Framing",
-      "summary": "Framing disagreement, protest or criticism as criminal or inherently dangerous without establishing that the conduct meets the relevant description.",
-      "tags": [
-        "criminalisation",
-        "labelling",
-        "law and order framing"
-      ],
-      "status": "research-informed-starter",
-      "definition": "The text uses criminal labels or law-and-order language to associate a viewpoint or group with illegality, sometimes blurring the distinction between lawful dissent, alleged offences and proven criminal conduct.",
-      "observable_features": [
-        "Protesters or critics are collectively described as criminals without individualised evidence.",
-        "Lawful protest is conflated with violence or property damage.",
-        "An allegation or investigation is described as proof of criminality.",
-        "The article uses criminal labels before explaining the conduct or legal status."
-      ],
-      "example": "The phrase 'the protest movement's criminal agenda' is used to describe a lawful demonstration without identifying a relevant offence.",
-      "reader_effect": "Can make readers view a position as illegitimate or threatening without examining what participants actually did.",
-      "references": [
-        "da2020",
-        "tymbay2022"
-      ]
     }
   ]
 }
