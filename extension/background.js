@@ -1,40 +1,9 @@
-const enabledTabs = new Set();
-
-async function refreshBadge(tabId) {
-  await browser.browserAction.setBadgeText({tabId, text: enabledTabs.has(tabId) ? "ON" : ""});
-  await browser.browserAction.setBadgeBackgroundColor({tabId, color: "#168f9b"});
-}
-
-async function enable(tabId) {
-  try {
-    await browser.tabs.executeScript(tabId, {file: "content.js"});
-    enabledTabs.add(tabId);
-    await refreshBadge(tabId);
-  } catch (error) {
-    console.warn("Could not enable highlighting on this page:", error);
-    enabledTabs.delete(tabId);
-    await refreshBadge(tabId);
-  }
-}
-
-async function disable(tabId) {
-  try {
-    await browser.tabs.executeScript(tabId, {code: "if (window.__dmPatternHighlighter) window.__dmPatternHighlighter.disable();"});
-  } catch (_) {}
-  enabledTabs.delete(tabId);
-  await refreshBadge(tabId);
-}
-
-browser.browserAction.onClicked.addListener(async tab => {
-  if (enabledTabs.has(tab.id)) await disable(tab.id);
-  else await enable(tab.id);
-});
-
-browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-  if (changeInfo.status === "complete" && enabledTabs.has(tabId)) {
-    enabledTabs.delete(tabId);
-    await enable(tabId);
-  }
-});
-
-browser.tabs.onRemoved.addListener(tabId => enabledTabs.delete(tabId));
+const enabledTabs=new Set();let worker,ready;
+function getWorker(){if(!worker){worker=new Worker(browser.runtime.getURL("matcher-worker.js"),{type:"module"});ready=new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error("Model initialisation timed out")),180000);worker.addEventListener("message",e=>{if(e.data.type==="ready"){clearTimeout(timer);resolve();}if(e.data.type==="fatal"){clearTimeout(timer);reject(Error(e.data.error));}});});fetch(browser.runtime.getURL("techniques.json")).then(r=>r.json()).then(catalogue=>worker.postMessage({type:"init",catalogue})).catch(e=>worker.postMessage({type:"fatal",error:String(e)}));}return ready.then(()=>worker);}
+browser.runtime.onMessage.addListener(async m=>{if(m.type!=="DM_MATCH")return;const w=await getWorker();return new Promise((resolve,reject)=>{const id=crypto.randomUUID();const listener=e=>{if(e.data.id!==id)return;w.removeEventListener("message",listener);e.data.error?reject(Error(e.data.error)):resolve(e.data.matches);};w.addEventListener("message",listener);w.postMessage({type:"match",id,text:m.text});});});
+async function badge(id){await browser.browserAction.setBadgeText({tabId:id,text:enabledTabs.has(id)?"ON":""});await browser.browserAction.setBadgeBackgroundColor({tabId:id,color:"#168f9b"});}
+async function enable(id){try{await browser.tabs.executeScript(id,{file:"content.js"});enabledTabs.add(id);await badge(id);}catch(e){console.warn(e);enabledTabs.delete(id);await badge(id);}}
+async function disable(id){try{await browser.tabs.executeScript(id,{code:"if(window.__dmPatternHighlighter)window.__dmPatternHighlighter.disable();"});}catch(_){}enabledTabs.delete(id);await badge(id);}
+browser.browserAction.onClicked.addListener(t=>enabledTabs.has(t.id)?disable(t.id):enable(t.id));
+browser.tabs.onUpdated.addListener((id,c)=>{if(c.status==="complete"&&enabledTabs.has(id)){enabledTabs.delete(id);enable(id);}});
+browser.tabs.onRemoved.addListener(id=>enabledTabs.delete(id));

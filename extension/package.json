@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js",
+    "dev": "npm run build && web-ext run --source-dir ."
+  },
+  "dependencies": { "@huggingface/transformers": "^3.7.2" },
+  "devDependencies": { "esbuild": "^0.25.0", "web-ext": "^8.9.0" }
+}
