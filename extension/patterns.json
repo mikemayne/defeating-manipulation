@@ -5,8 +5,8 @@
       "expressions": [
         "\\b(?:your )?(?:argument|claim|point|reasoning) (?:is|must be) (?:wrong|false|invalid) because (?:you are|you're) (?:an? )?(?:idiot|moron|stupid|ignorant)\\b",
         "\\b(?:you're|you are) (?:an? )?(?:idiot|moron|fool), so (?:your|that) (?:argument|claim|point)\\b",
-        "\\\\byour (?:opinion|argument|claim|view) (?:about .{1,80} )?(?:doesn't matter|does not matter|is worthless|doesn't count|does not count) because you (?:didn't|did not|never|don't|do not|haven't|have not|aren't|are not)\\\\b",
-        "\\\\b(?:don't|do not) listen to (?:him|her|them|his|her|their) (?:argument|opinion|point|claim)\\\\b.{0,80}\\\\b(?:uneducated|ignorant|stupid|idiot)\\\\b"
+        "\\byour (?:opinion|argument|claim|view) (?:about .{1,80} )?(?:doesn't matter|does not matter|is worthless|doesn't count|does not count) because you (?:didn't|did not|never|don't|do not|haven't|have not|aren't|are not)\\b",
+        "\\b(?:don't|do not) listen to (?:him|her|them|his|her|their) (?:argument|opinion|point|claim)\\b.{0,80}\\b(?:uneducated|ignorant|stupid|idiot)\\b"
       ]
     },
     {
@@ -23,7 +23,7 @@
         "\\b(?:everyone|everybody|the whole world|most people) (?:believes?|thinks?|does it|agrees?)\\b.{0,70}\\b(?:so|therefore|must be true|right)\\b",
         "\\b(?:it must be true|it must be right) because (?:everyone|everybody|most people)\\b",
         "\\bjoin the (?:crowd|majority),? (?:because|since) everyone\\b",
-        "\\\\b(?:everyone else|the majority|most people) (?:agrees?|supports?|believes?|thinks?)\\\\b.{0,90}\\\\b(?:so|therefore|which proves)\\\\b"
+        "\\b(?:everyone else|the majority|most people) (?:agrees?|supports?|believes?|thinks?)\\b.{0,90}\\b(?:so|therefore|which proves)\\b"
       ]
     },
     {
