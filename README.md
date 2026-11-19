@@ -93,3 +93,48 @@ All contributions require human review. Automated checks validate structure and 
 ## Licence
 
 The project will use CC0 1.0 for original written catalogue content and the MIT Licence for code, unless a later project decision records a different licence. Third-party references and quotations remain subject to their own rights.
+
+
+## GitHub Pages setup
+
+To publish the site:
+
+1. Open **Settings → Pages** in this repository.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Open **Actions** and enable workflows if GitHub asks.
+4. Push to `main`, or run **Actions → Build and deploy site → Run workflow**.
+5. The published site should appear at `https://mikemayne.github.io/defeating-manipulation/`.
+
+The build creates static catalogue pages, a sitemap, `robots.txt` and `llms.txt` in the Actions workspace. Generated files are not committed to `main`.
+
+## Current scaffold
+
+The repository currently includes:
+- A responsive homepage with a searchable technique catalogue.
+- A private-in-browser questionnaire for finding relevant techniques.
+- A starter catalogue of 20 techniques in `techniques.json`.
+- A machine-readable output contract in `analysis-schema.json`.
+- Editorial guidance, local-model design notes and an extension plan in `docs/` and `extension/`.
+- Fictional evaluation fixtures in `evaluation/fixtures.json`.
+- A dependency-free Node.js build and smoke-test script.
+- GitHub Actions workflows for validation and Pages deployment.
+
+The individual technique pages are generated from the catalogue at build time. Their explanatory content and references still need editorial development; the starter entries are not presented as fully researched chapters.
+
+## Local development
+
+Requires Node.js 22 or newer:
+
+```sh
+node scripts/test-build.mjs
+```
+
+This builds the site into `_site/` and checks the generated pages. Serve `_site/` with a local static HTTP server to preview it.
+
+## Next development stages
+
+1. Expand and reference-check the technique explanations.
+2. Build a representative, human-reviewed evaluation set.
+3. Prototype local inference behind the output contract.
+4. Implement a user-triggered browser extension with minimal permissions.
+5. Compare small local models for quotation accuracy, precision, abstention and device performance.
