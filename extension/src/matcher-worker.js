@@ -1,4 +1,5 @@
 import { pipeline, env } from "@huggingface/transformers";
+import { windows } from "./text-windows.mjs";
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
 env.useBrowserCache = true;
@@ -50,27 +51,6 @@ async function initialise(catalogue, patternCatalogue) {
  self.postMessage({ type: "ready" });
 }
 
-function windows(text) {
- const out = [], sentences = [], re = /[^.!?\n]+[.!?]?/g;
- let m;
- while ((m = re.exec(text)) !== null) {
-  const value = m[0].trim();
-  if (value.length > 18) {
-   const start = m.index + m[0].indexOf(value);
-   sentences.push({ text: value, start, end: start + value.length });
-  }
- }
- for (let i = 0; i < sentences.length; i++) {
-  out.push(sentences[i]);
-  if (i + 1 < sentences.length && sentences[i + 1].start - sentences[i].start < 420) {
-   out.push({ text: sentences[i].text + " " + sentences[i + 1].text,
-    // The first sentence supplies context; the second is the response being assessed.
-    // Keep both for classification, but highlight only the response.
-    start: sentences[i + 1].start, end: sentences[i + 1].end, contextual: true });
-  }
- }
- return out;
-}
 
 function deterministicMatches(part) {
  const found = [];
