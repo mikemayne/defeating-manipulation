@@ -49,7 +49,7 @@
    // Inline elements such as strong/em/span belong to the same sentence.
    if (first === second) return "";
    // Separate paragraphs/list items/headings so the matcher sees sentence boundaries.
-   return "\\n";
+   return "\n";
  }
  function selectionSnapshot() {
    const selection = window.getSelection();
