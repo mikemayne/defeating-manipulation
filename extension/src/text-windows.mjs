@@ -57,7 +57,7 @@ export function windows(source) {
   const atom = atoms[i];
   add(atom.start, atom.end);
   // Neighbouring sentences or separate lines may comprise one argument.
-  for (let count = 2; count <= 3 && i + count <= atoms.length; count++) {
+  for (let count = 2; count <= 5 && i + count <= atoms.length; count++) {
    const last = atoms[i + count - 1];
    if (last.end - atom.start > CONTEXT_WINDOW) break;
    add(atom.start, last.end, last.start, true);
