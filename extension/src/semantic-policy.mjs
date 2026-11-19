@@ -31,5 +31,14 @@ export function selectSemanticTechnique(vector, prototypes, dot, options = {}) {
  if (!ranked.length || ranked[0][1] < minSimilarity) return null;
  // Competing categories within the margin are not reliable classifications.
  if (ranked.length > 1 && ranked[0][1] - ranked[1][1] < minMargin) return null;
- return { techniqueIndex: ranked[0][0], score: ranked[0][1] };
+ const margin = ranked.length > 1 ? ranked[0][1] - ranked[1][1] : 1;
+ return { techniqueIndex: ranked[0][0], score: ranked[0][1], margin };
+}
+
+// Qualitative match strength, not a calibrated probability.
+export function semanticMatchStrength(score, margin) {
+ if (score >= 0.75 && margin >= 0.12) return "High";
+ if (score >= 0.68 && margin >= 0.09) return "Mid";
+ return "Low";
+}
 }
