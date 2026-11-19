@@ -186,4 +186,13 @@ assert.deepEqual(embedding.embeddingRows(
  { dims: [1, 3], data: new Float32Array([1,2,3]) }, 1),
  [[1,2,3]], 'Single-input model tensors are supported');
 
+// A model failure must not cause already recognised rule matches to disappear.
+const rulesBeforeFailure = await matchingCore.matchText(
+ multiExample + "\nThe minutes describe a completely ordinary discussion of administrative arrangements.",
+ { techniques: extensionCatalogue.techniques, rules: compiled,
+  prototypes: [{ techniqueIndex: 0, vector: [1] }],
+  embed: async () => { throw Error('Simulated model failure'); } });
+assert.deepEqual([...new Set(rulesBeforeFailure.map(item => item.technique.id))].sort(),
+ ['bandwagon', 'false_dilemma'], 'A failed semantic model preserves deterministic matches');
+
 console.log('Build and matching-core regression checks passed.');
