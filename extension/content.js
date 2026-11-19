@@ -37,6 +37,20 @@
    document.body.normalize();
    tooltip.style.display = "none";
  }
+ const BLOCKS = "p,div,section,article,li,ul,ol,blockquote,h1,h2,h3,h4,h5,h6,pre,table,tr,td,th";
+ function blockAncestor(node) {
+   return node.parentElement?.closest(BLOCKS) || document.body;
+ }
+ function textBoundary(previous, current) {
+   if (!previous) return "";
+   const a = previous.node, b = current.node;
+   if (a.parentElement.closest("br") || b.parentElement.closest("br")) return "\n";
+   const first = blockAncestor(a), second = blockAncestor(b);
+   // Inline elements such as strong/em/span belong to the same sentence.
+   if (first === second) return "";
+   // Separate paragraphs/list items/headings so the matcher sees sentence boundaries.
+   return "\n";
+ }
  function selectionSnapshot() {
    const selection = window.getSelection();
    if (!selection || selection.isCollapsed || !selection.rangeCount) return null;
@@ -50,9 +64,17 @@
    while (walker.nextNode()) {
      const node = walker.currentNode;
      if (!eligible(node) || !range.intersectsNode(node)) continue;
-     const start = node === range.startContainer ? range.startOffset : 0;
-     const end = node === range.endContainer ? range.endOffset : node.nodeValue.length;
-     if (end <= start) continue;
+     // Intersect the selection with each text node; selection endpoints can be elements.
+     const nodeRange = document.createRange();
+     nodeRange.selectNodeContents(node);
+     if (range.compareBoundaryPoints(Range.START_TO_START, nodeRange) > 0)
+       nodeRange.setStart(range.startContainer, range.startOffset);
+     if (range.compareBoundaryPoints(Range.END_TO_END, nodeRange) < 0)
+       nodeRange.setEnd(range.endContainer, range.endOffset);
+     if (nodeRange.collapsed) continue;
+     const start = nodeRange.startOffset, end = nodeRange.endOffset;
+     if (nodeRange.startContainer !== node || nodeRange.endContainer !== node) continue;
+     text += textBoundary(nodes[nodes.length - 1], { node });
      nodes.push({ node, start, end, textStart: text.length, textEnd: text.length + end - start });
      text += node.nodeValue.slice(start, end);
    }
