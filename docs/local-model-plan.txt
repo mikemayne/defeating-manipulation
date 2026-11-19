@@ -1,33 +1,43 @@
 # Local model plan
 
 ## Principle
+
 The first release must work without a model. The catalogue, search and questionnaire are static and usable offline after loading. AI analysis is an optional enhancement.
 
+The purpose of the model is to help the reader recognise techniques and understand their effects. It is not there to conduct an investigation into the publisher.
+
 ## Proposed architecture
+
 - Browser extension: user explicitly selects text or clicks Analyse on the current page.
 - Extraction: collect only the selected text or article text requested by the user; preserve paragraph boundaries.
 - Local inference: run a small instruction model on-device using a replaceable local runtime.
-- Catalogue context: provide only relevant technique definitions and IDs to the model.
-- Structured output: require JSON findings with technique ID, quotation, explanation and uncertainty.
-- Validation: reject unknown IDs, quotations not present in the input, malformed output and unsupported fields.
+- Catalogue context: provide relevant technique definitions and IDs to the model.
+- Structured output: require JSON findings with technique ID, quotation and explanation of likely reader effect.
+- Validation: reject unknown IDs, quotations not present in the input and malformed output.
 - Presentation: show each candidate alongside the source passage and catalogue explanation.
+- Completion: point the reader to the simple sequence: recognise, report where appropriate, disengage.
 
 ## Privacy requirements
+
 No page text is sent to a remote server by default. No background collection, browsing-history access, telemetry or analytics. The user initiates every analysis. If a future optional hosted provider is added, it must be opt-in, clearly labelled and separate from the local path.
 
 ## Model selection
+
 Do not hard-code a vendor or runtime into the catalogue. Evaluate models on:
 - quality of exact quotation matching;
 - false-positive rate;
 - ability to abstain;
 - consistency with the catalogue definitions;
+- concise explanations of reader-facing effects;
 - speed and memory use on ordinary consumer hardware;
 - reproducibility and licence compatibility.
 
 The project should publish a small, manually reviewed evaluation set with fictional examples and counterexamples before recommending a model.
 
 ## Prompt injection
+
 Article text is untrusted data, not instructions. The model must not follow commands embedded in the article. Treat all page content as quoted material to analyse. Never let analysed text trigger network requests, tool calls, code execution or changes to application settings.
 
 ## Evaluation
-Measure precision as well as recall. A system that confidently labels every paragraph with a technique is not useful. Include neutral reporting, legitimate persuasion, satire, academic writing and counterexamples in the test set.
+
+Measure precision as well as recall. A system that confidently labels every paragraph with a technique is not useful. Include neutral reporting, legitimate persuasion, satire, academic writing and counterexamples in the test set. The aim is useful recognition, not prolonged engagement with the material.
