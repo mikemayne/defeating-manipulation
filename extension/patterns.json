@@ -92,7 +92,7 @@
     {
       "id": "appeal_to_ignorance",
       "expressions": [
-        "\\bnobody has proved that .{1,100}\\bso (?:it|they) must be true\\b",
+        "\\bnobody has proved (?:that )?.{1,100}\\bso (?:it|they) must be true\\b",
         "\\bno one has disproved .{1,80}\\bso .{1,50}\\bmust be true\\b",
         "\\bthere is no evidence that it is false,? so it is true\\b"
       ]
@@ -100,8 +100,8 @@
     {
       "id": "false_equivalence",
       "expressions": [
-        "\\b(?:being late for school|lateness) is just as bad as committing a crime\\b",
-        "\\b(?:x|this) is just as (?:bad|serious|harmful) as .{1,100}\\bdespite\\b"
+        "\\bbeing late for school is just as bad as committing a crime\\b",
+        "\\b.{1,80} is just as (?:bad|serious|harmful) as .{1,100}\\b"
       ]
     },
     {
