@@ -838,6 +838,186 @@
       "example": "Illustrative example: During a disagreement, someone says, 'The jury are going to hate that,' without explaining what evidence supports the prediction or addressing the point being discussed.",
       "reader_effect": "Can make a person feel judged, isolated or under threat by introducing the supposed opinion of an audience that is not present. It can also lend an unsupported prediction the appearance of social or institutional authority and divert attention from the actual issue.",
       "references": []
+    },
+    {
+      "id": "hasty_generalisation",
+      "title": "Hasty generalisation",
+      "category": "Argumentation",
+      "summary": "Drawing a broad conclusion about a group or pattern from too few or unrepresentative examples.",
+      "tags": [
+        "generalisation",
+        "sample size",
+        "anecdote"
+      ],
+      "status": "starter",
+      "definition": "A conclusion about a whole group or general pattern is drawn from a small, unrepresentative or otherwise inadequate sample. The examples may be real, but they do not justify the breadth of the conclusion.",
+      "observable_features": [
+        "A universal claim follows from one or a few personal examples.",
+        "A small sample is treated as representative of an entire population.",
+        "The conclusion uses words such as 'all', 'always' or 'everyone' despite limited evidence."
+      ],
+      "example": "I met two rude tourists from France, so all French tourists must be rude."
+    },
+    {
+      "id": "circular_reasoning",
+      "title": "Circular reasoning",
+      "category": "Argumentation",
+      "summary": "Using the conclusion itself, or a restatement of it, as the reason the conclusion is true.",
+      "tags": [
+        "begging the question",
+        "circular argument"
+      ],
+      "status": "starter",
+      "definition": "The argument assumes the point it is supposed to prove. Its supporting reason simply repeats the conclusion in different words rather than providing independent evidence.",
+      "observable_features": [
+        "The reason restates the claim instead of supporting it.",
+        "A claim is justified by saying it is true, reliable or correct without independent support."
+      ],
+      "example": "I'm trustworthy because I always tell the truth."
+    },
+    {
+      "id": "appeal_to_authority",
+      "title": "Appeal to authority",
+      "category": "Evidence and sourcing",
+      "summary": "Treating a claim as true because a person of status or authority endorses it, without relevant expertise or supporting evidence.",
+      "tags": [
+        "authority",
+        "endorsement",
+        "celebrity"
+      ],
+      "status": "starter",
+      "definition": "A claim is presented as established because a prominent or authoritative person endorses it. The person's status is substituted for relevant expertise, evidence or reasoning.",
+      "observable_features": [
+        "A celebrity endorsement is offered as proof that a product or claim works.",
+        "The authority's fame or position is treated as sufficient evidence.",
+        "No relevant expertise or independent evidence is provided."
+      ],
+      "example": "This product must work because a famous actor recommends it."
+    },
+    {
+      "id": "post_hoc",
+      "title": "Post hoc (false cause)",
+      "category": "Argumentation",
+      "summary": "Assuming that because one event happened before another, it caused the later event.",
+      "tags": [
+        "false cause",
+        "sequence",
+        "causation"
+      ],
+      "status": "starter",
+      "definition": "The argument treats a sequence in time as proof of causation. The fact that one event preceded another does not establish that it caused it.",
+      "observable_features": [
+        "A result is attributed to something that happened beforehand without evidence of a causal link.",
+        "A coincidence or temporal sequence is treated as proof of cause."
+      ],
+      "example": "I wore my lucky socks and we won, so my socks caused the victory."
+    },
+    {
+      "id": "red_herring",
+      "title": "Red herring",
+      "category": "Argumentation",
+      "summary": "Diverting attention from the issue being discussed by introducing an irrelevant point.",
+      "tags": [
+        "distraction",
+        "deflection",
+        "irrelevance"
+      ],
+      "status": "starter",
+      "definition": "The argument shifts attention away from the original question by introducing a separate issue that does not answer it.",
+      "observable_features": [
+        "A response changes the subject instead of addressing the question.",
+        "An unrelated problem is raised as a reason not to discuss the original issue."
+      ],
+      "example": "Why worry about pollution when there are people who don't have jobs?"
+    },
+    {
+      "id": "appeal_to_emotion",
+      "title": "Appeal to emotion",
+      "category": "Emotional appeals",
+      "summary": "Using an emotional response as a substitute for relevant evidence or reasoning.",
+      "tags": [
+        "emotion",
+        "sympathy",
+        "persuasion"
+      ],
+      "status": "starter",
+      "definition": "The argument asks the audience to accept a conclusion because of the feelings it evokes, rather than because of evidence or reasoning that supports it.",
+      "observable_features": [
+        "Sympathy, fear, pity or affection is offered as the main reason to accept a claim.",
+        "An emotional circumstance is presented as grounds for a decision without addressing relevant criteria."
+      ],
+      "example": "You should give me a good grade because I've had a really difficult week."
+    },
+    {
+      "id": "tu_quoque",
+      "title": "Tu quoque (hypocrisy)",
+      "category": "Argumentation",
+      "summary": "Rejecting criticism by pointing out that the critic behaves inconsistently with their own advice.",
+      "tags": [
+        "hypocrisy",
+        "whataboutism",
+        "personal inconsistency"
+      ],
+      "status": "starter",
+      "definition": "Instead of addressing whether the criticism is valid, the response points to the critic's own behaviour or inconsistency. A person's hypocrisy does not by itself make their argument false.",
+      "observable_features": [
+        "A criticism is dismissed with 'you do it too'.",
+        "The critic's conduct is substituted for an answer to the substance of the criticism."
+      ],
+      "example": "You can't tell me to stop smoking when you smoke yourself."
+    },
+    {
+      "id": "appeal_to_ignorance",
+      "title": "Appeal to ignorance",
+      "category": "Argumentation",
+      "summary": "Claiming that a proposition is true because it has not been disproved, or false because it has not been proved.",
+      "tags": [
+        "absence of evidence",
+        "burden of proof"
+      ],
+      "status": "starter",
+      "definition": "The absence of proof for one side is treated as proof for the other. A lack of disproof does not establish that a claim is true.",
+      "observable_features": [
+        "A claim is said to be true because nobody has disproved it.",
+        "A claim is said to be false solely because nobody has proved it."
+      ],
+      "example": "Nobody has proved that ghosts don't exist, so they must be real."
+    },
+    {
+      "id": "false_equivalence",
+      "title": "False equivalence",
+      "category": "Argumentation",
+      "summary": "Treating two things as equivalent despite important differences in scale, severity, evidence or context.",
+      "tags": [
+        "misleading comparison",
+        "equivalence",
+        "proportionality"
+      ],
+      "status": "starter",
+      "definition": "The argument presents two things as equivalent while overlooking differences that matter to the comparison. The comparison creates a misleading impression of similarity.",
+      "observable_features": [
+        "Two actions or situations are described as equally serious despite substantial differences.",
+        "A superficial similarity is used to imply equivalence while relevant distinctions are ignored."
+      ],
+      "example": "Being late for school is just as bad as committing a crime."
+    },
+    {
+      "id": "cherry_picking",
+      "title": "Cherry picking",
+      "category": "Evidence and sourcing",
+      "summary": "Selecting only the evidence that supports a conclusion while ignoring relevant evidence that may contradict it.",
+      "tags": [
+        "selective evidence",
+        "omission",
+        "confirmation bias"
+      ],
+      "status": "starter",
+      "definition": "The argument highlights favourable examples or data while excluding relevant contrary evidence, creating a misleading impression of what the full evidence shows.",
+      "observable_features": [
+        "Only supporting examples are presented despite relevant contrary evidence.",
+        "A conclusion is based on a small selected set of cases without explaining how they were chosen."
+      ],
+      "example": "This diet works because I found three people online who lost weight using it."
     }
   ]
 }

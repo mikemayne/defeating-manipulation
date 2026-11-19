@@ -1,91 +1,19 @@
 {
   "patterns": [
-    {
-      "id": "manufactured_consensus",
-      "expressions": [
-        "\\beveryone knows\\b",
-        "\\bthe public has had enough\\b",
-        "\\bpeople are saying\\b",
-        "\\beverybody agrees\\b"
-      ]
-    },
-    {
-      "id": "premature_closure",
-      "expressions": [
-        "\\bcase closed\\b",
-        "\\bnothing more to discuss\\b",
-        "\\bthe truth is now clear\\b",
-        "\\bsettles the matter once and for all\\b"
-      ]
-    },
-    {
-      "id": "threat_framing",
-      "expressions": [
-        "\\byou will pay\\b",
-        "\\byou'll pay\\b",
-        "\\byou will regret it\\b",
-        "\\bface the consequences if you (?:disagree|refuse|fail)\\b"
-      ]
-    },
-    {
-      "id": "paternalistic_coercion_framing",
-      "expressions": [
-        "\\bfor your own good\\b",
-        "\\bwe know what is best for you\\b",
-        "\\bwe know what's best for you\\b"
-      ]
-    },
-    {
-      "id": "guilt_appeal",
-      "expressions": [
-        "\\bhow can anyone live with themselves if\\b",
-        "\\byou should be ashamed if\\b",
-        "\\byou will be responsible for (?:their|its) suffering\\b"
-      ]
-    },
-    {
-      "id": "false_dilemma",
-      "expressions": [
-        "\\byou are either with us or against us\\b",
-        "\\bthere are only two choices\\b",
-        "\\bthe only alternatives? are\\b"
-      ]
-    },
-    {
-      "id": "incitement_to_violence",
-      "expressions": [
-        "\\bthey should be (?:killed|attacked|beaten)\\b",
-        "\\bdrive them out by force\\b",
-        "\\bthe only answer is to attack\\b"
-      ]
-    },
-    {
-      "id": "disgust_appeal",
-      "expressions": [
-        "\\b(?:filthy|vile|rotten|disgusting) (?:people|group|proposal|idea|practice)\\b"
-      ]
-    },
-    {
-      "id": "criminalising_dissent",
-      "expressions": [
-        "\\bcriminals? (?:and|for) (?:protesting|protest)\\b",
-        "\\bcriminal agenda\\b",
-        "\\bthe protesters are criminals\\b"
-      ]
-    },
-    {
-      "id": "manufactured_consensus",
-      "expressions": [
-        "\\bwidely accepted by everyone\\b"
-      ]
-    },
-    {
-      "id": "invoking_an_imagined_audience",
-      "expressions": [
-        "\\bthe (?:press|jury|police|public|authorities|court|judges?|employers?|family) (?:are|is) going to (?:hate|love|dislike) (?:that|this)\\b",
-        "\\bthe (?:press|jury|police|public|authorities|court|judges?|employers?|family) won't like (?:that|this)\\b",
-        "\\b(?:everyone|people) are going to (?:hate|love) that\\b"
-      ]
-    }
+    {"id":"ad_hominem","expressions":["\\b(?:your )?(?:argument|claim|point|reasoning) (?:is|must be) (?:wrong|false|invalid) because (?:you are|you're) (?:an? )?(?:idiot|moron|stupid|ignorant)\\b","\\b(?:you're|you are) (?:an? )?(?:idiot|moron|fool), so (?:your|that) (?:argument|claim|point)\\b"]},
+    {"id":"straw_man","expressions":["\\byou (?:want|think|believe|are saying) .{0,100}\\bso you (?:obviously|clearly) (?:want|think|believe) .{0,100}\\b(?:no freedom|nothing|never|always|everything)\\b","\\bso you (?:think|want|believe|are saying) .{0,120}\\b(?:never|nothing|all|every|completely|at all)\\b"]},
+    {"id":"bandwagon","expressions":["\\b(?:everyone|everybody|the whole world|most people) (?:believes?|thinks?|does it|agrees?)\\b.{0,70}\\b(?:so|therefore|must be true|right)\\b","\\b(?:it must be true|it must be right) because (?:everyone|everybody|most people)\\b","\\bjoin the (?:crowd|majority),? (?:because|since) everyone\\b"]},
+    {"id":"slippery_slope","expressions":["\\bif we (?:allow|let|permit|start) .{0,100}\\b(?:soon|eventually|before long) .{0,120}\\b(?:collapse|fail|disaster|nobody|everyone|completely)\\b","\\bone (?:small )?step will inevitably lead to .{0,100}\\b(?:disaster|collapse|chaos)\\b"]},
+    {"id":"false_dilemma","expressions":["\\b(?:you're|you are) either with us or against us\\b","\\b(?:you're|you are) either .{1,70}\\bor\\b.{1,70}\\b(?:no other choice|no alternative|nothing else)\\b","\\bthere are only two (?:options|choices)\\b"]},
+    {"id":"hasty_generalisation","expressions":["\\bi met (?:one|two|three|a few) .{1,80}\\bso (?:all|every|none of)\\b","\\b(?:one|two|three|a few) (?:people|cases|examples) .{0,100}\\bso (?:all|everyone|always|never)\\b"]},
+    {"id":"circular_reasoning","expressions":["\\bi'?m trustworthy because i always tell the truth\\b","\\b(?:it is|it's) true because .{0,50}\\b(?:it is|it's) true\\b","\\b(?:this|that) is correct because .{0,50}\\b(?:this|that) is correct\\b"]},
+    {"id":"appeal_to_authority","expressions":["\\bthis (?:product|treatment|claim|idea) must work because .{0,60}\\b(?:famous actor|celebrity|influencer) (?:recommends?|endorses?) it\\b","\\b(?:it must be true|the claim must be true) because (?:a )?(?:famous|well-known) (?:actor|celebrity|influencer) says so\\b"]},
+    {"id":"post_hoc","expressions":["\\bi wore .{0,50}\\band we won,? so .{0,50}\\b(?:caused|made) (?:the )?victory\\b","\\bafter .{1,80}\\btherefore .{1,80}\\b(?:caused|because of)\\b","\\bthis happened after that,? so that must have caused it\\b"]},
+    {"id":"red_herring","expressions":["\\bwhy worry about .{1,100}\\bwhen there are (?:other )?(?:people|others)\\b","\\bwhat about .{1,100}\\binstead of answering\\b"]},
+    {"id":"appeal_to_emotion","expressions":["\\byou should (?:give|grant|award) me .{0,80}\\bbecause i'?ve had .{0,60}\\b(?:difficult|terrible|hard) week\\b","\\byou must agree because .{0,50}\\b(?:i'?m begging|i'?m suffering|i had a terrible|you'?ll break my heart)\\b"]},
+    {"id":"tu_quoque","expressions":["\\byou (?:can't|cannot) tell me to .{0,80}\\bwhen you .{0,50}\\b(?:yourself|too)\\b","\\bwhy should i listen to you when you (?:do|did) the same thing\\b","\\byou do it too\\b"]},
+    {"id":"appeal_to_ignorance","expressions":["\\bnobody has proved (?:that )?.{1,100}\\bso (?:it|they) must be (?:true|real)\\b","\\bno one has disproved .{1,80}\\bso .{1,50}\\bmust be (?:true|real)\\b","\\bthere is no evidence that it is false,? so it is true\\b"]},
+    {"id":"false_equivalence","expressions":["\\bbeing late for school is just as bad as committing a crime\\b","\\b.{1,80} is just as (?:bad|serious|harmful) as .{1,100}\\b"]},
+    {"id":"cherry_picking","expressions":["\\bthis (?:diet|method|product|treatment) works because i found .{1,50}\\b(?:people|reviews|examples) .{0,60}\\b(?:online|on the internet)\\b","\\bhere are (?:three|four|five) examples proving .{1,80}\\b(?:ignore|excluding|despite) (?:the )?(?:other|contrary) evidence\\b"]}
   ]
 }
