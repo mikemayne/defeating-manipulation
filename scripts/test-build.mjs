@@ -93,9 +93,9 @@ for (const [id, example] of multilineCases) {
    : part.text, 'Source offsets must survive normalisation');
  }
 }
-assert.equal(windows('Heading\nA short note\nThis is another line.')[0].text,
- 'Heading A short note This is another line.',
- 'Line breaks are whitespace within a continuous statement');
+assert.ok(windows('Heading\nA short note\nThis is another line.').some(part =>
+ part.text === 'Heading A short note This is another line.'),
+ 'Multi-line context is available in addition to individual lines');
 
 // Verify the async selection workflow exposes the busy cursor and always restores it.
 const selectionScript = fs.readFileSync('extension/content.js', 'utf8');
@@ -166,4 +166,24 @@ assert.ok(selectionScript.includes('"Match: Rule"'),
 assert.ok(!selectionScript.includes('Match confidence: 100%'),
  'Do not present rule matches as calibrated confidence');
 
-console.log('Build, fallacy, multiline, cursor, semantic-precision and match-strength checks passed.');
+// Both the browser worker and evaluator use exactly this matching core.
+const matchingCore = await import('../extension/src/matching-core.mjs');
+const compiled = matchingCore.compilePatternRules(extensionCatalogue, extensionPatterns);
+const multiExample = "You're either with us or against us.\\nEveryone believes this, so it must be true.";
+const multiMatches = await matchingCore.matchText(multiExample,
+ { techniques: extensionCatalogue.techniques, rules: compiled });
+assert.deepEqual([...new Set(multiMatches.map(item => item.technique.id))].sort(),
+ ['bandwagon', 'false_dilemma'], 'Combined selection finds both distinct techniques');
+for (const item of multiMatches) {
+ assert.ok(item.start >= 0 && item.end <= multiExample.length,
+  'Match offsets refer to the selected source text');
+}
+const embedding = await import('../extension/src/embedding-rows.mjs');
+assert.deepEqual(embedding.embeddingRows(
+ { dims: [2, 3], data: new Float32Array([1,2,3,4,5,6]) }, 2),
+ [[1,2,3],[4,5,6]], 'Multi-input model tensors are separated into rows');
+assert.deepEqual(embedding.embeddingRows(
+ { dims: [1, 3], data: new Float32Array([1,2,3]) }, 1),
+ [[1,2,3]], 'Single-input model tensors are supported');
+
+console.log('Build and matching-core regression checks passed.');
