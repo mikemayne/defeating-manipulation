@@ -108,4 +108,62 @@ assert.match(selectionScript, /finally\s*\{\s*setBusy\(false\);\s*\}/,
 assert.ok(selectionScript.includes('activeAnalyses'),
  'Concurrent matching requests retain the busy cursor until finished');
 
-console.log('Build, fallacy, multiline and busy-cursor checks passed.');
+// Regression cases for semantic false positives and missing prototypes.
+const policy = await import('../extension/src/semantic-policy.mjs');
+const named = id => extensionCatalogue.techniques.find(item => item.id === id);
+for (const id of ['ad_hominem', 'bandwagon']) {
+ assert.ok(named(id).examples?.length >= 2,
+  'Semantic matching has actual examples for ' + id);
+}
+const classificationCases = [
+ ['ad_hominem', "Your opinion about climate change doesn't matter because you didn't finish school."],
+ ['ad_hominem', "Don't listen to her argument: she is too uneducated to understand this."],
+ ['bandwagon', 'Everyone believes this, so it must be true.'],
+ ['bandwagon', 'Most people agree with the proposal, therefore it must be the right choice.'],
+ ['bandwagon', 'Everyone else supports it, so you should too.'],
+ ['straw_man', "You want less homework, so you clearly don't care about education."]
+];
+for (const [expected, statement] of classificationCases) {
+ const found = [...ruleMap.entries()].filter(([, rules]) => rules.some(regex => regex.test(statement)))
+  .map(([id]) => id);
+ assert.ok(found.includes(expected), 'Expected structural match for ' + statement);
+ assert.deepEqual(found, [expected], 'No competing deterministic classification for ' + statement);
+}
+const descriptiveNonExamples = [
+ 'Appeal to authority',
+ 'Drawing a broad conclusion from too little evidence',
+ 'Attacking someone personally rather than their argument',
+ 'Hasty generalisation'
+];
+for (const fragment of descriptiveNonExamples) {
+ assert.equal(policy.isSemanticCandidate(fragment, extensionCatalogue.techniques), false,
+  'A technique name or neutral definition must not become a semantic match: ' + fragment);
+}
+const fauxPrototypes = [
+ { techniqueIndex: 0, vector: [0.80] },
+ { techniqueIndex: 1, vector: [0.78] }
+];
+const fauxDot = (_query, vector) => vector[0];
+assert.equal(policy.selectSemanticTechnique([1], fauxPrototypes, fauxDot), null,
+ 'Close competing semantic categories must not be guessed');
+assert.equal(policy.selectSemanticTechnique([1],
+ [{ techniqueIndex: 0, vector: [0.51] }], fauxDot), null,
+ 'Weak semantic similarity must not be assigned a technique');
+assert.equal(policy.selectSemanticTechnique([1],
+ [{ techniqueIndex: 0, vector: [0.82] }, { techniqueIndex: 1, vector: [0.62] }], fauxDot).techniqueIndex, 0,
+ 'Strong and distinctive semantic similarity may still classify');
+
+// Match-strength labels are qualitative and never convert similarity to a percentage.
+assert.equal(policy.semanticMatchStrength(0.82, 0.20), 'High');
+assert.equal(policy.semanticMatchStrength(0.70, 0.10), 'Mid');
+assert.equal(policy.semanticMatchStrength(0.60, 0.07), 'Low');
+assert.equal(policy.semanticMatchStrength(0.80, 0.07), 'Low',
+ 'A strong top score with close competitors is still ambiguous');
+assert.ok(selectionScript.includes('Match strength: '),
+ 'Semantic classifications display a qualitative label in the popup');
+assert.ok(selectionScript.includes('"Match: Rule"'),
+ 'Deterministic rule matches are labelled without treating them as 100% confidence');
+assert.ok(!selectionScript.includes('Match confidence: 100%'),
+ 'Do not present rule matches as calibrated confidence');
+
+console.log('Build, fallacy, multiline, cursor, semantic-precision and match-strength checks passed.');

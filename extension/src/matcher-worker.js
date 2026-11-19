@@ -1,5 +1,6 @@
 import { pipeline, env } from "@huggingface/transformers";
 import { windows } from "./text-windows.mjs";
+import { isSemanticCandidate, selectSemanticTechnique, semanticMatchStrength } from "./semantic-policy.mjs";
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
 env.useBrowserCache = true;
@@ -8,7 +9,6 @@ env.useBrowserCache = true;
 env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
 
 const MODEL = "Xenova/all-MiniLM-L6-v2";
-const MATCH_THRESHOLD = 0.43;
 let extractor, techniques = [], prototypes = [], compiledPatterns = [], initialising;
 
 const dot = (a, b) => {
@@ -77,18 +77,17 @@ self.addEventListener("message", async event => {
 
   // Explicit phrase/structure rules catch known constructions reliably.
   const patterned = parts.flatMap(deterministicMatches);
-  const embedded = await embed(parts.map(p => p.text));
+  const semanticParts = parts.filter(part =>
+   isSemanticCandidate(part.text, techniques) &&
+   !patterned.some(match => match.start < part.end && match.end > part.start));
+  const embedded = semanticParts.length ? await embed(semanticParts.map(part => part.text)) : [];
   const semantic = [];
-  for (let i = 0; i < parts.length; i++) {
-   // A semantic match must not duplicate or override a deterministic match.
-   if (patterned.some(m => m.start < parts[i].end && m.end > parts[i].start)) continue;
-   let best = -1, score = -1;
-   for (const prototype of prototypes) {
-    const value = dot(embedded[i], prototype.vector);
-    if (value > score) { score = value; best = prototype.techniqueIndex; }
-   }
-   if (score >= MATCH_THRESHOLD) {
-    semantic.push({ ...parts[i], technique: techniques[best], score, method: "semantic" });
+  for (let i = 0; i < semanticParts.length; i++) {
+   const best = selectSemanticTechnique(embedded[i], prototypes, dot);
+   if (best) {
+    semantic.push({ ...semanticParts[i], technique: techniques[best.techniqueIndex],
+     score: best.score, method: "semantic",
+     strength: semanticMatchStrength(best.score, best.margin) });
    }
   }
 
