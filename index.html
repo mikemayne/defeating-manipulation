@@ -4,31 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="A public, collaborative knowledge base of language patterns that AI tools can use to analyse online articles.">
-<title>Defeating Manipulation — Open Knowledge Base</title>
+<meta name="description" content="A searchable library of manipulation techniques.">
+<title>Manipulation Techniques</title>
 <style>
-:root{color-scheme:light dark;--paper:#dcecff;--surface:#edf6ff;--ink:#102b46;--muted:#38546e;--accent:#075eaa;--pale:#c5e0fa;--line:#9bbbd8;--serif:Georgia,"Iowan Old Style",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
-@media(prefers-color-scheme:dark){:root{--paper:#102b46;--surface:#183c60;--ink:#f0f7ff;--muted:#c0d7ed;--accent:#8ecaff;--pale:#214d76;--line:#426b91}}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans)}a{color:var(--accent)}.wrap{width:min(850px,calc(100% - 40px));margin:auto}header{border-bottom:1px solid var(--line)}.nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-weight:800;text-decoration:none;color:var(--ink);letter-spacing:-.03em}.nav a:last-child{font-size:.9rem}.hero{padding:clamp(64px,12vw,120px) 0 72px}.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-size:.75rem;font-weight:800}.hero h1{font:normal clamp(2.8rem,7vw,5.4rem)/1.04 var(--serif);letter-spacing:-.055em;max-width:780px;margin:18px 0 24px}.lead{max-width:720px;color:var(--muted);font-size:1.2rem}.purpose{margin-top:42px;padding:24px 26px;border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--surface);border-radius:4px}.purpose h2{font:normal 1.55rem/1.2 var(--serif);margin:0 0 10px}.purpose p{margin:0;color:var(--muted)}.links{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;font-weight:700}.links a{text-decoration:none}.links a:hover{text-decoration:underline}footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.85rem}
+:root{color-scheme:light dark;--paper:#dcecff;--surface:#edf6ff;--ink:#102b46;--muted:#38546e;--accent:#075eaa;--line:#9bbbd8;--serif:Georgia,"Iowan Old Style",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
+@media(prefers-color-scheme:dark){:root{--paper:#102b46;--surface:#183c60;--ink:#f0f7ff;--muted:#c0d7ed;--accent:#8ecaff;--line:#426b91}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 var(--sans)}a{color:var(--accent)}.wrap{width:min(1100px,calc(100% - 40px));margin:auto}header{border-bottom:1px solid var(--line)}.nav{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-weight:800;text-decoration:none;color:var(--ink)}.nav a:last-child{font-size:.9rem}.main{padding:52px 0 72px}h1{font:normal clamp(2.4rem,6vw,4.2rem)/1.1 var(--serif);letter-spacing:-.04em;margin:0 0 28px}.toolbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:0 0 24px}.toolbar input{flex:1;min-width:240px;padding:13px 15px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink);font:inherit}.count{color:var(--muted);font-size:.9rem}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.tech{border:1px solid var(--line);background:var(--surface);border-radius:5px;padding:20px}.category{font-size:.72rem;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.tech h2{font-size:1.15rem;line-height:1.3;margin:8px 0}.tech h2 a{text-decoration:none;color:var(--ink)}.tech h2 a:hover{color:var(--accent)}.tech p{margin:0;color:var(--muted);font-size:.94rem}.empty{color:var(--muted);grid-column:1/-1}@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.grid{grid-template-columns:1fr}.main{padding-top:36px}}
 </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="brand" href="./">Defeating Manipulation</a><a href="https://github.com/mikemayne/defeating-manipulation">View the repository ↗</a></div></header>
-<main class="wrap">
-<section class="hero">
-<div class="eyebrow">Public · Collaborative · Open source</div>
-<h1>A shared knowledge base of language patterns.</h1>
-<p class="lead">Defeating Manipulation is a public, collaborative collection of recognised patterns in language and media. It is designed as a resource that AI tools can use to identify and explain matching patterns in online articles.</p>
-<div class="purpose">
-<h2>What this project does</h2>
-<p>The repository defines techniques, describes their observable features and records examples and references. AI analysis tools can compare article text against these definitions and show readers where patterns occur. The software identifies textual matches; readers decide what significance to give them.</p>
-</div>
-<div class="links">
-<a href="https://github.com/mikemayne/defeating-manipulation/blob/main/techniques.json">Explore the machine-readable catalogue ↗</a>
-<a href="https://github.com/mikemayne/defeating-manipulation/blob/main/CONTRIBUTING.txt">Contribute to the project ↗</a>
-</div>
-</section>
+<header><div class="wrap nav"><a class="brand" href="./">Manipulation Techniques</a><a href="https://github.com/mikemayne/defeating-manipulation">Repository ↗</a></div></header>
+<main class="wrap main">
+<h1>Manipulation techniques</h1>
+<div class="toolbar"><input id="search" type="search" placeholder="Search techniques…" aria-label="Search techniques"><span class="count" id="count" aria-live="polite"></span></div>
+<div id="catalogue" class="grid"><p class="empty">Loading library…</p></div>
 </main>
-<footer><div class="wrap">An open knowledge base for collaborative development. The repository is the source of truth for its definitions and data.</div></footer>
+<script>
+let techniques=[];const root=document.getElementById('catalogue'),search=document.getElementById('search'),count=document.getElementById('count');
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){const q=search.value.trim().toLowerCase();const found=techniques.filter(t=>[t.title,t.summary,t.category,...(t.tags||[])].join(' ').toLowerCase().includes(q));count.textContent=found.length+' / '+techniques.length;root.innerHTML=found.map(t=>'<article class="tech"><div class="category">'+esc(t.category)+'</div><h2><a href="./techniques/'+encodeURIComponent(t.id)+'.html">'+esc(t.title)+'</a></h2><p>'+esc(t.summary)+'</p></article>').join('')||'<p class="empty">No matching techniques.</p>'}
+search.addEventListener('input',render);fetch('./techniques.json').then(r=>{if(!r.ok)throw new Error('Catalogue unavailable');return r.json()}).then(d=>{techniques=d.techniques||[];render()}).catch(()=>root.innerHTML='<p class="empty">The library could not be loaded.</p>');
+</script>
 </body>
 </html>
