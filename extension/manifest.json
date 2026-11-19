@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Defeating Manipulation — Pattern Highlighter",
+  "version": "0.1.0",
+  "description": "Highlight textual patterns from the Defeating Manipulation library on webpages.",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "https://raw.githubusercontent.com/*"
+  ],
+  "browser_action": {
+    "default_title": "Toggle manipulation-pattern highlighting"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "web_accessible_resources": [
+    "patterns.json"
+  ],
+  "applications": {
+    "gecko": {
+      "id": "pattern-highlighter@defeating-manipulation.org",
+      "strict_min_version": "109.0"
+    }
+  }
+}
