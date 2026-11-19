@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "description": "A starter catalogue of recognised rhetorical and persuasive techniques. Entries describe observable textual patterns, not author intent.",
+  "techniques": [
+    {
+      "id": "loaded_language",
+      "title": "Loaded language",
+      "category": "Framing",
+      "summary": "Words with strong positive or negative associations that encourage an emotional evaluation beyond the literal information conveyed.",
+      "tags": [
+        "emotional framing",
+        "word choice"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "ad_hominem",
+      "title": "Ad hominem",
+      "category": "Argumentation",
+      "summary": "Attacking a person’s character or circumstances instead of addressing the substance of their argument.",
+      "tags": [
+        "personal attack",
+        "credibility"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "false_dilemma",
+      "title": "False dilemma",
+      "category": "Argumentation",
+      "summary": "Presenting two options as the only possibilities when other reasonable alternatives exist.",
+      "tags": [
+        "binary choice",
+        "oversimplification"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "straw_man",
+      "title": "Straw man",
+      "category": "Argumentation",
+      "summary": "Recasting an opposing position in a weaker or distorted form that is easier to criticise.",
+      "tags": [
+        "misrepresentation",
+        "rebuttal"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "appeal_to_fear",
+      "title": "Appeal to fear",
+      "category": "Emotional appeals",
+      "summary": "Using a threat or frightening possibility to influence judgement or action, particularly when supporting evidence is missing or unclear.",
+      "tags": [
+        "threat",
+        "fear",
+        "urgency"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "bandwagon",
+      "title": "Bandwagon appeal",
+      "category": "Social influence",
+      "summary": "Suggesting that a claim or action is correct because many people supposedly accept or do it.",
+      "tags": [
+        "popularity",
+        "consensus"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "selective_presentation",
+      "title": "Selective presentation",
+      "category": "Evidence and sourcing",
+      "summary": "Highlighting evidence that supports a particular conclusion while leaving out relevant counterevidence or context.",
+      "tags": [
+        "cherry picking",
+        "omission"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "out_of_context_quote",
+      "title": "Quote mining",
+      "category": "Evidence and sourcing",
+      "summary": "Using a quotation while omitting surrounding material that changes or qualifies its meaning.",
+      "tags": [
+        "quotation",
+        "context"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "whataboutism",
+      "title": "Whataboutism",
+      "category": "Argumentation",
+      "summary": "Deflecting criticism by pointing to another alleged wrong rather than addressing the original point.",
+      "tags": [
+        "deflection",
+        "tu quoque"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "false_authority",
+      "title": "Appeal to false authority",
+      "category": "Evidence and sourcing",
+      "summary": "Using a person’s status or claimed expertise as support where their expertise is not relevant or the authority is not established.",
+      "tags": [
+        "expertise",
+        "credentials"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "conspiracy_framing",
+      "title": "Conspiracy framing",
+      "category": "Framing",
+      "summary": "Explaining events through an alleged hidden plan while relying on insinuation or claims that are difficult to test.",
+      "tags": [
+        "hidden actors",
+        "unfalsifiability"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "repetition",
+      "title": "Repetition and familiarity",
+      "category": "Attention and memory",
+      "summary": "Repeating a claim or phrase so that familiarity can make it easier to recall or feel more credible.",
+      "tags": [
+        "repetition",
+        "familiarity"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "priming",
+      "title": "Priming",
+      "category": "Attention and memory",
+      "summary": "Presenting cues that make particular concepts or associations more accessible when a reader processes later information.",
+      "tags": [
+        "association",
+        "context"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "presupposition",
+      "title": "Presupposition",
+      "category": "Framing",
+      "summary": "Embedding an assumption in a sentence so that it is treated as given rather than argued for.",
+      "tags": [
+        "embedded assumption",
+        "question framing"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "false_balance",
+      "title": "False balance",
+      "category": "Evidence and sourcing",
+      "summary": "Presenting positions as comparably supported when the available evidence is substantially unequal.",
+      "tags": [
+        "proportionality",
+        "evidence"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "anecdotal_evidence",
+      "title": "Anecdotal evidence",
+      "category": "Evidence and sourcing",
+      "summary": "Using an individual story as if it establishes a general pattern without adequate supporting data.",
+      "tags": [
+        "personal story",
+        "generalisation"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "slippery_slope",
+      "title": "Slippery slope",
+      "category": "Argumentation",
+      "summary": "Claiming that one step will lead to a chain of further consequences without adequately establishing the links.",
+      "tags": [
+        "causal chain",
+        "prediction"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "scapegoating",
+      "title": "Scapegoating",
+      "category": "Framing",
+      "summary": "Assigning broad blame for a complex problem to a person or group while simplifying or ignoring other causes.",
+      "tags": [
+        "blame",
+        "group framing"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "motte_bailey",
+      "title": "Motte-and-bailey",
+      "category": "Argumentation",
+      "summary": "Moving between a bold, controversial claim and a narrower, easier-to-defend claim as criticism arises.",
+      "tags": [
+        "claim shifting",
+        "equivocation"
+      ],
+      "status": "starter",
+      "references": []
+    },
+    {
+      "id": "gish_gallop",
+      "title": "Gish gallop",
+      "category": "Argumentation",
+      "summary": "Overwhelming a discussion with numerous claims faster than they can reasonably be checked or answered.",
+      "tags": [
+        "information overload",
+        "debate"
+      ],
+      "status": "starter",
+      "references": []
+    }
+  ]
+}
