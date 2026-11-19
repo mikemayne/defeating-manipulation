@@ -26,20 +26,27 @@
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
  const eligible = node => node.parentElement &&
    !node.parentElement.closest("script,style,noscript,textarea,input,select,option,button,code,pre,svg,mark,[contenteditable],#dm-pattern-tooltip");
- function show(mark, technique) {
+ function show(mark, match) {
+   const technique = match.technique;
    tooltip.replaceChildren();
    const title = document.createElement("strong");
    title.textContent = technique.title;
    const summary = document.createElement("div");
    summary.textContent = technique.summary || "";
    summary.style.margin = "6px 0 8px";
+   const strength = document.createElement("div");
+   strength.textContent = match.method === "pattern"
+     ? "Match: Rule"
+     : "Match strength: " + (match.strength || "Low");
+   strength.style.cssText = "margin:0 0 8px;font-size:12px;color:#b5d0e5;";
+   strength.title = "Match strength is an experimental estimate, not the probability that the text is manipulative.";
    const link = document.createElement("a");
    link.textContent = "Read the full explanation";
    link.href = `https://mikemayne.github.io/defeating-manipulation/techniques/${encodeURIComponent(technique.id)}.html`;
    link.target = "_blank";
    link.rel = "noopener noreferrer";
    link.style.color = "#7ee4e7";
-   tooltip.append(title, summary, link);
+   tooltip.append(title, summary, strength, link);
    const r = mark.getBoundingClientRect();
    tooltip.style.display = "block";
    tooltip.style.left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - 350)) + "px";
@@ -115,8 +122,8 @@
        const mark = document.createElement("mark");
        mark.setAttribute(MARK, match.technique.id);
        mark.style.cssText = `background:transparent;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-color:${colour(match.technique)};text-decoration-thickness:3px;text-underline-offset:3px;cursor:help;`;
-       mark.addEventListener("mouseenter", () => show(mark, match.technique));
-       mark.addEventListener("focus", () => show(mark, match.technique));
+       mark.addEventListener("mouseenter", () => show(mark, match));
+       mark.addEventListener("focus", () => show(mark, match));
        mark.tabIndex = 0;
        range.surroundContents(mark);
      }
