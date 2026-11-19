@@ -48,7 +48,23 @@
         "rebuttal"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "definition": "A response misrepresents another person's stated position by exaggerating it, removing qualifications or replacing it with a more extreme or less reasonable claim. The response then attacks that invented position instead of addressing what was actually said. The distortion can be explicit even when the original position is not repeated in the same sentence.",
+      "observable_features": [
+        "Restating a moderate or qualified position as an extreme absolute position.",
+        "Replacing what someone actually proposed with a more unreasonable version that is easier to reject.",
+        "Using phrases such as 'so you think…', 'in other words…' or 'you're saying…' to introduce a position the person did not state.",
+        "Attacking the exaggerated replacement rather than engaging with the original argument.",
+        "The distorted version changes the scope, strength or meaning of the original position."
+      ],
+      "example": "Someone says, 'We should reduce the amount of homework students get because they need more time to rest and pursue hobbies.' The reply is, 'So you think students should never have to do any homework and should just play around all day?'",
+      "examples": [
+        "Someone says, 'We should reduce the amount of homework students get.' The reply is, 'So you think students should never have to do any homework and should just play around all day?'",
+        "'I think the policy needs some changes.' 'So you want to scrap the whole thing?'",
+        "'We should be more careful about spending.' 'So you want to stop funding everything?'",
+        "'The evidence does not prove that conclusion.' 'So you're saying the evidence is completely worthless?'"
+      ],
+      "reader_effect": "Can make a position appear unreasonable by substituting an exaggerated version for what was actually said, then directing criticism at the substitute."
     },
     {
       "id": "appeal_to_fear",
