@@ -195,4 +195,30 @@ const rulesBeforeFailure = await matchingCore.matchText(
 assert.deepEqual([...new Set(rulesBeforeFailure.map(item => item.technique.id))].sort(),
  ['bandwagon', 'false_dilemma'], 'A failed semantic model preserves deterministic matches');
 
-console.log('Build and matching-core regression checks passed.');
+// Web benchmark uses the same shared matching core as Firefox and generates
+// large datasets without keeping all cases in memory.
+const { generatedCase, validateSeeds } = await import('../evaluation/benchmark-generator.mjs');
+const testSeeds = JSON.parse(fs.readFileSync('evaluation/matcher-examples.json', 'utf8')).cases;
+validateSeeds(testSeeds, extensionCatalogue.techniques.map(item => item.id));
+assert.equal(JSON.stringify(generatedCase(testSeeds, 250, 2026)),
+ JSON.stringify(generatedCase(testSeeds, 250, 2026)), 'Generated tests are reproducible');
+for (let i = 0; i < 800; i++) {
+ const testCase = generatedCase(testSeeds, i, 2026);
+ assert.ok(testCase.text.trim() && testCase.id, 'Generated cases include text and an ID');
+ assert.ok(testCase.expected.every(id => extensionCatalogue.techniques.some(t => t.id === id)),
+  'Generated cases keep valid expected technique labels');
+}
+for (const script of [
+ 'extension/src/benchmark-worker.js',
+ 'extension/src/benchmark-ui.mjs',
+ 'evaluation/benchmark-generator.mjs',
+ 'scripts/serve-benchmark.mjs'
+]) {
+ execFileSync(process.execPath, ['--check', script], { stdio: 'pipe' });
+}
+const lab = fs.readFileSync('extension/benchmark.html', 'utf8');
+assert.ok(lab.includes('id="progress-count"'), 'Web lab has a progress counter');
+assert.ok(lab.includes('id="copy"'), 'Web lab has a copy failure details button');
+assert.ok(lab.includes('id="stats"'), 'Web lab shows aggregate statistics');
+
+console.log('Build, matching-core and local benchmark checks passed.');
