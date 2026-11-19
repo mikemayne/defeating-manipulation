@@ -23,7 +23,10 @@
         "\\b(?:everyone|everybody|the whole world|most people) (?:believes?|thinks?|does it|agrees?)\\b.{0,70}\\b(?:so|therefore|must be true|right)\\b",
         "\\b(?:it must be true|it must be right) because (?:everyone|everybody|most people)\\b",
         "\\bjoin the (?:crowd|majority),? (?:because|since) everyone\\b",
-        "\\b(?:everyone else|the majority|most people) (?:agrees?|supports?|believes?|thinks?)\\b.{0,90}\\b(?:so|therefore|which proves)\\b"
+        "\\b(?:everyone else|the majority|most people) (?:agrees?|supports?|believes?|thinks?)\\b.{0,90}\\b(?:so|therefore|which proves)\\b",
+        "\\b(?:everyone|everybody|most people|the majority|everyone else) (?:is|are) (?:doing|using|buying|supporting) .{1,100}\\bso (?:you|we) (?:should|must|have to)\\b",
+        "\\b(?:most people|the majority|millions of people) (?:believe|agree|support|say|think) .{1,100}\\b(?:therefore|so|which (?:means|proves))\\b.{0,100}\\b(?:true|correct|right|must|should|best|better)\\b",
+        "\\b(?:it's|it is) (?:popular|widely believed|what everyone believes),? so (?:it|that) (?:must|has to) be (?:true|right|correct|good)\\b"
       ]
     },
     {
@@ -38,7 +41,11 @@
       "expressions": [
         "\\b(?:you're|you are) either with us or against us\\b",
         "\\b(?:you're|you are) either .{1,70}\\bor\\b.{1,70}\\b(?:no other choice|no alternative|nothing else)\\b",
-        "\\bthere are only two (?:options|choices)\\b"
+        "\\bthere are only two (?:options|choices)\\b",
+        "\\b(?:we can|you can|we must|you must) either .{1,110}\\bor\\b.{1,110}\\b(?:collapse|disaster|fail|ruin|destroyed)\\b",
+        "\\b(?:either you|you either|either we|we either) .{1,120}\\bor .{1,120}\\b(?:no other choice|no other option|no alternative|no middle ground)\\b",
+        "\\b(?:there (?:are|is)|you have|we have) (?:only|just) two (?:choices|options|possibilities)\\b",
+        "\\b(?:accept|support|agree with) .{1,90}\\bor (?:watch|face|suffer|risk) .{1,90}\\b(?:collapse|ruin|disaster|failure)\\b"
       ]
     },
     {
