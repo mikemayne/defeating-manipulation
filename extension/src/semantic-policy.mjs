@@ -41,4 +41,3 @@ export function semanticMatchStrength(score, margin) {
  if (score >= 0.68 && margin >= 0.09) return "Mid";
  return "Low";
 }
-}
