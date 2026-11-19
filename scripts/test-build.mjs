@@ -32,4 +32,36 @@ assert.ok(read('techniques/allegation_laundering.html').includes('<h2>Recognisin
 assert.ok(read('techniques/allegation_laundering.html').includes('Repeating an allegation'), 'Generated chapter includes its definition');
 assert.ok(read('techniques/allegation_laundering.html').includes('SemEval-2020'), 'Generated chapter includes linked research references');
 assert.ok(read('robots.txt').includes('Sitemap:'));
-console.log('Build smoke tests passed.');
+
+const extensionCatalogue = JSON.parse(fs.readFileSync('extension/techniques.json','utf8'));
+const extensionPatterns = JSON.parse(fs.readFileSync('extension/patterns.json','utf8'));
+const ruleMap = new Map(extensionPatterns.patterns.map(rule => [rule.id, rule.expressions.map(source => new RegExp(source, 'i'))]));
+const fallacyCases = [
+  ['ad_hominem', "Your argument is wrong because you're an idiot."],
+  ['straw_man', 'You want stricter school rules, so you obviously want students to have no freedom.'],
+  ['bandwagon', 'Everyone believes this, so it must be true.'],
+  ['slippery_slope', 'If we allow phones in class, soon nobody will pay attention, and schools will completely fail.'],
+  ['false_dilemma', "You're either with us or against us."],
+  ['hasty_generalisation', 'I met two rude tourists from France, so all French tourists must be rude.'],
+  ['circular_reasoning', "I'm trustworthy because I always tell the truth."],
+  ['appeal_to_authority', 'This product must work because a famous actor recommends it.'],
+  ['post_hoc', 'I wore my lucky socks and we won, so my socks caused the victory.'],
+  ['red_herring', "Why worry about pollution when there are people who don't have jobs?"],
+  ['appeal_to_emotion', "You should give me a good grade because I've had a really difficult week."],
+  ['tu_quoque', 'You cannot tell me to stop smoking when you smoke yourself.'],
+  ['appeal_to_ignorance', "Nobody has proved that ghosts don't exist, so they must be real."],
+  ['false_equivalence', 'Being late for school is just as bad as committing a crime.'],
+  ['cherry_picking', 'This diet works because I found three people online who lost weight using it.']
+];
+for (const [id, example] of fallacyCases) {
+  assert.ok(extensionCatalogue.techniques.some(item => item.id === id), 'Extension catalogue contains ' + id);
+  assert.ok(ruleMap.has(id), 'Pattern rules exist for ' + id);
+  assert.ok(ruleMap.get(id).some(regex => regex.test(example)), 'Pattern detects supplied example for ' + id);
+  assert.ok(fs.existsSync('_site/techniques/' + id + '.html'), 'Generated site page exists for ' + id);
+}
+for (const rule of extensionPatterns.patterns) {
+  assert.ok(extensionCatalogue.techniques.some(item => item.id === rule.id), 'Pattern rule has a catalogue entry: ' + rule.id);
+  for (const expression of rule.expressions) assert.doesNotThrow(() => new RegExp(expression, 'i'), 'Pattern compiles for ' + rule.id);
+}
+
+console.log('Build and fallacy pattern tests passed.');
