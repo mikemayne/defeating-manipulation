@@ -3,6 +3,9 @@ env.allowLocalModels = false;
 env.allowRemoteModels = true;
 env.useBrowserCache = true;
 
+// Load ONNX Runtime JS/WASM companions from this extension, not the CDN.
+env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
+
 const MODEL = "Xenova/all-MiniLM-L6-v2";
 const MATCH_THRESHOLD = 0.43;
 let extractor, techniques = [], prototypes = [], compiledPatterns = [], initialising;
