@@ -1,37 +1,42 @@
 # Analysis design
 
 ## Purpose
-The analysis system helps a reader inspect the language and structure of an online article. It identifies candidate textual patterns and explains why they may matter.
+
+The analysis helps a reader recognise manipulative techniques in online media and understand their effects. It is a short route to recognition, not an invitation to investigate the material indefinitely.
+
+## The sequence
+
+1. **Recognise** the technique from observable features in the content.
+2. **Report** it through an appropriate platform or other reporting channel when warranted.
+3. **Disengage**. Stop reading, sharing, arguing with or returning to the material.
 
 ## Unit of analysis
-Work with a selected passage and enough surrounding context to interpret it. Keep paragraph boundaries and source positions so every finding can be traced back to the page.
 
-## Output for each candidate
+Work with the selected passage and enough surrounding context to identify the technique accurately. Keep paragraph boundaries and source positions so findings can be traced back to the page.
+
+## Output for each finding
+
 - Technique identifier and human-readable name.
 - Exact supporting quotation.
 - Location in the source text where available.
 - Short explanation of the textual feature.
-- Confidence that the passage matches the technique.
-- Alternative interpretation or contextual caveat.
-- Links to the catalogue definition and references.
-
-## Separate three questions
-1. What can be observed in the text?
-2. Which recognised concept might describe that feature?
-3. What effect might that feature have on a reader?
-
-Do not collapse these into claims about the author's intention. Intent cannot reliably be inferred from a text alone.
+- Description of the effect the technique can have on a reader.
+- Link to the catalogue definition.
 
 ## Evidence standards
-A finding must cite a specific passage. A generic statement such as "this article is propaganda" is not an acceptable output. Distinguish a direct quotation from a paraphrase. Do not invent source context, references or facts.
+
+A finding must cite a specific passage. A generic statement such as "this article is propaganda" is not an acceptable output. Distinguish direct quotation from paraphrase. Do not invent source context, references or facts.
+
+The analysis identifies techniques and their potential effects. It does not attempt to establish why the author used them. Deliberate and accidental use can have the same effect on a reader; investigating motive is outside the project's purpose.
 
 ## Analysis stages
+
 1. Extract the reader-selected text locally.
 2. Segment into paragraphs and sentences while retaining offsets.
 3. Use deterministic matching for simple, well-defined patterns where appropriate.
 4. Ask the local model to propose candidate passages and technique IDs from the approved catalogue.
 5. Validate model output against the catalogue schema.
-6. Display only findings with traceable evidence and an explanation.
-7. Let the reader inspect, dismiss or correct findings.
+6. Display findings with their source passages and concise explanations.
+7. Present the practical sequence: recognise, report where appropriate, disengage.
 
-The model is an assistant for finding candidates, not an authority. It should be allowed to return no finding. It must not be rewarded for maximising the number of techniques detected.
+The model is an assistant for recognising patterns, not an authority. It should be allowed to return no finding. It must not be rewarded for maximising the number of techniques detected. Keep the result concise so the reader can move on.
