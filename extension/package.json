@@ -2,7 +2,9 @@
   "private": true,
   "scripts": {
     "build": "node build.mjs && esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js",
-    "dev": "npm run build && web-ext run --source-dir ."
+    "dev": "npm run build && web-ext run --source-dir .",
+    "evaluate": "node evaluate.mjs --strict",
+    "evaluate:ai": "node evaluate.mjs --semantic"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.7.2"
