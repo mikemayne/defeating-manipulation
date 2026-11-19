@@ -3,80 +3,80 @@
     {
       "id": "manufactured_consensus",
       "expressions": [
-        "\\\\beveryone knows\\\\b",
-        "\\\\bthe public has had enough\\\\b",
-        "\\\\bpeople are saying\\\\b",
-        "\\\\beverybody agrees\\\\b"
+        "\\beveryone knows\\b",
+        "\\bthe public has had enough\\b",
+        "\\bpeople are saying\\b",
+        "\\beverybody agrees\\b"
       ]
     },
     {
       "id": "premature_closure",
       "expressions": [
-        "\\\\bcase closed\\\\b",
-        "\\\\bnothing more to discuss\\\\b",
-        "\\\\bthe truth is now clear\\\\b",
-        "\\\\bsettles the matter once and for all\\\\b"
+        "\\bcase closed\\b",
+        "\\bnothing more to discuss\\b",
+        "\\bthe truth is now clear\\b",
+        "\\bsettles the matter once and for all\\b"
       ]
     },
     {
       "id": "threat_framing",
       "expressions": [
-        "\\\\byou will pay\\\\b",
-        "\\\\byou'll pay\\\\b",
-        "\\\\byou will regret it\\\\b",
-        "\\\\bface the consequences if you (?:disagree|refuse|fail)\\\\b"
+        "\\byou will pay\\b",
+        "\\byou'll pay\\b",
+        "\\byou will regret it\\b",
+        "\\bface the consequences if you (?:disagree|refuse|fail)\\b"
       ]
     },
     {
       "id": "paternalistic_coercion_framing",
       "expressions": [
-        "\\\\bfor your own good\\\\b",
-        "\\\\bwe know what is best for you\\\\b",
-        "\\\\bwe know what's best for you\\\\b"
+        "\\bfor your own good\\b",
+        "\\bwe know what is best for you\\b",
+        "\\bwe know what's best for you\\b"
       ]
     },
     {
       "id": "guilt_appeal",
       "expressions": [
-        "\\\\bhow can anyone live with themselves if\\\\b",
-        "\\\\byou should be ashamed if\\\\b",
-        "\\\\byou will be responsible for (?:their|its) suffering\\\\b"
+        "\\bhow can anyone live with themselves if\\b",
+        "\\byou should be ashamed if\\b",
+        "\\byou will be responsible for (?:their|its) suffering\\b"
       ]
     },
     {
       "id": "false_dilemma",
       "expressions": [
-        "\\\\byou are either with us or against us\\\\b",
-        "\\\\bthere are only two choices\\\\b",
-        "\\\\bthe only alternatives? are\\\\b"
+        "\\byou are either with us or against us\\b",
+        "\\bthere are only two choices\\b",
+        "\\bthe only alternatives? are\\b"
       ]
     },
     {
       "id": "incitement_to_violence",
       "expressions": [
-        "\\\\bthey should be (?:killed|attacked|beaten)\\\\b",
-        "\\\\bdrive them out by force\\\\b",
-        "\\\\bthe only answer is to attack\\\\b"
+        "\\bthey should be (?:killed|attacked|beaten)\\b",
+        "\\bdrive them out by force\\b",
+        "\\bthe only answer is to attack\\b"
       ]
     },
     {
       "id": "disgust_appeal",
       "expressions": [
-        "\\\\b(?:filthy|vile|rotten|disgusting) (?:people|group|proposal|idea|practice)\\\\b"
+        "\\b(?:filthy|vile|rotten|disgusting) (?:people|group|proposal|idea|practice)\\b"
       ]
     },
     {
       "id": "criminalising_dissent",
       "expressions": [
-        "\\\\bcriminals? (?:and|for) (?:protesting|protest)\\\\b",
-        "\\\\bcriminal agenda\\\\b",
-        "\\\\bthe protesters are criminals\\\\b"
+        "\\bcriminals? (?:and|for) (?:protesting|protest)\\b",
+        "\\bcriminal agenda\\b",
+        "\\bthe protesters are criminals\\b"
       ]
     },
     {
       "id": "manufactured_consensus",
       "expressions": [
-        "\\\\bwidely accepted by everyone\\\\b"
+        "\\bwidely accepted by everyone\\b"
       ]
     }
   ]
