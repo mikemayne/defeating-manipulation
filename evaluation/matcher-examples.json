@@ -1,0 +1,385 @@
+{
+  "version": 1,
+  "description": "Fictional, manually labelled examples for checking the extension's full matching pipeline. Gate cases are regression expectations, not evidence of any real-life incident.",
+  "variants": [
+    "original",
+    "context_before",
+    "context_after",
+    "surrounding_lines",
+    "wrapped_lines"
+  ],
+  "cases": [
+    {
+      "id": "bandwagon-belief",
+      "text": "Everyone believes this, so it must be true.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "bandwagon-most",
+      "text": "Most people agree with the proposal, therefore it must be the right choice.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "bandwagon-everyone-else",
+      "text": "Everyone else supports it, so you should too.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "bandwagon-popular",
+      "text": "It's popular, so it must be good.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "bandwagon-buy",
+      "text": "Everyone is buying this product, so you should too.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "bandwagon-cross-sentence",
+      "text": "Everyone believes this. So it must be true.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "false-dilemma-classic",
+      "text": "You're either with us or against us.",
+      "expected": [
+        "false_dilemma"
+      ],
+      "gate": true
+    },
+    {
+      "id": "false-dilemma-collapse",
+      "text": "We can either accept this proposal exactly as written or watch the entire service collapse.",
+      "expected": [
+        "false_dilemma"
+      ],
+      "gate": true
+    },
+    {
+      "id": "false-dilemma-only",
+      "text": "There are only two options: support the plan or abandon it.",
+      "expected": [
+        "false_dilemma"
+      ],
+      "gate": true
+    },
+    {
+      "id": "false-dilemma-middle",
+      "text": "Either you support the plan or you want the project to fail. There's no middle ground.",
+      "expected": [
+        "false_dilemma"
+      ],
+      "gate": true
+    },
+    {
+      "id": "false-dilemma-policy",
+      "text": "You must either support this policy or face disaster.",
+      "expected": [
+        "false_dilemma"
+      ],
+      "gate": true
+    },
+    {
+      "id": "false-dilemma-neglect",
+      "text": "We can either fund the programme or watch it fail.",
+      "expected": [
+        "false_dilemma"
+      ],
+      "gate": true
+    },
+    {
+      "id": "straw-man-homework",
+      "text": "You want less homework, so you clearly don't care about education.",
+      "expected": [
+        "straw_man"
+      ],
+      "gate": true
+    },
+    {
+      "id": "straw-man-school",
+      "text": "You want stricter school rules, so you obviously want students to have no freedom.",
+      "expected": [
+        "straw_man"
+      ],
+      "gate": true
+    },
+    {
+      "id": "straw-man-no-funding",
+      "text": "So you want to stop funding everything?",
+      "expected": [
+        "straw_man"
+      ],
+      "gate": true
+    },
+    {
+      "id": "ad-hominem-education",
+      "text": "Your opinion about climate change doesn't matter because you didn't finish school.",
+      "expected": [
+        "ad_hominem"
+      ],
+      "gate": true
+    },
+    {
+      "id": "ad-hominem-insult",
+      "text": "Your argument is wrong because you're an idiot.",
+      "expected": [
+        "ad_hominem"
+      ],
+      "gate": true
+    },
+    {
+      "id": "ad-hominem-source",
+      "text": "Don't listen to her argument: she is too uneducated to understand this.",
+      "expected": [
+        "ad_hominem"
+      ],
+      "gate": true
+    },
+    {
+      "id": "slippery-slope-phones",
+      "text": "If we allow phones in class, soon nobody will pay attention, and schools will completely fail.",
+      "expected": [
+        "slippery_slope"
+      ],
+      "gate": true
+    },
+    {
+      "id": "slippery-slope-deadlines",
+      "text": "If we allow one late submission, soon nobody will meet deadlines.",
+      "expected": [
+        "slippery_slope"
+      ],
+      "gate": true
+    },
+    {
+      "id": "hasty-generalisation-tourists",
+      "text": "I met two rude tourists from France, so all French tourists must be rude.",
+      "expected": [
+        "hasty_generalisation"
+      ],
+      "gate": true
+    },
+    {
+      "id": "circular-trust",
+      "text": "I'm trustworthy because I always tell the truth.",
+      "expected": [
+        "circular_reasoning"
+      ],
+      "gate": true
+    },
+    {
+      "id": "appeal-to-authority-celebrity",
+      "text": "This product must work because a famous actor recommends it.",
+      "expected": [
+        "appeal_to_authority"
+      ],
+      "gate": true
+    },
+    {
+      "id": "red-herring-jobs",
+      "text": "Why worry about pollution when there are people who don't have jobs?",
+      "expected": [
+        "red_herring"
+      ],
+      "gate": true
+    },
+    {
+      "id": "appeal-ignorance-ghosts",
+      "text": "Nobody has proved that ghosts don't exist, so they must be real.",
+      "expected": [
+        "appeal_to_ignorance"
+      ],
+      "gate": true
+    },
+    {
+      "id": "post-hoc-socks",
+      "text": "I wore my lucky socks and we won, so my socks caused the victory.",
+      "expected": [
+        "post_hoc"
+      ],
+      "gate": true
+    },
+    {
+      "id": "false-equivalence-late",
+      "text": "Being late for school is just as bad as committing a crime.",
+      "expected": [
+        "false_equivalence"
+      ],
+      "gate": true
+    },
+    {
+      "id": "cherry-picking-diet",
+      "text": "This diet works because I found three people online who lost weight using it.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "tu-quoque-smoke",
+      "text": "You cannot tell me to stop smoking when you smoke yourself.",
+      "expected": [
+        "tu_quoque"
+      ],
+      "gate": true
+    },
+    {
+      "id": "appeal-to-emotion-grade",
+      "text": "You should give me a good grade because I've had a really difficult week.",
+      "expected": [
+        "appeal_to_emotion"
+      ],
+      "gate": true
+    },
+    {
+      "id": "neutral-policy",
+      "text": "The council published a transport plan on Tuesday and will debate it next month.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-choices",
+      "text": "You can choose the green or blue folder according to your preference.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-quoted-criticism",
+      "text": "The lecturer described what a personal attack means without criticising any student.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-description",
+      "text": "Drawing a broad conclusion from too little evidence.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-name-authority",
+      "text": "Appeal to authority",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-name-bandwagon",
+      "text": "Bandwagon",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-name-dilemma",
+      "text": "False dilemma",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-bridge",
+      "text": "If the inspection finds structural damage, the bridge may be closed to protect the public.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-consensus",
+      "text": "Most people surveyed agreed with the proposal, according to the published results.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-disagreement",
+      "text": "Two people disagree about the best way to fund the town library.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-time",
+      "text": "The project took three weeks to complete and was delivered within budget.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-statement",
+      "text": "There are two railway lines from this station.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-quote",
+      "text": "The teacher introduced a lesson about argumentation and invited students to give examples.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-sampling",
+      "text": "A random sample was collected and the uncertainty of the estimate was reported.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-support",
+      "text": "The company issued a statement supporting the public consultation.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-conditional",
+      "text": "If rain arrives by noon, the outdoor event will move indoors.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-choice",
+      "text": "You may pay by card or cash, and other arrangements are available on request.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-market",
+      "text": "The report counts how many people bought the product without claiming that popularity proves quality.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "neutral-explanation",
+      "text": "An invalid argument is not necessarily a malicious argument.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "combined-dilemma-bandwagon",
+      "text": "You're either with us or against us.\nEveryone believes this, so it must be true.",
+      "expected": [
+        "false_dilemma",
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "combined-straw-bandwagon",
+      "text": "You want less homework, so you clearly don't care about education.\nMost people agree with the proposal, therefore it must be the right choice.",
+      "expected": [
+        "straw_man",
+        "bandwagon"
+      ],
+      "gate": true
+    }
+  ]
+}
