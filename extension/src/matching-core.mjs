@@ -59,7 +59,7 @@ export async function matchText(text, { techniques, rules, prototypes = [], embe
     if (alreadyMatched.has(key)) continue;
     alreadyMatched.add(key);
     patterned.push({ start, end, technique: rule.technique, score: 1,
-     method: "pattern" });
+     method: "pattern", contextual: Boolean(part.contextual) });
   }
  }
  }
@@ -83,9 +83,19 @@ export async function matchText(text, { techniques, rules, prototypes = [], embe
   }
  }
 
- const ranked = [...patterned, ...semantic].sort((a, b) =>
-  (a.method === "pattern" ? 0 : 1) - (b.method === "pattern" ? 0 : 1) ||
-  b.end - b.start - (a.end - a.start) || b.score - a.score);
+ // Prefer rule matches within individual sentences over rules that extend into
+ // adjacent sentences. A long contextual match must not hide another distinct
+ // technique in the neighbouring sentence. Keep score-based ordering for AI.
+ const ranked = [...patterned, ...semantic].sort((a, b) => {
+  const methodOrder = (a.method === "pattern" ? 0 : 1) -
+   (b.method === "pattern" ? 0 : 1);
+  if (methodOrder) return methodOrder;
+  if (a.method === "pattern") {
+   return Number(a.contextual) - Number(b.contextual) ||
+    (a.end - a.start) - (b.end - b.start);
+  }
+  return b.score - a.score;
+ });
  const selected = [];
  for (const candidate of ranked) {
   if (!selected.some(existing => candidate.start < existing.end && candidate.end > existing.start))
