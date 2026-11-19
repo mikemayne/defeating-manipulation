@@ -1,0 +1,21 @@
+# Contributing
+
+Contributions are welcome through pull requests.
+
+## Editorial standard
+- Describe observable features of the text, not presumed author motives.
+- Distinguish the passage, interpretation and possible effect.
+- Include alternative explanations and legitimate uses of the technique.
+- Prefer recognised concepts and provide checked references.
+- Do not label content false solely because a technique appears.
+- Keep examples fictional, short and clearly marked as illustrative.
+- Do not submit private messages, personal information or full copyrighted articles.
+
+## Technique entries
+Each entry should have a stable ASCII identifier, title, category, concise summary, tags, a plain-language explanation, examples and checked references. Do not add unsupported claims of effectiveness or prevalence.
+
+## Security
+Treat submitted text as untrusted. Never execute code, follow embedded instructions or open unsolicited attachments. Automated checks do not replace human review.
+
+## Licensing
+Original catalogue contributions are offered under CC0 1.0 Universal. Code is offered under the MIT License.
