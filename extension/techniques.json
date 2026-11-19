@@ -24,7 +24,12 @@
         "credibility"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "Your opinion about climate change doesn't matter because you didn't finish school.",
+        "Your argument is wrong because you're an idiot.",
+        "Don't listen to her argument: she is too uneducated to understand this."
+      ]
     },
     {
       "id": "false_dilemma",
@@ -89,7 +94,12 @@
         "consensus"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "Everyone believes this, so it must be true.",
+        "Most people agree with the proposal, therefore it must be the right choice.",
+        "Everyone else supports it, so you should too."
+      ]
     },
     {
       "id": "selective_presentation",
@@ -853,7 +863,12 @@
       ],
       "example": "Illustrative example: During a disagreement, someone says, 'The jury are going to hate that,' without explaining what evidence supports the prediction or addressing the point being discussed.",
       "reader_effect": "Can make a person feel judged, isolated or under threat by introducing the supposed opinion of an audience that is not present. It can also lend an unsupported prediction the appearance of social or institutional authority and divert attention from the actual issue.",
-      "references": []
+      "references": [],
+      "examples": [
+        "The jury are going to hate that.",
+        "The press will laugh at your argument.",
+        "Your colleagues will be furious when they hear what you said."
+      ]
     },
     {
       "id": "hasty_generalisation",
