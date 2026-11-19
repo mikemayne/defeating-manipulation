@@ -1,6 +1,6 @@
 (() => {
  if(window.__dmPatternHighlighter)return;
- const MARK="data-dm-pattern-highlight";let tooltip;
+ const MARK="data-dm-pattern-highlight";let tooltip,observer;
  const colour=id=>{let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))>>>0;return `hsl(${195+h%21} 78% 86%)`;};
  function show(mark,t){tooltip.replaceChildren();const title=document.createElement("strong");title.textContent=t.title;const summary=document.createElement("div");summary.textContent=t.summary;summary.style.margin="6px 0 8px";const link=document.createElement("a");link.textContent="Read the full explanation";link.href=`https://mikemayne.github.io/defeating-manipulation/techniques/${encodeURIComponent(t.id)}.html`;link.target="_blank";link.rel="noopener noreferrer";link.style.color="#7ee4e7";tooltip.append(title,summary,link);const r=mark.getBoundingClientRect();tooltip.style.display="block";tooltip.style.left=Math.min(Math.max(8,r.left),window.innerWidth-350)+"px";tooltip.style.top=r.bottom+tooltip.offsetHeight+8<window.innerHeight?r.bottom+8+"px":Math.max(8,r.top-tooltip.offsetHeight-8)+"px";}
  function eligible(n){const p=n.parentElement;return !!p&&!p.closest("script,style,noscript,textarea,input,select,option,button,code,pre,svg,mark,[contenteditable=true]");}
@@ -11,11 +11,11 @@
  const root=document.body||document.documentElement;
  // Observe the page before the first scan: ChatGPT and other apps often render
  // their answers after the initial document load.
- const observer=new MutationObserver(records=>{for(const record of records){if(record.type==="characterData"){scan(record.target);continue;}for(const added of record.addedNodes){if(added.nodeType===Node.ELEMENT_NODE)scan(added);else if(added.nodeType===Node.TEXT_NODE&&!record.target.querySelector?.("mark["+MARK+"]"))scan(added);}}});
+ observer=new MutationObserver(records=>{for(const record of records){if(record.type==="characterData"){scan(record.target);continue;}for(const added of record.addedNodes){if(added.nodeType===Node.ELEMENT_NODE)scan(added);else if(added.nodeType===Node.TEXT_NODE&&!record.target.querySelector?.("mark["+MARK+"]"))scan(added);}}});
  observer.observe(root,{subtree:true,childList:true,characterData:true});
  scan(root);
  document.addEventListener("mouseover",e=>{if(!e.target.closest?.("mark["+MARK+"]")&&!tooltip.contains(e.target))tooltip.style.display="none";},true);document.addEventListener("keydown",e=>{if(e.key==="Escape")tooltip.style.display="none";});
  }
- window.__dmPatternHighlighter={disable(){document.querySelectorAll("mark["+MARK+"]").forEach(m=>m.replaceWith(document.createTextNode(m.textContent)));if(tooltip)tooltip.remove();delete window.__dmPatternHighlighter;}};
+ window.__dmPatternHighlighter={disable(){if(observer)observer.disconnect();document.querySelectorAll("mark["+MARK+"]").forEach(m=>m.replaceWith(document.createTextNode(m.textContent)));if(tooltip)tooltip.remove();delete window.__dmPatternHighlighter;}};
  start().catch(e=>console.warn("Defeating Manipulation highlighter:",e));
 })();
