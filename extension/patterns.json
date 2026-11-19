@@ -32,7 +32,7 @@
     {
       "id": "false_dilemma",
       "expressions": [
-        "\\byou are either with us or against us\\b",
+        "\\b(?:you're|you are) either with us or against us\\b",
         "\\b(?:you're|you are) either .{1,70}\\bor\\b.{1,70}\\b(?:no other choice|no alternative|nothing else)\\b",
         "\\bthere are only two (?:options|choices)\\b"
       ]
