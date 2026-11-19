@@ -20,14 +20,14 @@ The mapping is about whether a comparable **textual pattern** exists. It does no
 | Impossible Standards | [Moving the goalposts](../techniques/moving_goalposts.html); [Double standards](../techniques/double_standards.html) | Split into two recognisable textual patterns. |
 | Moral Blackmail | [Appeal to guilt](../techniques/guilt_appeal.html) | Related match: guilt is used to compel agreement or action. |
 | False Endings / False Completion | [Premature closure](../techniques/premature_closure.html) | Related match: unresolved matters are presented as settled. |
-| Moral Accusations | Existing [Loaded language](../techniques/loaded_language.html) and [Ad hominem](../techniques/ad_hominem.html) | Already covered by the original catalogue; no duplicate chapter. |
-| Logic Traps | Existing [False dilemma](../techniques/false_dilemma.html), [Straw man](../techniques/straw_man.html) and related argumentation entries | Already covered by established argumentation categories. |
-| Loaded Questions | Existing [Presupposition](../techniques/presupposition.html) | Already covered: an unestablished assumption is embedded in the wording. |
-| Claim Inflation | Existing [Exaggeration](../techniques/exaggeration.html) where present in the taxonomy | Existing category; no separate duplicate. |
-| Attacking Your Priorities | Existing [Ad hominem](../techniques/ad_hominem.html) | Character inference replaces engagement with the substance of a statement. |
+| Moral Accusations | Existing **Loaded language** (`loaded_language`) and **Ad hominem** (`ad_hominem`) | Already covered by the original catalogue; no duplicate chapter. |
+| Logic Traps | Existing **False dilemma** (`false_dilemma`), **Straw man** (`straw_man`) and related argumentation entries | Already covered by established argumentation categories. |
+| Loaded Questions | Existing **Presupposition** (`presupposition`) | Already covered: an unestablished assumption is embedded in the wording. |
+| Claim Inflation | Existing **Exaggeration and minimisation** (`exaggeration_minimisation`) where present in the taxonomy | Existing category; no separate duplicate. |
+| Attacking Your Priorities | Existing **Ad hominem** (`ad_hominem`) | Character inference replaces engagement with the substance of a statement. |
 | Threatened Framing | [Threat framing](../techniques/threat_framing.html) | Direct match where threats or threatened consequences shape the argument. |
 | Pre-emptive Discrediting | [Poisoning the well](../techniques/poisoning_the_well.html) | Direct match: a source is discredited before their evidence is considered. |
-| Creating the Appearance of Guilt | [Insinuation by juxtaposition](../techniques/insinuation_by_juxtaposition.html); existing [Presupposition](../techniques/presupposition.html) | Covered where guilt is implied through arrangement or embedded assumptions. |
+| Creating the Appearance of Guilt | [Insinuation by juxtaposition](../techniques/insinuation_by_juxtaposition.html); existing **Presupposition** (`presupposition`) | Covered where guilt is implied through arrangement or embedded assumptions. |
 | Retrospective Reinterpretation of Behaviour | [Narrative reframing](../techniques/narrative_reframing.html); [Quote recontextualisation](../techniques/quote_recontextualisation.html) | Related match: sequence or context changes the apparent meaning of earlier events or statements. |
 | Interpretation Trick | [Narrative reframing](../techniques/narrative_reframing.html) | Related match: a selected interpretive frame shapes the reading of events. |
 | Narrating | [Narrative reframing](../techniques/narrative_reframing.html) | Direct textual match: story structure and sequencing shape attribution and causation. |
@@ -37,9 +37,9 @@ The mapping is about whether a comparable **textual pattern** exists. It does no
 | Exaggerated Disgust | [Appeal to disgust](../techniques/disgust_appeal.html) | Direct match: revulsion substitutes for evidence or reasoning. |
 | Incitement to Violence | [Incitement to violence](../techniques/incitement_to_violence.html) | Direct match where text encourages or endorses violence. |
 | Using Concern as a Vehicle for Intimidation | [Paternalistic coercion framing](../techniques/paternalistic_coercion_framing.html) | Related match where restrictions are framed as benevolent protection. |
-| Negging | Existing [Loaded language](../techniques/loaded_language.html) and [Ad hominem](../techniques/ad_hominem.html) | Online insults and backhanded compliments are already covered by these broader entries. |
-| False Shock / Induced Sympathy | Existing [Loaded language](../techniques/loaded_language.html), [Appeal to fear](../techniques/appeal_to_fear.html) and [Appeal to guilt](../techniques/guilt_appeal.html) | Emotional appeals are covered; no separate chapter for the interpersonal performance. |
-| Claim Inflation / Outcome Inflation and Deflation | Existing [Exaggeration](../techniques/exaggeration.html) and [Minimisation](../techniques/minimisation.html), where available | Existing rhetorical category. |
+| Negging | Existing **Loaded language** (`loaded_language`) and **Ad hominem** (`ad_hominem`) | Online insults and backhanded compliments are already covered by these broader entries. |
+| False Shock / Induced Sympathy | Existing **Loaded language** (`loaded_language`), **Appeal to fear** (`appeal_to_fear`) and [Appeal to guilt](../techniques/guilt_appeal.html) | Emotional appeals are covered; no separate chapter for the interpersonal performance. |
+| Claim Inflation / Outcome Inflation and Deflation | Existing **Exaggeration and minimisation** (`exaggeration_minimisation`) and **Exaggeration and minimisation** (`exaggeration_minimisation`), where available | Existing rhetorical category. |
 | Criminalisation | [Criminalising dissent](../techniques/criminalising_dissent.html) | Direct match where criticism or protest is framed as criminal without establishing the conduct. |
 
 ## Related patterns not imported as standalone article-text techniques
