@@ -70,7 +70,7 @@
     {
       "id": "red_herring",
       "expressions": [
-        "\\bwhy worry about .{1,100}\\bwhen there are .{1,100}\\b(?:people|others) who\\b",
+        "\\bwhy worry about .{1,100}\\bwhen there are (?:other )?(?:people|others) who\\b",
         "\\bwhat about .{1,100}\\binstead of answering\\b"
       ]
     },
