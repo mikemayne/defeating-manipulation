@@ -740,6 +740,30 @@
         "tohidi2025",
         "da2019"
       ]
+    },
+    {
+      "id": "incitement_to_violence",
+      "title": "Incitement to violence",
+      "category": "Emotional appeals",
+      "summary": "Language that directly encourages, endorses or calls for violence against a person or group.",
+      "tags": [
+        "violence",
+        "call to action",
+        "dehumanisation"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The text urges, endorses or legitimises violent action against an identifiable person, group or category of people. It may use direct commands, calls for action, celebration of violence or language that presents violence as necessary or deserved.",
+      "observable_features": [
+        "Direct commands or calls for readers or others to attack, harm or kill.",
+        "Explicit endorsement or celebration of violence against a target.",
+        "Violence is presented as justified, inevitable or deserved without meaningful qualification.",
+        "A target group is described in terms that remove ordinary moral restraints on harming them."
+      ],
+      "example": " 'They should be driven out by force' or 'The only answer is to attack them.'",
+      "reader_effect": "Can normalise violence, lower resistance to violent action or encourage hostility towards the people being targeted.",
+      "references": [
+        "da2020"
+      ]
     }
   ]
 }
