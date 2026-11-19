@@ -93,9 +93,9 @@ for (const [id, example] of multilineCases) {
    : part.text, 'Source offsets must survive normalisation');
  }
 }
-assert.equal(windows('Heading\nA short note\nThis is another line.')[0].text,
- 'Heading A short note This is another line.',
- 'Line breaks are whitespace within a continuous statement');
+assert.ok(windows('Heading\nA short note\nThis is another line.').some(part =>
+ part.text === 'Heading A short note This is another line.'),
+ 'Multi-line context is available in addition to individual lines');
 
 // Verify the async selection workflow exposes the busy cursor and always restores it.
 const selectionScript = fs.readFileSync('extension/content.js', 'utf8');
@@ -166,4 +166,59 @@ assert.ok(selectionScript.includes('"Match: Rule"'),
 assert.ok(!selectionScript.includes('Match confidence: 100%'),
  'Do not present rule matches as calibrated confidence');
 
-console.log('Build, fallacy, multiline, cursor, semantic-precision and match-strength checks passed.');
+// Both the browser worker and evaluator use exactly this matching core.
+const matchingCore = await import('../extension/src/matching-core.mjs');
+const compiled = matchingCore.compilePatternRules(extensionCatalogue, extensionPatterns);
+const multiExample = "You're either with us or against us.\nEveryone believes this, so it must be true.";
+const multiMatches = await matchingCore.matchText(multiExample,
+ { techniques: extensionCatalogue.techniques, rules: compiled });
+assert.deepEqual([...new Set(multiMatches.map(item => item.technique.id))].sort(),
+ ['bandwagon', 'false_dilemma'], 'Combined selection finds both distinct techniques');
+for (const item of multiMatches) {
+ assert.ok(item.start >= 0 && item.end <= multiExample.length,
+  'Match offsets refer to the selected source text');
+}
+const embedding = await import('../extension/src/embedding-rows.mjs');
+assert.deepEqual(embedding.embeddingRows(
+ { dims: [2, 3], data: new Float32Array([1,2,3,4,5,6]) }, 2),
+ [[1,2,3],[4,5,6]], 'Multi-input model tensors are separated into rows');
+assert.deepEqual(embedding.embeddingRows(
+ { dims: [1, 3], data: new Float32Array([1,2,3]) }, 1),
+ [[1,2,3]], 'Single-input model tensors are supported');
+
+// A model failure must not cause already recognised rule matches to disappear.
+const rulesBeforeFailure = await matchingCore.matchText(
+ multiExample + "\nThe minutes describe a completely ordinary discussion of administrative arrangements.",
+ { techniques: extensionCatalogue.techniques, rules: compiled,
+  prototypes: [{ techniqueIndex: 0, vector: [1] }],
+  embed: async () => { throw Error('Simulated model failure'); } });
+assert.deepEqual([...new Set(rulesBeforeFailure.map(item => item.technique.id))].sort(),
+ ['bandwagon', 'false_dilemma'], 'A failed semantic model preserves deterministic matches');
+
+// Web benchmark uses the same shared matching core as Firefox and generates
+// large datasets without keeping all cases in memory.
+const { generatedCase, validateSeeds } = await import('../evaluation/benchmark-generator.mjs');
+const testSeeds = JSON.parse(fs.readFileSync('evaluation/matcher-examples.json', 'utf8')).cases;
+validateSeeds(testSeeds, extensionCatalogue.techniques.map(item => item.id));
+assert.equal(JSON.stringify(generatedCase(testSeeds, 250, 2026)),
+ JSON.stringify(generatedCase(testSeeds, 250, 2026)), 'Generated tests are reproducible');
+for (let i = 0; i < 800; i++) {
+ const testCase = generatedCase(testSeeds, i, 2026);
+ assert.ok(testCase.text.trim() && testCase.id, 'Generated cases include text and an ID');
+ assert.ok(testCase.expected.every(id => extensionCatalogue.techniques.some(t => t.id === id)),
+  'Generated cases keep valid expected technique labels');
+}
+for (const script of [
+ 'extension/src/benchmark-worker.js',
+ 'extension/src/benchmark-ui.mjs',
+ 'evaluation/benchmark-generator.mjs',
+ 'scripts/serve-benchmark.mjs'
+]) {
+ execFileSync(process.execPath, ['--check', script], { stdio: 'pipe' });
+}
+const lab = fs.readFileSync('extension/benchmark.html', 'utf8');
+assert.ok(lab.includes('id="progress-count"'), 'Web lab has a progress counter');
+assert.ok(lab.includes('id="copy"'), 'Web lab has a copy failure details button');
+assert.ok(lab.includes('id="stats"'), 'Web lab shows aggregate statistics');
+
+console.log('Build, matching-core and local benchmark checks passed.');
