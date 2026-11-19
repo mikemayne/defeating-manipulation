@@ -78,6 +78,14 @@
       "expressions": [
         "\\bwidely accepted by everyone\\b"
       ]
+    },
+    {
+      "id": "invoking_an_imagined_audience",
+      "expressions": [
+        "\\bthe (?:press|jury|police|public|authorities|court|judges?|employers?|family) (?:are|is) going to (?:hate|love|dislike) (?:that|this)\\b",
+        "\\bthe (?:press|jury|police|public|authorities|court|judges?|employers?|family) won't like (?:that|this)\\b",
+        "\\b(?:everyone|people) are going to (?:hate|love) that\\b"
+      ]
     }
   ]
 }

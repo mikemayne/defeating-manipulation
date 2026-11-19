@@ -814,6 +814,30 @@
       "example": "Illustrative example: An interviewee says that photographs of a deceased person appear to show features that warrant investigation. The interviewer replies that the interviewee cannot know what happened because they did not personally see the body, without addressing what the photographs show.",
       "reader_effect": "Can divert attention from the content and limits of the evidence, making a relevant observation appear inadmissible simply because the speaker was not an eyewitness.",
       "references": []
+    },
+    {
+      "id": "invoking_an_imagined_audience",
+      "title": "Invoking an imagined audience",
+      "category": "Social influence",
+      "summary": "Invoking the anticipated reaction of an absent third party or audience to create pressure, imply opposition or shape how a person interprets a situation.",
+      "tags": [
+        "third-party reaction",
+        "social pressure",
+        "anticipated judgement",
+        "triangulation"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The speaker predicts or asserts how an absent person, institution or audience will react, and uses that imagined reaction to influence the listener. The audience may be a specific group, such as the press, a jury, the police or an employer, or a vague collective such as 'everyone'. Rather than addressing the issue directly, the statement imports the supposed judgement of others into the conversation. The prediction can make the listener feel watched, outnumbered, judged or threatened, even though the people whose reactions are invoked have not expressed those views.",
+      "observable_features": [
+        "Statements such as 'the press are going to hate that', 'the jury won't like that' or 'the police are going to love this' are used to influence the listener rather than explain a relevant, evidence-based consequence.",
+        "An absent audience is presented as though its reaction is already known or inevitable.",
+        "The speaker does not identify evidence that the audience has actually expressed the predicted view.",
+        "The anticipated reaction is used to discourage a course of action, undermine confidence or suggest that others are already aligned against the listener.",
+        "The conversation shifts from the substance of the issue to what an imagined audience supposedly thinks or will do."
+      ],
+      "example": "Illustrative example: During a disagreement, someone says, 'The jury are going to hate that,' without explaining what evidence supports the prediction or addressing the point being discussed.",
+      "reader_effect": "Can make a person feel judged, isolated or under threat by introducing the supposed opinion of an audience that is not present. It can also lend an unsupported prediction the appearance of social or institutional authority and divert attention from the actual issue.",
+      "references": []
     }
   ]
 }
