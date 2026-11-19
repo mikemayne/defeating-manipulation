@@ -88,7 +88,7 @@
    if (!snapshot) return;
    try {
      const matches = await browser.runtime.sendMessage({ type: "DM_MATCH", text: snapshot.text });
-     clearMarks();
+     // Keep captured text nodes intact until the new underlines are applied.
      underline(snapshot, matches || []);
      window.getSelection()?.removeAllRanges();
    } catch (error) {
