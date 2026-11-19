@@ -15,5 +15,8 @@ for (const item of catalogue.techniques) {
   assert.ok(fs.existsSync('_site/techniques/'+item.id+'.html'), 'Generated page exists for '+item.id);
 }
 assert.ok(read('sitemap.xml').includes('techniques/loaded_language.html'));
+assert.ok(read('techniques/allegation_laundering.html').includes('Observable') === false, 'Generated chapter exists');
+assert.ok(read('techniques/allegation_laundering.html').includes('Repeating an allegation'), 'Generated chapter includes its definition');
+assert.ok(read('techniques/allegation_laundering.html').includes('SemEval-2020'), 'Generated chapter includes linked research references');
 assert.ok(read('robots.txt').includes('Sitemap:'));
 console.log('Build smoke tests passed.');
