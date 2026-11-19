@@ -23,3 +23,10 @@ jobs:
         run: node scripts/test-build.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
+      - name: Bundle Firefox and local benchmark workers
+        run: |
+          cd extension
+          npm install --no-audit --no-fund
+          npm run build
+          test -s matcher-worker.js
+          test -s benchmark-worker.js
