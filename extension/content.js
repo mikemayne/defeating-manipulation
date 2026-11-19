@@ -120,13 +120,12 @@
     for (const node of nodes) if (node.isConnected) highlightTextNode(node, patternData.patterns, techniques);
 
     document.addEventListener("mouseover", event => {
-      if (!event.target.closest?.("mark[" + MARK + "]")) hideTooltip();
+      if (!event.target.closest?.("mark[" + MARK + "]") && !tooltip?.contains(event.target)) hideTooltip();
     }, true);
     document.addEventListener("keydown", event => { if (event.key === "Escape") hideTooltip(); });
 
     window.__dmPatternHighlighter = {
       disable() {
-        active = false;
         document.querySelectorAll("mark[" + MARK + "]").forEach(mark => {
           mark.replaceWith(document.createTextNode(mark.textContent));
         });
@@ -137,7 +136,6 @@
   }
 
   window.__dmPatternHighlighter = {disable() {
-    active = false;
     document.querySelectorAll("mark[" + MARK + "]").forEach(mark => mark.replaceWith(document.createTextNode(mark.textContent)));
     if (tooltip) tooltip.remove();
     delete window.__dmPatternHighlighter;
