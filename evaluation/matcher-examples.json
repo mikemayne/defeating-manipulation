@@ -123,7 +123,7 @@
     },
     {
       "id": "straw-man-no-funding",
-      "text": "So you want to stop funding everything?",
+      "text": "We should be more careful about spending. So you want to stop funding everything?",
       "expected": [
         "straw_man"
       ],
