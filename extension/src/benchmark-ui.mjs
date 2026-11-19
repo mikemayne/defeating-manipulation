@@ -1,0 +1,241 @@
+const $ = id => document.getElementById(id);
+const mode = $("mode"), source = $("source"), count = $("count"), seed = $("seed");
+const file = $("file"), runButton = $("run"), stopButton = $("stop");
+const status = $("status"), progress = $("progress"), progressCount = $("progress-count");
+const message = $("message"), results = $("results"), copyButton = $("copy");
+let runner = null, running = false, lastResult = null, lastMode = "", lastSource = "";
+let runId = 0, loadCatalogues;
+
+const number = value => Number(value).toLocaleString("en-GB");
+const percent = value => Number(value).toFixed(1) + "%";
+const oneDecimal = value => Number(value).toFixed(1);
+
+function setError(text) {
+ message.textContent = text;
+ message.hidden = !text;
+}
+function updateSource() {
+ const upload = source.value === "uploaded";
+ $("count-control").hidden = upload;
+ $("seed-control").hidden = upload;
+ $("file-control").hidden = !upload;
+ $("dataset-note").textContent = upload
+  ? "Upload .json (an array or {cases: [...]}) or .jsonl (one {id, text, expected} object per line). Labels must match technique IDs. Your file stays in this browser."
+  : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
+}
+source.addEventListener("change", updateSource);
+updateSource();
+
+function setupWorker() {
+ if (runner) return runner;
+ const worker = new Worker(new URL("../benchmark-worker.js", import.meta.url), { type: "module" });
+ worker.onmessage = event => {
+  const data = event.data;
+  if (data.type === "stage") {
+   status.textContent = data.message;
+  } else if (data.type === "progress" && data.runId === runId) {
+   progress.max = data.total;
+   progress.value = data.completed;
+   progressCount.textContent = number(data.completed) + " / " + number(data.total);
+   status.textContent = "Testing…";
+  } else if (data.type === "done" && data.runId === runId) {
+   lastResult = data.result;
+   lastMode = data.mode;
+   lastSource = data.source;
+   progress.max = Math.max(1, data.result.requested);
+   progress.value = data.result.total;
+   progressCount.textContent = number(data.result.total) + " / " + number(data.result.requested);
+   status.textContent = data.result.stopped ? "Stopped — partial results" : "Complete";
+   renderResults(data.result);
+   finish();
+  } else if (data.type === "error" && data.runId === runId) {
+   status.textContent = "Test failed";
+   setError(data.message);
+   finish();
+  }
+ };
+ worker.onerror = event => {
+  status.textContent = "Could not load test engine";
+  setError("Check that you ran npm run build and opened the page using the local web server. " + (event.message || ""));
+  runner?.terminate();
+  runner = null;
+  finish();
+ };
+ runner = worker;
+ return worker;
+}
+function finish() {
+ running = false;
+ runButton.disabled = false;
+ stopButton.disabled = true;
+}
+function metric(title, value) {
+ const div = document.createElement("div");
+ div.className = "stat";
+ const main = document.createElement("div");
+ main.className = "value";
+ main.textContent = value;
+ const detail = document.createElement("div");
+ detail.className = "caption";
+ detail.textContent = title;
+ div.append(main, detail);
+ return div;
+}
+function tableRows(body, rows, emptyLabel) {
+ body.replaceChildren();
+ if (!rows.length) {
+  const tr = document.createElement("tr"), cell = document.createElement("td");
+  cell.colSpan = 4;
+  cell.textContent = emptyLabel;
+  tr.append(cell);
+  body.append(tr);
+  return;
+ }
+ for (const columns of rows) {
+  const tr = document.createElement("tr");
+  columns.forEach((value, i) => {
+   const cell = document.createElement("td");
+   cell.textContent = String(value);
+   if (i > 0) cell.className = "num";
+   tr.append(cell);
+  });
+  body.append(tr);
+ }
+}
+function renderResults(data) {
+ results.hidden = false;
+ const grid = $("stats");
+ grid.replaceChildren(
+  metric("Tests completed", number(data.total)),
+  metric("Exact classifications", percent(data.exactRate)),
+  metric("Incorrect classifications", number(data.incorrect)),
+  metric("Label precision", percent(data.precision)),
+  metric("Label recall", percent(data.recall)),
+  metric("False positive rate on negatives", percent(data.negativeFalsePositiveRate)),
+  metric("Speed, cases/sec", number(Math.round(data.casesPerSecond))),
+  metric("Elapsed time, seconds", oneDecimal(data.elapsedSeconds))
+ );
+ $("summary-note").textContent =
+  "Evaluated " + number(data.total) + " cases, including " + number(data.negativeCount) +
+  " cases with no expected technique. Results describe this test dataset, not accuracy on unseen writing.";
+ tableRows($("confusion"), data.confusion.slice(0, 20)
+  .map(item => [item.pair, number(item.count)]), "No classification errors.");
+ tableRows($("per-technique"), data.perTechnique
+  .map(item => [item.id, number(item.detected) + " / " + number(item.expected),
+    number(item.missed), number(item.falsePositives)]), "No technique-level results.");
+ $("failure-note").textContent = data.incorrect
+  ? number(data.incorrect) + " failed cases. Copy includes the confusion summary and the first " +
+    number(data.capturedFailures) + " full examples" +
+    (data.capturedFailures < data.incorrect ? " (sample capped at 500)." : ".")
+  : "No failures in the completed test cases.";
+ copyButton.disabled = data.incorrect === 0;
+ $("copied").textContent = "";
+}
+function failureReport(data) {
+ const lines = [
+  "Defeating Manipulation — Matcher Test Lab",
+  "Method: " + lastMode + " | Dataset: " + lastSource,
+  "Tested: " + data.total + " / " + data.requested,
+  "Exact: " + percent(data.exactRate) + " | Failures: " + data.incorrect,
+  "Precision: " + percent(data.precision) + " | Recall: " + percent(data.recall),
+  "Negative false positive rate: " + percent(data.negativeFalsePositiveRate),
+  "Elapsed (seconds): " + oneDecimal(data.elapsedSeconds),
+  "",
+  "CONFUSION SUMMARY"
+ ];
+ for (const item of data.confusion) lines.push(item.pair + " = " + item.count);
+ lines.push("", "PER-TECHNIQUE");
+ for (const item of data.perTechnique) lines.push(item.id +
+  ": " + item.detected + "/" + item.expected + " detected; " +
+  item.missed + " missed; " + item.falsePositives + " false positives");
+ lines.push("", "FAILURES (first " + data.capturedFailures + " of " + data.incorrect + ")");
+ for (const item of data.failureSamples) {
+  lines.push("\n--- " + item.id + " ---",
+   "Expected: " + (item.expected.join(", ") || "(none)"),
+   "Detected: " + (item.predicted.join(", ") || "(none)"),
+   "Missing: " + (item.missing.join(", ") || "(none)"),
+   "Extra: " + (item.extra.join(", ") || "(none)"),
+   "Text:\n" + item.text);
+ }
+ return lines.join("\n");
+}
+copyButton.addEventListener("click", async () => {
+ if (!lastResult || !lastResult.incorrect) return;
+ const text = failureReport(lastResult);
+ try {
+  await navigator.clipboard.writeText(text);
+  $("copied").textContent = "Copied failure details";
+ } catch {
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.style.cssText = "position:fixed;left:-9999px;top:0";
+  document.body.append(field);
+  field.select();
+  const copied = document.execCommand("copy");
+  field.remove();
+  $("copied").textContent = copied ? "Copied failure details" : "Clipboard unavailable";
+ }
+});
+function catalogues() {
+ return loadCatalogues ||= Promise.all([
+  fetch(new URL("../techniques.json", import.meta.url)).then(response => {
+   if (!response.ok) throw Error("Cannot load the extension techniques file");
+   return response.json();
+  }),
+  fetch(new URL("../patterns.json", import.meta.url)).then(response => {
+   if (!response.ok) throw Error("Cannot load the extension rules file");
+   return response.json();
+  }),
+  fetch(new URL("../../evaluation/matcher-examples.json", import.meta.url)).then(response => {
+   if (!response.ok) throw Error("Cannot load the labelled examples");
+   return response.json();
+  })
+ ]);
+}
+runButton.addEventListener("click", async () => {
+ if (running) return;
+ const amount = Number(count.value);
+ if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > 1000000)) {
+  setError("Choose a test count between 1 and 1,000,000.");
+  return;
+ }
+ if (source.value === "uploaded" && !file.files?.length) {
+  setError("Select a JSON or JSONL file containing labelled examples.");
+  return;
+ }
+ if (location.protocol === "file:") {
+  setError("Open through the local server, not as a file:// page. See extension/README.md.");
+  return;
+ }
+ running = true;
+ runButton.disabled = true;
+ stopButton.disabled = false;
+ progress.value = 0;
+ progress.max = source.value === "generated" ? amount : 100;
+ progressCount.textContent = "0 / " + (source.value === "generated" ? number(amount) : "file");
+ status.textContent = "Preparing local test…";
+ results.hidden = true;
+ setError("");
+ try {
+  const [catalogue, patterns, fixture] = await catalogues();
+  runId++;
+  setupWorker().postMessage({
+   type: "start", runId, mode: mode.value, source: source.value,
+   amount, seed: Number(seed.value), catalogue, patterns, fixture,
+   file: source.value === "uploaded" ? file.files[0] : null
+  });
+ } catch (error) {
+  status.textContent = "Test could not start";
+  setError(String(error?.message || error));
+  finish();
+ }
+});
+stopButton.addEventListener("click", () => {
+ if (!running || !runner) return;
+ runner.postMessage({ type: "stop" });
+ status.textContent = "Stopping after the current case…";
+ stopButton.disabled = true;
+});
+if (location.protocol === "file:") {
+ setError("Run this page through the local server; file:// blocks JavaScript module loading in Firefox.");
+}
