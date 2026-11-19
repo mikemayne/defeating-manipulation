@@ -7,7 +7,7 @@ const read = name => fs.readFileSync('_site/'+name,'utf8');
 const catalogue = JSON.parse(read('techniques.json'));
 const schema = JSON.parse(fs.readFileSync('analysis-schema.json','utf8'));
 assert.ok(catalogue.techniques.length >= 10, 'Catalogue has an initial set of techniques');
-assert.ok(read('index.html').includes('Recognise. Report. Disengage.'), 'Homepage project principle is present');
+assert.ok(read('index.html').includes('A shared knowledge base of language patterns.'), 'Homepage explains the project purpose');
 assert.ok(read('questionnaire.html').includes('Report. Disengage.'), 'Questionnaire gives the agreed next steps');
 assert.ok(schema.finding.reader_effect, 'Analysis schema describes reader-facing effects');
 assert.ok(schema.workflow.join(' ').includes('Recognise') && schema.workflow.join(' ').includes('Disengage'), 'Analysis schema contains the project workflow');
