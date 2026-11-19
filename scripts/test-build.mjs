@@ -37,6 +37,12 @@ const extensionCatalogue = JSON.parse(fs.readFileSync('extension/techniques.json
 const extensionPatterns = JSON.parse(fs.readFileSync('extension/patterns.json','utf8'));
 const ruleMap = new Map(extensionPatterns.patterns.map(rule => [rule.id, rule.expressions.map(source => new RegExp(source, 'i'))]));
 const fallacyCases = [
+  // Original five examples: keep these exact sentences covered by regression tests.
+  ['ad_hominem', "Your argument is wrong because you're stupid."],
+  ['straw_man', "You want less homework, so you clearly don't care about education."],
+  ['bandwagon', 'Everyone believes it, so it must be true.'],
+  ['slippery_slope', 'If we allow one late submission, soon nobody will meet deadlines.'],
+  ['false_dilemma', "You're either with us or against us."],
   ['ad_hominem', "Your argument is wrong because you're an idiot."],
   ['straw_man', 'You want stricter school rules, so you obviously want students to have no freedom.'],
   ['bandwagon', 'Everyone believes this, so it must be true.'],
