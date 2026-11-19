@@ -153,4 +153,17 @@ assert.equal(policy.selectSemanticTechnique([1],
  [{ techniqueIndex: 0, vector: [0.82] }, { techniqueIndex: 1, vector: [0.62] }], fauxDot).techniqueIndex, 0,
  'Strong and distinctive semantic similarity may still classify');
 
-console.log('Build, fallacy, multiline, cursor and semantic-precision checks passed.');
+// Match-strength labels are qualitative and never convert similarity to a percentage.
+assert.equal(policy.semanticMatchStrength(0.82, 0.20), 'High');
+assert.equal(policy.semanticMatchStrength(0.70, 0.10), 'Mid');
+assert.equal(policy.semanticMatchStrength(0.60, 0.07), 'Low');
+assert.equal(policy.semanticMatchStrength(0.80, 0.07), 'Low',
+ 'A strong top score with close competitors is still ambiguous');
+assert.ok(selectionScript.includes('Match strength: '),
+ 'Semantic classifications display a qualitative label in the popup');
+assert.ok(selectionScript.includes('"Match: Rule"'),
+ 'Deterministic rule matches are labelled without treating them as 100% confidence');
+assert.ok(!selectionScript.includes('Match confidence: 100%'),
+ 'Do not present rule matches as calibrated confidence');
+
+console.log('Build, fallacy, multiline, cursor, semantic-precision and match-strength checks passed.');
