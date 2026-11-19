@@ -1,23 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
-<meta name="description" content="Recognise manipulative media, report it and disengage. An open guide to techniques and their effects."><title>Defeating Manipulation</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="A public, collaborative knowledge base of language patterns that AI tools can use to analyse online articles.">
+<title>Defeating Manipulation — Open Knowledge Base</title>
 <style>
-:root{color-scheme:light dark;--paper:#f7f6f0;--surface:#fffef9;--ink:#23302d;--muted:#606c65;--accent:#356a60;--pale:#e1ece6;--line:#d9ddd3;--orange:#94502a;--serif:Georgia,"Iowan Old Style",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
-@media(prefers-color-scheme:dark){:root{--paper:#141d1a;--surface:#202c26;--ink:#edf2e9;--muted:#bac8bf;--accent:#a5d4bf;--pale:#273d32;--line:#405248;--orange:#e2b38c}}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans)}a{color:var(--accent)}.wrap{width:min(1100px,calc(100% - 40px));margin:auto}header{border-bottom:1px solid var(--line)}.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-weight:800;text-decoration:none;color:var(--ink);letter-spacing:-.03em}.navlinks{display:flex;gap:22px}.navlinks a{text-decoration:none;font-size:.9rem}.hero{padding:76px 0 70px;border-bottom:1px solid var(--line)}.eyebrow{text-transform:uppercase;letter-spacing:.17em;color:var(--accent);font-size:.75rem;font-weight:800}.hero h1{font:normal clamp(3rem,7vw,6rem)/1.02 var(--serif);letter-spacing:-.055em;max-width:850px;margin:18px 0}.hero p{max-width:700px;color:var(--muted);font-size:1.12rem}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-block;padding:12px 18px;border-radius:4px;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:700}.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}section{padding:56px 0;border-bottom:1px solid var(--line)}h2{font:normal clamp(2rem,4vw,3rem)/1.15 var(--serif);margin:8px 0 14px}.intro{max-width:780px;color:var(--muted)}.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}.principle,.tech{border:1px solid var(--line);background:var(--surface);border-radius:5px;padding:22px}.principle h3,.tech h3{margin:0 0 8px}.principle p,.tech p{margin:0;color:var(--muted);font-size:.94rem}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:24px 0}.toolbar input{flex:1;min-width:220px;padding:13px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink);font:inherit}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tech a{text-decoration:none;color:var(--ink)}.tech a:hover h3{color:var(--accent)}.tag{font-size:.72rem;color:var(--orange);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.notice{border-left:4px solid var(--accent);padding:16px 20px;background:var(--surface);max-width:850px}footer{padding:28px 0;color:var(--muted);font-size:.85rem}@media(max-width:760px){.grid,.principles{grid-template-columns:1fr}.navlinks{gap:12px}.hero{padding:52px 0}}
-</style></head><body>
-<header><div class="wrap nav"><a class="brand" href="./">Defeating Manipulation</a><nav class="navlinks"><a href="#approach">The approach</a><a href="#techniques">Techniques</a><a href="https://github.com/mikemayne/defeating-manipulation">GitHub</a></nav></div></header>
-<main>
-<div class="hero"><div class="wrap"><div class="eyebrow">An open, practical guide</div><h1>Recognise. Report. Disengage.</h1><p>Manipulative media is designed to shape attention, emotion and interpretation. Recognise the techniques, report the content through the appropriate channel, and stop giving it your attention.</p><div class="actions"><a class="btn" href="#techniques">Recognise the techniques →</a><a class="btn alt" href="./questionnaire.html">Find a technique</a></div></div></div>
-<section id="approach"><div class="wrap"><div class="eyebrow">The approach</div><h2>Effect matters. Motive doesn't.</h2><p class="intro">You do not need to establish whether a technique was used deliberately. What matters is recognising what the content is doing and the effect it can have on the reader.</p><div class="principles"><article class="principle"><h3>01 — Recognise</h3><p>Identify the technique. Understand how it can shape attention, emotion or interpretation. Keep it simple.</p></article><article class="principle"><h3>02 — Report</h3><p>Use the appropriate platform reporting tool or relevant reporting channel. A report is enough; there is no need to argue with the publisher.</p></article><article class="principle"><h3>03 — Disengage</h3><p>Stop reading, sharing and responding. Do not feed the material with more of your time and attention. Get on with your day.</p></article></div></div></section>
-<section id="techniques"><div class="wrap"><div class="eyebrow">Catalogue</div><h2>Recognised techniques</h2><p class="intro">Browse the catalogue or search for a term. Each entry explains the technique and the effect it can have.</p><div class="toolbar"><input id="search" type="search" placeholder="Search techniques…" aria-label="Search techniques"><span id="count" aria-live="polite"></span></div><div id="catalogue" class="grid"><p>Loading catalogue…</p></div></div></section>
-<section><div class="wrap"><div class="eyebrow">Keep it practical</div><h2>Don't get drawn in.</h2><div class="notice">The purpose of recognising manipulation is not to spend more time with it. Recognise the technique, report the content where appropriate, then disengage. You do not need to prove what the author intended.</div></div></section>
-</main><footer><div class="wrap">Open project · No tracking · No text is sent anywhere by this catalogue page. <a href="https://github.com/mikemayne/defeating-manipulation">Source and contributions</a></div></footer>
-<script>
-let techniques=[];const root=document.getElementById('catalogue'),search=document.getElementById('search');
-function render(){const q=search.value.trim().toLowerCase();const found=techniques.filter(t=>(t.title+' '+t.summary+' '+t.category+' '+t.tags.join(' ')).toLowerCase().includes(q));document.getElementById('count').textContent=found.length+' of '+techniques.length;root.innerHTML=found.map(t=>'<article class="tech"><div class="tag">'+esc(t.category)+'</div><h3><a href="./techniques/'+encodeURIComponent(t.id)+'.html">'+esc(t.title)+'</a></h3><p>'+esc(t.summary)+'</p></article>').join('')||'<p>No matching techniques.</p>'}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-search.addEventListener('input',render);fetch('./techniques.json').then(r=>r.json()).then(d=>{techniques=d.techniques;render()}).catch(()=>root.textContent='The catalogue could not be loaded.');
-</script></body></html>
+:root{color-scheme:light dark;--paper:#f7f6f0;--surface:#fffef9;--ink:#23302d;--muted:#606c65;--accent:#356a60;--pale:#e1ece6;--line:#d9ddd3;--serif:Georgia,"Iowan Old Style",serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif}
+@media(prefers-color-scheme:dark){:root{--paper:#141d1a;--surface:#202c26;--ink:#edf2e9;--muted:#bac8bf;--accent:#a5d4bf;--pale:#273d32;--line:#405248}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans)}a{color:var(--accent)}.wrap{width:min(850px,calc(100% - 40px));margin:auto}header{border-bottom:1px solid var(--line)}.nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-weight:800;text-decoration:none;color:var(--ink);letter-spacing:-.03em}.nav a:last-child{font-size:.9rem}.hero{padding:clamp(64px,12vw,120px) 0 72px}.eyebrow{text-transform:uppercase;letter-spacing:.16em;color:var(--accent);font-size:.75rem;font-weight:800}.hero h1{font:normal clamp(2.8rem,7vw,5.4rem)/1.04 var(--serif);letter-spacing:-.055em;max-width:780px;margin:18px 0 24px}.lead{max-width:720px;color:var(--muted);font-size:1.2rem}.purpose{margin-top:42px;padding:24px 26px;border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--surface);border-radius:4px}.purpose h2{font:normal 1.55rem/1.2 var(--serif);margin:0 0 10px}.purpose p{margin:0;color:var(--muted)}.links{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;font-weight:700}.links a{text-decoration:none}.links a:hover{text-decoration:underline}footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="./">Defeating Manipulation</a><a href="https://github.com/mikemayne/defeating-manipulation">View the repository ↗</a></div></header>
+<main class="wrap">
+<section class="hero">
+<div class="eyebrow">Public · Collaborative · Open source</div>
+<h1>A shared knowledge base of language patterns.</h1>
+<p class="lead">Defeating Manipulation is a public, collaborative collection of recognised patterns in language and media. It is designed as a resource that AI tools can use to identify and explain matching patterns in online articles.</p>
+<div class="purpose">
+<h2>What this project does</h2>
+<p>The repository defines techniques, describes their observable features and records examples and references. AI analysis tools can compare article text against these definitions and show readers where patterns occur. The software identifies textual matches; readers decide what significance to give them.</p>
+</div>
+<div class="links">
+<a href="https://github.com/mikemayne/defeating-manipulation/blob/main/techniques.json">Explore the machine-readable catalogue ↗</a>
+<a href="https://github.com/mikemayne/defeating-manipulation/blob/main/CONTRIBUTING.txt">Contribute to the project ↗</a>
+</div>
+</section>
+</main>
+<footer><div class="wrap">An open knowledge base for collaborative development. The repository is the source of truth for its definitions and data.</div></footer>
+</body>
+</html>
