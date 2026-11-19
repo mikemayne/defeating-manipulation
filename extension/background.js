@@ -35,22 +35,9 @@ browser.runtime.onMessage.addListener(async m => {
  });
 });
 
-async function badge(id) {
- await browser.browserAction.setBadgeText({ tabId: id, text: enabledTabs.has(id) ? "ON" : "" });
- await browser.browserAction.setBadgeBackgroundColor({ tabId: id, color: "#168f9b" });
-}
-async function enable(id) {
+// Clicking the toolbar button analyses only the current selection.
+browser.browserAction.onClicked.addListener(async tab => {
  try {
-  await browser.tabs.executeScript(id, { file: "content.js" });
-  enabledTabs.add(id); await badge(id);
- } catch (e) { console.warn(e); enabledTabs.delete(id); await badge(id); }
-}
-async function disable(id) {
- try { await browser.tabs.executeScript(id, { code: "if(window.__dmPatternHighlighter)window.__dmPatternHighlighter.disable();" }); } catch (_) {}
- enabledTabs.delete(id); await badge(id);
-}
-browser.browserAction.onClicked.addListener(t => enabledTabs.has(t.id) ? disable(t.id) : enable(t.id));
-browser.tabs.onUpdated.addListener((id, c) => {
- if (c.status === "complete" && enabledTabs.has(id)) { enabledTabs.delete(id); enable(id); }
+   await browser.tabs.executeScript(tab.id, { file: "content.js" });
+ } catch (error) { console.warn("Defeating Manipulation selection:", error); }
 });
-browser.tabs.onRemoved.addListener(id => enabledTabs.delete(id));
