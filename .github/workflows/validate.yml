@@ -21,3 +21,5 @@ jobs:
           node-version: '22'
       - name: Validate catalogue and generated pages
         run: node scripts/test-build.mjs
+      - name: Evaluate matching logic on hundreds of labelled examples
+        run: node extension/evaluate.mjs --strict
