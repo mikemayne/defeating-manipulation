@@ -1,49 +1,53 @@
 # Defeating Manipulation
 
-A free, open-source project for recognising persuasive and manipulative techniques in online written media.
+A free, open-source guide to recognising manipulative techniques in online media, reporting them, and disengaging.
 
-The project is designed to help readers examine *how* a piece of writing works: its framing, language, structure, emotional cues, omissions, sourcing and presentation of evidence. It should make analysis more transparent, not tell readers what to think.
+## The principle
 
-**Core principle:** identify observable features in the text, explain the recognised technique they may illustrate, quote the relevant passage, and distinguish evidence from interpretation.
+**Recognise. Report. Disengage.**
+
+Manipulative media can influence what people notice, how they interpret events and how they feel. The practical response is not to spend hours debating the material or trying to establish what its publisher intended.
+
+1. **Recognise** the technique and understand the effect it can have.
+2. **Report** the content through the appropriate platform, publisher, regulator or other reporting channel.
+3. **Disengage**. Stop reading, sharing, arguing with or giving further attention to it.
+
+The focus is the effect on the reader, not the motive of the author. The project does not attempt to determine whether manipulation was deliberate or accidental.
 
 ## Project goals
 
 - Build an openly documented catalogue of recognised rhetorical, persuasive and manipulative techniques.
-- Explain each technique in clear, accessible language, with examples and references.
+- Explain each technique in direct, accessible language, with examples and references.
+- Describe the effects a technique can have on a reader.
 - Provide a browser-based reader and analysis interface.
 - Develop an optional browser extension that can analyse selected page text.
-- Run analysis locally in the browser or on the reader's device using a small language model where practical.
+- Run analysis locally in the browser or on the reader's device where practical.
 - Keep submitted text private by default: no automatic upload, tracking or remote analysis.
 - Make the project easy to fork, adapt, inspect and improve.
 
-## What the analysis should and should not claim
+## What the analysis does
 
-The tool analyses **text**, not the private intentions or character of its author.
+The tool identifies observable features in media and explains the techniques they illustrate and the effects they can have. It does not investigate the publisher's motives, decide whether a campaign is coordinated, or deliver a verdict on the truth of an entire article.
 
-It may report that a passage *uses language consistent with* a recognised technique. It must not infer that the author deliberately intended to manipulate the reader, that the article is false, or that the publisher is part of a coordinated campaign.
-
-For every finding, the interface should show:
-1. The exact passage that triggered the finding.
+A finding should show:
+1. The exact passage that demonstrates the technique.
 2. The technique name and a concise explanation.
-3. Why the passage may fit the technique.
-4. Relevant context or plausible alternative readings.
-5. A confidence or uncertainty indicator that reflects the strength of the textual match, not the author's intent.
+3. The effect the technique can have on a reader.
+4. A clear next step: report the content where appropriate, then disengage.
 
-Absence of a detected technique is not proof that a text is neutral or accurate. Presence of a technique is not proof of deception. Ordinary reporting, advocacy, commentary, satire and legitimate persuasion can use some of the same rhetorical devices.
+The catalogue is an aid to recognition, not an invitation to endless analysis. Once the technique is recognised and the content has been reported where appropriate, move on.
 
 ## Planned structure
 
-- `index.html` — project homepage and interactive reader.
-- `techniques/` — individual plain-text technique explainers.
+- `index.html` — project homepage and searchable technique catalogue.
+- `techniques/` — individual technique explainers.
 - `techniques.json` — machine-readable technique catalogue.
-- `questionnaire.html` — find techniques by the effects or textual features a reader wants to understand.
+- `questionnaire.html` — find techniques by the features noticed in a piece of media.
 - `examples/` — short, clearly labelled illustrative examples.
 - `references.json` — bibliography and source metadata.
-- `extension/` — browser-extension prototype, developed separately from the core catalogue.
+- `extension/` — browser-extension prototype.
 - `scripts/` — dependency-free validation and site generation.
-- `.github/workflows/` — read-only checks and GitHub Pages deployment.
-
-The initial scaffold will establish the content model and publishing pipeline before choosing or bundling a particular local model. Model choice should remain replaceable.
+- `.github/workflows/` — validation and GitHub Pages deployment.
 
 ## Privacy and security
 
@@ -57,12 +61,11 @@ The initial scaffold will establish the content model and publishing pipeline be
 
 ## Editorial standards
 
-- Define techniques in terms of observable textual features.
+- Define techniques in terms of observable textual features and their effects.
 - Prefer recognised terms with reputable references; distinguish established concepts from informal labels.
 - Give concise examples and explain why they fit.
-- Avoid presenting a list of techniques as proof of a hidden plan.
-- Separate factual claims, value judgements, emotional framing and speculation.
-- Include legitimate uses and alternative explanations where relevant.
+- Avoid turning recognition into a prolonged investigation of motives.
+- Keep explanations direct and focused on the reader's experience.
 - Cite research and primary sources. Do not invent citations or imply that a source supports more than it does.
 - Keep the writing direct, accessible and free of unnecessary humour.
 
@@ -85,7 +88,7 @@ Contributions are welcome through pull requests. Please:
 - keep examples fictional or thoroughly anonymised;
 - do not submit private messages, personal data or copyrighted full articles;
 - distinguish direct quotations from paraphrases;
-- explain uncertainty and competing interpretations;
+- explain the technique and its reader-facing effect;
 - do not submit executable files or model binaries.
 
 All contributions require human review. Automated checks validate structure and basic safety constraints; they do not establish factual accuracy or editorial quality.
@@ -93,7 +96,6 @@ All contributions require human review. Automated checks validate structure and 
 ## Licence
 
 The project will use CC0 1.0 for original written catalogue content and the MIT Licence for code, unless a later project decision records a different licence. Third-party references and quotations remain subject to their own rights.
-
 
 ## GitHub Pages setup
 
@@ -133,8 +135,8 @@ This builds the site into `_site/` and checks the generated pages. Serve `_site/
 
 ## Next development stages
 
-1. Expand and reference-check the technique explanations.
+1. Expand and reference-check the technique explanations, including their effects on readers.
 2. Build a representative, human-reviewed evaluation set.
 3. Prototype local inference behind the output contract.
 4. Implement a user-triggered browser extension with minimal permissions.
-5. Compare small local models for quotation accuracy, precision, abstention and device performance.
+5. Compare small local models for quotation accuracy, useful recognition and device performance.
