@@ -24,8 +24,9 @@ async function embed(texts) {
 }
 
 function prototypeTexts(t) {
- return [...new Set([t.title, t.summary, t.definition, t.description, t.example,
-  ...(t.examples || []), ...(t.observable_features || [])]
+ // Match against examples of the technique, not prose explaining how to recognise it.
+ // Otherwise definitions and chapter descriptions can be mistaken for real instances.
+ return [...new Set([t.example, ...(t.examples || [])]
   .filter(x => typeof x === "string" && x.trim()).map(x => x.trim()))];
 }
 
@@ -63,7 +64,9 @@ function windows(text) {
   out.push(sentences[i]);
   if (i + 1 < sentences.length && sentences[i + 1].start - sentences[i].start < 420) {
    out.push({ text: sentences[i].text + " " + sentences[i + 1].text,
-    start: sentences[i].start, end: sentences[i + 1].end });
+    // The first sentence supplies context; the second is the response being assessed.
+    // Keep both for classification, but highlight only the response.
+    start: sentences[i + 1].start, end: sentences[i + 1].end, contextual: true });
   }
  }
  return out;
