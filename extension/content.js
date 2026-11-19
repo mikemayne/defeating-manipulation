@@ -4,6 +4,22 @@
    return;
  }
  const MARK = "data-dm-pattern-highlight";
+ const BUSY_CURSOR_STYLE_ID = "dm-pattern-busy-cursor";
+ let activeAnalyses = 0;
+ function setBusy(busy) {
+   activeAnalyses = Math.max(0, activeAnalyses + (busy ? 1 : -1));
+   if (busy && activeAnalyses === 1) {
+     const style = document.createElement("style");
+     style.id = BUSY_CURSOR_STYLE_ID;
+     style.textContent = "html[data-dm-analysing], html[data-dm-analysing] * { cursor: wait !important; }";
+     document.documentElement.append(style);
+     document.documentElement.setAttribute("data-dm-analysing", "");
+   } else if (!busy && activeAnalyses === 0) {
+     document.documentElement.removeAttribute("data-dm-analysing");
+     document.getElementById(BUSY_CURSOR_STYLE_ID)?.remove();
+   }
+ }
+
  let tooltip;
  const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#0d9488";
  const colour = technique => technique.category === "Positive" ? GREEN :
@@ -109,6 +125,7 @@
  async function analyseSelection() {
    const snapshot = selectionSnapshot();
    if (!snapshot) return;
+   setBusy(true);
    try {
      const matches = await browser.runtime.sendMessage({ type: "DM_MATCH", text: snapshot.text });
      // Keep captured text nodes intact until the new underlines are applied.
@@ -116,6 +133,8 @@
      window.getSelection()?.removeAllRanges();
    } catch (error) {
      console.warn("Defeating Manipulation selected-text matcher:", error);
+   } finally {
+     setBusy(false);
    }
  }
  tooltip = document.createElement("div");
@@ -133,7 +152,7 @@
    if (event.key === "Escape") tooltip.style.display = "none";
  });
  window.__dmPatternHighlighter = { analyseSelection, disable() {
-   clearMarks(); tooltip.remove(); delete window.__dmPatternHighlighter;
+   clearMarks(); tooltip.remove(); activeAnalyses = 1; setBusy(false); delete window.__dmPatternHighlighter;
  } };
  analyseSelection();
 })();

@@ -97,4 +97,15 @@ assert.equal(windows('Heading\nA short note\nThis is another line.')[0].text,
  'Heading A short note This is another line.',
  'Line breaks are whitespace within a continuous statement');
 
-console.log('Build, fallacy and multiline matching tests passed.');
+// Verify the async selection workflow exposes the busy cursor and always restores it.
+const selectionScript = fs.readFileSync('extension/content.js', 'utf8');
+assert.ok(selectionScript.includes('cursor: wait !important;'),
+ 'Selected-text analysis displays Firefox\'s busy cursor');
+assert.match(selectionScript, /setBusy\(true\);\s*try\s*\{/,
+ 'Busy cursor is enabled before matching begins');
+assert.match(selectionScript, /finally\s*\{\s*setBusy\(false\);\s*\}/,
+ 'Busy cursor is always restored on success or failure');
+assert.ok(selectionScript.includes('activeAnalyses'),
+ 'Concurrent matching requests retain the busy cursor until finished');
+
+console.log('Build, fallacy, multiline and busy-cursor checks passed.');
