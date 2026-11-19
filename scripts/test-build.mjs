@@ -88,8 +88,8 @@ for (const [id, example] of multilineCases) {
  for (const part of candidates) {
   assert.ok(part.start >= 0 && part.end <= example.length && part.end > part.start,
    'Highlight coordinates remain within the original selected text');
-  assert.equal(example.slice(part.start, part.end).replace(/\\s+/g, ' '), part.contextual
-   ? example.slice(part.start, part.end).replace(/\\s+/g, ' ')
+  assert.equal(example.slice(part.start, part.end).replace(/\s+/g, ' '), part.contextual
+   ? example.slice(part.start, part.end).replace(/\s+/g, ' ')
    : part.text, 'Source offsets must survive normalisation');
  }
 }
