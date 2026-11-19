@@ -56,7 +56,7 @@ The mapping does not transfer assumptions about how or why an event described in
 | The guilty always run | `presupposition`, `insinuation_by_juxtaposition` | The phrase presupposes guilt and treats an ambiguous behaviour as confirmation. |
 | Creating the Appearance of Guilt | `insinuation_by_juxtaposition`, `presupposition` | Guilt can be implied through arrangement or embedded assumptions. |
 | Legal intimidation | `threat_framing` | Related match where legal consequences are invoked as pressure rather than explained as relevant information. |
-| Hiding behind the Official Secrets Act | `appeal_to_authority`, `obfuscation` | A claim of secrecy or official authority may be rhetorical, but the underlying legal status requires separate factual checking. |
+| Hiding behind the Official Secrets Act | `false_authority`, `obfuscation` | A claim of secrecy or official authority may be rhetorical, but the underlying legal status requires separate factual checking. |
 | Criminalisation | `criminalising_dissent` | Direct match where criticism or protest is framed as criminal without establishing the conduct. |
 | Threatened framing | `threat_framing` | Direct match where threatened consequences shape the argument. |
 | Pretending to be overheard | Not imported as a standalone technique | The source chapter describes conduct, threats or conditions across an interaction. Where the same pressure has a clear textual form, it is mapped above; otherwise it is not a standalone article-language technique. |
