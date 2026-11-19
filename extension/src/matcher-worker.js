@@ -1,5 +1,6 @@
 import { pipeline, env } from "@huggingface/transformers";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
+import { embeddingRows } from "./embedding-rows.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -11,7 +12,7 @@ let extractor, techniques = [], rules = [], prototypes = [], initialising;
 
 async function embed(texts) {
  const output = await extractor(texts, { pooling: "mean", normalize: true });
- return Array.from({ length: texts.length }, (_, i) => Array.from(output[i].data));
+ return embeddingRows(output, texts.length);
 }
 
 async function initialise(catalogue, patternCatalogue) {
