@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "description": "Fictional examples for evaluating candidate detection. These are not claims about real publications.",
+  "cases": [
+    {
+      "id": "loaded-language-positive",
+      "text": "The reckless and disastrous plan will leave families paying the price.",
+      "expected_candidates": [
+        "loaded_language"
+      ],
+      "notes": "The evaluative adjectives are explicit."
+    },
+    {
+      "id": "neutral-reporting-negative",
+      "text": "The council published its transport plan on Tuesday. The document contains 18 proposals and will be debated next month.",
+      "expected_candidates": [],
+      "notes": "Neutral factual reporting; avoid forcing a technique label."
+    },
+    {
+      "id": "false-dilemma-positive",
+      "text": "We can either accept this proposal exactly as written or watch the entire service collapse.",
+      "expected_candidates": [
+        "false_dilemma",
+        "appeal_to_fear"
+      ],
+      "notes": "Two options are presented as exhaustive and one is linked to a threatening outcome."
+    },
+    {
+      "id": "legitimate-warning-ambiguous",
+      "text": "If the bridge inspection finds structural damage, the council may close the crossing to protect the public.",
+      "expected_candidates": [],
+      "notes": "A conditional safety warning is not automatically an appeal to fear."
+    },
+    {
+      "id": "quote-context-ambiguous",
+      "text": "The report called the service 'unacceptable', but the next sentence said the issue had been resolved the previous day.",
+      "expected_candidates": [],
+      "notes": "The quotation is contextualised; do not flag quote mining."
+    }
+  ]
+}
