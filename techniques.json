@@ -792,6 +792,28 @@
         "mm2023",
         "tymbay2022"
       ]
+    },
+    {
+      "id": "firsthand_evidence_requirement",
+      "title": "Firsthand evidence requirement",
+      "category": "Evidence and sourcing",
+      "summary": "Treating personal observation of an event as a prerequisite for drawing any conclusion from other available evidence.",
+      "tags": [
+        "firsthand observation",
+        "evidence dismissal",
+        "evidential standards"
+      ],
+      "status": "research-informed-starter",
+      "definition": "The argument dismisses or refuses to engage with evidence because the person presenting it did not personally witness the event. It treats direct observation as the only legitimate route to knowledge, rather than assessing what the available photographs, documents, recordings or other evidence can support. Firsthand observation may provide additional evidence, but its absence does not by itself invalidate other evidence.",
+      "observable_features": [
+        "Photographs, documents, recordings or other evidence are dismissed solely because the person discussing them was not present when the event occurred.",
+        "The response demands that the speaker personally saw or experienced the event without explaining why that is necessary to assess the particular evidence.",
+        "The evidential content of the material is left unanswered while the speaker's lack of firsthand access becomes the focus.",
+        "Potential additional evidence from direct examination is treated as though it were a prerequisite for considering evidence already available."
+      ],
+      "example": "Illustrative example: An interviewee says that photographs of a deceased person appear to show features that warrant investigation. The interviewer replies that the interviewee cannot know what happened because they did not personally see the body, without addressing what the photographs show.",
+      "reader_effect": "Can divert attention from the content and limits of the evidence, making a relevant observation appear inadmissible simply because the speaker was not an eyewitness.",
+      "references": []
     }
   ]
 }
