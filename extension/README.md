@@ -21,3 +21,14 @@ This exercises the same pattern matching code as the extension against hundreds
 of labelled examples and reports errors by technique. After `npm install` in
 `extension/`, run `npm run evaluate:ai` there to include the locally executed
 MiniLM semantic model. See `evaluation/README.txt` for commands and test design.
+
+## Local webpage to stress-test the matcher
+
+Install dependencies once using `npm install`, then run
+`npm run benchmark:dev` from `extension/` and open
+`http://127.0.0.1:4173/extension/benchmark.html` in Firefox.
+
+The page imports the same matching core as the browser extension, generates
+a reproducible large test set, displays only progress and aggregate statistics,
+and provides a button to copy failure details. It also accepts local labelled
+JSON/JSONL datasets. See `evaluation/README.txt` for the test data format.
