@@ -30,7 +30,7 @@ function updateSource() {
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
   ? argumentMode
-   ? 'Upload JSON/JSONL with {id, text, expected_argument: true/false, expected_model_conclusion?: string, expected?: [] or [reasoning label]}. Omit expected for structure-only tests; include it to run the unchanged local NLI model. Nothing leaves this computer.'
+   ? 'Upload JSON/JSONL with {id, text}. For unlabelled real-world scans, add analyse_reasoning:true to run local NLI; these runs report predictions, never accuracy. To score a labelled benchmark, provide expected_argument:true/false and optional expected:[reasoning label]. No text leaves this computer.'
    : consistency
    ? 'Upload JSON/JSONL containing {id, text, expected}, where expected is [] or ["argument_inconsistency"]. All analysis stays in this browser.'
    : concealed
@@ -129,6 +129,28 @@ function tableRows(body, rows, emptyLabel) {
 }
 function renderResults(data) {
  results.hidden = false;
+ if(data.unlabelledScan){
+  const grid=$("stats");
+  grid.replaceChildren(
+   metric("Real-world cases scanned",number(data.total)),
+   metric("Arguments extracted",number(data.predictions.filter(x=>x.extracted_arguments.length).length)),
+   metric("Cases with reasoning verdicts",number(data.predictions.filter(x=>x.predicted_labels.length).length)),
+   metric("Speed, cases/sec",number(Math.round(data.casesPerSecond))),
+   metric("Elapsed time, seconds",oneDecimal(data.elapsedSeconds))
+  );
+  $("real-breakdown").hidden=true;
+  $("summary-note").textContent="Prediction-only scan: no gold labels provided, so exact, precision, recall and false-positive rates are deliberately NOT calculated. Download predictions to review them locally. Existing source labels are metadata, not truth.";
+  tableRows($("confusion"),Object.entries(data.predictionCounts||{})
+   .sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,count])=>[label,number(count)]),
+   "No predictions.");
+  tableRows($("per-technique"),[],"Unlabelled: accuracy and per-technique failures are not defined.");
+  $("failure-note").textContent="Prediction-only run — download all " + number(data.predictions.length) + " results for review.";
+  copyButton.disabled=false;
+  copyButton.textContent="Download predictions JSON";
+  $("copied").textContent="";
+  return;
+ }
+ copyButton.textContent="Copy failures";
  const grid = $("stats");
  grid.replaceChildren(
   metric("Tests completed", number(data.total)),
@@ -301,7 +323,22 @@ function failureReport(data) {
  return lines.join("\n");
 }
 copyButton.addEventListener("click", async () => {
- if (!lastResult || !lastResult.incorrect) return;
+ if (!lastResult) return;
+ if(lastResult.unlabelledScan){
+  const payload=JSON.stringify({
+   schema_version:1,mode:"prediction_only_unlabelled",total:lastResult.total,
+   counts:lastResult.predictionCounts,predictions:lastResult.predictions
+  },null,2)+"\n";
+  const blob=new Blob([payload],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const anchor=document.createElement("a");
+  anchor.href=url;anchor.download="real-world-argument-predictions.json";
+  document.body.append(anchor);anchor.click();anchor.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $("copied").textContent="Predictions downloaded locally";
+  return;
+ }
+ if (!lastResult.incorrect) return;
  const text = failureReport(lastResult);
  try {
   await navigator.clipboard.writeText(text);
@@ -355,7 +392,7 @@ runButton.addEventListener("click", async () => {
   return;
  }
  if (source.value === "uploaded" && !file.files?.length) {
-  setError("Select a JSON or JSONL file containing labelled examples.");
+  setError("Select a JSON or JSONL file containing examples.");
   return;
  }
  if (location.protocol === "file:") {
