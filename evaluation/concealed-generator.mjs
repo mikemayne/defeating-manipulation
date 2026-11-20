@@ -22,6 +22,7 @@ export function generatedConcealedCase(cases, index, seed = 2026) {
  if (variant === 1) text = intro + "\n\n" + text;
  else if (variant === 2) text += "\n\n" + outro;
  else if (variant === 3) text = intro + "\n\n" + text + "\n\n" + outro;
- else if (variant === 4) text = text.replace(/\.\s+(?=[A-Z])/g, ".\n");
+ else if (variant === 4) text = text.split(/\n[ \t]*\n/).map(paragraph =>
+  paragraph.replace(/\. +(?=[A-Z])/g, ".\n")).join("\n\n");
  return { ...item, id: item.id + "/generated-" + index, text, variant };
 }
