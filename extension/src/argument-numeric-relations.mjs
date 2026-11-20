@@ -133,6 +133,51 @@ function measuredInterval(p,c){
  return relation(actual?'supported_conclusion':'contradictory_claims','measured_value_against_stated_interval',
   {value,low,high,claim:claimed},p,c);
 }
+// Explicit finite constraints: no guess about exhaustive lists or hidden units.
+function explicitNumericLimits(p,c){
+ if(/\b(?:except|excluding|other|different|separate|another|roughly|approximately|about|estimated|at least|at most)\b/i.test(p+c))return null;
+ // Claims must name the same container and counted object. An unqualified
+ // number is not exhaustive; the label/manifest and "exactly" establish it.
+ const contain=/\b(?:this|the|same)\s+([a-z][a-z-]{2,24})\s+contains?\s+(?:exactly\s+)?([\w-]+)\s+(?:(?:identical|standard|ordinary)\s+)?([a-z][a-z-]{2,24})\b/i;
+ const a=contain.exec(p),b=contain.exec(c);
+ if(a&&b&&singular(a[1].toLowerCase())===singular(b[1].toLowerCase())&&
+    singular(a[3].toLowerCase())===singular(b[3].toLowerCase())&&
+    /\b(?:label|inventory|manifest|register|exactly|total)\b/i.test(p)&&
+    /\b(?:exactly|according to that|according to the)\b/i.test(c)){
+  const av=count(a[2]),bv=count(b[2]);
+  if(av!==null&&bv!==null)return compareResult(av,bv,'same_container_explicit_count',p,c,{container:a[1],item:a[3]});
+ }
+ // A stated lowest seat number excludes an asserted smaller seat number.
+ const lowest=/\blowest\s+(?:seat\s+)?number\s+(?:is|was)\s+([\w-]+)\b/i.exec(p);
+ const numbered=/\b(seat)\s+numbered\s+(minus\s+[\w-]+|[\w-]+)\b/i.exec(c);
+ if(lowest&&numbered&&/\b(?:every|all)\s+seats?\b/i.test(p)&&sameItem(p,c)){
+  const min=count(lowest[1]),claimed=parseNumber(numbered[2]);
+  if(min!==null&&claimed!==null&&claimed<min)
+   return relation('contradictory_claims','number_below_explicit_minimum',
+    {minimum:min,claimed,operator:'<'},p,c);
+ }
+ // An explicit universal upper bound cannot coexist with an observed
+ // higher score in that same group.
+ const noAbove=/\bnot\s+a\s+single\s+([a-z][a-z-]{2,24})\s+scored\s+above\s+([\w-]+)\b/i.exec(p);
+ const asserted=/\b(?:one|several|some|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+([a-z][a-z-]{2,24})\s+scored\s+([\w-]+)\b/i.exec(c);
+ if(noAbove&&asserted&&singular(noAbove[1].toLowerCase())===singular(asserted[1].toLowerCase())){
+  const max=count(noAbove[2]),actual=count(asserted[2]);
+  if(max!==null&&actual!==null&&actual>max)
+   return relation('contradictory_claims','score_exceeds_explicit_exclusion',
+    {maximum:max,claimed:actual,operator:'>'},p,c);
+ }
+ // A source expressly stating a complete inventory sum can be compared
+ // against a conclusion claiming a different total of that inventory.
+ const total=/\bmaking\s+([\w-]+)\s+in\s+all\b/i.exec(p);
+ const claim=/\bthere\s+(?:were|are)\s+([\w-]+)\s+([a-z][a-z-]{2,24})\s+in\s+(?:that|the|this)\s+(inventory)\b/i.exec(c);
+ if(total&&claim&&/\binventory\b/i.test(p)&&sameItem(p,c)&&
+    p.toLowerCase().includes(singular(claim[2].toLowerCase()))){
+  const actual=count(total[1]),claimed=count(claim[1]);
+  if(actual!==null&&claimed!==null)
+   return compareResult(actual,claimed,'explicit_inventory_total',p,c,{item:claim[2]});
+ }
+ return null;
+}
 export function extractTypedNumericalFacts(text){
  if(typeof text!=='string'||text.length>1600)return [];
  return [...labelledMetricObservations(text).map(x=>({type:'metric_by_period',...x})),
@@ -143,5 +188,6 @@ export function inferTypedNumericRelation(premise,conclusion){
   QUOTES.test(premise)||QUOTES.test(conclusion)||hedged(premise)||hedged(conclusion)||
   EXCEPTION.test(premise))return null;
  return qtyWithMetric(premise,conclusion)||compareMoneyCategories(premise,conclusion)||
-  compareDateLabels(premise,conclusion)||measuredInterval(premise,conclusion);
+  compareDateLabels(premise,conclusion)||measuredInterval(premise,conclusion)||
+  explicitNumericLimits(premise,conclusion);
 }
