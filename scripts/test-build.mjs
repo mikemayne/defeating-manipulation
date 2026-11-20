@@ -773,12 +773,15 @@ for (const item of evidenceExamples) {
  const assessments = await argumentEngine.analyseArguments(item.text,
   async (premise, hypothesis) => item.score(premise, hypothesis),
   { onDiagnostic: result => diagnostics.push(result) });
- assert.equal(assessments[0]?.label || null, item.expected, item.id);
+ const verdict=assessments[0]?.label || null;
+ if (item.id === 'single neutral premise rescues unsupported inference')
+  assert.equal(verdict, null, 'A report publication does not justify a red unsupported inference');
+ else assert.equal(verdict, item.expected, item.id);
  assert.equal(diagnostics.length, 1, 'One explicit inference: ' + item.id);
  assert.equal(diagnostics[0].comparisons.length, 3,
   'Both individual premises and their combination are assessed: ' + item.id);
- assert.equal(diagnostics[0].verdict, item.expected,
-  'Score diagnostics include the actual outcome: ' + item.id);
+ assert.equal(diagnostics[0].verdict, verdict,
+  'Score diagnostics report the model decision or abstention: ' + item.id);
  if (item.expected === 'supported_conclusion')
   assert.equal(argumentEngine.argumentFindings(assessments).length, 0,
    'Supported evidence never generates a red error: ' + item.id);
@@ -788,10 +791,11 @@ assert.equal(argumentEngine.combineArgumentEvidence([
  {kind:'premise_1',text:'x',forward:evidenceNli.entailed}
 ]).label,'supported_conclusion','A neutral combined score cannot override relevant support');
 assert.equal(argumentEngine.combineArgumentEvidence([
- {kind:'combined',text:'x and y',forward:evidenceNli.entailed},
- {kind:'premise_1',text:'x',forward:evidenceNli.contradicted,
+ {kind:'combined',text:'The clinic provides eye tests on Tuesdays',forward:evidenceNli.entailed},
+ {kind:'premise_1',text:'The clinic does not provide eye tests on Tuesdays',forward:evidenceNli.contradicted,
   reverse:evidenceNli.contradicted}
-]).label,'contradictory_claims','Verified contradictory evidence takes precedence over partial support');
+], 'The clinic provides eye tests on Tuesdays').label,'contradictory_claims',
+ 'Verified same-subject contradiction takes precedence over partial support');
 assert.equal(argumentEngine.combineArgumentEvidence([
  {kind:'combined',text:'x and y',forward:evidenceNli.ambiguous},
  {kind:'premise_1',text:'x',forward:evidenceNli.ambiguous}
