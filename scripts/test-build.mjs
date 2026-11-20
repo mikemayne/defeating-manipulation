@@ -679,7 +679,7 @@ for (const text of headingsAndNoInference)
  assert.deepEqual(argumentEngine.extractArguments(text), [],
   'Reports, missing premises, and advice do not become factual conclusions');
 assert.ok(benchmarkPage.includes('value="argument_support"') &&
- benchmarkWorker.includes('analyseArguments(item.text, nliScorer)') &&
+ benchmarkWorker.includes('analyseArguments(item.text, nliScorer,') &&
  benchmarkUI.includes('argument-support-examples.json') &&
  localServer.includes('/evaluation/argument-support-examples.json'),
  'Argument NLI lab uses actual local NLI model and dedicated dataset');
