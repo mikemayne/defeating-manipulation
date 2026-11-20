@@ -433,3 +433,41 @@ Rerun **Arguments — premise and conclusion (local NLI)** on the unchanged
 101-case JSON and inspect the NLI diagnostics, actual red false positives,
 recall, and runtime. Changes to extraction can expose new NLI limitations;
 keep the pilot's labels unchanged until independent review.
+
+
+### Explicit evidence checks for red argument findings
+
+The existing browser-local `Xenova/distilbert-base-uncased-mnli` model and
+its quantisation, weights, and token budget are **unchanged**. A second, fast,
+rule-based check in `src/argument-evidence-checks.mjs` consumes the parsed
+premise and conclusion separately. It is fed structured comparisons rather
+than interpreting a raw MNLI probability as a logical proof:
+
+- **Contradiction requires an observable conflict** such as the same claim
+  being explicitly denied, an opposing predicate about the same subject and
+  time, or an explicit `only` restriction that conflicts with `every`.
+  Different authors or periods do not automatically contradict one another.
+- **Unsupported requires a specific evidence gap** such as observing two
+  platforms and concluding every platform is accessible. The mere presence
+  of `all`, `most`, `best`, `guaranteed` or strong MNLI neutrality is
+  not enough for a red underline.
+- **Everything else abstains** with no red underline, including scientific
+  inferences that may require specialist knowledge.
+
+These are deliberately narrow *verification signals*, not a claim that the
+model knows a statement is true, that a writer is deceptive, or that every
+unsupported inference has been caught. Supported conclusions are still
+classified only by the original NLI/identity paths.
+
+`evaluation/argument-evidence-pairs.json` contains 54 distinct manually
+authored premise/conclusion contrasts, with expected evidence signals and
+rationales. The independent test is `node scripts/test-argument-evidence.mjs`.
+It also replays the **actual reported NLI scores** that previously generated
+incorrect red marks for the election example and the physics example.
+CI runs this test during project validation. It does **not** rerun the
+neural model.
+
+Keep the 101-case real-world benchmark unchanged and rerun in Firefox to
+measure the tradeoff: false red markings should become less likely, while
+unsupported-argument recall may stay low or fall. Metrics must report
+abstention and misses honestly, not relabel reference cases.
