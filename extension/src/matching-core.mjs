@@ -4,7 +4,7 @@ import { hasSemanticEvidence } from "./semantic-evidence.mjs";
 
 // Shared by the Firefox worker and the stand-alone evaluation runner.
 export function compilePatternRules(catalogue, patternCatalogue) {
- const byId = new Map((catalogue.techniques || []).map(item => [item.id, item]));
+ const byId = new Map((catalogue.techniques || catalogue.patterns || []).map(item => [item.id, item]));
  return (patternCatalogue.patterns || []).flatMap(rule => {
   const technique = byId.get(rule.id);
   if (!technique) return [];
@@ -40,7 +40,8 @@ export function cosineSimilarity(a, b) {
  return dot / (Math.sqrt(normA) * Math.sqrt(normB) || 1);
 }
 
-export async function matchText(text, { techniques, rules, prototypes = [], embed = null }) {
+export async function matchText(text, { techniques, rules, prototypes = [], embed = null,
+  evidence = hasSemanticEvidence, semanticOptions = {} }) {
  const parts = windows(text);
  const patterned = [];
  const alreadyMatched = new Set();
@@ -73,9 +74,9 @@ export async function matchText(text, { techniques, rules, prototypes = [], embe
     !patterned.some(match => match.start < part.sourceEnd && match.end > part.sourceStart));
    const embedded = candidates.length ? await embed(candidates.map(part => part.text)) : [];
    for (let i = 0; i < candidates.length; i++) {
-    const result = selectSemanticTechnique(embedded[i], prototypes, cosineSimilarity);
+    const result = selectSemanticTechnique(embedded[i], prototypes, cosineSimilarity, semanticOptions);
     const matchedTechnique = result ? techniques[result.techniqueIndex] : null;
-    if (matchedTechnique && hasSemanticEvidence(matchedTechnique.id, candidates[i].text)) {
+    if (matchedTechnique && evidence(matchedTechnique.id, candidates[i].text)) {
      semantic.push({ start: candidates[i].start, end: candidates[i].end,
       technique: matchedTechnique, score: result.score,
       method: "semantic", strength: semanticMatchStrength(result.score, result.margin) });
