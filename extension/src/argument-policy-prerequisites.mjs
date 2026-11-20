@@ -76,7 +76,7 @@ function pairedAssemblyPrerequisite(p,c){
  if(!rule||!fact||!target||same(rule[2],rule[3])||
   !same(singular(rule[1]),singular(fact[1]))||!same(singular(rule[1]),singular(target[1])))return null;
  // Two unique named components. An additional pair makes "both" ambiguous.
- if((p.match(/\b(?:bolts?|screws?) [A-Z] and [A-Z]\b/g)||[]).length!==1)return null;
+ if((p.match(/\b(?:bolts?|screws?) [A-Z] and [A-Z]\b/gi)||[]).length!==1)return null;
  return result('both_named_assembly_prerequisites_complete',
   {component:singular(rule[1]),ids:[rule[2],rule[3]],before:rule[4]});
 }
