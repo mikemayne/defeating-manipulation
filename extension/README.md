@@ -609,3 +609,36 @@ The model is unchanged. New synthetic tests exercise these principles against
 independent fictional positive cases and difficult counterexamples. The
 previous 100-paragraph development dataset is not committed; rerun it, then
 test new independently annotated paragraphs before claiming general accuracy.
+
+
+### Normalising name, role and pronoun references before NLI
+
+The experimental paragraph analyser performs a **local, deterministic entity
+normalisation pass before sending premise/conclusion pairs to the existing
+local NLI model**. For example:
+
+- Original premise: `All shortlisted candidates were invited. Ada is on that shortlist.`
+- Original conclusion: `She was invited.`
+- Model premise: `All shortlisted candidates were invited. The candidate is on that shortlist.`
+- Model conclusion: `The candidate was invited.`
+
+A name is mapped to `the candidate`, `the applicant` or another explicit
+singular role **only when a unique named person can be linked to that role**,
+such as a stated role or a matched shortlist rule. A second named person, an
+interviewer or other possible referent, a quotation or missing role information
+causes the normaliser to abstain. Plural class statements (`all candidates`)
+are never replaced by the singular `the candidate`; that would change the
+logic of the argument. Explicit declarations such as `Ada is a candidate`
+are retained to preserve the identity evidence.
+
+Normalised strings are **model inputs only**. All displayed/source text,
+underline offsets, deterministic logical checks and quotations use the
+unmodified original. The failure report displays both original and normalised
+model inputs when a rewrite occurs. The existing quantised NLI model, its size
+and number of scoring comparisons remain unchanged.
+
+This is intentionally a conservative initial reference-resolution pass, **not
+general unrestricted coreference resolution**. It does not rewrite all
+pronouns, assume a person's gender from their name or resolve ambiguous
+interviews, reported speech or multi-person dialogue. New fictional regression
+tests cover both safe replacements and false-identity counterexamples.
