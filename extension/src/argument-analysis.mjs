@@ -188,8 +188,12 @@ function scopeWidening(premise, conclusion) {
 // signals to scrutinise the scope of the provided evidence, not proof that
 // the conclusion is false. Qualified claims are not automatically supported;
 // without an entailment signal, they must abstain instead of turning red.
-const CLAIMED_UNIVERSALS =
- /\b(?:all|every|each|everyone|everybody|everything|entire|whole|only|always|never|none|nobody|nothing|no|no one|everyone's)\b/i;
+const UNIVERSAL_SCOPE =
+ /\b(?:all|every|each|everyone|everybody|everything|entire|whole)\b/i;
+const NEGATIVE_SCOPE =
+ /\b(?:never|none|nobody|nothing|no|no one)\b/i;
+const EXCLUSIVE_SCOPE =
+ /\b(?:only|always)\b/i;
 const CATEGORICAL_ABSOLUTES =
  /\b(?:completely|entirely|totally|absolutely|guaranteed|forever|everlasting|infallible|perfectly|flawless|zero|fully|eliminated|eradicated|solved|cured|proven|proved|definitively)\b/i;
 const SUPERLATIVE_SCOPE =
@@ -201,9 +205,15 @@ const QUALIFIED_INFERENCE =
 // premise uses a universal too. The entailment model still determines
 // whether the details actually match; if it is neutral we abstain.
 function conclusionScopeCue(conclusion, premise) {
- if (CLAIMED_UNIVERSALS.test(conclusion) &&
-     !CLAIMED_UNIVERSALS.test(premise))
+ // Distinguish *types* of quantification. "No damage in three
+ // buildings" cannot justify "every building is safe"; a stray
+ // negative word in the premise must not mask universal expansion.
+ if (UNIVERSAL_SCOPE.test(conclusion) && !UNIVERSAL_SCOPE.test(premise))
   return "universal_scope";
+ if (NEGATIVE_SCOPE.test(conclusion) && !NEGATIVE_SCOPE.test(premise))
+  return "categorical_denial";
+ if (EXCLUSIVE_SCOPE.test(conclusion) && !EXCLUSIVE_SCOPE.test(premise))
+  return "exclusive_scope";
  if (CATEGORICAL_ABSOLUTES.test(conclusion) &&
      !CATEGORICAL_ABSOLUTES.test(premise))
   return "categorical_certainty";
