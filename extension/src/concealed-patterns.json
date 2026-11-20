@@ -41,11 +41,13 @@
       ],
       "positiveCues": [
         "\\b(?:i (?:respect|welcome) (?:your|any|everyone's) (?:right to )?(?:disagree|disagreement|opinion)|(?:you(?:'re| are) free|feel free) to disagree|(?:it's|it is) (?:fine|okay|ok) to disagree|we (?:welcome|encourage|value) (?:disagreement|different (?:opinions|views)|open discussion)|i(?:'m| am) (?:happy|glad) to hear (?:other|different) (?:views|opinions))\\b",
-        "\\b(?:please (?:challenge|correct) me|i(?:'d| would) like to understand why you disagree)\\b"
+        "\\b(?:please (?:challenge|correct) me|i(?:'d| would) like to understand why you disagree)\\b",
+        "\\bi welcome disagreement\\b"
       ],
       "negativeCues": [
         "\\b(?:anyone who (?:disagrees|objects|speaks against|says no)\\b[^.!?]{0,60}\\b(?:must leave|will be (?:fired|excluded|punished|removed)|cannot stay|is not welcome)|you (?:must|have to|need to) agree (?:with (?:me|us)|or\\b)|(?:no one|nobody) (?:is allowed|may) to disagree|if you disagree\\b[^.!?]{0,100}\\b(?:we(?:'ll| will)|you(?:'ll| will))\\b[^.!?]{0,100}\\b(?:fire|exclude|punish|remove|lose|regret|ban))\\b",
-        "\\b(?:you (?:must|have to|need to|are required to) (?:agree|support|endorse|approve|accept|comply|back|vote for|sign (?:the|this|our) (?:pledge|petition|statement|agreement))\\b|(?:you(?:'ll| will) (?:lose|be (?:fired|excluded|punished|banned|removed|shamed)|regret)\\b)|(?:we(?:'ll| will) (?:fire|exclude|punish|ban|remove|shame|blacklist|expose|publish your name|tell everyone)\\b)|(?:if you (?:don't|do not|won't|refuse to) (?:agree|support|approve|accept|comply|sign|vote)\\b)|(?:unless you (?:agree|support|approve|accept|comply|sign|vote)\\b)|(?:or else\\b)|(?:you (?:are|you're) (?:selfish|disloyal|ungrateful|a coward)\\b)|(?:if you really cared\\b)|(?:anyone who (?:disagrees|refuses|says no)\\b[^.!?]{0,50}\\b(?:must leave|will be|is not welcome|cannot stay)))"
+        "\\b(?:you (?:must|have to|need to|are required to) (?:agree|support|endorse|approve|accept|comply|back|vote for|sign (?:the|this|our) (?:pledge|petition|statement|agreement))\\b|(?:you(?:'ll| will) (?:lose|be (?:fired|excluded|punished|banned|removed|shamed)|regret)\\b)|(?:we(?:'ll| will) (?:fire|exclude|punish|ban|remove|shame|blacklist|expose|publish your name|tell everyone)\\b)|(?:if you (?:don't|do not|won't|refuse to) (?:agree|support|approve|accept|comply|sign|vote)\\b)|(?:unless you (?:agree|support|approve|accept|comply|sign|vote)\\b)|(?:or else\\b)|(?:you (?:are|you're) (?:selfish|disloyal|ungrateful|a coward)\\b)|(?:if you really cared\\b)|(?:anyone who (?:disagrees|refuses|says no)\\b[^.!?]{0,50}\\b(?:must leave|will be|is not welcome|cannot stay)))",
+        "\\bif you disagree\\b[^.!?]{0,110}\\bi(?:'ll| will) (?:fire|exclude|remove|punish|ban|shame) you\\b"
       ]
     },
     {
