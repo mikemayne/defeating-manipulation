@@ -1246,3 +1246,6 @@ await import('./test-argument-overreach.mjs');
 
 // Keep unique role-linked coreferences aligned for NLI; ambiguous actors abstain.
 await import('./test-argument-entity-normalisation.mjs');
+
+// Typed, locally verified relations must preserve conservative abstention.
+await import('./test-argument-propositions.mjs');
