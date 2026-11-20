@@ -64,7 +64,7 @@ const assessments=await analyseArguments(source,async (p,c)=>{
 },{onDiagnostic:d=>diagnostics.push(d)});
 assert.equal(comparisons.length,3,'Model still sees the same three views of the evidence');
 assert.equal(comparisons[0].conclusion,'The candidate was invited to interview.');
-assert.ok(comparisons[0].premise.includes('The candidate is on that shortlist.'));
+assert.ok(comparisons[0].premise.includes('The candidate is on that shortlist'));
 assert.ok(comparisons[1].premise.includes('All shortlisted candidates were invited'));
 assert.ok(comparisons[2].premise.includes('The candidate is on that shortlist'));
 assert.equal(diagnostics[0].entityNormalization?.canonical,'the candidate');
