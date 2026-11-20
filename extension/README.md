@@ -149,3 +149,55 @@ pressure passages to make diagnosing false positives straightforward.
 by a clearly coercive statement. Subtle implication, indirect threats,
 sarcasm, long-range persuasion and concealed manipulation that does not
 match these observable mechanisms need further development and testing.
+
+
+## Whole-paragraph argument support analysis (experimental)
+
+The Firefox extension now runs two **different red NLI checks** on the same
+selected text:
+
+1. The existing sentence-pair contradiction detector (unchanged).
+2. A new paragraph-level analysis that identifies an **explicit conclusion**
+   (for example, "Therefore, ...", "This proves ...", or "Thus, ..."), gathers
+   up to five preceding premise statements across adjacent paragraphs, then
+   asks the **same local NLI model** whether the supplied premises entail,
+   contradict or leave the conclusion unestablished.
+
+Outcomes: **supported conclusion** (available in the test lab but not red
+underlined); **contradicted conclusion** (red); and **insufficient evidence
+provided for the conclusion** (red). If the inference is uncertain or the
+conclusion is only a suggestion or recommendation, the analyser **abstains**.
+
+A neutral NLI score does not mean a conclusion is false. A flag means only
+that the evidence **present in the selection** appears insufficient for the
+inference made. Additional evidence may exist elsewhere. The analyser does
+not attempt unrestricted logical proof, causal inference or author-intent
+detection, and sentences without a clear conclusion signal are not
+classified by this version.
+
+The Firefox selection remains editable and browsable during the longer
+analysis. A small **non-blocking status badge** reports the active stage,
+with an indeterminate progress bar rather than a bogus percentage or busy
+mouse cursor. The hover popup shows the premises for each flagged
+conclusion, and links to its red pattern entry.
+
+### Whole-argument benchmark
+
+Open the Matcher Test Lab and choose **Arguments — premise and conclusion
+(local NLI)**. The default is **96 fictional cases**:
+24 supported conclusions, 24 unsupported inferences, 24 contradictions,
+and 24 passages without an explicit assessable conclusion. You can also
+upload a labelled JSON/JSONL file with `id`, `text` and
+`expected`: one of `["supported_conclusion"]`,
+`["unsupported_conclusion"]`, `["contradictory_claims"]`,
+or `[]` for passages that should not receive a verdict.
+
+The test lab uses the same local NLI scoring and argument extraction as
+Firefox, reports precision/recall for all three classes, and includes the
+premises and conclusion in failure details. The prior 200-case
+**Inconsistencies — local NLI** contradiction benchmark remains separate.
+
+CI exercises the parser, evidence gathering and decision logic using
+deterministic scorer outputs, **not** the browser's real NLI inference.
+Run the test lab in Firefox to assess the real model, and add fresh,
+independently written examples before claiming general accuracy.
