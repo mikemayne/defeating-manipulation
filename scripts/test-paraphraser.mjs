@@ -14,7 +14,10 @@ assert.throws(() => normaliseParagraphInputs([{id:"same",text:"A"},{id:"same",te
 assert.throws(() => normaliseParagraphInputs([{id:"broken"}]), /text string/);
 
 const prompt = paraphrasePrompt("The council has not approved the plan.");
-assert.match(prompt, /Preserve every distinct claim, negation, qualification/);
+assert.match(prompt, /MOST IMPORTANT: preserve the exact/);
+assert.match(prompt, /implied accusations, suggested causal links/);
+assert.match(prompt, /Do NOT neutralise persuasive content/);
+assert.match(prompt, /Do NOT label any manipulation pattern/);
 assert.ok(prompt.includes("The council has not approved the plan."));
 assert.deepEqual(assessParaphrase("A majority supported the proposal.",
  "Most members of the group backed the proposal."), []);
