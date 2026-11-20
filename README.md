@@ -84,7 +84,7 @@ The project uses CC0 1.0 for original written catalogue content and the MIT Lice
 The repository contains an initial catalogue and supporting project scaffolding. Definitions, examples and references are a starting point for collaborative development, not a completed or definitive taxonomy.
 
 
-## Argument consistency patterns
+## Argument inconsistency patterns
 
 The website has three searchable, colour-coded catalogue areas: manipulation
 techniques (blue), positive communication (green), and argument consistency
