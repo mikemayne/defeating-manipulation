@@ -58,7 +58,7 @@ export function inferExplicitProofObligationGap(premise,conclusion,{inferenceMar
  const p=premise.trim(),c=conclusion.trim();
  if(!p||!c||QUOTED.test(p)||QUOTED.test(c)||HEDGE.test(c)||
   EXPRESS_RULE.test(p)||EXPRESS_RULE.test(c)||
-  statementCount(p)>2 || supportedBySamePopulation(p,c))return null;
+  statementCount(p)>1 || supportedBySamePopulation(p,c))return null;
  const finite=LOCAL_EVENT.test(p)||FINITE_OBSERVATION.test(p);
  if(!finite)return null;
  // A published report may contain additional evidence outside this excerpt.
