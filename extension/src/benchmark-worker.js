@@ -2,6 +2,9 @@ import { pipeline, env } from "@huggingface/transformers";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
 import { generatedCase, validateSeeds } from "../../evaluation/benchmark-generator.mjs";
+import { validateConsistencyCases, generatedConsistencyCase } from "../../evaluation/inconsistency-generator.mjs";
+import { findInconsistencies } from "./consistency.mjs";
+import { createNliScorer } from "./nli-inference.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -13,6 +16,7 @@ const MAX_EMBED_CACHE = 4000;
 const MODEL = "Xenova/all-MiniLM-L6-v2";
 let running = false, stopRequested = false;
 let extractor, cachedCatalogueKey, prototypes = [], cache = new Map();
+let nliScorer;
 
 async function embed(texts) {
  if (!texts.length) return [];
@@ -54,6 +58,15 @@ async function initialiseModel(techniques) {
  const vectors = await embed(entries.map(entry => entry.text));
  prototypes = entries.map((entry, i) => ({ ...entry, vector: vectors[i] }));
  cachedCatalogueKey = key;
+}
+
+async function initialiseConsistencyModel() {
+ if (!nliScorer) {
+  nliScorer = await createNliScorer({
+   onStatus: message => self.postMessage({ type: "stage", message })
+  });
+ }
+ return nliScorer;
 }
 
 async function parseUpload(file) {
@@ -99,14 +112,18 @@ async function startRun(message) {
  const begin = performance.now(), id = message.runId;
  try {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
+  const consistency = mode === "consistency";
+  if (!["rules", "ai", "consistency"].includes(mode)) throw Error("Unknown matcher mode");
   const techniques = catalogue.techniques || [];
-  const seeds = validateSeeds(source === "uploaded"
-   ? await parseUpload(message.file) : fixture.cases, techniques.map(t => t.id));
+  const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
+  const seeds = consistency ? validateConsistencyCases(rawSeeds) :
+   validateSeeds(rawSeeds, techniques.map(t => t.id));
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
   if (!Number.isSafeInteger(total) || total < 1 || total > 1000000)
    throw Error("Choose between 1 and 1,000,000 tests");
-  const rules = compilePatternRules(catalogue, patterns);
-  if (mode === "ai") await initialiseModel(techniques);
+  const rules = consistency ? [] : compilePatternRules(catalogue, patterns);
+  if (consistency) await initialiseConsistencyModel();
+  else if (mode === "ai") await initialiseModel(techniques);
   else self.postMessage({ type: "stage", message: "Running deterministic pattern tests…" });
 
   const data = { tested: 0, requested: total, exact: 0, tp: 0, fp: 0, fn: 0,
@@ -114,11 +131,15 @@ async function startRun(message) {
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
-   const item = source === "uploaded" ? seeds[i] : generatedCase(seeds, i, Number(seed) || 2026);
-   const matches = await matchText(item.text, {
-    techniques, rules, prototypes: mode === "ai" ? prototypes : [],
-    embed: mode === "ai" ? embed : null
-   });
+   const item = source === "uploaded" ? seeds[i] :
+    consistency ? generatedConsistencyCase(seeds, i, Number(seed) || 2026) :
+    generatedCase(seeds, i, Number(seed) || 2026);
+   const matches = consistency ?
+    await findInconsistencies(item.text, nliScorer) :
+    await matchText(item.text, {
+     techniques, rules, prototypes: mode === "ai" ? prototypes : [],
+     embed: mode === "ai" ? embed : null
+    });
    for (const match of matches) {
     if (match.start < 0 || match.end > item.text.length || match.start >= match.end)
      throw Error("Invalid match offsets in " + item.id);
@@ -151,7 +172,12 @@ async function startRun(message) {
     const confusion = (expected.join(", ") || "(none)") + " → " + (predicted.join(", ") || "(none)");
     data.confusion[confusion] = (data.confusion[confusion] || 0) + 1;
     if (data.failures.length < MAX_FAILURE_SAMPLES) data.failures.push({
-     id: item.id, text: item.text, expected, predicted, missing, extra
+     id: item.id, text: item.text, expected, predicted, missing, extra,
+     detectedPairs: consistency ? matches.filter(match => match.kind === "inconsistency")
+      .map(match => ({
+       text: item.text.slice(match.start, match.end),
+       otherText: match.otherText, score: Number(match.score.toFixed(3))
+      })) : []
     });
    }
    const now = performance.now();
