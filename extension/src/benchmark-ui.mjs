@@ -15,41 +15,36 @@ function setError(text) {
  message.hidden = !text;
 }
 function updateSource() {
- const structureMode = mode.value === "argument_structure";
- // Structural metadata is never meaningful as generated NLI truth labels.
- source.options[0].disabled = structureMode;
- if (structureMode && source.value !== "uploaded") source.value = "uploaded";
+ const argumentMode = mode.value === "argument_paragraph";
+ // One uploaded paragraph test schema, with optional NLI labels.
+ source.options[0].disabled = argumentMode;
+ if (argumentMode && source.value !== "uploaded") source.value = "uploaded";
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
- const argumentMode = mode.value === "argument_support";
  const positive = mode.value.startsWith("positive_");
  const concealed = mode.value.startsWith("concealed_");
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
- count.max = consistency || argumentMode || structureMode || concealed ? 10000 : 1000000;
+ count.max = consistency || argumentMode || concealed ? 10000 : 1000000;
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
-  ? structureMode
-   ? 'Upload JSON/JSONL with {id, text, expected_argument: true/false, expected_model_conclusion?: string}. Tests extraction and completed NLI inputs only; no NLI model runs. Files stay on this computer.'
+  ? argumentMode
+   ? 'Upload JSON/JSONL with {id, text, expected_argument: true/false, expected_model_conclusion?: string, expected?: [] or [reasoning label]}. Omit expected for structure-only tests; include it to run the unchanged local NLI model. Nothing leaves this computer.'
    : consistency
    ? 'Upload JSON/JSONL containing {id, text, expected}, where expected is [] or ["argument_inconsistency"]. All analysis stays in this browser.'
-   : argumentMode
-    ? 'Upload JSON/JSONL with {id, text, expected}, where expected is one of ["supported_conclusion"], ["unsupported_conclusion"], ["contradictory_claims"], or []. No uploads leave this browser.'
-    : concealed
-     ? "Upload JSON/JSONL with {id, text, expected}, where expected contains a concealed-pattern ID (e.g. choice_with_coercion) or []. No uploads leave this browser."
-    : positive
-     ? "Upload JSON/JSONL containing {id, text, expected}. Expected IDs must be from the positive-pattern library. All analysis stays in this browser."
-     : "Upload JSON/JSONL containing {id, text, expected} using manipulation technique IDs. All analysis stays in this browser."
+   : concealed
+   ? "Upload JSON/JSONL with {id, text, expected}, where expected contains a concealed-pattern ID (e.g. choice_with_coercion) or []. No uploads leave this browser."
+   : positive
+   ? "Upload JSON/JSONL containing {id, text, expected}. Expected IDs must be from the positive-pattern library. All analysis stays in this browser."
+   : "Upload JSON/JSONL containing {id, text, expected} using manipulation technique IDs. All analysis stays in this browser."
   : consistency
    ? "200 labelled fictional cases: direct contradictions, paraphrases, consistent claims, different speakers/dates and hypotheticals. Generated variations test robustness, not independent accuracy."
-   : argumentMode
-    ? "96 fictional multi-premise cases: supported, unsupported, contradicted, and no explicit conclusion. Only red-underline inconsistent conclusions; supported results appear in the lab."
-    : concealed
-     ? "96 fictional cases: 48 positive openings undermined by targeted pressure and 48 hard negatives. Tests relationships, not just green/blue co-occurrence; no intent inferred."
-    : positive
-     ? "72 labelled fictional cases: 36 constructive statements and 36 neutral or misleading lookalikes. Generated repetitions are regression tests, not independent accuracy evidence."
-     : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
+   : concealed
+   ? "96 fictional cases: 48 positive openings undermined by targeted pressure and 48 hard negatives. Tests relationships, not just green/blue co-occurrence; no intent inferred."
+   : positive
+   ? "72 labelled fictional cases: 36 constructive statements and 36 neutral or misleading lookalikes. Generated repetitions test stability, not independent accuracy."
+   : "Generates labelled variants for the non-argument matching methods.";
 }
 count.addEventListener("input", () => { count.dataset.edited = "true"; });
 mode.addEventListener("change", updateSource);
@@ -137,13 +132,19 @@ function renderResults(data) {
  const grid = $("stats");
  grid.replaceChildren(
   metric("Tests completed", number(data.total)),
-  metric(lastMode === "argument_structure" ? "Exact structural checks" : "Exact classifications", percent(data.exactRate)),
+  metric(lastMode === "argument_paragraph" ? "Exact combined checks" : "Exact classifications", percent(data.exactRate)),
   metric("Incorrect classifications", number(data.incorrect)),
-  metric(lastMode === "argument_structure" ? "Structural label precision" : "Label precision", percent(data.precision)),
-  metric(lastMode === "argument_structure" ? "Structural label recall" : "Label recall", percent(data.recall)),
+  metric(lastMode === "argument_paragraph" ? "Combined label precision" : "Label precision", percent(data.precision)),
+  metric(lastMode === "argument_paragraph" ? "Combined label recall" : "Label recall", percent(data.recall)),
   metric("False positive rate on negatives", percent(data.negativeFalsePositiveRate)),
   metric("Speed, cases/sec", number(Math.round(data.casesPerSecond))),
-  metric("Elapsed time, seconds", oneDecimal(data.elapsedSeconds))
+  metric("Elapsed time, seconds", oneDecimal(data.elapsedSeconds)),
+  ...(data.paragraphStages ? [
+   metric("Structure exact", data.paragraphStages.structure.exact+" / "+data.paragraphStages.structure.total),
+   metric("Reasoning exact", data.paragraphStages.reasoning.total
+    ? data.paragraphStages.reasoning.exact+" / "+data.paragraphStages.reasoning.total
+    : "Not labelled")
+  ] : [])
  );
  $("real-breakdown").hidden = !data.realTracks?.length;
  if (data.realTracks?.length) {
@@ -164,15 +165,14 @@ function renderResults(data) {
   }
  }
  $("summary-note").textContent =
-  (lastMode === "argument_structure"
-   ? "Structure-only checks: argument extraction and optional exact model-hypothesis completion. This does not judge the quality or truth of reasoning. No NLI model was used. "
+  (lastMode === "argument_paragraph"
+   ? "Argument extraction always runs. Rows with the optional expected array also run local NLI and receive a separate reasoning score. The combined score mixes both stages. "
    : "") +
   "Evaluated " + number(data.total) + " cases, including " + number(data.negativeCount) +
   (lastMode === "consistency" ? " cases with no expected inconsistency." :
    lastMode.startsWith("positive_") ? " cases with no expected positive pattern." :
    lastMode.startsWith("concealed_") ? " cases with no expected concealed relationship." :
-   lastMode === "argument_support" ? " cases with no explicit conclusion to assess." :
-   lastMode === "argument_structure" ? " cases with no expected argument or hypothesis-completion check." :
+   lastMode === "argument_paragraph" ? " cases without an expected positive structural or reasoning label." :
    " cases with no expected technique.") +
   " Results describe this test dataset, not accuracy on unseen writing.";
  tableRows($("confusion"), data.confusion.slice(0, 20)
@@ -197,6 +197,10 @@ function failureReport(data) {
   "Precision: " + percent(data.precision) + " | Recall: " + percent(data.recall),
   "Negative false positive rate: " + percent(data.negativeFalsePositiveRate),
   "Elapsed (seconds): " + oneDecimal(data.elapsedSeconds),
+  ...(data.paragraphStages ? [
+   "Structure exact: "+data.paragraphStages.structure.exact+"/"+data.paragraphStages.structure.total,
+   "Reasoning exact: "+data.paragraphStages.reasoning.exact+"/"+data.paragraphStages.reasoning.total+" labelled rows"
+  ] : []),
   "",
   "CONFUSION SUMMARY"
  ];
@@ -221,7 +225,7 @@ function failureReport(data) {
   }
   if (item.structureCheck) {
    const c = item.structureCheck;
-   lines.push("Structure-only check (no NLI evaluation):",
+   lines.push("Argument structure check:",
     "  Expected argument: " + c.expectedArgument,
     "  Extracted arguments: " + c.hypotheses.length,
     "  Expected model hypothesis: " + (c.expectedModelConclusion ?? "(not labelled)"));
@@ -321,16 +325,13 @@ function catalogues() {
    if (!response.ok) throw Error("Cannot load the concealed-pattern examples");
    return response.json();
   }),
-  fetch(new URL("../../evaluation/argument-support-examples.json", import.meta.url)).then(response => {
-   if (!response.ok) throw Error("Cannot load the argument-support examples");
-   return response.json();
-  })
+  Promise.resolve(null)
  ]);
 }
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
- const maximum = mode.value === "consistency" || mode.value === "argument_support" || mode.value === "argument_structure" || mode.value.startsWith("concealed_")
+ const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value.startsWith("concealed_")
   ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
   setError("Choose a test count between 1 and " + number(maximum) + ".");
@@ -355,10 +356,9 @@ runButton.addEventListener("click", async () => {
  setError("");
  try {
   const [catalogue, patterns, manipulationFixture, consistencyFixture,
-   positiveFixture, concealedFixture, argumentFixture] = await catalogues();
+   positiveFixture, concealedFixture] = await catalogues();
   const fixture = mode.value === "consistency" ? consistencyFixture :
-   mode.value === "argument_structure" ? {cases:[]} :
-   (mode.value === "argument_support") ? argumentFixture :
+   mode.value === "argument_paragraph" ? {cases:[]} :
    mode.value.startsWith("positive_") ? positiveFixture :
    mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;
   runId++;
