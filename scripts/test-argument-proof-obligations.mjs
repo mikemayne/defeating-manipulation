@@ -17,7 +17,7 @@ const positives=[
  ['The club ordered new uniforms for its players.','It will never suffer another injury.'],
  ['The committee bought a new microphone.','That means every future decision will be fair.'],
 ];
-for(const [p,c] of positives){const v=gap(p,c);assert.equal(v?.label,'unsupported_conclusion',`Missing obligation: ${p} => ${c}`);assert.ok(v.obligation);}
+for(const [p,c] of positives){const v=gap(p,c,{inferenceMarker:'therefore'});assert.equal(v?.label,'unsupported_conclusion',`Missing obligation: ${p} => ${c}`);assert.ok(v.obligation);}
 const negatives=[
  ['All printed tickets were checked.','Therefore every printed ticket has been checked.'],
  ['If a server loses power, every connected session ends. The server lost power.','Therefore every connected session ended.'],
@@ -52,7 +52,8 @@ const negatives=[
  ['All five engines passed the inspection.','Therefore all five passed the inspection.'],
  ['The publisher made a new title available.','The title is available.'],
 ];
-for(const [p,c] of negatives)assert.equal(gap(p,c),null,`False evidence gap: ${p} => ${c}`);
+for(const [p,c] of negatives)assert.equal(gap(p,c,{inferenceMarker:'therefore'}),null,`False evidence gap: ${p} => ${c}`);
+assert.equal(gap('A bakery replaced a poster.','Every visitor will now be delighted.'),null,'No inference marker: do not infer a claim of logical entailment');
 console.log(`Proof obligations: ${positives.length} verified asymmetry cases; ${negatives.length} adversarial abstentions passed.`);
 
 // End-to-end: a missing proof alone stays diagnostic-only, but an explicit
@@ -62,7 +63,7 @@ const {combineArgumentEvidence,analyseArguments,argumentFindings}
 const neutral={contradiction:0.001,neutral:0.998,entailment:0.001};
 const p='A theatre bought a new curtain.';
 const c='All future performances are guaranteed to sell out.';
-const result=combineArgumentEvidence([{kind:'combined',text:p,forward:neutral}],c);
+const result=combineArgumentEvidence([{kind:'combined',text:p,forward:neutral}],c,{inferenceMarker:'therefore'});
 assert.equal(result?.label,'unsupported_conclusion');
 assert.ok(['verified_evidence_type_mismatch','verified_scope_overreach'].includes(result?.status));
 const uncertain=await analyseArguments(
