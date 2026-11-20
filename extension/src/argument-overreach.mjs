@@ -17,8 +17,8 @@ const COMPLETED=/\b(?:all|every|zero|entire|whole|permanently|eliminated|eradica
 // A bounded completed intervention cannot, by itself, establish a
 // universal or permanent outcome. This deliberately excludes rules,
 // exhaustive premises and contingent conclusions via the main gates below.
-const LOCAL_INTERVENTION=/\\b(?:added|installed|replaced|redesigned|repainted|changed|introduced|purchased|bought|launched|started|began|opened|published|released|announced|held|attended|commissioned|planted|removed|offered|hired|updated|repaired|upgraded)\\b/i;
-const STRONG_UNIVERSAL=/\\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|entirely|guaranteed|without exception)\\b/i;
+const LOCAL_INTERVENTION=/\b(?:added|installed|replaced|redesigned|repainted|changed|introduced|purchased|bought|launched|started|began|opened|published|released|announced|held|attended|commissioned|planted|removed|offered|hired|updated|repaired|upgraded)\b/i;
+const STRONG_UNIVERSAL=/\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|entirely|guaranteed|without exception)\b/i;
 const QUOTED_LABEL=/\b(?:used the words|used the phrase|wrote the words|claimed in (?:an?|the) (?:advert|advertisement|marketing)|labelled itself)\b/i;
 function isHedged(text){
  // "in May" is a calendar month, not the epistemic modal "may".
@@ -62,8 +62,8 @@ export function observableOverreach(premise, conclusion, {inferenceMarker=""}={}
  // unrestricted, permanent or universal outcome. Record a specific scope
  // overclaim rather than equating a neutral NLI score with unsupportedness.
  if(LOCAL_INTERVENTION.test(p)&&STRONG_UNIVERSAL.test(c)&&
-    !/\\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|guaranteed)\\b/i.test(p)&&
-    !/\\b(?:if|provided|only|necessarily|entails|logically)\\b/i.test(p))
+    !/\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|guaranteed)\b/i.test(p)&&
+    !/\b(?:if|provided|only|necessarily|entails|logically)\b/i.test(p))
   return {label:"unsupported_conclusion",reason:"local_intervention_to_universal_outcome"};
  // First wins do not *guarantee* the rest of a season.
  if(/\b(?:first|opening|initial)\s+(?:game|match|contest|trial)\b/i.test(p)&&
