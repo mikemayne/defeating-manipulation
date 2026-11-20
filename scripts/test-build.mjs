@@ -967,9 +967,9 @@ assert.ok(realClient.includes('localStorage') &&
  realClient.includes('source-list') &&
  realClient.includes('textContent ='),
  'Local collector exports import-ready JSON and avoids unsafe HTML rendering');
-assert.ok(benchmarkPage.includes('href="./real-data.html"') &&
+assert.ok(!benchmarkPage.includes('href="./real-data.html"') &&
  benchmarkPage.includes('id="real-track-results"'),
- 'Matcher Test Lab links to collector and shows sampling-strategy results');
+ 'Retired collector is no longer linked as compatible with the new paragraph schema');
 assert.ok(localServer.includes('/extension/real-data.html') &&
  localServer.includes('/extension/src/real-data-ui.mjs') &&
  localServer.includes('/evaluation/real-corpus.mjs') &&
