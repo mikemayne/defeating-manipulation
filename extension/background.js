@@ -20,13 +20,21 @@ function getWorker() {
  return ready.then(() => worker);
 }
 
-browser.runtime.onMessage.addListener(async m => {
+browser.runtime.onMessage.addListener(async (m, sender) => {
  if (m.type !== "DM_MATCH") return;
  const w = await getWorker();
  return new Promise((resolve, reject) => {
   const id = crypto.randomUUID();
   const listener = e => {
    if (e.data.id !== id) return;
+   if (e.data.type === "stage") {
+    // Update an unobtrusive, non-blocking badge in the tab. No percentages
+    // are invented: NLI inference has variable cost per argument.
+    if (sender.tab?.id != null) void browser.tabs.sendMessage(sender.tab.id, {
+     type: "DM_PROGRESS", message: e.data.message
+    }).catch(() => {});
+    return;
+   }
    w.removeEventListener("message", listener);
    e.data.error ? reject(Error(e.data.error)) : resolve(e.data.matches);
   };

@@ -1,0 +1,726 @@
+{
+  "version": 1,
+  "description": "96 fictional labelled premise-to-conclusion cases: 24 supported, 24 unsupported, 24 contradicted, 24 without a qualifying explicit inference. Includes multiple premises, paragraph breaks, reported disagreement and uncertain conclusions. Hand-constructed smoke tests, not a measure of model generalisation.",
+  "cases": [
+    {
+      "id": "supported_conclusion-01",
+      "group": "supported_conclusion",
+      "text": "The library opens to visitors every Sunday.\n\nAdmission is free for children.\nTherefore, the library opens to visitors every Sunday.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-01",
+      "group": "unsupported_conclusion",
+      "text": "The library opens to visitors every Sunday.\n\nAdmission is free for children.\nTherefore, the library has the safest electrical system in the country.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-01",
+      "group": "contradictory_claims",
+      "text": "The library opens to visitors every Sunday.\n\nAdmission is free for children.\nTherefore, the library never opens to visitors on Sundays.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-02",
+      "group": "supported_conclusion",
+      "text": "The museum offers guided tours on Saturdays. Tickets are sold at the entrance.\nThus, the museum offers guided tours on Saturdays.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-02",
+      "group": "unsupported_conclusion",
+      "text": "The museum offers guided tours on Saturdays. Tickets are sold at the entrance.\nThus, the museum is the most profitable attraction in Europe.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-02",
+      "group": "contradictory_claims",
+      "text": "The museum offers guided tours on Saturdays. Tickets are sold at the entrance.\nThus, the museum offers no guided tours on Saturdays.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-03",
+      "group": "supported_conclusion",
+      "text": "The school serves vegetarian lunches on Fridays. Its kitchen employs six cooks.\nThis shows that the school serves vegetarian lunches on Fridays.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-03",
+      "group": "unsupported_conclusion",
+      "text": "The school serves vegetarian lunches on Fridays. Its kitchen employs six cooks.\nThis shows that all pupils at the school have excellent nutrition.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-03",
+      "group": "contradictory_claims",
+      "text": "The school serves vegetarian lunches on Fridays. Its kitchen employs six cooks.\nThis shows that the school serves no vegetarian lunches on Fridays.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-04",
+      "group": "supported_conclusion",
+      "text": "The ferry runs between the two islands each morning. The crossing takes forty minutes.\nHence, the ferry runs between the islands each morning.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-04",
+      "group": "unsupported_conclusion",
+      "text": "The ferry runs between the two islands each morning. The crossing takes forty minutes.\nHence, the ferry has never experienced a safety problem.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-04",
+      "group": "contradictory_claims",
+      "text": "The ferry runs between the two islands each morning. The crossing takes forty minutes.\nHence, the ferry never runs between the islands in the mornings.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-05",
+      "group": "supported_conclusion",
+      "text": "The hospital has a pharmacy on its ground floor.\n\nThe building has three entrances.\nConsequently, the hospital has a pharmacy on its ground floor.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-05",
+      "group": "unsupported_conclusion",
+      "text": "The hospital has a pharmacy on its ground floor.\n\nThe building has three entrances.\nConsequently, the hospital has the best clinical outcomes in the country.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-05",
+      "group": "contradictory_claims",
+      "text": "The hospital has a pharmacy on its ground floor.\n\nThe building has three entrances.\nConsequently, the hospital has no pharmacy on its ground floor.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-06",
+      "group": "supported_conclusion",
+      "text": "The council has published its spending report online. The report covers the previous financial year.\nAs a result, the council has published its spending report online.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-06",
+      "group": "unsupported_conclusion",
+      "text": "The council has published its spending report online. The report covers the previous financial year.\nAs a result, the council has eliminated all financial waste.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-06",
+      "group": "contradictory_claims",
+      "text": "The council has published its spending report online. The report covers the previous financial year.\nAs a result, the council has not published its spending report online.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-07",
+      "group": "supported_conclusion",
+      "text": "The train station has step-free access to platform two. Its ticket office is open on weekdays.\nThis proves that the station has step-free access to platform two.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-07",
+      "group": "unsupported_conclusion",
+      "text": "The train station has step-free access to platform two. Its ticket office is open on weekdays.\nThis proves that every platform at the station is accessible to every traveller.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-07",
+      "group": "contradictory_claims",
+      "text": "The train station has step-free access to platform two. Its ticket office is open on weekdays.\nThis proves that the station has no step-free access to platform two.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-08",
+      "group": "supported_conclusion",
+      "text": "The cafe sells soup at lunchtime. It also stocks tea and coffee.\nIt follows that the cafe sells soup at lunchtime.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-08",
+      "group": "unsupported_conclusion",
+      "text": "The cafe sells soup at lunchtime. It also stocks tea and coffee.\nIt follows that the cafe uses only organic ingredients.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-08",
+      "group": "contradictory_claims",
+      "text": "The cafe sells soup at lunchtime. It also stocks tea and coffee.\nIt follows that the cafe never sells soup at lunchtime.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-09",
+      "group": "supported_conclusion",
+      "text": "The park has a public playground near the entrance.\n\nIts main gate is open until sunset.\nTherefore, the park has a public playground near the entrance.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-09",
+      "group": "unsupported_conclusion",
+      "text": "The park has a public playground near the entrance.\n\nIts main gate is open until sunset.\nTherefore, the park has no hazards for young children.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-09",
+      "group": "contradictory_claims",
+      "text": "The park has a public playground near the entrance.\n\nIts main gate is open until sunset.\nTherefore, the park has no public playground near the entrance.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-10",
+      "group": "supported_conclusion",
+      "text": "The charity runs a food bank on Wednesdays. It received a donation of new shelving.\nThus, the charity runs a food bank on Wednesdays.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-10",
+      "group": "unsupported_conclusion",
+      "text": "The charity runs a food bank on Wednesdays. It received a donation of new shelving.\nThus, the charity has solved local food insecurity.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-10",
+      "group": "contradictory_claims",
+      "text": "The charity runs a food bank on Wednesdays. It received a donation of new shelving.\nThus, the charity does not run a food bank on Wednesdays.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-11",
+      "group": "supported_conclusion",
+      "text": "The university library lends laptops to students. It also has study rooms upstairs.\nThis shows that the university library lends laptops to students.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-11",
+      "group": "unsupported_conclusion",
+      "text": "The university library lends laptops to students. It also has study rooms upstairs.\nThis shows that every university student now owns a laptop.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-11",
+      "group": "contradictory_claims",
+      "text": "The university library lends laptops to students. It also has study rooms upstairs.\nThis shows that the university library does not lend laptops to students.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-12",
+      "group": "supported_conclusion",
+      "text": "The factory produces bicycles for local shops. The factory installed new lights this month.\nHence, the factory produces bicycles for local shops.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-12",
+      "group": "unsupported_conclusion",
+      "text": "The factory produces bicycles for local shops. The factory installed new lights this month.\nHence, the factory is completely free of workplace injuries.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-12",
+      "group": "contradictory_claims",
+      "text": "The factory produces bicycles for local shops. The factory installed new lights this month.\nHence, the factory produces no bicycles for local shops.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-13",
+      "group": "supported_conclusion",
+      "text": "The gallery hosts exhibitions by regional artists.\n\nThe current show runs until December.\nConsequently, the gallery hosts exhibitions by regional artists.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-13",
+      "group": "unsupported_conclusion",
+      "text": "The gallery hosts exhibitions by regional artists.\n\nThe current show runs until December.\nConsequently, the gallery is the most prestigious art venue in the world.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-13",
+      "group": "contradictory_claims",
+      "text": "The gallery hosts exhibitions by regional artists.\n\nThe current show runs until December.\nConsequently, the gallery never hosts exhibitions by regional artists.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-14",
+      "group": "supported_conclusion",
+      "text": "The bakery makes bread each morning. Its doors open at seven o'clock.\nAs a result, the bakery makes bread each morning.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-14",
+      "group": "unsupported_conclusion",
+      "text": "The bakery makes bread each morning. Its doors open at seven o'clock.\nAs a result, the bakery is the healthiest place to eat in town.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-14",
+      "group": "contradictory_claims",
+      "text": "The bakery makes bread each morning. Its doors open at seven o'clock.\nAs a result, the bakery makes no bread in the mornings.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-15",
+      "group": "supported_conclusion",
+      "text": "The river path is open to walkers during daylight. The bridge was inspected in June.\nThis proves that the river path is open to walkers during daylight.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-15",
+      "group": "unsupported_conclusion",
+      "text": "The river path is open to walkers during daylight. The bridge was inspected in June.\nThis proves that the river path is safe in every possible weather condition.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-15",
+      "group": "contradictory_claims",
+      "text": "The river path is open to walkers during daylight. The bridge was inspected in June.\nThis proves that the river path is closed to walkers throughout daylight hours.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-16",
+      "group": "supported_conclusion",
+      "text": "The hotel provides breakfast for overnight guests. Rooms are cleaned each afternoon.\nIt follows that the hotel provides breakfast for overnight guests.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-16",
+      "group": "unsupported_conclusion",
+      "text": "The hotel provides breakfast for overnight guests. Rooms are cleaned each afternoon.\nIt follows that the hotel is the most environmentally sustainable in the region.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-16",
+      "group": "contradictory_claims",
+      "text": "The hotel provides breakfast for overnight guests. Rooms are cleaned each afternoon.\nIt follows that the hotel does not provide breakfast to overnight guests.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-17",
+      "group": "supported_conclusion",
+      "text": "The clinic provides eye tests on Tuesdays.\n\nAppointments can be booked by telephone.\nTherefore, the clinic provides eye tests on Tuesdays.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-17",
+      "group": "unsupported_conclusion",
+      "text": "The clinic provides eye tests on Tuesdays.\n\nAppointments can be booked by telephone.\nTherefore, the clinic has cured every patient it has treated.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-17",
+      "group": "contradictory_claims",
+      "text": "The clinic provides eye tests on Tuesdays.\n\nAppointments can be booked by telephone.\nTherefore, the clinic provides no eye tests on Tuesdays.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-18",
+      "group": "supported_conclusion",
+      "text": "The market sells fresh vegetables on Saturdays. The stalls are set up before eight.\nThus, the market sells fresh vegetables on Saturdays.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-18",
+      "group": "unsupported_conclusion",
+      "text": "The market sells fresh vegetables on Saturdays. The stalls are set up before eight.\nThus, all vegetables sold at the market are pesticide-free.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-18",
+      "group": "contradictory_claims",
+      "text": "The market sells fresh vegetables on Saturdays. The stalls are set up before eight.\nThus, the market never sells fresh vegetables on Saturdays.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-19",
+      "group": "supported_conclusion",
+      "text": "The sports centre offers swimming lessons for children. The pool is heated.\nThis shows that the sports centre offers swimming lessons for children.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-19",
+      "group": "unsupported_conclusion",
+      "text": "The sports centre offers swimming lessons for children. The pool is heated.\nThis shows that the sports centre has the most effective teaching methods in Britain.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-19",
+      "group": "contradictory_claims",
+      "text": "The sports centre offers swimming lessons for children. The pool is heated.\nThis shows that the sports centre offers no swimming lessons for children.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-20",
+      "group": "supported_conclusion",
+      "text": "The theatre schedules matinee performances on Sundays. Its foyer sells refreshments.\nHence, the theatre schedules matinee performances on Sundays.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-20",
+      "group": "unsupported_conclusion",
+      "text": "The theatre schedules matinee performances on Sundays. Its foyer sells refreshments.\nHence, the theatre has the highest audience satisfaction in the country.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-20",
+      "group": "contradictory_claims",
+      "text": "The theatre schedules matinee performances on Sundays. Its foyer sells refreshments.\nHence, the theatre never schedules matinee performances on Sundays.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-21",
+      "group": "supported_conclusion",
+      "text": "The bus company accepts contactless payment.\n\nIts routes cover the city centre.\nConsequently, the bus company accepts contactless payment.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-21",
+      "group": "unsupported_conclusion",
+      "text": "The bus company accepts contactless payment.\n\nIts routes cover the city centre.\nConsequently, the bus company has eliminated every delay on its routes.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-21",
+      "group": "contradictory_claims",
+      "text": "The bus company accepts contactless payment.\n\nIts routes cover the city centre.\nConsequently, the bus company does not accept contactless payment.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-22",
+      "group": "supported_conclusion",
+      "text": "The research centre published a report in April. Its researchers collected water samples.\nAs a result, the research centre published a report in April.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-22",
+      "group": "unsupported_conclusion",
+      "text": "The research centre published a report in April. Its researchers collected water samples.\nAs a result, the research centre has proved every possible cause of pollution.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-22",
+      "group": "contradictory_claims",
+      "text": "The research centre published a report in April. Its researchers collected water samples.\nAs a result, the research centre published no report in April.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-23",
+      "group": "supported_conclusion",
+      "text": "The bookshop holds readings on Thursday evenings. It also sells second-hand novels.\nThis proves that the bookshop holds readings on Thursday evenings.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-23",
+      "group": "unsupported_conclusion",
+      "text": "The bookshop holds readings on Thursday evenings. It also sells second-hand novels.\nThis proves that the bookshop has the lowest prices of any retailer worldwide.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-23",
+      "group": "contradictory_claims",
+      "text": "The bookshop holds readings on Thursday evenings. It also sells second-hand novels.\nThis proves that the bookshop holds no readings on Thursday evenings.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "supported_conclusion-24",
+      "group": "supported_conclusion",
+      "text": "The community hall hosts a weekly chess club. It has seating for sixty people.\nIt follows that the community hall hosts a weekly chess club.",
+      "expected": [
+        "supported_conclusion"
+      ]
+    },
+    {
+      "id": "unsupported_conclusion-24",
+      "group": "unsupported_conclusion",
+      "text": "The community hall hosts a weekly chess club. It has seating for sixty people.\nIt follows that the community hall is guaranteed to remain open forever.",
+      "expected": [
+        "unsupported_conclusion"
+      ]
+    },
+    {
+      "id": "contradictory_claims-24",
+      "group": "contradictory_claims",
+      "text": "The community hall hosts a weekly chess club. It has seating for sixty people.\nIt follows that the community hall does not host a weekly chess club.",
+      "expected": [
+        "contradictory_claims"
+      ]
+    },
+    {
+      "id": "no-argument-01",
+      "group": "no_argument",
+      "text": "The director said the museum opens on Saturdays. The spokesperson said that it is closed on Saturdays.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-02",
+      "group": "no_argument",
+      "text": "The librarian read out the statement: 'Therefore the whole building is safe.' The report did not adopt that conclusion.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-03",
+      "group": "no_argument",
+      "text": "The programme describes the phrase 'This proves the product is safe' as an example of weak reasoning.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-04",
+      "group": "no_argument",
+      "text": "Therefore, the programme is completely safe.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-05",
+      "group": "no_argument",
+      "text": "The report lists opening times and the price of admission without drawing a conclusion.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-06",
+      "group": "no_argument",
+      "text": "The workshop starts at ten. Therefore, we should arrive early.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-07",
+      "group": "no_argument",
+      "text": "The report mentions several delays. So we might need to review the schedule.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-08",
+      "group": "no_argument",
+      "text": "The engineers did not release any findings. It is therefore unclear whether the system works.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-09",
+      "group": "no_argument",
+      "text": "The council released figures for April. They did not draw a conclusion from them.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-10",
+      "group": "no_argument",
+      "text": "One witness described the room as bright. Another witness called it dark.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-11",
+      "group": "no_argument",
+      "text": "The photographer took two photographs. Consequently, could you send us a copy?",
+      "expected": []
+    },
+    {
+      "id": "no-argument-12",
+      "group": "no_argument",
+      "text": "The report notes that people may draw different conclusions from the same facts.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-13",
+      "group": "no_argument",
+      "text": "The guidance tells readers to be cautious before reaching a conclusion.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-14",
+      "group": "no_argument",
+      "text": "The word 'therefore' appears in the article's glossary.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-15",
+      "group": "no_argument",
+      "text": "The team opened a discussion of statistical uncertainty. So what should happen next?",
+      "expected": []
+    },
+    {
+      "id": "no-argument-16",
+      "group": "no_argument",
+      "text": "This is an illustrative hypothetical: Suppose the bridge is open on Sundays. What would follow?",
+      "expected": []
+    },
+    {
+      "id": "no-argument-17",
+      "group": "no_argument",
+      "text": "The editor said the report was complete. The auditor said it was incomplete.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-18",
+      "group": "no_argument",
+      "text": "Passengers can pay cash at the station. Payment by card is also available.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-19",
+      "group": "no_argument",
+      "text": "The study recorded a correlation and acknowledged that causation was not demonstrated.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-20",
+      "group": "no_argument",
+      "text": "The coordinator asked everyone to make their own assessment of the proposal.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-21",
+      "group": "no_argument",
+      "text": "The notes explain that a conclusion would require more data.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-22",
+      "group": "no_argument",
+      "text": "The article lists three possible interpretations, without endorsing any of them.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-23",
+      "group": "no_argument",
+      "text": "The notice says the doors must remain closed during the fire drill.",
+      "expected": []
+    },
+    {
+      "id": "no-argument-24",
+      "group": "no_argument",
+      "text": "The organiser said the booking page might be unavailable for an hour.",
+      "expected": []
+    }
+  ]
+}

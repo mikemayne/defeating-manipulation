@@ -5,6 +5,8 @@ import { generatedCase, validateSeeds } from "../../evaluation/benchmark-generat
 import { validateConsistencyCases, generatedConsistencyCase } from "../../evaluation/inconsistency-generator.mjs";
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
+import { analyseArguments, ARGUMENT_LABELS } from "./argument-analysis.mjs";
+import { validateArgumentCases, generatedArgumentCase } from "../../evaluation/argument-generator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
 import { generatedConcealedCase } from "../../evaluation/concealed-generator.mjs";
@@ -126,23 +128,24 @@ async function startRun(message) {
  try {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
   const consistency = mode === "consistency";
+  const argumentMode = mode === "argument_support";
   const positive = mode === "positive_rules" || mode === "positive_ai";
   const concealed = mode === "concealed_rules" || mode === "concealed_ai";
-  if (!["rules", "ai", "consistency", "positive_rules", "positive_ai",
+  if (!["rules", "ai", "consistency", "argument_support", "positive_rules", "positive_ai",
    "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
   const ids = concealed ? concealedPatterns.map(pattern => pattern.id) :
    techniques.map(t => t.id);
-  const seeds = consistency ? validateConsistencyCases(rawSeeds) :
-   validateSeeds(rawSeeds, ids);
+  const seeds = argumentMode ? validateArgumentCases(rawSeeds) :
+   consistency ? validateConsistencyCases(rawSeeds) : validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
-  const limit = consistency || concealed ? 10000 : 1000000;
+  const limit = consistency || argumentMode || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
-  const rules = consistency || positive ? [] : compilePatternRules(catalogue, patterns);
-  if (consistency) await initialiseConsistencyModel();
+  const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
+  if (consistency || argumentMode) await initialiseConsistencyModel();
   else if (mode === "concealed_ai") await initialiseConcealedModel(techniques);
   else if (mode === "ai" || mode === "positive_ai") await initialiseModel(techniques);
   else self.postMessage({ type: "stage",
@@ -156,10 +159,19 @@ async function startRun(message) {
    if (stopRequested) break;
    const item = source === "uploaded" ? seeds[i] :
     consistency ? generatedConsistencyCase(seeds, i, Number(seed) || 2026) :
+    argumentMode ? generatedArgumentCase(seeds, i, Number(seed) || 2026) :
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
-   let matches;
-   if (consistency) {
+   let matches, argumentAssessments = [];
+   if (argumentMode) {
+    argumentAssessments = await analyseArguments(item.text, nliScorer);
+    // Supported conclusions appear only in this benchmark's classification,
+    // not as red highlights in the Firefox extension.
+    matches = argumentAssessments.map(assessment => ({
+     start: assessment.conclusion.start, end: assessment.conclusion.end,
+     technique: { id: assessment.label }, kind: "argument_assessment"
+    }));
+   } else if (consistency) {
     matches = await findInconsistencies(item.text, nliScorer);
    } else if (concealed) {
     const useAi = mode === "concealed_ai";
@@ -227,6 +239,10 @@ async function startRun(message) {
       pattern: match.technique.id, positive: match.positiveText,
       pressure: item.text.slice(match.start, match.end),
       relatedNegative: match.negativePattern
+     })) : [],
+     argumentAssessments: argumentMode ? argumentAssessments.map(assessment => ({
+      label: assessment.label, premise: assessment.premise,
+      conclusion: assessment.conclusion.text, score: Number(assessment.score.toFixed(3))
      })) : []
     });
    }

@@ -2,6 +2,7 @@ import { pipeline, env } from "@huggingface/transformers";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
 import { findInconsistencies } from "./consistency.mjs";
+import { analyseArguments, argumentFindings } from "./argument-analysis.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { findConcealedPatterns } from "./concealed-matching.mjs";
@@ -80,13 +81,34 @@ self.addEventListener("message", async event => {
   const concealedMatches = findConcealedPatterns(data.text, {
    positiveMatches, negativeMatches: matches
   });
-  // The analyses share the selection. A missing NLI model never prevents
-  // ordinary blue, green or turquoise highlighting.
-  let inconsistencies = [];
-  try { inconsistencies = await findInconsistencies(data.text, scorePair); }
-  catch (error) { console.warn("Consistency analysis unavailable:", error); }
+  // Use one memoised local NLI scorer for both red analyses.
+  // The same selected text can require many pairwise inferences.
+  const cache = new Map();
+  const memoScore = (premise, hypothesis) => {
+   const key = JSON.stringify([premise, hypothesis]);
+   if (!cache.has(key)) cache.set(key, scorePair(premise, hypothesis));
+   return cache.get(key);
+  };
+  const stage = message => self.postMessage({ id: data.id, type: "stage", message });
+  let inconsistencies = [], argumentIssues = [];
+  try {
+   stage("Checking statements for contradictions…");
+   inconsistencies = await findInconsistencies(data.text, memoScore);
+   stage("Checking whether conclusions follow from the evidence…");
+   const assessed = await analyseArguments(data.text, memoScore, {
+    onProgress: ({ completed, total }) => {
+     if (total) stage("Checking conclusion " + Math.min(completed + 1, total) +
+      " of " + total + "…");
+    }
+   });
+   argumentIssues = argumentFindings(assessed);
+  } catch (error) {
+   // A broken NLI model cannot erase successful blue, green or turquoise matches.
+   console.warn("Local argument analysis unavailable:", error);
+  }
   self.postMessage({ id: data.id,
-   matches: [...matches, ...positiveMatches, ...concealedMatches, ...inconsistencies] });
+   matches: [...matches, ...positiveMatches, ...concealedMatches,
+    ...inconsistencies, ...argumentIssues] });
  } catch (error) {
   self.postMessage({ id: data.id, error: String(error?.message || error) });
  }
