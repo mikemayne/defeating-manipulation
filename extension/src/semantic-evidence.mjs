@@ -24,7 +24,7 @@ function isBandwagon(text) {
 function isNarrativeReframing(text) {
  const medium = /\b(?:article|report|story|account|coverage|headline|narrative|news)\b/i;
  const ordering = /\b(?:begins?|starts?|opens?|focuses?|frames?|portrays?|describes?|presents?|recounts?|highlights?)\b/i;
- const omission = /\b(?:but|while|without|instead of|rather than|omits?|omitted|ignores?|ignored|excludes?|excluded|leaves? out|left out|hides?|conceals?|earlier|prior|preceding|previous|context)\b/i;
+ const omission = /\b(?:omits?|omitted|ignores?|ignored|excludes?|excluded|leaves? out|left out|hides?|conceals?)\b[^.!?]{0,130}\b(?:earlier|prior|preceding|previous|context|decision|events?|cause|details?|incident|circumstances?|reason|evidence|background|what led to|what happened)\b/i;
  return medium.test(text) && ordering.test(text) && omission.test(text);
 }
 
