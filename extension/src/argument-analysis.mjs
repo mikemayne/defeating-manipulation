@@ -69,7 +69,8 @@ function extractInlineArgument(statement) {
   if ((before.match(/\b[\w'-]+\b/g) || []).length < 7 ||
       after.length < 12 || after.length > MAX_CONCLUSION_CHARS ||
       NORMATIVE.test(after)) continue;
-  const leading = before.search(/\S/), premiseEnd = before.trimEnd().length;
+  const leading = before.search(/\S/);
+  const premiseEnd = before.trimEnd().replace(/[,;]\s*$/, "").trimEnd().length;
   if (leading < 0 || premiseEnd <= leading) continue;
   const premise = {
    start: statement.start + leading,
