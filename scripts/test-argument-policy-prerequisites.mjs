@@ -122,5 +122,25 @@ assert.equal(assessment?.label,'supported_conclusion','explicit policy proof cor
 assert.deepEqual(argumentFindings([{...assessment,conclusion:{start:0,end:12}}]),[],
  'supported reasoning must not be underlined');
 
+// A third-person tentative *inference* is not an imperative recommendation.
+const tentativeArguments=[
+ 'The museum announced evening admission. Hence more visitors may consider arriving after work.',
+ 'The playground gained a new shaded area. Therefore some parents may consider visiting in summer.',
+ 'The hall introduced an accessible entrance. Consequently more residents may consider attending future events.'
+];
+for(const text of tentativeArguments){
+ const args=extractArguments(text);
+ assert.equal(args.length,1,'tentative conclusion is still an argument: '+text);
+ assert.match(args[0].conclusion.text,/\bmay consider\b/i);
+}
+const adviceNotArguments=[
+ 'The park has new benches. Hence consider stopping there tomorrow.',
+ 'A school opened nearby. Therefore you may consider applying for a place.',
+ 'The town has a cinema. Consequently we prefer to go there.',
+ 'The new route was announced. Therefore we should consider using it.',
+ 'The proposal is published. Thus please consider responding.'
+];
+for(const text of adviceNotArguments)
+ assert.equal(extractArguments(text).length,0,'recommendation must not count as argument: '+text);
 console.log('Explicit policy and prerequisite tests passed:',
  positives.length,'independent positives,',negatives.length,'hard negatives.');
