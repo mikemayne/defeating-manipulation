@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "description": "Authentic published materials to sample, not pre-labelled examples. Paste continuous verbatim passages and record the source URL before using the local argument classifier. Inclusion here does not imply the author makes inconsistent arguments.",
+  "methodology": "Use natural-prevalence sampling from whole articles as well as a separate challenge sample of passages with real conclusions. Choose and label passages before examining model output. No rewriting into 'therefore' sentences. Prefer one assessable inference per case; set aside ambiguous cases.",
+  "sources": [
+    {
+      "id": "ons-survey-2026",
+      "title": "ONS — Questionnaire changes and antisocial-behaviour responses",
+      "genre": "statistical methods",
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/methodologies/howachangeinthecrimesurveyforenglandandwalesquestionnaireinapril2025affectedresponsestoquestionsonantisocialbehaviour",
+      "provider": "Office for National Statistics"
+    },
+    {
+      "id": "ons-productivity-2025",
+      "title": "ONS — UK productivity estimates",
+      "genre": "statistics",
+      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/labourproductivity/articles/ukproductivityintroduction/januarytomarch2025andoctobertodecember2024",
+      "provider": "Office for National Statistics"
+    },
+    {
+      "id": "commons-evidence-report",
+      "title": "Commons committee — Transforming the UK's Evidence Base",
+      "genre": "committee report",
+      "url": "https://publications.parliament.uk/pa/cm5804/cmselect/cmpubadm/197/summary.html",
+      "provider": "UK Parliament"
+    },
+    {
+      "id": "nhs-independent-review",
+      "title": "Independent investigation of the NHS in England",
+      "genre": "independent report",
+      "url": "https://www.gov.uk/government/publications/independent-investigation-of-the-nhs-in-england/independent-investigation-of-the-national-health-service-in-england-accessible-version",
+      "provider": "GOV.UK"
+    },
+    {
+      "id": "oral-evidence-2026",
+      "title": "Parliamentary committee — Oral evidence, 16 June 2026",
+      "genre": "spoken evidence",
+      "url": "https://committees.parliament.uk/oralevidence/17747/html/",
+      "provider": "UK Parliament"
+    },
+    {
+      "id": "cdc-interpretation",
+      "title": "CDC — Analysing and interpreting epidemiological data",
+      "genre": "technical guidance",
+      "url": "https://www.cdc.gov/field-epi-manual/php/chapters/analyze-interpret-data.html",
+      "provider": "US Centers for Disease Control and Prevention"
+    },
+    {
+      "id": "ons-trust-surveys",
+      "title": "ONS — Trust barriers in social surveys",
+      "genre": "evaluation report",
+      "url": "https://www.ons.gov.uk/aboutus/transparencyandgovernance/onsevaluationstrategy/onsevaluation/understandingandaddressingtrustbarriersinsocialsurveys",
+      "provider": "Office for National Statistics"
+    },
+    {
+      "id": "statutory-instruments",
+      "title": "Joint Committee on Statutory Instruments — Report",
+      "genre": "legislative scrutiny",
+      "url": "https://publications.parliament.uk/pa/jt5901/jtselect/jtstatin/78/report.html",
+      "provider": "UK Parliament"
+    }
+  ]
+}
