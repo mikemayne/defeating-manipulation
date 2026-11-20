@@ -13,7 +13,7 @@ const temporal = sentence => (sentence.toLowerCase().match(/\b(?:monday|tuesday|
 // ambiguous wording is left for the existing NLI/context checks.
 export function attributedSource(sentence) {
  const text = sentence.trim();
- let match = text.match(/^(?:(?:the|an?|our)\s+)?([a-z][a-z'-]*(?:\s+[a-z][a-z'-]*){0,3})\s+(?:said|says|stated|states|claimed|claims|reported|reports|announced|announces|argued|argues|maintained|maintains|insisted|insists|asserted|asserts|wrote|writes|testified|testifies)\b/i);
+ let match = text.match(/^(?:(?:the|an?|our)\s+)?([a-z][a-z'-]*(?:\s+[a-z][a-z'-]*){0,3}?)\s+(?:(?:later|earlier|previously|again|also)\s+)?(?:said|says|stated|states|claimed|claims|reported|reports|announced|announces|argued|argues|maintained|maintains|insisted|insists|asserted|asserts|wrote|writes|testified|testifies)\b/i);
  if (!match) {
   match = text.match(/^(?:according to|as (?:stated|reported) by)\s+(?:(?:the|an?|our)\s+)?([a-z][a-z'-]*(?:\s+[a-z][a-z'-]*){0,3})\s*[,;]/i);
  }
