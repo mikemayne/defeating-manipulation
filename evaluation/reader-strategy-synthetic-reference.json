@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "48 fictional cases with 96 manually authored expected boundary choices. These are model-author reference choices, not independently surveyed human reader interpretations; do not report as real-world accuracy.",
+    "description": "54 fictional cases with 108 manually authored expected boundary choices. These are model-author reference choices, not independently surveyed human reader interpretations; do not report as real-world accuracy.",
     "schema": "cases: [{id,text,expected_boundaries:[{offset,choice}]}]",
     "no_real_world_corpus": true
   },
