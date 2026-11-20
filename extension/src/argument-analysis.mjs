@@ -1,4 +1,5 @@
-import { extractArguments } from "./argument-clauses.mjs";
+import { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
+import { discoverModelArgumentCandidates } from "./argument-model-discovery.mjs";
 import { normaliseClaimForNli } from "./argument-claim-normalisation.mjs";
 import { normaliseEntitiesForNli, normaliseEntityTextForNli } from "./argument-entity-normalisation.mjs";
 import { explicitConflict, specificEvidenceGap } from "./argument-evidence-checks.mjs";
@@ -211,9 +212,28 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
 }
 
 export async function analyseArguments(source, scorePair,
- { onProgress, onDiagnostic, includeImplicit=false } = {}) {
+ { onProgress, onDiagnostic, onCandidate,
+   includeImplicit=false, includeModelDiscovery=false } = {}) {
  if (typeof scorePair !== "function") return [];
+ // Per-run cache prevents model discovery and evidence assessment from
+ // rescoring an identical sentence pair twice. Original strings only.
+ const scoreCache = new Map();
+ const memoScorePair = (premise, hypothesis) => {
+  const key = JSON.stringify([premise, hypothesis]);
+  if (!scoreCache.has(key)) scoreCache.set(key, scorePair(premise, hypothesis));
+  return scoreCache.get(key);
+ };
  const candidates = extractArguments(source, {includeImplicit});
+ // A separate ML pass is reserved for text without any parser candidates.
+ // It never overwrites or expands already recognised arguments.
+ if (includeModelDiscovery && candidates.length === 0) {
+  const inferred = await discoverModelArgumentCandidates(
+   source, extractArgumentStatements(source), memoScorePair);
+  for (const candidate of inferred) {
+   candidates.push(candidate);
+   onCandidate?.(candidate);
+  }
+ }
  const assessments = [];
  for (let i = 0; i < candidates.length; i++) {
   const argument = candidates[i];
@@ -258,11 +278,11 @@ export async function analyseArguments(source, scorePair,
    // all other comparisons use the actual local NLI model.
    const forward = repeated
     ? { contradiction: 0, neutral: 0, entailment: 1 }
-    : validatedNliScores(await scorePair(modelPremise, hypothesis));
+    : validatedNliScores(await memoScorePair(modelPremise, hypothesis));
    let reverse = null;
    if (scoresValid(forward) && forward.contradiction >= 0.84 &&
        forward.contradiction > forward.neutral)
-    reverse = validatedNliScores(await scorePair(hypothesis, modelPremise));
+    reverse = validatedNliScores(await memoScorePair(hypothesis, modelPremise));
    scored.push({ ...item, modelPremise, repeated, forward, reverse });
   }
   // Explicit-logic checks continue to use the original statements and
@@ -294,6 +314,8 @@ export async function analyseArguments(source, scorePair,
    inferred: argument.inferred || false,
    inferredConnector: argument.inferredConnector || null,
    analysisText: argument.inferred ? argument.analysisText : null,
+   reconstructionMethod: argument.reconstructionMethod || null,
+   modelRelationScore: argument.relationScore ?? null,
    comparisons: scored.map(({ kind, text, modelPremise, repeated, forward, reverse }) =>
     ({ kind, premise: text, modelPremise: modelPremise!==text?modelPremise:null,
      repeated, forward, reverse })),
