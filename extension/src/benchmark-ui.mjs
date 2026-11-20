@@ -34,7 +34,7 @@ function updateSource() {
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
   ? compareMode
-   ? 'Upload the same 1,000 real-world {id,text} examples to compare progressive joins against original-context joins, using the same four candidate wordings and local model. Results show agreement and latency. Accuracy is only shown if a case includes expected_boundaries:[{offset,choice}], judged by a human; otherwise accuracy is unknown.'
+   ? 'Upload the same 1,000 real-world {id,text} examples to compare progressive joins against original-context joins, using the same four candidate wordings and local model. Results show agreement and latency. Accuracy is only shown if a case includes expected_boundaries:[{offset,choice}], labelled by a reviewer; otherwise accuracy is unknown.'
    : boundaryMode
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. Four-way local language-model comparison: original punctuation, no punctuation, and, but. One-time model download; scores indicate linguistic plausibility, not human reader percentages. Original text is never modified.'
    : readerMode
@@ -168,7 +168,7 @@ function renderResults(data) {
     m.labelled-m.correctContext,percent(100*m.correctContext/m.labelled)],
    ["Progressive",m.correctProgressive+" / "+m.labelled,
     m.labelled-m.correctProgressive,percent(100*m.correctProgressive/m.labelled)]
-  ]:[],"No human labels: upload expected_boundaries offsets to score reference agreement.");
+  ]:[],"No reference labels: upload expected_boundaries offsets to score agreement.");
   $("confusion-title").textContent="Replacement selections: context / progressive";
   $("confusion-column").textContent="Choice";
   $("per-technique-title").textContent="Reference-label comparison (if provided)";
