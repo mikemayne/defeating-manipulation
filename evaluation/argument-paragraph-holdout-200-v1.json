@@ -1,0 +1,1913 @@
+{
+  "version": 1,
+  "benchmark_type": "argument_paragraph",
+  "title": "Synthetic Paragraph Argument Holdout — 200 Original Cases (v1)",
+  "origin": "Original AI-authored fictional examples; labels written before any model predictions; not sourced from real people, news or user accounts.",
+  "annotation": "Author-provided reference labels with short rationales. Not independently human-adjudicated. Review any disputed labels separately; do not silently alter this frozen v1 corpus.",
+  "status": "frozen-pre-evaluation",
+  "date_created": "2026-11-20",
+  "intended_split": "200 new cases: 50 supported, 50 unsupported, 50 contradictory, 25 explicit-but-undetermined, 25 without an inference.",
+  "evaluation_protocol": "Run once on the frozen main-branch analyser after merge, record results and source commit. Do not tune to this corpus; use a separate development dataset and test against a v2 blind holdout later.",
+  "cases": [
+    {
+      "id": "syn-v1-supported-001",
+      "text": "Town regulations require every hot-food stall at the quay to hold a hygiene permit. The cedar kiosk sells hot meals at the quay, so it is subject to the hygiene-permit requirement.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The universal permit rule applies to an explicitly described member of its class."
+    },
+    {
+      "id": "syn-v1-supported-002",
+      "text": "The competition tally contains 26 votes for Elm and 19 for Ash. Therefore Elm received seven more votes than Ash.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The conclusion is the exact arithmetic difference between two stated totals."
+    },
+    {
+      "id": "syn-v1-supported-003",
+      "text": "Every parcel weighing more than 15 kilograms must travel on the freight lift. This parcel weighs 18 kilograms, so the freight-lift rule applies to it.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The parcel exceeds the explicitly stated threshold."
+    },
+    {
+      "id": "syn-v1-supported-004",
+      "text": "The exhibition ends on 30 April, and tonight is 1 May. Consequently the exhibition has already ended.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The end date precedes the explicitly anchored current date."
+    },
+    {
+      "id": "syn-v1-supported-005",
+      "text": "If the reservoir level drops below four metres, the intake pump shuts down. The gauge now reads 3.6 metres, so the stated shutdown condition has been met.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The measured level satisfies the conditional trigger."
+    },
+    {
+      "id": "syn-v1-supported-006",
+      "text": "The regional tournament admits only clubs registered before January. The Falcons registered in November of the previous year and have been admitted, so their registration preceded January.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The stated registration date and eligibility are consistent with the conclusion."
+    },
+    {
+      "id": "syn-v1-supported-007",
+      "text": "All seven envelopes in the drawer were sealed this morning. The red envelope is one of those seven, so the red envelope was sealed this morning.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A property of every identified item also holds for one explicitly identified member."
+    },
+    {
+      "id": "syn-v1-supported-008",
+      "text": "The taxi fare is £12 plus £3 for each of two extra stops. Therefore this journey costs £18 before any tip.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The computation is 12 plus twice 3."
+    },
+    {
+      "id": "syn-v1-supported-009",
+      "text": "The notice says that if the alarm is sounding, visitors must exit by the east door. The alarm is sounding, so the notice directs visitors to the east door.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The asserted condition activates the stated instruction."
+    },
+    {
+      "id": "syn-v1-supported-010",
+      "text": "At the end of counting, 41 ballots favoured the proposal and 41 opposed it. Hence neither side won a numerical majority of the votes counted.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Equal counts preclude a greater count on either side."
+    },
+    {
+      "id": "syn-v1-supported-011",
+      "text": "All workshops in the north wing require protective glasses. The pottery workshop is in the north wing, so participants there are subject to that glasses rule.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A universal location-scoped rule is applied to an explicit member."
+    },
+    {
+      "id": "syn-v1-supported-012",
+      "text": "The scheduled bus leaves at 14:20, and the current time is 14:35 on the same day. Therefore its scheduled departure time has passed.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Comparable times on the same date establish the ordering."
+    },
+    {
+      "id": "syn-v1-supported-013",
+      "text": "The laboratory recorded 0.8 milligrams in sample A and 1.3 in sample B. As a result, sample B's reported reading is higher than sample A's.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The numeric comparison follows from the readings."
+    },
+    {
+      "id": "syn-v1-supported-014",
+      "text": "The membership handbook says every annual member receives a printed directory. Anika is an annual member, so the handbook entitles Anika to a printed directory.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A universal entitlement applies to a named member."
+    },
+    {
+      "id": "syn-v1-supported-015",
+      "text": "The hall's maximum posted capacity is 140 people. The event register shows 125 attendees, so the registered attendance is below the posted maximum.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The registered count is smaller than the posted capacity."
+    },
+    {
+      "id": "syn-v1-supported-016",
+      "text": "No deliveries were scheduled for the national holiday, which the calendar identifies as today. Therefore the schedule contains no deliveries for today.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The two references identify the same day and schedule."
+    },
+    {
+      "id": "syn-v1-supported-017",
+      "text": "Each of the four shortlisted designs received a technical review. Design Delta is on that shortlist, so Design Delta received a technical review.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A quantified statement holds for the explicitly listed design."
+    },
+    {
+      "id": "syn-v1-supported-018",
+      "text": "The standard exchange rate in this fictional ledger is five tokens per credit. A deposit of 30 tokens therefore equals six credits under that rate.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The conversion divides 30 by five within the stated ledger."
+    },
+    {
+      "id": "syn-v1-supported-019",
+      "text": "Every meal marked V on this menu contains no meat. The lentil bowl is marked V, so the menu represents the lentil bowl as meat-free.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The label rule applies to a specified labelled menu item."
+    },
+    {
+      "id": "syn-v1-supported-020",
+      "text": "If the bridge is closed, the pedestrian route uses the tunnel. The bridge is closed for repairs today, so the specified pedestrian route uses the tunnel today.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The rule and explicitly true antecedent establish the stated route."
+    },
+    {
+      "id": "syn-v1-supported-021",
+      "text": "The draft is 24 pages long, while the published brief is 10 pages long. Thus the draft contains 14 more pages than the brief.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The difference between the two stated page counts is fourteen."
+    },
+    {
+      "id": "syn-v1-supported-022",
+      "text": "The security register records every authorised contractor for this site. Omar is recorded as an authorised contractor, so Omar appears in the register.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The conclusion restates the explicitly documented membership."
+    },
+    {
+      "id": "syn-v1-supported-023",
+      "text": "The institute requires all visiting scholars to sign in at reception. Elena is a visiting scholar, so Elena must sign in at reception under the institute's policy.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The all-members rule applies to an explicitly identified scholar."
+    },
+    {
+      "id": "syn-v1-supported-024",
+      "text": "Only the green lane is open for vehicles tonight, and the blue lane is shut. Consequently a driver using an open lane tonight must use the green lane.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The premises explicitly limit the open vehicle lanes to one."
+    },
+    {
+      "id": "syn-v1-supported-025",
+      "text": "Two of the ten chairs were moved to storage, leaving eight in the meeting room. Therefore eight of the original ten chairs remain there.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The stated inventory change directly establishes the remaining quantity."
+    },
+    {
+      "id": "syn-v1-supported-026",
+      "text": "The subscription was paid for the period ending 31 December. The invoice is dated 15 December of the same year, so that invoice date falls within the paid period's ending month.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Fifteenth December precedes the stated end of December."
+    },
+    {
+      "id": "syn-v1-supported-027",
+      "text": "The prize rules give one entry to every ticket holder. Yusuf holds a ticket, so he qualifies for one entry under the prize rules.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A universal conditional entitlement is applied to the holder."
+    },
+    {
+      "id": "syn-v1-supported-028",
+      "text": "The new schedule includes exactly three morning ferries: 08:00, 09:00 and 10:00. Hence 09:00 is one of the scheduled morning departures.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The proposed item occurs in the exhaustive schedule."
+    },
+    {
+      "id": "syn-v1-supported-029",
+      "text": "All devices that failed the initial calibration were set aside. The hand-held meter failed calibration, so it was set aside under that procedure.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The failed device belongs to the stated disposal group."
+    },
+    {
+      "id": "syn-v1-supported-030",
+      "text": "The water-quality sample had a pH of 6.2, and the stated acceptable interval is 6.5 to 8.5. Thus this sample's reading lies below that interval.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A numeric measurement is below the lower bound."
+    },
+    {
+      "id": "syn-v1-supported-031",
+      "text": "This document says the committee has five voting members. Four voted in favour and one against, so more than half of its voting members supported the motion.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Four of five constitutes a strict majority."
+    },
+    {
+      "id": "syn-v1-supported-032",
+      "text": "The emergency protocol makes the first aid room available whenever the building is occupied. The building is occupied now, so the protocol makes the first aid room available now.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A stated condition applies at the given moment."
+    },
+    {
+      "id": "syn-v1-supported-033",
+      "text": "All returned equipment receives a serial-number check. Unit 9 has been returned, so unit 9 is due a serial-number check under that policy.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The return qualifies the unit for the specified check."
+    },
+    {
+      "id": "syn-v1-supported-034",
+      "text": "The app's terms state that trial accounts expire after 14 days. Mira opened a trial account 20 days ago and has not renewed it, so its specified trial period has expired.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The elapsed time exceeds the stated trial term without renewal."
+    },
+    {
+      "id": "syn-v1-supported-035",
+      "text": "The archive catalogued every photograph in the donated collection. The harbour portrait photograph is in that collection, so the archive catalogued the photograph.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The universal cataloguing rule includes the named photograph."
+    },
+    {
+      "id": "syn-v1-supported-036",
+      "text": "Only staff on the official rota can supervise the late session. Theo supervised the late session, so Theo must have been on the official rota if that rule was followed.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The conclusion correctly preserves the stated rule as a conditional implication."
+    },
+    {
+      "id": "syn-v1-supported-037",
+      "text": "The room-temperature log recorded 17°C at 09:00 and 20°C at 10:00. Therefore the recorded temperature increased by three degrees over that hour.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The stated endpoints establish the recorded difference."
+    },
+    {
+      "id": "syn-v1-supported-038",
+      "text": "The retailer offered free delivery on every order above £50. This basket costs £63, so this basket qualifies for free delivery under that offer.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The explicitly stated qualifying threshold is exceeded."
+    },
+    {
+      "id": "syn-v1-supported-039",
+      "text": "The notice identifies both east and west entrances as closed all weekend. This is Saturday, so neither entrance is available under that weekend notice today.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Saturday is inside the stated weekend closure period."
+    },
+    {
+      "id": "syn-v1-supported-040",
+      "text": "The published programme lists five speakers, including Lora. Hence Lora is among the speakers listed in the published programme.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The stated inclusion directly supports the membership claim."
+    },
+    {
+      "id": "syn-v1-supported-041",
+      "text": "No battery in the batch passed the voltage check. Battery B belongs to that batch, so battery B did not pass the voltage check.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A universal negative property applies to the identified member."
+    },
+    {
+      "id": "syn-v1-supported-042",
+      "text": "The depot holds twelve bicycles and has loaned four of them today. Thus eight of those bicycles have not been loaned today, assuming no other loans.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The explicit condition closes the otherwise possible additional-loan gap."
+    },
+    {
+      "id": "syn-v1-supported-043",
+      "text": "The contract states that a refund is due whenever a cancellation is made at least 48 hours ahead. The cancellation was made 72 hours ahead, so the contract provides a refund for it.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The sufficient refund condition is explicitly satisfied."
+    },
+    {
+      "id": "syn-v1-supported-044",
+      "text": "Every stage of the route must be completed to earn the full badge. Priya completed all stages, so she has met the route-completion requirement for the full badge.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The conclusion is restricted to meeting the specified completion requirement."
+    },
+    {
+      "id": "syn-v1-supported-045",
+      "text": "The assembly instructions say to tighten bolts A and B before fitting the guard. Both bolts have already been tightened, so the bolt-tightening prerequisite is satisfied.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Both named required bolts are confirmed tightened."
+    },
+    {
+      "id": "syn-v1-supported-046",
+      "text": "The board adopted the 2027 budget on 12 October 2026. Therefore the budget had been adopted by 13 October 2026.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The adoption date precedes the subsequent specified date."
+    },
+    {
+      "id": "syn-v1-supported-047",
+      "text": "The village library lends books and audio recordings. Consequently it lends at least two categories of material.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Two explicitly different material categories are named."
+    },
+    {
+      "id": "syn-v1-supported-048",
+      "text": "All certificates with an expired issue period are rejected by this checker. This certificate's issue period has expired, so the checker will reject it according to its rule.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "The certificate meets the exact rejection condition."
+    },
+    {
+      "id": "syn-v1-supported-049",
+      "text": "The hospital inventory identifies nine unused wheelchairs and one in service. Hence the inventory accounts for ten wheelchairs in total.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "Nine plus one equals ten within the same inventory."
+    },
+    {
+      "id": "syn-v1-supported-050",
+      "text": "The route planner gives a 24-minute walk and a 36-minute bus journey for the same trip. Therefore its walking estimate is 12 minutes shorter.",
+      "expected_argument": true,
+      "expected": [
+        "supported_conclusion"
+      ],
+      "case_kind": "supported",
+      "label_rationale": "A straightforward difference between two estimates is stated."
+    },
+    {
+      "id": "syn-v1-unsupported-001",
+      "text": "The town repainted the benches around the square last week. Therefore every visitor now feels welcome in the town.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Repainting benches does not establish the feelings of every visitor."
+    },
+    {
+      "id": "syn-v1-unsupported-002",
+      "text": "A podcast episode received twelve enthusiastic comments on its release day. This proves the podcast is the most trusted source of financial advice in Europe.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A handful of comments cannot establish a continent-wide trust ranking."
+    },
+    {
+      "id": "syn-v1-unsupported-003",
+      "text": "The laboratory purchased a new microscope on Tuesday. As a result, all of its future discoveries will be scientifically correct.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Purchasing equipment does not guarantee correctness of future research."
+    },
+    {
+      "id": "syn-v1-unsupported-004",
+      "text": "The stadium replaced its ticket scanners. Consequently the club will win every home match this season.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Ticket-scanner replacement supplies no basis for a guaranteed sports outcome."
+    },
+    {
+      "id": "syn-v1-unsupported-005",
+      "text": "One local bakery sold out of cinnamon buns before noon. Therefore nobody in the district prefers savoury breakfasts.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A single product selling out cannot establish universal dietary preferences."
+    },
+    {
+      "id": "syn-v1-unsupported-006",
+      "text": "An app's logo was redesigned in bright colours. That means the app now stores every user's data securely.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A visual redesign provides no information about comprehensive security safeguards."
+    },
+    {
+      "id": "syn-v1-unsupported-007",
+      "text": "The museum announced a new weekend opening slot. This proves it has become the nation's most accessible cultural institution.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One scheduling change cannot establish an overall national accessibility ranking."
+    },
+    {
+      "id": "syn-v1-unsupported-008",
+      "text": "A supplier delivered its latest order ahead of schedule. Hence every delivery from that supplier will arrive early next year.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One observed delivery is insufficient to guarantee all future deliveries."
+    },
+    {
+      "id": "syn-v1-unsupported-009",
+      "text": "The school purchased twenty additional tablets for its classrooms. Therefore every pupil has mastered digital literacy.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A device purchase does not measure student competence."
+    },
+    {
+      "id": "syn-v1-unsupported-010",
+      "text": "A single electric bus began service on the coast road. This means the entire county's transport system produces zero emissions.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One vehicle cannot establish system-wide zero emissions."
+    },
+    {
+      "id": "syn-v1-unsupported-011",
+      "text": "The gallery's account gained five hundred followers yesterday. Consequently its exhibition must be the most important in the city.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Follower counts do not establish a city's artistic-importance ranking."
+    },
+    {
+      "id": "syn-v1-unsupported-012",
+      "text": "The company changed the typeface on its invoices. Therefore its customers are guaranteed never to be overcharged again.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Typography cannot establish future billing accuracy."
+    },
+    {
+      "id": "syn-v1-unsupported-013",
+      "text": "The local magazine published a picture of a clean riverbank. That proves the river has no pollution anywhere along its length.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One image at one location does not establish the whole river's condition."
+    },
+    {
+      "id": "syn-v1-unsupported-014",
+      "text": "The charity held a successful fundraising dinner. Therefore homelessness in the region has been permanently eliminated.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "An event's success does not demonstrate a regional social outcome."
+    },
+    {
+      "id": "syn-v1-unsupported-015",
+      "text": "The weather station registered no rainfall yesterday afternoon. This shows there will never be flooding in the valley.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One dry afternoon cannot establish the absence of future flooding."
+    },
+    {
+      "id": "syn-v1-unsupported-016",
+      "text": "A software firm hired an additional customer-service agent. Consequently every support request will be resolved within thirty seconds.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One hire does not guarantee a strict universal response time."
+    },
+    {
+      "id": "syn-v1-unsupported-017",
+      "text": "The football team's captain gave an upbeat interview. That means the team is certain to finish first in the league.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Confidence in an interview does not establish a guaranteed league result."
+    },
+    {
+      "id": "syn-v1-unsupported-018",
+      "text": "One contractor received a safety award. This proves every contractor on the project has a perfect safety record.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "An individual award does not describe every contractor's history."
+    },
+    {
+      "id": "syn-v1-unsupported-019",
+      "text": "A public garden installed a new drinking fountain. As a result, every resident in the city now has easy access to clean drinking water.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One fountain cannot establish universal citywide access."
+    },
+    {
+      "id": "syn-v1-unsupported-020",
+      "text": "The restaurant removed plastic straws from its tables. Thus its entire supply chain must now be carbon-neutral.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A limited materials change is not a comprehensive supply-chain emissions assessment."
+    },
+    {
+      "id": "syn-v1-unsupported-021",
+      "text": "The rail operator tested one carriage successfully. Therefore its entire fleet will operate without faults for the next decade.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One test does not prove fleet-wide, long-term reliability."
+    },
+    {
+      "id": "syn-v1-unsupported-022",
+      "text": "A survey questioned forty shoppers at one market. Consequently all consumers in the country support the proposed pricing law.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A small local sample does not establish unanimous national opinion."
+    },
+    {
+      "id": "syn-v1-unsupported-023",
+      "text": "The council planted ten trees near its offices. This proves the borough's summer temperatures will fall by exactly five degrees.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A tree-planting count does not determine a precise temperature change."
+    },
+    {
+      "id": "syn-v1-unsupported-024",
+      "text": "A messenger service reached one thousand registered users. Hence its encryption has no vulnerabilities at all.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "User registration numbers are not evidence of zero encryption vulnerabilities."
+    },
+    {
+      "id": "syn-v1-unsupported-025",
+      "text": "The training centre introduced a new welcome video. Therefore not one new participant will ever feel confused.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A video does not guarantee every participant's experience."
+    },
+    {
+      "id": "syn-v1-unsupported-026",
+      "text": "A publisher released a biography about a well-known chef. That means every statement in the book is historically accurate.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "The publication of a book does not independently verify its claims."
+    },
+    {
+      "id": "syn-v1-unsupported-027",
+      "text": "The village repaired its clock tower. Consequently the unemployment rate across the province will be halved within a month.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Repairing a clock tower gives no basis for a precise provincial employment prediction."
+    },
+    {
+      "id": "syn-v1-unsupported-028",
+      "text": "The factory added a third loading bay. Therefore the cost of producing each item must have fallen by exactly 40 percent.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A loading-bay addition does not establish a precise production-cost change."
+    },
+    {
+      "id": "syn-v1-unsupported-029",
+      "text": "A theatre added two extra performances of its play. This guarantees that every resident will see the production.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Additional performances cannot guarantee attendance by all residents."
+    },
+    {
+      "id": "syn-v1-unsupported-030",
+      "text": "A council officer attended an environmental seminar. Therefore the municipality has met every air-quality target for the next ten years.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Seminar attendance cannot establish future target attainment."
+    },
+    {
+      "id": "syn-v1-unsupported-031",
+      "text": "Three students praised the new school timetable. This proves that every family in the town supports it.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Three opinions do not establish unanimous support among all families."
+    },
+    {
+      "id": "syn-v1-unsupported-032",
+      "text": "A supermarket began stocking locally made jam. Consequently every product it sells is now sourced locally.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One locally sourced item does not establish a universal sourcing practice."
+    },
+    {
+      "id": "syn-v1-unsupported-033",
+      "text": "The new office building has a rooftop garden. That means it will never require heating during winter.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A rooftop garden does not rule out winter heating needs."
+    },
+    {
+      "id": "syn-v1-unsupported-034",
+      "text": "The airline changed the colour of its boarding passes. Hence all future flights will depart exactly on time.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Boarding-pass colour cannot guarantee future departure punctuality."
+    },
+    {
+      "id": "syn-v1-unsupported-035",
+      "text": "A town's recycling centre purchased an additional skip. Therefore the town has permanently eliminated household waste.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A capacity addition is not proof of zero waste."
+    },
+    {
+      "id": "syn-v1-unsupported-036",
+      "text": "A film trailer attracted a million views. This proves the film has already won every major award.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Trailer views do not establish awards having been won."
+    },
+    {
+      "id": "syn-v1-unsupported-037",
+      "text": "The hospital installed a new sign at its main entrance. Consequently every patient will recover faster than before.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Entrance signage alone cannot establish patient-level recovery improvements."
+    },
+    {
+      "id": "syn-v1-unsupported-038",
+      "text": "A coastal village opened a small visitor kiosk. Therefore tourism revenue in every neighbouring village has doubled.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A kiosk opening supplies no data about revenue elsewhere."
+    },
+    {
+      "id": "syn-v1-unsupported-039",
+      "text": "The research group presented a promising preliminary chart. This guarantees that the final trial will confirm the hypothesis without any uncertainty.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A preliminary chart does not guarantee the future trial outcome."
+    },
+    {
+      "id": "syn-v1-unsupported-040",
+      "text": "A delivery van used less fuel on one trip after its route changed. Therefore all vehicles operated by the firm have halved their annual fuel consumption.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One trip's fuel usage cannot establish an annual fleet-wide reduction."
+    },
+    {
+      "id": "syn-v1-unsupported-041",
+      "text": "The library began offering a podcast about local history. So everybody in the county now knows the region's history in detail.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Providing one learning resource does not prove universal knowledge."
+    },
+    {
+      "id": "syn-v1-unsupported-042",
+      "text": "A paper manufacturer introduced recycled packaging for one product line. This demonstrates that its entire operation has no environmental impact whatsoever.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One packaging decision does not establish zero organisation-wide impact."
+    },
+    {
+      "id": "syn-v1-unsupported-043",
+      "text": "The community choir sold every ticket for a single concert. Therefore its next ten concerts are guaranteed to sell out as well.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One sold-out event does not settle future demand."
+    },
+    {
+      "id": "syn-v1-unsupported-044",
+      "text": "The council's web page now uses larger buttons. That proves every person with a disability can access every council service independently.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Interface changes on one page cannot establish universal service accessibility."
+    },
+    {
+      "id": "syn-v1-unsupported-045",
+      "text": "A local art fair had twice as many volunteers this year. Therefore every visitor must have spent twice as much money at the fair.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Volunteer counts do not entail a proportional change in individual spending."
+    },
+    {
+      "id": "syn-v1-unsupported-046",
+      "text": "An office received a replacement water dispenser. Consequently employee satisfaction has reached exactly 100 percent.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "A facilities replacement does not establish perfect satisfaction."
+    },
+    {
+      "id": "syn-v1-unsupported-047",
+      "text": "A manufacturer added a warranty leaflet to the box. Therefore the product will never malfunction in any household.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Packaging documentation cannot guarantee absolute product reliability."
+    },
+    {
+      "id": "syn-v1-unsupported-048",
+      "text": "A river tour sold 200 tickets in a weekend. This proves the water quality is safe everywhere along the route throughout the year.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Ticket sales cannot establish comprehensive water-safety data."
+    },
+    {
+      "id": "syn-v1-unsupported-049",
+      "text": "A newly elected committee held its first meeting on time. Therefore every decision it makes over the next five years will be fair.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "One punctual meeting cannot establish the quality of all future decisions."
+    },
+    {
+      "id": "syn-v1-unsupported-050",
+      "text": "The city commissioned a feasibility study for a cycle network. This means all the planned cycle routes are already built and open to the public.",
+      "expected_argument": true,
+      "expected": [
+        "unsupported_conclusion"
+      ],
+      "case_kind": "unsupported",
+      "label_rationale": "Commissioning a study is not equivalent to completing construction."
+    },
+    {
+      "id": "syn-v1-contradictory-001",
+      "text": "The final register lists exactly 14 participants in the workshop. Therefore the workshop had 19 participants in that same final register.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The exact participant count cannot be both fourteen and nineteen in the same register."
+    },
+    {
+      "id": "syn-v1-contradictory-002",
+      "text": "The depot's inspection states that no forklifts were working on Wednesday. Consequently at least one forklift was working there on that Wednesday.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Zero working forklifts conflicts with at least one working forklift at the same time and site."
+    },
+    {
+      "id": "syn-v1-contradictory-003",
+      "text": "The concert organiser confirmed that all balcony tickets were sold out at noon. Therefore balcony tickets remained unsold at noon.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "All tickets sold conflicts with unsold tickets in the same allocation at the same time."
+    },
+    {
+      "id": "syn-v1-contradictory-004",
+      "text": "The receipt shows a final payment of £82 for the purchase. Hence the final payment for that purchase was £28.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The same final payment has incompatible stated amounts."
+    },
+    {
+      "id": "syn-v1-contradictory-005",
+      "text": "The schedule says the ferry is suspended for the whole of 12 August. Thus the ferry is operating normally on 12 August under that same schedule.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A fully suspended service cannot be operating normally for the same period."
+    },
+    {
+      "id": "syn-v1-contradictory-006",
+      "text": "The safety audit recorded that every emergency exit was unlocked during the drill. Therefore one emergency exit was locked during that drill.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "All exits unlocked conflicts with the existence of a locked exit in the same drill."
+    },
+    {
+      "id": "syn-v1-contradictory-007",
+      "text": "The inventory shows four red folders and six blue folders, making ten in all. Consequently there were twelve folders in that inventory.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The asserted total contradicts the exhaustive arithmetic count."
+    },
+    {
+      "id": "syn-v1-contradictory-008",
+      "text": "A signed notice says the pool has no public sessions on Mondays. It follows that the pool offers a public session this Monday.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "An expressly prohibited same-day session is asserted to exist."
+    },
+    {
+      "id": "syn-v1-contradictory-009",
+      "text": "The board's recorded vote was unanimously against the amendment. Therefore one board member voted for the amendment in that recorded vote.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A unanimous vote against is incompatible with any vote in favour."
+    },
+    {
+      "id": "syn-v1-contradictory-010",
+      "text": "This laboratory labels sample K as containing no detectable lead under the stated test. Thus the same test detected lead in sample K.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The conclusion reverses the detection result of the same test."
+    },
+    {
+      "id": "syn-v1-contradictory-011",
+      "text": "The final attendance sheet shows nobody from the design team attended the briefing. Consequently one design-team member was present at that briefing.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Zero attendance from the group contradicts asserted attendance by a member."
+    },
+    {
+      "id": "syn-v1-contradictory-012",
+      "text": "The library's official calendar says it is closed every public holiday. Today is a public holiday, so the calendar shows the library as open today.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Applying the universal closure rule yields the opposite status for today."
+    },
+    {
+      "id": "syn-v1-contradictory-013",
+      "text": "Every road in the mapped district is shown as open to traffic. Therefore the same map shows at least one road in that mapped district as closed to traffic.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Every road open and one road closed contradict each other under the same map."
+    },
+    {
+      "id": "syn-v1-contradictory-014",
+      "text": "The log shows the machine was switched off throughout the entire test. This proves it was switched on for part of that same test.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The same machine cannot be off throughout and on for part of the same test."
+    },
+    {
+      "id": "syn-v1-contradictory-015",
+      "text": "All three bags were weighed and each was less than five kilograms. Hence one of those bags weighed more than ten kilograms.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Each bag being under five conflicts with one exceeding ten."
+    },
+    {
+      "id": "syn-v1-contradictory-016",
+      "text": "The survey's published breakdown contains exactly 30 respondents, including 12 in group A and 18 in group B. Consequently the total number of respondents was 40.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The exhaustive group counts sum to thirty, not forty."
+    },
+    {
+      "id": "syn-v1-contradictory-017",
+      "text": "The contract fixes the monthly service fee at zero pounds for the entire first year. Therefore the monthly service fee during the first year is £25.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A zero fee and a positive fee conflict for the same period."
+    },
+    {
+      "id": "syn-v1-contradictory-018",
+      "text": "The building plan shows that the ground-floor lift stops at levels 0, 1 and 2 only. Thus the lift stops at level 7 according to that plan.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The exhaustive set of stops excludes level seven."
+    },
+    {
+      "id": "syn-v1-contradictory-019",
+      "text": "The examination results say that not a single candidate scored above 80. Therefore several candidates scored 95.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Scores of ninety-five necessarily exceed the excluded threshold."
+    },
+    {
+      "id": "syn-v1-contradictory-020",
+      "text": "The train information board lists platform 4 as the sole departure platform for service R18. Hence service R18 departs from platform 9 according to that board.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A sole platform assignment excludes the different claimed platform."
+    },
+    {
+      "id": "syn-v1-contradictory-021",
+      "text": "The park's gate was kept locked for the entire night. Therefore the same gate stood unlocked at midnight that night.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Midnight lies inside the stated locked period."
+    },
+    {
+      "id": "syn-v1-contradictory-022",
+      "text": "The chemical manifest lists 0 litres of solvent in container B. Consequently container B holds two litres of solvent according to that manifest.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The same manifest cannot establish both zero and two litres for one container."
+    },
+    {
+      "id": "syn-v1-contradictory-023",
+      "text": "The council voted 8 to 3 in favour of the street plan. Thus more councillors voted against the plan than for it.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Eight votes in favour exceeds three against."
+    },
+    {
+      "id": "syn-v1-contradictory-024",
+      "text": "The head gardener's list says every rose bush in section C was pruned yesterday. Therefore one rose bush in section C was left unpruned yesterday.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A universal completed action conflicts with an exception in the same section."
+    },
+    {
+      "id": "syn-v1-contradictory-025",
+      "text": "The venue licence forbids any alcohol sales during the morning session. Therefore alcohol sales are permitted during that morning session under the licence.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A stated prohibition contradicts asserted permission in the same session."
+    },
+    {
+      "id": "syn-v1-contradictory-026",
+      "text": "The weather report records a minimum temperature of 11°C for the day. Thus the temperature reached 4°C on that same day.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A day with minimum eleven cannot have reached four on the same scale."
+    },
+    {
+      "id": "syn-v1-contradictory-027",
+      "text": "All applications received on time were accepted in the panel's final decision. Lila's application was received on time, so the same final decision rejected Lila's application.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "An explicitly accepted member is asserted to have been rejected by the same panel."
+    },
+    {
+      "id": "syn-v1-contradictory-028",
+      "text": "The final scoreboard reads Home 2, Away 5. Therefore the home team scored more goals than the away team.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Two goals are fewer than five."
+    },
+    {
+      "id": "syn-v1-contradictory-029",
+      "text": "The staff rota assigns nobody to the reception desk after 18:00 on Friday. Consequently three reception staff are assigned there at 20:00 on that Friday.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A zero-assignment period is contradicted by a positive assignment within it."
+    },
+    {
+      "id": "syn-v1-contradictory-030",
+      "text": "The storage record identifies exactly six crates, and every one is marked fragile. Hence two of those six crates are not marked fragile.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Every crate being marked contradicts two unmarked crates in the same set."
+    },
+    {
+      "id": "syn-v1-contradictory-031",
+      "text": "The laboratory's procedure states that test tubes labelled orange are discarded immediately. Tube 12 was labelled orange and discarded, so tube 12 was retained for reuse instead.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The conclusion asserts retention rather than the stated disposal of the same tube."
+    },
+    {
+      "id": "syn-v1-contradictory-032",
+      "text": "The film festival schedule shows no screenings in auditorium B today. Therefore a film is scheduled in auditorium B at 15:00 today.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "An empty schedule for that auditorium and date contradicts a scheduled screening."
+    },
+    {
+      "id": "syn-v1-contradictory-033",
+      "text": "The dispatch ledger lists 350 items shipped in March and 360 in April. Hence fewer items were shipped in April than in March.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The numerical ordering runs opposite to the conclusion."
+    },
+    {
+      "id": "syn-v1-contradictory-034",
+      "text": "Every applicant in the cohort submitted identification. Therefore at least one applicant in that cohort failed to submit identification.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "An all-members submission conflicts with an alleged non-submitter."
+    },
+    {
+      "id": "syn-v1-contradictory-035",
+      "text": "The report describes the trial as involving only adults aged 21 or older. Thus a sixteen-year-old took part in that same trial.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A participant aged sixteen falls outside the exhaustive adult-only age condition."
+    },
+    {
+      "id": "syn-v1-contradictory-036",
+      "text": "The museum's entry gate accepted no visitors between 09:00 and 10:00 today. Consequently a visitor passed through that gate at 09:30 today.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Half past nine falls within the stated zero-entry interval."
+    },
+    {
+      "id": "syn-v1-contradictory-037",
+      "text": "The service notice explicitly states that express trains stop at Elmfield but not at Brookside. Therefore the express trains stop at Brookside under that notice.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The location explicitly excluded as a stop is asserted to be a stop."
+    },
+    {
+      "id": "syn-v1-contradictory-038",
+      "text": "The assembly record shows that all five circuit boards passed the continuity test. So one of the five circuit boards failed the continuity test.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The alleged failure conflicts with every board passing the same test."
+    },
+    {
+      "id": "syn-v1-contradictory-039",
+      "text": "The hotel register shows the suite was vacant throughout Saturday. Hence somebody occupied that suite on Saturday.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Vacancy throughout the day excludes occupancy that day."
+    },
+    {
+      "id": "syn-v1-contradictory-040",
+      "text": "The charity's financial statement lists total income of £90,000 and total expenses of £65,000. Therefore expenses exceeded income in that statement.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Sixty-five thousand is below ninety thousand."
+    },
+    {
+      "id": "syn-v1-contradictory-041",
+      "text": "The timetable allocates exactly three minutes for the transfer. Therefore the timetable allocates nine minutes for that same transfer.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "One transfer cannot simultaneously have two different exact allotted durations."
+    },
+    {
+      "id": "syn-v1-contradictory-042",
+      "text": "The water meter was removed from service on 2 June and was not reinstated before 10 June. Thus it was in active service on 7 June.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The date lies inside the stated out-of-service period."
+    },
+    {
+      "id": "syn-v1-contradictory-043",
+      "text": "The packaging label states that this box contains eight identical notebooks. Consequently the box contains exactly twelve notebooks according to that label.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The same label cannot give both exact quantities."
+    },
+    {
+      "id": "syn-v1-contradictory-044",
+      "text": "The report states that no flights departed the airport during the runway closure. Therefore at least one flight departed during that same closure.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A universal no-departure statement conflicts with one departure in its time window."
+    },
+    {
+      "id": "syn-v1-contradictory-045",
+      "text": "The security policy allows only yellow badges into the restricted corridor. Kai used a blue badge and was refused entry, so the blue badge was accepted under that policy.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "The stated refusal conflicts with claimed acceptance for the same badge."
+    },
+    {
+      "id": "syn-v1-contradictory-046",
+      "text": "The published minutes record zero votes to abstain. Thus several members abstained from the recorded vote.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Zero recorded abstentions conflicts with several recorded abstentions."
+    },
+    {
+      "id": "syn-v1-contradictory-047",
+      "text": "The wildlife survey found exactly three nesting pairs on the island. Therefore the same survey found zero nesting pairs on the island.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Exact positive count and zero count cannot both describe the same survey."
+    },
+    {
+      "id": "syn-v1-contradictory-048",
+      "text": "The queue monitor reports that every checkout was unattended at 08:00. Consequently checkout 5 had a cashier working at 08:00.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Every checkout unattended excludes a staffed checkout at that time."
+    },
+    {
+      "id": "syn-v1-contradictory-049",
+      "text": "The maintenance report states the sprinkler system failed its inspection on Monday. Therefore the same system passed that same inspection on Monday.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "Opposite results for one inspection are incompatible."
+    },
+    {
+      "id": "syn-v1-contradictory-050",
+      "text": "Every seat in the conference hall is numbered, and the lowest number is 1. Thus the hall contains a seat numbered minus five.",
+      "expected_argument": true,
+      "expected": [
+        "contradictory_claims"
+      ],
+      "case_kind": "contradictory",
+      "label_rationale": "A negative seat number contradicts the stated minimum seat number."
+    },
+    {
+      "id": "syn-v1-abstain-001",
+      "text": "The volunteers have prepared an extra seating area for the lecture. Therefore attendance might increase if more people arrive than expected.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The conclusion is conditional and tentative, not a definite attendance outcome."
+    },
+    {
+      "id": "syn-v1-abstain-002",
+      "text": "The new timetable leaves a longer gap between two late buses. This suggests the evening journey could feel less convenient to some passengers.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "A qualified perception forecast is not a demonstrated outcome or explicit contradiction."
+    },
+    {
+      "id": "syn-v1-abstain-003",
+      "text": "The council has asked residents to comment on a draft zoning plan. Consequently some of the proposed boundaries may change after consultation.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "Consultation creates a possibility, not an asserted final change."
+    },
+    {
+      "id": "syn-v1-abstain-004",
+      "text": "The workshop has trialled a quieter ventilation setting. Thus participants might find the room more comfortable next week.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The future comfort claim is hedged and the effect has not been observed."
+    },
+    {
+      "id": "syn-v1-abstain-005",
+      "text": "The retailer will test a different shelf arrangement in one branch. Therefore the change might help shoppers locate products more quickly.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "A trial of layout offers only a tentative future benefit."
+    },
+    {
+      "id": "syn-v1-abstain-006",
+      "text": "The rehearsal was moved from the afternoon to the morning. As a result, some performers could find the new schedule easier to manage.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The conclusion describes a possible response by unspecified people."
+    },
+    {
+      "id": "syn-v1-abstain-007",
+      "text": "The museum is considering bilingual signs at its entrance. This means visitors may eventually see information in another language.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The asserted possibility depends on a decision not yet made."
+    },
+    {
+      "id": "syn-v1-abstain-008",
+      "text": "The neighbourhood group has arranged a public meeting about traffic. Hence the discussion could identify an option that has not previously been considered.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "Possible discovery in a future discussion is not directly established or refuted."
+    },
+    {
+      "id": "syn-v1-abstain-009",
+      "text": "A garden nursery has offered to sponsor seed packets at the school. Therefore the pupils might be able to plant more varieties in spring.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "Sponsorship and planting are contingent, not a definite causal conclusion."
+    },
+    {
+      "id": "syn-v1-abstain-010",
+      "text": "The committee delayed its vote to obtain another engineering report. Consequently the final decision may differ from the current proposal.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The statement is an explicitly uncertain future decision."
+    },
+    {
+      "id": "syn-v1-abstain-011",
+      "text": "The theatre is experimenting with shorter intervals. This suggests audience feedback could be different at the next performance.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "A possible feedback change is not a certain fact established by the experiment."
+    },
+    {
+      "id": "syn-v1-abstain-012",
+      "text": "A construction team expects to use a quieter concrete mixer. Therefore nearby residents might notice less noise during the next pour.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The equipment is prospective and the effect is qualified."
+    },
+    {
+      "id": "syn-v1-abstain-013",
+      "text": "The printer has been serviced after intermittent paper jams. Hence it may run more smoothly when the next large document is printed.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "Maintenance may help but does not establish the next print outcome."
+    },
+    {
+      "id": "syn-v1-abstain-014",
+      "text": "The university has added an optional evening tutorial. So students with jobs could find it easier to attend a class.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The outcome is a possibility conditional on individual schedules."
+    },
+    {
+      "id": "syn-v1-abstain-015",
+      "text": "The campsite is taking reservations for an extra autumn weekend. Consequently some guests might choose to extend their holidays.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "Availability does not establish a specific guest's future choice."
+    },
+    {
+      "id": "syn-v1-abstain-016",
+      "text": "The council is reviewing the location of a pedestrian crossing. Therefore the eventual design could put the crossing a little farther uphill.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The proposed location remains unsettled."
+    },
+    {
+      "id": "syn-v1-abstain-017",
+      "text": "The local newspaper has recruited a science correspondent. This means its science coverage might become more detailed.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "A tentative editorial quality outcome is not established solely by a hire."
+    },
+    {
+      "id": "syn-v1-abstain-018",
+      "text": "The delivery firm is assessing electric cargo bikes for short routes. Consequently some routes may eventually require fewer van journeys.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "An assessment does not certify future implementation, and the conclusion is tentative."
+    },
+    {
+      "id": "syn-v1-abstain-019",
+      "text": "The town has created a small grant programme for musicians. Thus some applicants might be able to hold events they previously could not afford.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The conclusion depends on selection, costs and future actions, and is hedged."
+    },
+    {
+      "id": "syn-v1-abstain-020",
+      "text": "A restaurant is trying a different dough recipe in its kitchen. Therefore the new version might appeal to customers who disliked the old one.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "Preference changes are hypothetical rather than a stated observed fact."
+    },
+    {
+      "id": "syn-v1-abstain-021",
+      "text": "The technology team intends to simplify its sign-in screen. This suggests fewer users could become confused by the next version.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The interface is not yet deployed and the claimed effect is qualified."
+    },
+    {
+      "id": "syn-v1-abstain-022",
+      "text": "The recreation centre has proposed a morning yoga class. Hence more residents may consider visiting the centre before work.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "A proposed class and future interest are possibilities, not known outcomes."
+    },
+    {
+      "id": "syn-v1-abstain-023",
+      "text": "The publishing house has asked several illustrators for sketches. As a result, the book's eventual cover might look different from the initial mock-up.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The future design is expressly uncertain."
+    },
+    {
+      "id": "syn-v1-abstain-024",
+      "text": "The transit authority is exploring ways to shorten ticket queues. Therefore the average waiting time could fall if a suitable system is adopted.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The claimed improvement is conditional on adoption and effectiveness."
+    },
+    {
+      "id": "syn-v1-abstain-025",
+      "text": "The orchard manager plans to inspect the trees before harvest. Consequently the inspection might reveal problems that were not visible earlier.",
+      "expected_argument": true,
+      "expected": [],
+      "case_kind": "abstain",
+      "label_rationale": "The result of a future inspection is not known and is described only as possible."
+    },
+    {
+      "id": "syn-v1-nonargument-001",
+      "text": "The exhibition catalogue was printed in two editions, one in English and one in Welsh. Both editions contain the same photographs.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Two descriptive facts are presented without a proposed inference."
+    },
+    {
+      "id": "syn-v1-nonargument-002",
+      "text": "In 2024 the café closed at 17:00, but this year it closes at 18:00. The change is noted on the entrance notice.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Different dates describe a change, not contradictory simultaneous assertions or a conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-003",
+      "text": "The chair described how the committee arrived at its decision. The explanation was recorded in the published minutes.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Reporting that an explanation exists is not asserting an inference in this passage."
+    },
+    {
+      "id": "syn-v1-nonargument-004",
+      "text": "A red line marks the pedestrian area on the site plan. The map key also identifies bicycle parking beside the western gate.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "The paragraph supplies map facts without an inferential claim."
+    },
+    {
+      "id": "syn-v1-nonargument-005",
+      "text": "The artist said, “We sold out, so everyone loves us.” The interviewer did not endorse that statement.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "An attributed quotation is reported rather than advanced as the narrator's argument."
+    },
+    {
+      "id": "syn-v1-nonargument-006",
+      "text": "The organisers arranged extra microphones so that people in the rear rows could hear the panel. Sound engineers checked the equipment before the doors opened.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "The words so that express purpose rather than an argument conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-007",
+      "text": "Because of heavy fog, the harbour office postponed the crossing. The revised departure time was posted later.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "A causal event report introduced by because of is not a tested argument in this schema."
+    },
+    {
+      "id": "syn-v1-nonargument-008",
+      "text": "The exhibition has been travelling since 2021. Its latest stop is a municipal gallery near the river.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Since marks a date, not an inferential connector."
+    },
+    {
+      "id": "syn-v1-nonargument-009",
+      "text": "The website's home page includes a calendar, a directory and a contact form. Its accessibility statement is in the footer.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "These are inventory observations with no explicit conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-010",
+      "text": "A reporter asked whether the scheme had met its targets. The director said the figures were being audited.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "A question and attributed reply are not the reporter's own inferred conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-011",
+      "text": "The first train leaves the valley at dawn. The last return trip is scheduled for 21:30.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Two schedule facts are stated without drawing an inference."
+    },
+    {
+      "id": "syn-v1-nonargument-012",
+      "text": "The team wanted to improve the readability of the leaflet. It changed the heading sizes and increased the margins.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Actions and motivations are described without claiming a logical conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-013",
+      "text": "The term “green corridor” is used in the planning document to describe a route between parks. The council has published a map of that route.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "A term's definition and a publication fact do not form an explicit argument."
+    },
+    {
+      "id": "syn-v1-nonargument-014",
+      "text": "Three friends travelled to the festival together. They purchased separate return tickets and shared a picnic.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "A narrative sequence without a proposed inferential claim."
+    },
+    {
+      "id": "syn-v1-nonargument-015",
+      "text": "The company announced a new annual report last Tuesday. The report is scheduled for publication next month.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "A publication timeline is described without an asserted conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-016",
+      "text": "Please check the size chart before ordering a uniform. The return instructions are printed at the back of the booklet.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "An instruction and a descriptive detail do not constitute an inferential argument."
+    },
+    {
+      "id": "syn-v1-nonargument-017",
+      "text": "The survey includes questions about commuting, food shopping and public spaces. Respondents can skip any question they prefer.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Survey design facts are given without any explicit deduction."
+    },
+    {
+      "id": "syn-v1-nonargument-018",
+      "text": "The conservation group monitors butterfly habitats each spring. Its volunteers also record rainfall for the local archive.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Two activities are reported, neither offered as evidence for a conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-019",
+      "text": "The board discussed the budget on Monday and the staffing plan on Wednesday. The meeting notes distinguish the two topics.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Events on separate days are not presented as inferentially linked claims."
+    },
+    {
+      "id": "syn-v1-nonargument-020",
+      "text": "The cooking demonstration covered bread making, food storage and knife care. Participants received a copy of the recipe booklet.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Event details are presented without a conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-021",
+      "text": "Some readers praised the article while others questioned its sources. The editor printed several letters from both groups.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Differing views are attributed, not endorsed as the text's own inference."
+    },
+    {
+      "id": "syn-v1-nonargument-022",
+      "text": "The ferry captain spoke about the route during a radio interview. The port authority later published the updated schedule.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Sequential news items are not an explicit inference."
+    },
+    {
+      "id": "syn-v1-nonargument-023",
+      "text": "The trial's methods section explains that participants completed a short questionnaire. The answers were stored without names.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "A study procedure and data-handling fact form a description, not a conclusion."
+    },
+    {
+      "id": "syn-v1-nonargument-024",
+      "text": "The council notice lists the dates for repairing the pavement. Residents can contact the works office with access questions.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "Information and contact instructions are not an inferred assertion."
+    },
+    {
+      "id": "syn-v1-nonargument-025",
+      "text": "The museum shop sells postcards, pencils and reproductions of historical maps. A second counter opens during busy afternoons.",
+      "expected_argument": false,
+      "expected": [],
+      "case_kind": "nonargument",
+      "label_rationale": "The paragraph inventories services without asserting a causal or deductive conclusion."
+    }
+  ]
+}
