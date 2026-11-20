@@ -211,9 +211,9 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
 }
 
 export async function analyseArguments(source, scorePair,
- { onProgress, onDiagnostic } = {}) {
+ { onProgress, onDiagnostic, includeImplicit=false } = {}) {
  if (typeof scorePair !== "function") return [];
- const candidates = extractArguments(source, {includeImplicit:true});
+ const candidates = extractArguments(source, {includeImplicit});
  const assessments = [];
  for (let i = 0; i < candidates.length; i++) {
   const argument = candidates[i];
