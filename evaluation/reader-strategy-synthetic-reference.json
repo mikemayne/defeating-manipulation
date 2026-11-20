@@ -1,0 +1,819 @@
+{
+  "meta": {
+    "description": "48 fictional cases with 96 manually authored expected boundary choices. These are model-author reference choices, not independently surveyed human reader interpretations; do not report as real-world accuracy.",
+    "schema": "cases: [{id,text,expected_boundaries:[{offset,choice}]}]",
+    "no_real_world_corpus": true
+  },
+  "cases": [
+    {
+      "id": "synthetic-strategy-001",
+      "text": "The manager promised delivery by Monday. The package arrived three days late. Customers complained about the delay.",
+      "expected_boundaries": [
+        {
+          "offset": 39,
+          "choice": "but"
+        },
+        {
+          "offset": 76,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-002",
+      "text": "The forecast predicted clear skies. Heavy rain arrived before noon. The outdoor concert was cancelled.",
+      "expected_boundaries": [
+        {
+          "offset": 34,
+          "choice": "but"
+        },
+        {
+          "offset": 66,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-003",
+      "text": "The advertisement promised unlimited access. The account stopped working after ten minutes. Subscribers requested refunds.",
+      "expected_boundaries": [
+        {
+          "offset": 43,
+          "choice": "but"
+        },
+        {
+          "offset": 90,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-004",
+      "text": "The report described a falling crime rate. The official chart showed an increase. The committee asked for corrections.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "but"
+        },
+        {
+          "offset": 80,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-005",
+      "text": "The company announced a hiring freeze. It recruited fifty new employees. Staff questioned the announcement.",
+      "expected_boundaries": [
+        {
+          "offset": 37,
+          "choice": "but"
+        },
+        {
+          "offset": 71,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-006",
+      "text": "The referee initially awarded a goal. Video review showed an offside. The referee overturned the decision.",
+      "expected_boundaries": [
+        {
+          "offset": 36,
+          "choice": "but"
+        },
+        {
+          "offset": 68,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-007",
+      "text": "The campaign promised lower prices. Shoppers paid substantially more. The promise became controversial.",
+      "expected_boundaries": [
+        {
+          "offset": 34,
+          "choice": "but"
+        },
+        {
+          "offset": 68,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-008",
+      "text": "The supplier guaranteed fresh bread. Several loaves arrived stale. The shop returned the delivery.",
+      "expected_boundaries": [
+        {
+          "offset": 35,
+          "choice": "but"
+        },
+        {
+          "offset": 65,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-009",
+      "text": "The train timetable promised punctual service. The train departed forty minutes late. Commuters missed their connections.",
+      "expected_boundaries": [
+        {
+          "offset": 45,
+          "choice": "but"
+        },
+        {
+          "offset": 84,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-010",
+      "text": "The brochure advertised a quiet hotel. Construction continued throughout the night. Guests demanded alternative rooms.",
+      "expected_boundaries": [
+        {
+          "offset": 37,
+          "choice": "but"
+        },
+        {
+          "offset": 82,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-011",
+      "text": "The survey predicted a decisive win. The election ended in defeat. Analysts reviewed the polling.",
+      "expected_boundaries": [
+        {
+          "offset": 35,
+          "choice": "but"
+        },
+        {
+          "offset": 65,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-012",
+      "text": "The product claimed waterproof protection. The device failed during light rain. The manufacturer issued a recall.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "but"
+        },
+        {
+          "offset": 78,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-013",
+      "text": "The alarm sounded throughout the building. Staff moved toward the exits. Emergency crews arrived shortly afterward.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "and"
+        },
+        {
+          "offset": 71,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-014",
+      "text": "The committee discussed the annual budget. Members reviewed the spending figures. They approved the final proposal.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "and"
+        },
+        {
+          "offset": 80,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-015",
+      "text": "The gardener watered the plants. She trimmed the overgrown hedges. She collected the fallen leaves.",
+      "expected_boundaries": [
+        {
+          "offset": 31,
+          "choice": "and"
+        },
+        {
+          "offset": 65,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-016",
+      "text": "The journalist checked the original transcript. She interviewed two additional witnesses. She corrected the published article.",
+      "expected_boundaries": [
+        {
+          "offset": 46,
+          "choice": "and"
+        },
+        {
+          "offset": 88,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-017",
+      "text": "The teacher explained the assignment. Students opened their notebooks. They began writing their answers.",
+      "expected_boundaries": [
+        {
+          "offset": 36,
+          "choice": "and"
+        },
+        {
+          "offset": 69,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-018",
+      "text": "The technician examined the damaged cable. He replaced the faulty connector. The equipment started working again.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "and"
+        },
+        {
+          "offset": 75,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-019",
+      "text": "The librarian catalogued the new books. She printed labels for each shelf. Volunteers arranged the books alphabetically.",
+      "expected_boundaries": [
+        {
+          "offset": 38,
+          "choice": "and"
+        },
+        {
+          "offset": 73,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-020",
+      "text": "The baker mixed the ingredients. He heated the oven. He baked the dough for thirty minutes.",
+      "expected_boundaries": [
+        {
+          "offset": 31,
+          "choice": "and"
+        },
+        {
+          "offset": 51,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-021",
+      "text": "The driver checked the tyre pressure. He filled the fuel tank. He started the journey.",
+      "expected_boundaries": [
+        {
+          "offset": 36,
+          "choice": "and"
+        },
+        {
+          "offset": 61,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-022",
+      "text": "The doctor reviewed the test results. She discussed the findings with her colleague. They prepared a follow-up plan.",
+      "expected_boundaries": [
+        {
+          "offset": 36,
+          "choice": "and"
+        },
+        {
+          "offset": 83,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-023",
+      "text": "The editor reviewed the manuscript. She marked several unclear passages. The author revised the chapter.",
+      "expected_boundaries": [
+        {
+          "offset": 34,
+          "choice": "and"
+        },
+        {
+          "offset": 71,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-024",
+      "text": "The organisers announced the venue. They released the event schedule. Ticket holders received confirmation emails.",
+      "expected_boundaries": [
+        {
+          "offset": 34,
+          "choice": "and"
+        },
+        {
+          "offset": 68,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-025",
+      "text": "The mountain path was covered in snow. My telephone needs a software update. The museum opens on Thursdays.",
+      "expected_boundaries": [
+        {
+          "offset": 37,
+          "choice": "keep"
+        },
+        {
+          "offset": 75,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-026",
+      "text": "The garden contained several rose bushes. A train departed from platform four. Tomorrow is the director's birthday.",
+      "expected_boundaries": [
+        {
+          "offset": 40,
+          "choice": "keep"
+        },
+        {
+          "offset": 77,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-027",
+      "text": "A ceramic bowl sat on the table. The software update changed the menu. The river rose after heavy rain.",
+      "expected_boundaries": [
+        {
+          "offset": 31,
+          "choice": "keep"
+        },
+        {
+          "offset": 69,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-028",
+      "text": "The village has a small library. My bicycle needs a new chain. The concert starts at seven.",
+      "expected_boundaries": [
+        {
+          "offset": 31,
+          "choice": "keep"
+        },
+        {
+          "offset": 61,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-029",
+      "text": "The ocean currents change seasonally. The hotel installed new curtains. The report contains six chapters.",
+      "expected_boundaries": [
+        {
+          "offset": 36,
+          "choice": "keep"
+        },
+        {
+          "offset": 70,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-030",
+      "text": "A satellite passed over the coast. The bakery closes on Sundays. A red scarf was left in the hall.",
+      "expected_boundaries": [
+        {
+          "offset": 33,
+          "choice": "keep"
+        },
+        {
+          "offset": 63,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-031",
+      "text": "The forest contains ancient oak trees. The invoice was paid yesterday. An actor won the final award.",
+      "expected_boundaries": [
+        {
+          "offset": 37,
+          "choice": "keep"
+        },
+        {
+          "offset": 69,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-032",
+      "text": "The river supports several fish species. A mechanic inspected the brakes. The painting has a wooden frame.",
+      "expected_boundaries": [
+        {
+          "offset": 39,
+          "choice": "keep"
+        },
+        {
+          "offset": 72,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-033",
+      "text": "The conference begins next month. A dog slept beneath the table. The website features a search box.",
+      "expected_boundaries": [
+        {
+          "offset": 32,
+          "choice": "keep"
+        },
+        {
+          "offset": 63,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-034",
+      "text": "The old bridge has stone arches. A new phone was released today. The kettle boiled quietly.",
+      "expected_boundaries": [
+        {
+          "offset": 31,
+          "choice": "keep"
+        },
+        {
+          "offset": 63,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-035",
+      "text": "The recipe lists six ingredients. A coach arrived at midnight. The laboratory purchased new microscopes.",
+      "expected_boundaries": [
+        {
+          "offset": 32,
+          "choice": "keep"
+        },
+        {
+          "offset": 61,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-036",
+      "text": "The small orchard grows apples. A passenger misplaced a suitcase. The cinema introduced new seats.",
+      "expected_boundaries": [
+        {
+          "offset": 30,
+          "choice": "keep"
+        },
+        {
+          "offset": 64,
+          "choice": "keep"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-037",
+      "text": "The mayor announced new funding. The council approved the budget. However, the planned bridge was cancelled.",
+      "expected_boundaries": [
+        {
+          "offset": 31,
+          "choice": "and"
+        },
+        {
+          "offset": 64,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-038",
+      "text": "The publisher scheduled an autumn release. The author completed the final edits. Nevertheless, the printer missed the deadline.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "and"
+        },
+        {
+          "offset": 79,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-039",
+      "text": "The research team recorded new observations. The data confirmed their earlier findings. But another experiment produced different results.",
+      "expected_boundaries": [
+        {
+          "offset": 43,
+          "choice": "and"
+        },
+        {
+          "offset": 86,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-040",
+      "text": "The school purchased additional equipment. Teachers prepared new lessons. However, the internet service remained unavailable.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "and"
+        },
+        {
+          "offset": 72,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-041",
+      "text": "The cook prepared the ingredients. The kitchen staff began the meal. Yet the oven failed during service.",
+      "expected_boundaries": [
+        {
+          "offset": 33,
+          "choice": "and"
+        },
+        {
+          "offset": 67,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-042",
+      "text": "The engineer completed the drawings. The client approved the design. But the permit application was rejected.",
+      "expected_boundaries": [
+        {
+          "offset": 35,
+          "choice": "and"
+        },
+        {
+          "offset": 67,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-043",
+      "text": "The council agreed to repair the road. Workers arrived with equipment. However, heavy rain stopped the work.",
+      "expected_boundaries": [
+        {
+          "offset": 37,
+          "choice": "and"
+        },
+        {
+          "offset": 69,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-044",
+      "text": "The orchestra rehearsed the programme. Musicians prepared for the performance. But the venue lost electrical power.",
+      "expected_boundaries": [
+        {
+          "offset": 37,
+          "choice": "and"
+        },
+        {
+          "offset": 77,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-045",
+      "text": "The museum received several new exhibits. Curators arranged the exhibition. However, a delivery was delayed.",
+      "expected_boundaries": [
+        {
+          "offset": 40,
+          "choice": "and"
+        },
+        {
+          "offset": 74,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-046",
+      "text": "The developer fixed the reported bug. The tests passed on the server. But the mobile build still failed.",
+      "expected_boundaries": [
+        {
+          "offset": 36,
+          "choice": "and"
+        },
+        {
+          "offset": 68,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-047",
+      "text": "The restaurant introduced a revised menu. The chef trained the kitchen team. Yet diners complained about long waits.",
+      "expected_boundaries": [
+        {
+          "offset": 40,
+          "choice": "and"
+        },
+        {
+          "offset": 75,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-strategy-048",
+      "text": "The office installed energy-saving lights. Staff adjusted the equipment settings. But electricity bills continued rising.",
+      "expected_boundaries": [
+        {
+          "offset": 41,
+          "choice": "and"
+        },
+        {
+          "offset": 80,
+          "choice": "but"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; NOT human reader validation"
+    },
+    {
+      "id": "synthetic-title-001",
+      "text": "Mr. Bell filed the report. The board reviewed the findings.",
+      "expected_boundaries": [
+        {
+          "offset": 2,
+          "choice": "nothing"
+        },
+        {
+          "offset": 25,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; titles use no-punctuation option"
+    },
+    {
+      "id": "synthetic-title-002",
+      "text": "Mrs. Lewis opened the meeting. The committee discussed the agenda.",
+      "expected_boundaries": [
+        {
+          "offset": 3,
+          "choice": "nothing"
+        },
+        {
+          "offset": 29,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; titles use no-punctuation option"
+    },
+    {
+      "id": "synthetic-title-003",
+      "text": "Dr. Patel examined the records. The team updated its report.",
+      "expected_boundaries": [
+        {
+          "offset": 2,
+          "choice": "nothing"
+        },
+        {
+          "offset": 30,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; titles use no-punctuation option"
+    },
+    {
+      "id": "synthetic-title-004",
+      "text": "Prof. Green delivered the lecture. The students asked several questions.",
+      "expected_boundaries": [
+        {
+          "offset": 4,
+          "choice": "nothing"
+        },
+        {
+          "offset": 33,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; titles use no-punctuation option"
+    },
+    {
+      "id": "synthetic-title-005",
+      "text": "Ms. Carter drafted the letter. The office sent it yesterday.",
+      "expected_boundaries": [
+        {
+          "offset": 2,
+          "choice": "nothing"
+        },
+        {
+          "offset": 29,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; titles use no-punctuation option"
+    },
+    {
+      "id": "synthetic-title-006",
+      "text": "Sen. Baker addressed the chamber. The members debated the amendment.",
+      "expected_boundaries": [
+        {
+          "offset": 3,
+          "choice": "nothing"
+        },
+        {
+          "offset": 32,
+          "choice": "and"
+        }
+      ],
+      "note": "Developer-authored synthetic reference choices; titles use no-punctuation option"
+    }
+  ]
+}
