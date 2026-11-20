@@ -873,3 +873,96 @@ const explicitOnly = argumentEngine.combineArgumentEvidence([{
 assert.equal(explicitOnly?.label,'contradictory_claims',
  'An explicit only restriction still contradicts broader access');
 console.log('Argument scope and NLI asymmetry: 9 replay/contrast cases and direct controls passed.');
+
+
+// Real-world evaluation must use authentic, independently labelled text, not
+// fresh paraphrases of synthetic examples. This tests the collection/export
+// workflow (not accuracy of a neural model on a real corpus).
+const realCorpus = await import('../evaluation/real-corpus.mjs');
+const realSources = JSON.parse(fs.readFileSync(
+ 'evaluation/real-source-shortlist.json', 'utf8'));
+assert.ok(realSources.sources.length >= 6, 'Real corpus has multiple authentic source links');
+assert.ok(new Set(realSources.sources.map(s => s.url)).size === realSources.sources.length,
+ 'Authentic source list has unique links');
+for (const source of realSources.sources) {
+ const url = new URL(source.url);
+ assert.equal(url.protocol, 'https:', 'Source links use https');
+ assert.ok(source.title && source.genre && source.provider,
+  'Source link includes meaningful provenance and publication type');
+ assert.ok(!source.text && !source.expected && !source.label,
+  'Source recommendations are not prewritten or pre-labelled synthetic excerpts');
+}
+const realItems = [
+ { id: 'real-01', source_title: 'Source A', source_url:'https://example.org/a',
+  track:'natural', label:'none',
+  text:'The report summarises measurements from the spring survey.',
+  rationale:'No stated conclusion or inference' },
+ { id: 'real-02', source_title: 'Source B', source_url:'https://example.org/b',
+  track:'natural', label:'supported_conclusion',
+  text:'The library is open on Sundays. Therefore, it is open on Sundays.',
+  rationale:'Conclusion follows exactly from the statement' },
+ { id: 'real-03', source_title: 'Source C', source_url:'https://example.org/c',
+  track:'challenge', label:'unsupported_conclusion',
+  text:'The factory installed new windows. Therefore, all its equipment is safe.',
+  rationale:'The evidence does not establish the conclusion' },
+ { id: 'real-04', source_title: 'Source D', source_url:'https://example.org/d',
+  track:'challenge', label:'uncertain',
+  text:'The report states the value of the property rose before the sale.',
+  rationale:'Not enough context to settle a label' }
+];
+const exportedReal = realCorpus.toRealBenchmark(realItems);
+assert.equal(exportedReal.dataset_type, 'authentic_human_labelled',
+ 'Export records independent human annotation provenance');
+assert.equal(exportedReal.cases.length, 3,
+ 'Uncertain real cases are excluded from scored export');
+assert.deepEqual(exportedReal.cases.map(item => item.expected),
+ [[],['supported_conclusion'],['unsupported_conclusion']],
+ 'Real human labels use the existing three-way plus none benchmark format');
+assert.deepEqual(exportedReal.cases.map(item => item.track),
+ ['natural','natural','challenge'],
+ 'Sampling strategy survives benchmark export');
+assert.ok(exportedReal.cases.every(item =>
+ item.source_url.startsWith('https://') && item.source_title && item.rationale),
+ 'Source title, URL and annotation rationale survive export');
+validateArgumentCases(exportedReal.cases);
+const talliedReal = realCorpus.tallyRealAnnotations(realItems);
+assert.deepEqual(
+ [talliedReal.total, talliedReal.natural,talliedReal.challenge,talliedReal.excluded],
+ [4,2,2,1], 'Real annotation counts distinguish sampling and exclusions');
+assert.throws(() => realCorpus.toRealBenchmark([realItems[0],realItems[0]]),
+ /Duplicate annotation ID/, 'Duplicate source annotations cannot inflate performance');
+assert.throws(() => realCorpus.validateRealEntry({
+ ...realItems[0],source_url:'javascript:alert(1)'
+}), /HTTP\(S\)/, 'Only ordinary source URLs are accepted');
+assert.throws(() => realCorpus.validateRealEntry({
+ ...realItems[0],label:'unsupported_even_if_correct'
+}), /human label/, 'Collector rejects undefined classifier labels');
+const realPage = fs.readFileSync('extension/real-data.html','utf8');
+const realClient = fs.readFileSync('extension/src/real-data-ui.mjs','utf8');
+assert.ok(realPage.includes('source-url') && realPage.includes('rationale') &&
+ realPage.includes('value="uncertain"') &&
+ realPage.includes('value="natural"') &&
+ realPage.includes('value="challenge"'),
+ 'Real-world annotation page preserves sources, manual labels and uncertain cases');
+assert.ok(realClient.includes('localStorage') &&
+ realClient.includes('toRealBenchmark(annotations)') &&
+ realClient.includes('source-list') &&
+ realClient.includes('textContent ='),
+ 'Local collector exports import-ready JSON and avoids unsafe HTML rendering');
+assert.ok(benchmarkPage.includes('href="./real-data.html"') &&
+ benchmarkPage.includes('id="real-track-results"'),
+ 'Matcher Test Lab links to collector and shows sampling-strategy results');
+assert.ok(localServer.includes('/extension/real-data.html') &&
+ localServer.includes('/extension/src/real-data-ui.mjs') &&
+ localServer.includes('/evaluation/real-corpus.mjs') &&
+ localServer.includes('/evaluation/real-source-shortlist.json'),
+ 'Local server exposes only explicit real-corpus assets');
+assert.ok(benchmarkWorker.includes('item.track === "natural"') &&
+ benchmarkWorker.includes('item.track === "challenge"') &&
+ benchmarkWorker.includes('realTracks: Object.entries(data.realTracks)') &&
+ benchmarkWorker.includes('sourceUrl: source === "uploaded"'),
+ 'Real data metrics separate natural vs challenge and preserve source provenance');
+assert.ok(benchmarkUI.includes('data.realTracks') &&
+ benchmarkUI.includes('Human rationale (assigned before testing):'),
+ 'Real result view displays separate performance and human-grounded failure details');
+console.log('Real-world corpus collector: provenance, blinding, export, exclusions and stratified metrics validated.');
