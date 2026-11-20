@@ -74,7 +74,7 @@ function labelsFor(text,name) {
 }
 function otherPossiblePerson(text,name,label) {
  const protectedTitle=label?text.replace(new RegExp('\\b(?:the|an?)\\s+'+escape(label)+'\\s+'+escape(name)+'\\b','gi'), ' EXPLICIT_PERSON '):text;
- const withoutName=protectedTitle.replace(new RegExp('\\b'+escape(name)+'\\b','g'), '');
+ const withoutName=(label?protectedTitle.replace(new RegExp('\\bthe\\s+'+escape(label)+'\\b','gi'), ' KNOWN_PERSON '):protectedTitle).replace(new RegExp('\\b'+escape(name)+'\\b','g'), '');
  // Another grammatical actor can be named through a noun phrase rather
  // than a proper name. A pronoun is then not necessarily the named person's.
  const nounActor=/\b(?:the|a|an|another)\s+([a-z][a-z-]{2,})(?:\s+[a-z][a-z-]{2,})?\s+(?:said|asked|told|replied|spoke|interviewed|instructed|helped|met|advised|called|argued|claimed|answered)\b/gi;
@@ -90,6 +90,9 @@ function otherPossiblePerson(text,name,label) {
  // person. The new actor's occupation is deliberately NOT hardcoded.
  if(/\bwrote\s+(?:to|with)\s+(?:the|a|an|another)\s+[a-z][a-z-]+\b/i.test(withoutName))return true;
  if(/\b(?:the|a|an|another)\s+[a-z][a-z-]{2,}(?:\s+[a-z][a-z-]{2,})?\s+(?:entered|arrived|left|worked|walked|approached|joined|spoke|applied|voted|called|replied|asked|said|met|helped|finished|signed|attended)\b/i.test(withoutName))return true;
+ // A second definite subject, even with just a copula, is a potential
+ // antecedent: 'Ada is an engineer. The supervisor is a writer. She ...'.
+ if(/\b(?:the|a|an|another)\s+[a-z][a-z-]{2,}(?:\s+[a-z][a-z-]{2,})?\s+(?:is|was|has|had|will|would)\b/i.test(withoutName))return true;
  return false;
 }
 function aliasProtected(text,name,label) {
