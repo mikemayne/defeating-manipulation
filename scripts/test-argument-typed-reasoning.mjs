@@ -59,6 +59,40 @@ for(const [p,c,label] of numberPositive){
  assert.equal(v?.label,label,`typed numeric failed: ${p} => ${c}`);
  assert.equal(v.chain.at(-1).type,'javascript_comparison');
 }
+const numericExclusionPositives=[
+ ['The warehouse manifest states that the parcel contains exactly 12 standard batteries.',
+  'The parcel contains exactly 15 batteries according to that manifest.','contradictory_claims'],
+ ['Every seat in the auditorium has a number and the lowest number is 4.',
+  'The auditorium contains a seat numbered minus two.','contradictory_claims'],
+ ['The final exam record shows not a single candidate scored above 70.',
+  'Several candidates scored 92.','contradictory_claims'],
+ ['The inventory counted seven green folders and three yellow folders, making ten in all.',
+  'There were twelve folders in that inventory.','contradictory_claims']
+];
+for(const [p,c,label] of numericExclusionPositives){
+ const v=inferTypedNumericRelation(p,c);
+ assert.equal(v?.label,label,'numeric exclusion: '+p+' / '+c+' '+JSON.stringify(v));
+}
+const numericExclusionNegatives=[
+ ['The warehouse manifest states that this parcel contains 12 standard batteries.',
+  'The parcel may contain exactly 15 batteries according to that manifest.'],
+ ['The warehouse manifest states that this parcel contains 12 standard batteries.',
+  'The other parcel contains exactly 15 batteries according to that manifest.'],
+ ['Every seat in the auditorium has a number and the lowest number is 4.',
+  'The auditorium contains a seat numbered nine.'],
+ ['The final exam record shows not a single candidate scored above 70.',
+  'Several candidates scored 60.'],
+ ['The inventory counted seven green folders and three yellow folders, making ten in all.',
+  'There were twelve files in that inventory.'],
+ ['The inventory counted seven green folders and three yellow folders.',
+  'There were twelve folders in that inventory.'],
+ ['This report says that the parcel contains 12 standard batteries.',
+  'The parcel contains exactly 15 batteries in another manifest.'],
+ ['Every seat in the auditorium has a number and the lowest number is 4.',
+  'A different auditorium contains a seat numbered minus two.']
+];
+for(const [p,c] of numericExclusionNegatives)
+ assert.equal(inferTypedNumericRelation(p,c),null,'numeric exclusion must abstain: '+p+' / '+c);
 const numberNegatives=[
  ['The report lists 30 employees in one office, excluding contractors.','The company has exactly 30 workers.'],
  ['The report lists approximately 90 entries.','The total number of entries was 90.'],
