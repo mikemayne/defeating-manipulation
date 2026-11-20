@@ -158,3 +158,23 @@ these tests in the public website deployment.
 The GitHub checks use synthetic NLI scores, plus module and fixture validation.
 They do **not** run the full neural model in a Firefox browser; a real local
 NLI-mode smoke test is required to validate model download and inference.
+
+
+## Reported disagreement false-positive regression
+
+The first live 200-case local NLI run had 100% recall, 83.3% precision,
+and 20 false positives. All twenty falsely flagged an accurately attributed
+disagreement between a manager and a spokesperson. The shared candidate-pair
+filter now skips different, clearly attributed sources, before running NLI.
+This preserves contradictory claims from the same source.
+
+Run `node scripts/test-build.mjs` to check the original 200 synthetic NLI
+cases with deliberately high mock contradiction scores, plus the 25 independently
+worded contrasts in `evaluation/inconsistency-attribution-contrasts.json`.
+These deterministic tests validate attribution filtering, not neural model
+accuracy. Re-run the **real** local 200-case lab after rebuilding.
+
+The public catalogue now contains **Inconsistent or unsupported reasoning**.
+It explicitly distinguishes contradictory claims from conclusions insufficiently
+supported by the evidence **provided** in the passage. The latter is a planned
+whole-argument analysis feature, not a capability established by these tests.
