@@ -9,7 +9,7 @@ const MAX_ARGUMENTS = 8;
 const MAX_PREMISES = 5;
 const MAX_PREMISE_CHARS = 780;
 const MAX_CONCLUSION_CHARS = 280;
-const MAX_PARAGRAPH_BREAKS = 2;
+const MAX_PARAGRAPH_BREAKS = 1;
 const MARKER = /^(?:(?:and|but)\s+)?(therefore|thus|hence|consequently|accordingly|as a result|it follows that|we can conclude that|this (?:shows|proves|demonstrates|confirms|means)(?: that)?|these (?:results|findings) (?:show|prove|demonstrate)(?: that)?|the evidence (?:shows|proves)(?: that)?|so)\s*[,:\s]\s*/i;
 const NORMATIVE = /\b(?:should|ought|perhaps|possibly|might|may|could|recommend|consider|prefer|hope|wish)\b/i;
 
@@ -29,7 +29,8 @@ export function extractArgumentStatements(source) {
  return statements;
 }
 function paragraphBreaks(between) {
- return (between.match(/\n\s*\n/g) || []).length;
+ // Two line breaks separate paragraphs; four separate an unrelated section.
+ return Math.floor((between.match(/\n/g) || []).length / 2);
 }
 
 function explicitConclusion(statement) {
