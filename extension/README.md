@@ -713,3 +713,55 @@ Independent fictional positive and adversarial negative tests live in
 dataset has not been committed. Re-run the unchanged browser benchmark
 and then test an unseen, independently labelled sample before drawing
 conclusions about accuracy.
+
+
+### Temporal, predicate-equivalence and multi-step reasoning bridges
+
+The second-pass **paragraph argument analyser** now builds small verified
+inference chains from the *original premise and conclusion* before scoring
+the same local NLI model. The sentence-level manipulation matcher remains
+independent and unchanged. The two passes do not feed their findings into
+each other.
+
+The additional bounded interpreter handles:
+
+- A **named facility's permanent closure** with explicit non-reopening,
+  used to infer a future inability to use that *same physical facility*
+- **Fully sold inventory**, when the evidence says all seats or tickets
+  have sold **and** no extra allocation will be released for the same
+  screening; resale or multiple events cause abstention
+- **Fee removal and fee-free predicates** for an identical service,
+  explicitly scoped to the same full group
+- **Day-specific fee waivers**, applied to a uniquely named and explicitly
+  qualified facility in the covered class on the covered day
+- **One-way exclusion eligibility**, where an offer is restricted to new
+  subscribers/members and the individual's previous multi-year membership
+  is stated, not merely guessed
+- **Weekday deadline ordering** only when the next-day/week relationship
+  is explicitly anchored; a bare `Monday` is not automatically after an
+  unspecified `Friday`
+
+The interpreter returns a chain of typed facts and a verdict **only when
+its premises fully establish the conclusion**. Ambiguous dates, unrelated
+facilities, different services, exceptions, quoted statements, hedges
+and unmatched group membership abstain. A rule saying a discount is
+*only* for new subscribers is a necessary condition, not an automatic
+guarantee that every new subscriber qualifies.
+
+The existing overclaim gate also recognises an absolute claim of
+`no privacy or security risks` when the sole supplied evidence is
+app downloads or another popularity proxy. Hedged claims and explicitly
+independent risk assessments remain protected by its established
+abstention guard.
+
+The original source and underline offsets are never altered. NLI weights,
+model size and the **number of scoring comparisons** are unchanged.
+The benchmark diagnostics report a concise verified-bridge reason and
+chain length when relevant. Independent fictional positive and hard
+negative tests are in `scripts/test-argument-bridges.mjs` and
+`scripts/test-argument-overreach.mjs`.
+
+**Freeze point:** this is the last planned development-set-targeted
+reasoning change before testing a new, independently labelled corpus.
+The existing private 100-paragraph set must not be committed or used
+to tune the next round.

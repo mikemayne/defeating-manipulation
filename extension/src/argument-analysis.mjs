@@ -6,6 +6,7 @@ import { observableContradiction, observableSamplingLeap } from "./argument-clai
 import { boundedArgumentLogic } from "./argument-bounded-logic.mjs";
 import { observableOverreach } from "./argument-overreach.mjs";
 import { structurePropositions } from "./argument-propositions.mjs";
+import { inferReasoningBridge } from "./argument-bridges.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -74,12 +75,16 @@ export function classifyArgumentScore(forward, reverse = null) {
 // verdict caused by adding irrelevant premises to the same NLI input.
 // A contradictory premise wins over a supporting one: the supplied set of
 // premises is then internally inconsistent. Uncertain scores abstain.
-export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker="",structured=null} = {}) {
+export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker="",structured=null,bridge=undefined} = {}) {
  // Structured arithmetic, explicit exclusions and a limited set of
  // quantified conditions are more reliable than MNLI guesses. Keep them
  // separate from neural probabilities and ensure contradictory evidence wins.
  const complete = scored.find(item => item.kind === "combined")?.text || scored[0]?.text || "";
  const propositionModel = structured || structurePropositions(complete, conclusionText);
+ // The additional bridge pass derives only an explicit, finite proof chain
+ // from original words. A null result leaves existing abstentions intact.
+ const verifiedBridge = bridge === undefined
+  ? inferReasoningBridge(complete, conclusionText) : bridge;
  const bounded = boundedArgumentLogic(complete, conclusionText);
  // An overclaim needs an observable *scope leap*, not merely an NLI-neutral
  // score. Explicit contradictions and bounded entailments take precedence.
@@ -129,6 +134,11 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
    evidence = assessNeutralArgumentEvidence(item.text, conclusionText, verdict);
   return { ...item, verdict:evidence.verdict, evidenceStatus:evidence.status,
    evidenceReason:evidence.reason || null };
+ });
+ if (verifiedBridge) classified.push({
+  kind:"reasoning_bridge",text:complete,
+  verdict:{label:verifiedBridge.label,score:1,reason:verifiedBridge.reason},
+  evidenceStatus:"verified_reasoning_bridge",evidenceReason:verifiedBridge.reason
  });
  if (propositionModel.relation) classified.push({
   kind:"proposition_relation", text:complete,
@@ -186,6 +196,7 @@ export async function analyseArguments(source, scorePair,
   // receives the same number of premise/hypothesis scoring comparisons.
   // Source assertions, not NLI rewrites, determine any verified relation.
   const propositions = structurePropositions(argument.premise, normalised.text);
+  const bridge = inferReasoningBridge(argument.premise, normalised.text);
   onProgress?.({ completed: i, total: candidates.length });
 
   const texts = [
@@ -215,7 +226,7 @@ export async function analyseArguments(source, scorePair,
   // Explicit-logic checks continue to use the original statements and
   // completed *source* conclusion, not canonicalised NLI text.
   const result = combineArgumentEvidence(scored, normalised.text,
-   {inferenceMarker:argument.conclusion.marker,structured:propositions});
+   {inferenceMarker:argument.conclusion.marker,structured:propositions,bridge});
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
    modelConclusion: normalised.expanded || entities.changed ? hypothesis : null,
@@ -223,6 +234,7 @@ export async function analyseArguments(source, scorePair,
    propositionNormalization:{facts:propositions.premises.length,
     claimKind:propositions.conclusion.kind,
     relation:propositions.relation?.reason || null},
+   reasoningBridge:bridge ? {reason:bridge.reason,steps:bridge.chain.length} : null,
    inferenceMarker: argument.conclusion.marker,
    inline: argument.conclusion.inline || false,
    comparisons: scored.map(({ kind, text, modelPremise, repeated, forward, reverse }) =>
