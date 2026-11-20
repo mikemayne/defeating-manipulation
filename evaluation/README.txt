@@ -193,3 +193,29 @@ Current local NLI tests cover claim contradictions. Unsupported or
 supported *conclusions* are library descriptions for a future
 whole-argument analyser and should not be scored as capabilities of the
 current contradiction model.
+
+
+## Positive-pattern matching baseline
+
+The public `positive-patterns.json` catalogue is now recognised locally by
+the Firefox selection worker as well as the website. Green pattern detection
+runs separately from the existing blue manipulation and red inconsistency
+passes; blue wins when highlighting would otherwise overlap green.
+
+The test lab offers `Positive patterns — rules only` and
+`Positive patterns — rules + local AI` modes. The default
+`evaluation/positive-matcher-examples.json` contains 72 fictional labelled
+cases covering all 12 current green patterns (12 public examples, 24 fresh
+paraphrases, and 36 neutral/negative contrasts).
+
+The GitHub build validates the rule-only baseline. Actual semantic model
+precision and recall must be measured in the local Firefox browser with
+`Positive patterns — rules + local AI`; the CI suite does not download
+MiniLM weights. This synthetic baseline is not an independent generalisation
+benchmark. To measure precision, introduce new real-world held-out examples
+and cases where pleasant wording disguises pressure or a demand.
+
+Do not treat co-occurrence of green and blue matches as proof of concealment.
+That relationship has not yet been trained or tested. The local matcher shows
+both patterns where they occupy separate spans, and preserves blue if they
+overlap.
