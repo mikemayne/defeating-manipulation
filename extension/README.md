@@ -658,3 +658,58 @@ fictional open-class role examples and hard-negative identity controls.
 The existing 100-paragraph dataset remains private and is not committed;
 the exact browser benchmark and a fresh independent dataset are still
 needed to measure model accuracy and false-positive effects.
+
+
+### Structured proposition normalisation before local inference
+
+The paragraph analyser now extracts an **intermediate proposition representation
+before calling the existing local NLI model**. It records typed observations
+and conditions, such as:
+
+- `universal(group, predicate)` and `member(name, group)`
+- `requirement(group, item)`, `classified(item, qualifier)`, and `missing(item)`
+- `contains(subject, material)` and `free_of(material, polarity)`
+- `permission(payment_medium, time_scope)` and accepted/refused payment
+- `state(subject, deleted_or_removed, persistent)`
+- `population(count, age_boundary)` and `threshold(age, free_service)`
+
+These are **text-grounded**, not factual claims about the outside world. A
+limited interpreter supports explicitly justified relations: applying a
+quantified rule to an *explicit* group member, matching a required item
+against a specifically missing item, reconciling ingredient presence with a
+`-free` claim, payment permission with refusal in the same time window,
+non-restored deletion with the same item described as visible, exact
+same-survey zero/positive counts, and age eligibility for an explicitly
+free service.
+
+For example:
+
+```text
+All museum docents can enter the archive.
+Maya is a museum docent.
+Therefore Maya can enter the archive.
+```
+
+The intermediate facts describe a quantified permission and the explicit
+membership; an interpreter can verify the conclusion without inferring new
+relationships from a neutral NLI score. **No occupation list is required.**
+
+The interpreter **abstains** on unknown grammar, missing role membership,
+different items, different time scopes, contradictory exceptions, quoted
+material, tentative conclusions and rules with ambiguous scope. A threshold
+such as `under 11 ride free` does **not** establish that older riders must pay:
+the rule is one-way. Similarly, appearing on a shortlist is not automatic
+evidence of being an applicant.
+
+The quantised local NLI model is **unchanged**. It still runs on the usual
+premise/hypothesis pairs, and its output is combined with separately
+verified structured evidence. The original text, source offsets and
+underlines are never rewritten by this representation. Diagnostic failure
+reports show the number of parsed proposition facts and any verified
+relationship.
+
+Independent fictional positive and adversarial negative tests live in
+`scripts/test-argument-propositions.mjs`. The existing private 100-case
+dataset has not been committed. Re-run the unchanged browser benchmark
+and then test an unseen, independently labelled sample before drawing
+conclusions about accuracy.
