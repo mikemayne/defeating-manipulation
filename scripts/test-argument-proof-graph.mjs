@@ -79,7 +79,8 @@ const numericHardNegatives=[
  ['indeterminate-division','The register lists nine people and six available chairs.','Every chair was occupied.'],
  ['separate-total','The report lists 7 receipts and 3 receipts for a separate account.','The business has 10 receipts total.'],
  ['duplicate-measures','The researcher measured 7 kg for the first bag and 2 kg for the second.','The bag weighed 9 kg in total.'],
- ['different-dates','The temperature was 17°C on Monday.','The temperature was 20°C on Thursday.']
+ ['different-dates','The temperature was 17°C on Monday.','The temperature was 20°C on Thursday.'],
+ ['different-subentity','The train recorded 3 passengers in carriage A.','The train recorded 4 passengers in carriage B.']
 ];
 for(const [id,p,c] of numericHardNegatives)assert.equal(inferNumericRelation(p,c),null,id+': must abstain');
 const span='The  receipt   lists the total charge as £74 for the package.';
