@@ -1252,3 +1252,7 @@ await import('./test-argument-propositions.mjs');
 
 // Temporal, equivalence and multi-step proof chains must resist ambiguous cases.
 await import('./test-argument-bridges.mjs');
+
+// Check immutable synthetic benchmark bytes and gold-label counts ONLY.
+// Deliberately never score or parse its paragraphs during CI.
+await import('./validate-frozen-argument-corpus.mjs');
