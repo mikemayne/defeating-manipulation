@@ -55,6 +55,7 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <p><a href="../">Defeating Manipulation</a> / Local development</p>
 <h1>Matcher Test Lab</h1>
 <p>Test the same JavaScript matching engine used by the Firefox extension against a large, reproducible labelled dataset. All analysis happens on this computer.</p>
+<p><strong>Ready for authentic articles?</strong> <a href="./real-data.html">Collect and label a real-world argument test set</a> before running it here.</p>
 <section class="panel" aria-labelledby="setup-title">
 <h2 id="setup-title">Test setup</h2>
 <div class="controls">
@@ -84,6 +85,11 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <p id="summary-note" class="note"></p>
 <div class="actions"><button id="copy" disabled>Copy failure details</button><span id="copied" role="status" aria-live="polite"></span></div>
 <p id="failure-note" class="note"></p>
+<section id="real-breakdown" hidden>
+<h2>Results by real-world sampling strategy</h2>
+<p class="note">Natural sampling estimates performance on typical passages; challenge sampling focuses on passages selected for their argument. These are different populations and should not be averaged uncritically.</p>
+<div class="tablewrap"><table><thead><tr><th>Sample</th><th class="num">Cases</th><th class="num">Exact</th><th class="num">Precision</th><th class="num">Recall</th></tr></thead><tbody id="real-track-results"></tbody></table></div>
+</section>
 <h2>Most frequent classification errors</h2>
 <div class="tablewrap"><table><thead><tr><th>Expected → Detected</th><th class="num">Cases</th></tr></thead><tbody id="confusion"></tbody></table></div>
 <h2 style="margin-top:28px">Per-technique performance</h2>

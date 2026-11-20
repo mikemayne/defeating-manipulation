@@ -117,6 +117,12 @@ function buildSummary(data, elapsedMs, cancelled) {
    .map(([pair, count]) => ({ pair, count })),
   perTechnique: Object.entries(data.perTechnique).sort((a,b) => b[1].missed - a[1].missed)
    .map(([id, metric]) => ({ id, ...metric })),
+  realTracks: Object.entries(data.realTracks).map(([track, metrics]) => ({
+   track, total: metrics.total, exact: metrics.exact,
+   exactRate: percentage(metrics.exact, metrics.total),
+   precision: percentage(metrics.tp, metrics.tp + metrics.fp),
+   recall: percentage(metrics.tp, metrics.tp + metrics.fn)
+  })),
   failureSamples: data.failures, capturedFailures: data.failures.length
  };
 }
@@ -153,7 +159,8 @@ async function startRun(message) {
     "Running deterministic pattern tests…" });
 
   const data = { tested: 0, requested: total, exact: 0, tp: 0, fp: 0, fn: 0,
-   negativeCount: 0, falsePositiveNegatives: 0, confusion: {}, perTechnique: {}, failures: [] };
+   negativeCount: 0, falsePositiveNegatives: 0, confusion: {}, perTechnique: {},
+   realTracks: {}, failures: [] };
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
@@ -212,6 +219,15 @@ async function startRun(message) {
    data.tp += expected.length - missing.length;
    data.fn += missing.length;
    data.fp += extra.length;
+   if (argumentMode && source === "uploaded" &&
+       (item.track === "natural" || item.track === "challenge")) {
+    const track = data.realTracks[item.track] ||= { total:0, exact:0, tp:0, fp:0, fn:0 };
+    track.total++;
+    track.tp += expected.length - missing.length;
+    track.fp += extra.length;
+    track.fn += missing.length;
+    if (!missing.length && !extra.length) track.exact++;
+   }
    if (!expected.length) {
     data.negativeCount++;
     if (predicted.length) data.falsePositiveNegatives++;
@@ -232,6 +248,10 @@ async function startRun(message) {
     data.confusion[confusion] = (data.confusion[confusion] || 0) + 1;
     if (data.failures.length < MAX_FAILURE_SAMPLES) data.failures.push({
      id: item.id, text: item.text, expected, predicted, missing, extra,
+     sourceUrl: source === "uploaded" ? item.source_url || null : null,
+     sourceTitle: source === "uploaded" ? item.source_title || null : null,
+     sampleTrack: source === "uploaded" ? item.track || null : null,
+     humanRationale: source === "uploaded" ? item.rationale || null : null,
      detectedPairs: consistency ? matches.filter(match => match.kind === "inconsistency")
       .map(match => ({
        text: item.text.slice(match.start, match.end),

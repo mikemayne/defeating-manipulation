@@ -7,6 +7,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = "127.0.0.1", port = 4173;
 const allowed = new Set([
  "/extension/benchmark.html",
+ "/extension/real-data.html",
+ "/extension/src/real-data-ui.mjs",
+ "/evaluation/real-corpus.mjs",
+ "/evaluation/real-source-shortlist.json",
  "/extension/src/benchmark-ui.mjs",
  "/extension/benchmark-worker.js",
  "/extension/techniques.json",

@@ -255,3 +255,54 @@ are stored in `evaluation/argument-evidence-contrasts.json`, alongside
 existing regression tests. These are fixed diagnostic scores, **not**
 independent estimates of generalisation; the 96-case local AI test
 must be rerun to verify improvement before changing thresholds again.
+
+
+## Benchmark authentic real-world arguments (recommended after synthetic tests)
+
+The template-generated 96-case argument dataset is a **regression test**.
+Even 96/96 correct does not establish reliability on unknown writing.
+For a meaningful external test, use the new
+[real-world corpus collector](./real-data.html), served locally alongside
+the Matcher Test Lab:
+
+```bash
+cd extension
+npm run benchmark:dev
+```
+
+Open `http://127.0.0.1:4173/extension/real-data.html`. The page lists
+authentic published starting sources across statistics, government reports,
+parliamentary evidence and scientific guidance. It does **not** contain
+prewritten/paraphrased "real" examples or automatically guessed labels.
+Choose real, unmodified, continuous paragraphs and manually annotate the
+conclusion **before** running the analyser.
+
+The collector captures source title, public URL, natural-versus-challenge
+sampling strategy, verbatim text, the human-selected label, and rationale.
+Use the "Uncertain — exclude" label where no fair ground truth can be
+assigned. Annotations are retained in the browser's local storage;
+the exported `real-argument-benchmark.json` is entirely local and excludes
+uncertain cases. Back it up before clearing site data. The local server
+does not accept uploads or send selection text to any third party.
+Respect source licences if redistributing your exported excerpts.
+
+In the Matcher Test Lab, choose **Arguments — premise and conclusion
+(local NLI)**, set **Dataset: Upload labelled JSON / JSONL**, select the
+exported file, and run. Results now show separate exact accuracy,
+precision and recall for **natural** and **challenge** sampling and
+include the publication URL plus original human rationale in copied
+failure details.
+
+Suggested evaluation: sample **50–100 naturally selected passages** from
+multiple independent articles, plus **25–50 challenge passages** containing
+real, sometimes implicit arguments. Include both supported and unsupported
+inferences, reported disagreements, and no-argument controls. Labels must
+be chosen *without inspecting model results*. Natural prevalence matters:
+don't artificially force every article to have one of each technique.
+A second independent reviewer is valuable for ambiguous examples.
+
+The current parser recognises explicitly signalled conclusions; real
+implicit arguments will often be missed. This is an important and
+measurable coverage limitation, not a reason to rewrite the article
+to fit the matcher or to relabel it as "no argument." Maintain the
+original text and label, then use the failures to decide what to improve.
