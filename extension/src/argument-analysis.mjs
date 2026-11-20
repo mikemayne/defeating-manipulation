@@ -302,16 +302,10 @@ export async function analyseArguments(source, scorePair,
    reason: result?.reason || null
   });
   if (!result?.label) continue;
-  // Implicit joins are weaker evidence of author intent. Explicitly require
-  // independently checked source propositions for a red finding; NLI scores,
-  // missing-proof heuristics, or an inserted conjunction are insufficient.
-  if (argument.inferred && result.label !== "supported_conclusion" &&
-      result.basis !== "checked_proposition_graph" &&
-      result.basis !== "reasoning_bridge" &&
-      result.basis !== "proposition_relation" &&
-      result.basis !== "bounded_relation" &&
-      result.basis !== "overreach_relation" &&
-      result.basis !== "proof_obligation_gap") continue;
+  // Implicit joins are speculative about author intent. For this first
+  // iteration, never create new red underlines from an inferred link.
+  // Diagnostics still retain the reconstruction and original NLI scores.
+  if (argument.inferred && result.label !== "supported_conclusion") continue;
   assessments.push({ ...argument, ...result,
    explanation: result.label === "supported_conclusion"
     ? "The supplied premises appear to support this conclusion at the stated level."
