@@ -407,3 +407,35 @@ assert.ok(nliSource.includes('text_pair: hypothesis') &&
 assert.ok(benchmarkWorker.includes('await initialiseConsistencyModel()'),
  'NLI benchmark model failures abort rather than report false negative passes');
 console.log('Inconsistency lab wiring, seed data, scoring and offsets validated.');
+
+
+// Contradictory statements attributed to different people are ordinary
+// reporting of a disagreement, not necessarily an inconsistency in the article.
+const attributionCases = JSON.parse(
+ fs.readFileSync('evaluation/inconsistency-attribution-contrasts.json', 'utf8')).cases;
+const highNliContradiction = async () => ({ contradiction: 0.995, neutral: 0.003, entailment: 0.002 });
+for (const item of attributionCases) {
+ const found = await consistency.findInconsistencies(item.text, highNliContradiction);
+ const got = found.length ? ['argument_inconsistency'] : [];
+ assert.deepEqual(got, item.expected, 'Attribution handling: ' + item.id);
+}
+for (const item of inconsistencySeeds.filter(item => item.group === 'different_period_or_speaker')) {
+ const found = await consistency.findInconsistencies(item.text, highNliContradiction);
+ assert.equal(found.length, 0, 'Different speaker or date: ' + item.id);
+}
+for (const item of inconsistencySeeds.filter(item =>
+ item.group === 'direct_contradiction' || item.group === 'paraphrased_contradiction')) {
+ const found = await consistency.findInconsistencies(item.text, highNliContradiction);
+ assert.equal(found.length, 2, 'Genuine contradiction stays eligible: ' + item.id);
+}
+assert.equal(consistency.attributedSource('The manager later said the station closed.'),
+ 'manager', 'A reporting adverb is not part of the speaker identity');
+assert.equal(consistency.attributedSource('The manager said the station is open.'),
+ 'manager', 'Stable attribution of reporting source');
+const inconsistencyArticle = catalogue.techniques.find(item => item.id === 'argument_inconsistency');
+assert.ok(inconsistencyArticle &&
+ /insufficient to support the conclusion/i.test(inconsistencyArticle.observable_features.join(' ')),
+ 'Inconsistency section explains conclusions unsupported by the provided evidence');
+assert.ok(fs.existsSync('_site/techniques/argument_inconsistency.html'),
+ 'New inconsistency article is built into the website');
+console.log('Attribution-aware contradiction and insufficient-evidence catalogue checks passed.');
