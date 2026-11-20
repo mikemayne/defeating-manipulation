@@ -14,7 +14,7 @@ if (!owner || !repo) throw new Error('Repository must be owner/name');
 const base = config.siteUrl ? config.siteUrl.replace(/\/$/, '') + '/' : `https://${owner}.github.io/${repo}/`;
 fs.rmSync(out, {recursive:true, force:true});
 fs.mkdirSync(path.join(out, 'techniques'), {recursive:true});
-for (const name of ['index.html','questionnaire.html','techniques.json','positive-patterns.json','references.json','site-config.json','README.md','CONTRIBUTING.txt','CONTENT-LICENSE.txt','LICENSE']) {
+for (const name of ['index.html','questionnaire.html','techniques.json','positive-patterns.json','inconsistency-patterns.json','references.json','site-config.json','README.md','CONTRIBUTING.txt','CONTENT-LICENSE.txt','LICENSE']) {
   if (fs.existsSync(path.join(root,name))) fs.copyFileSync(path.join(root,name),path.join(out,name));
 }
 const index = read('index.html')
@@ -52,10 +52,56 @@ for (const p of positiveCatalogue.patterns) {
   if (!p.title || !p.summary || !Array.isArray(p.tags)) throw new Error('Incomplete positive pattern: '+p.id);
 }
 
-const sitemap = [base,base+'questionnaire.html',base+'techniques.json',base+'positive-patterns.json',...links,...positiveLinks].map(u=>'<url><loc>'+esc(u)+'</loc></url>').join('');
+// Inconsistency patterns live in a separate data-driven red library.
+// Every JSON entry is given its own page and sitemap URL automatically.
+const inconsistencyCatalogue = JSON.parse(read('inconsistency-patterns.json'));
+if (!Array.isArray(inconsistencyCatalogue.patterns) || !inconsistencyCatalogue.patterns.length)
+ throw Error('Inconsistency pattern library must not be empty');
+fs.mkdirSync(path.join(out, 'inconsistency-patterns'), {recursive:true});
+const inconsistencyLinks = [], inconsistencyIds = new Set();
+for (const p of inconsistencyCatalogue.patterns) {
+ if (!/^[a-z0-9_-]+$/.test(p.id)) throw Error('Unsafe inconsistency id: '+p.id);
+ if (inconsistencyIds.has(p.id)) throw Error('Duplicate inconsistency pattern id: '+p.id);
+ inconsistencyIds.add(p.id);
+ if (!p.title || !p.summary || !p.definition || !p.category ||
+     !Array.isArray(p.observable_features) || !p.observable_features.length ||
+     !Array.isArray(p.tags))
+  throw Error('Incomplete inconsistency pattern: '+p.id);
+ const file = 'inconsistency-patterns/'+p.id+'.html';
+ inconsistencyLinks.push(base+file);
+ const features = p.observable_features.map(value => '<li>'+esc(value)+'</li>').join('');
+ const body = [
+  '<!doctype html><html lang="en"><head><meta charset="utf-8">',
+  '<meta name="viewport" content="width=device-width,initial-scale=1">',
+  '<meta name="description" content="'+esc(p.summary)+'">',
+  '<title>'+esc(p.title)+' — Argument consistency patterns</title>',
+  '<style>body{max-width:780px;margin:50px auto;padding:0 22px;font:17px/1.7 system-ui;background:#ffe4e6;color:#531724}',
+  'a{color:#9f1239}h1{font:normal clamp(2.5rem,7vw,4rem)/1.1 Georgia}',
+  '.tag{color:#9f1239;text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.12em}',
+  '.note{padding:18px;border-left:4px solid #be123c;background:#fff1f2}',
+  'footer{margin-top:50px;border-top:1px solid #e8a9b4;padding-top:20px;color:#783647;font-size:.9rem}',
+  '@media(prefers-color-scheme:dark){body{background:#401a27;color:#ffe7ec}a,.tag{color:#ffb6c5}',
+  '.note{background:#542333;border-color:#fb7185}footer{border-color:#824255;color:#f2bec9}}</style>',
+  '</head><body><p><a href="../">← All pattern libraries</a></p>',
+  '<p class="tag">'+esc(p.category)+'</p><h1>'+esc(p.title)+'</h1>',
+  '<p>'+esc(p.summary)+'</p><h2>What it is</h2><p>'+esc(p.definition)+'</p>',
+  '<h2>Recognising the pattern</h2><ul>'+features+'</ul>',
+  p.example ? '<h2>Example</h2><blockquote>'+esc(p.example)+'</blockquote>' : '',
+  p.reader_effect ? '<h2>Effect on the reader</h2><p>'+esc(p.reader_effect)+'</p>' : '',
+  '<div class="note"><strong>Scope:</strong> Describe how the claims relate, not the author’s intent. ',
+  'Insufficient evidence in a passage does not establish that its conclusion is false. ',
+  'The current local analyser detects contradictions; full premise-to-conclusion assessment is a separate planned capability.</div>',
+  '<h2>Related terms</h2><p>'+p.tags.map(esc).join(' · ')+'</p>',
+  '<footer>Argument consistency patterns · <a href="https://github.com/'+esc(repository)+'/blob/main/inconsistency-patterns.json">',
+  'View library source</a></footer></body></html>'
+ ].join('');
+ fs.writeFileSync(path.join(out, file), body);
+}
+
+const sitemap = [base,base+'questionnaire.html',base+'techniques.json',base+'positive-patterns.json',base+'inconsistency-patterns.json',...links,...positiveLinks,...inconsistencyLinks].map(u=>'<url><loc>'+esc(u)+'</loc></url>').join('');
 fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${sitemap}</urlset>`);
 fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${base}sitemap.xml\n`);
-fs.writeFileSync(path.join(out,'llms.txt'),`# ${config.title}\n\n${config.description}\n\n- Catalogue: ${base}techniques.json\n- Questionnaire: ${base}questionnaire.html\n- Source: https://github.com/${repository}\n`);
+fs.writeFileSync(path.join(out,'llms.txt'),`# ${config.title}\n\n${config.description}\n\n- Catalogue: ${base}techniques.json\n- Inconsistency patterns: ${base}inconsistency-patterns.json\n- Questionnaire: ${base}questionnaire.html\n- Source: https://github.com/${repository}\n`);
 if (catalogue.techniques.length < 1) throw new Error('Catalogue must not be empty');
 const ids = new Set();
 for (const t of catalogue.techniques) {
