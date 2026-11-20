@@ -521,3 +521,78 @@ assert.ok(benchmarkPage.includes('value="positive_rules"') &&
 assert.ok(localServer.includes('/evaluation/positive-matcher-examples.json'),
  'The local test server exposes the positive fixture');
 console.log('Green pattern matcher: 72 labelled cases, mixed colours, source offsets and lab wiring passed.');
+
+
+// Concealed manipulation is a RELATION between a constructive opening and
+// subsequent pressure. Neither mere co-occurrence nor author intent is inferred.
+const { concealedPatterns, findConcealedPatterns } =
+ await import('../extension/src/concealed-matching.mjs');
+const { generatedConcealedCase } =
+ await import('../evaluation/concealed-generator.mjs');
+const concealedCases = JSON.parse(fs.readFileSync(
+ 'evaluation/concealed-pattern-examples.json', 'utf8')).cases;
+assert.equal(concealedPatterns.length, 4, 'Initial relationship catalogue has four patterns');
+assert.equal(concealedCases.length, 96, 'Concealed benchmark contains 96 cases');
+assert.equal(concealedCases.filter(item => item.expected.length).length, 48,
+ 'Concealed benchmark includes 48 positive relationships');
+assert.equal(concealedCases.filter(item => item.expected.length === 0).length, 48,
+ 'Concealed benchmark includes 48 counterexamples');
+assert.equal(new Set(concealedPatterns.map(p => p.id)).size, concealedPatterns.length,
+ 'Relationship identifiers are unique');
+for (const pattern of concealedPatterns) {
+ assert.ok(pattern.positiveRegexes.length && pattern.negativeRegexes.length &&
+  pattern.positiveIds.length && pattern.negativeIds.length,
+  'Each relationship must declare positive and negative mechanisms: ' + pattern.id);
+}
+const concealedErrors = [];
+for (let i = 0; i < concealedCases.length * 5; i++) {
+ const item = generatedConcealedCase(concealedCases, i, 2026);
+ const negatives = await matchingCore.matchText(item.text, {
+  techniques: extensionCatalogue.techniques, rules: compiled
+ });
+ const positives = await matchPositiveText(item.text);
+ const found = findConcealedPatterns(item.text, {
+  positiveMatches: positives, negativeMatches: negatives
+ });
+ const predicted = [...new Set(found.map(match => match.technique.id))].sort();
+ const expected = [...new Set(item.expected)].sort();
+ if (JSON.stringify(predicted) !== JSON.stringify(expected))
+  concealedErrors.push({ id: item.id, predicted, expected });
+ for (const match of found) {
+  assert.equal(match.technique.category, 'Concealed manipulation',
+   'Concealed relationships carry turquoise category');
+  assert.equal(match.kind, 'concealed', 'Relationship output is explicitly typed');
+  assert.ok(match.start >= 0 && match.end > match.start && match.end <= item.text.length,
+   'Turquoise matches retain the correct selected-text offsets');
+  assert.ok(match.positiveText && match.negativeText,
+   'Turquoise tooltip explains both sides of the rhetorical reversal');
+ }
+}
+assert.deepEqual(concealedErrors, [],
+ 'Concealed relation classifier identifies pressure while rejecting co-occurrence and quoted speech');
+const mereCoexistence = 'The decision is yours. The report was published. You must agree with me.';
+assert.deepEqual(findConcealedPatterns(mereCoexistence), [],
+ 'A constructive sentence and a distant coercive sentence are not automatically a relationship');
+const quotedDifference = 'The director said no pressure. The manager said you must agree with me.';
+assert.deepEqual(findConcealedPatterns(quotedDifference), [],
+ 'Statements by different quoted speakers are not labelled concealed manipulation');
+const explicitReversal = 'No pressure, but you must agree with me or lose your place.';
+const turquoise = findConcealedPatterns(explicitReversal);
+assert.equal(turquoise.length, 1, 'A direct reassurance-to-pressure reversal is detected');
+assert.equal(explicitReversal.slice(turquoise[0].start, turquoise[0].end),
+ 'you must agree with me or lose your place.',
+ 'Turquoise underline targets the undermining pressure, not the whole passage');
+assert.ok(selectionScript.includes('match.kind === "concealed"') &&
+ selectionScript.includes('Relationship: positive wording followed by pressure'),
+ 'Firefox tooltip exposes the linked positive opening and pressure');
+assert.ok(extensionWorker.includes('findConcealedPatterns(data.text') &&
+ extensionWorker.includes('...concealedMatches'),
+ 'Firefox worker performs the relationship pass with the other three colours');
+assert.ok(benchmarkPage.includes('value="concealed_rules"') &&
+ benchmarkPage.includes('value="concealed_ai"') &&
+ benchmarkUI.includes('concealed-pattern-examples.json') &&
+ benchmarkWorker.includes('mode === "concealed_ai"'),
+ 'Benchmark supports both rules and actual local semantic turquoise tests');
+assert.ok(localServer.includes('/evaluation/concealed-pattern-examples.json'),
+ 'The local test server makes the labelled relationship benchmark available');
+console.log('Concealed relationship classifier: 480 generated cases and all four-color integration checks passed.');
