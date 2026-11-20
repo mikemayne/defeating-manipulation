@@ -32,6 +32,48 @@ const contrasts=[
  {id:'population-rule',premise:'Every registered visitor gets a badge. One visitor is registered.',conclusion:'Every registered visitor gets a badge.',expected:'none'},
  {id:'same-price-revision',premise:'One cashier reported a price change.',conclusion:'All cashiers might encounter changes this month.',expected:'none'}
 ];
+// Separate fresh controls for state opposites. Both sides must refer to the
+// same subject and scope; quoted, mixed, or temporally different facts abstain.
+const statePositive=[
+ ['lock','The archive door remained locked during the inspection.',
+  'The archive door was unlocked during the inspection.'],
+ ['pass-fail','The generator passed the maintenance inspection on Tuesday.',
+  'The generator failed the maintenance inspection on Tuesday.'],
+ ['on-off','The laboratory machine was switched off throughout the trial.',
+  'The laboratory machine was switched on throughout the trial.'],
+ ['vacancy','The holiday suite was vacant throughout Saturday.',
+  'The holiday suite was occupied throughout Saturday.'],
+ ['service','The coastal ferry was suspended throughout Friday.',
+  'The coastal ferry was operating normally throughout Friday.']
+];
+for(const [id,p,c] of statePositive){
+ const result=observableContradiction(p,c);
+ assert.equal(result.verified,true,id+': '+JSON.stringify(result));
+ assert.equal(combineArgumentEvidence([{kind:'combined',text:p,forward:{contradiction:.001,neutral:.998,entailment:.001}}],c)?.label,
+  'contradictory_claims',id+' must override model-neutral score');
+}
+const stateNegative=[
+ ['different-date','The archive door remained locked on Monday.',
+  'The archive door was unlocked on Tuesday.'],
+ ['different-object','The north archive door remained locked during the inspection.',
+  'The south archive door was unlocked during the inspection.'],
+ ['different-clock','The archive door remained locked at 09:00.',
+  'The archive door was unlocked at 10:00.'],
+ ['quoted-report','The caretaker said "The archive door was locked on Monday."',
+  'The archive door was unlocked on Monday.'],
+ ['both-premise-states','The archive door was locked then unlocked during the inspection.',
+  'The archive door was unlocked during the inspection.'],
+ ['hedged','The archive door remained locked during the inspection.',
+  'The archive door might be unlocked during the inspection.'],
+ ['later','The archive door was locked, then later unlocked.',
+  'The archive door was unlocked.'],
+ ['distinct-category','The venue had sold out balcony tickets on Monday.',
+  'The venue still had unsold standing tickets on Monday.']
+];
+for(const [id,p,c] of stateNegative){
+ const result=observableContradiction(p,c);
+ assert.equal(result.verified,false,id+': '+JSON.stringify(result));
+}
 const tallies={conflict:0,gap:0,none:0};
 for(const row of contrasts){
  const con=observableContradiction(row.premise,row.conclusion);
