@@ -47,7 +47,10 @@ const negatives=[
  ['unique-unknown-role','Ada completed a report.','the journalist was promoted.'],
  ['two-candidates','The scientist Ada met Ben.','She presented results.'],
  ['other-unnamed-actor','Ada is an engineer. The supervisor is a writer.','She was invited.'],
- ['other-unnamed-profession','Ada is a candidate. The coordinator arrived.','She was invited.']
+ ['other-unnamed-profession','Ada is a candidate. The coordinator arrived.','She was invited.'],
+ ['time-is-not-person','The bookshop opens on Tuesdays. It sells second-hand books.','the bookshop never opens on Tuesdays.'],
+ ['city-is-not-person','The theatre opens in Paris.','she was invited.'],
+ ['day-is-not-person','The shop opens on Mondays.','He arrived on Mondays.']
 ];
 for(const [id,premise,conclusion] of negatives) {
  const got=normaliseEntitiesForNli({premise},conclusion);
