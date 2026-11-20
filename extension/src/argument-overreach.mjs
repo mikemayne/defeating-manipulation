@@ -4,7 +4,8 @@
 const HEDGE=/\b(?:might|may|could|possibly|perhaps|potentially|apparently|seems|appears|suggests)\b/i;
 const UNIVERSAL_PREMISE=/\b(?:all|every|each|any|none|nobody|nothing|no one|never|always|the only|only if|whenever|provided that|must|guaranteed|necessarily|without exception|sole|exclusively|entire|whole|permanently)\b/i;
 const CONDITIONAL=/\b(?:if|whenever|provided that|unless|only when|assuming that)\b/i;
-const LIMITED_OBSERVATIONS=/\b(?:a single|a lone|only one|one|two|three|four|five|six|seven|eight|nine|ten|a few|few|several|some|a handful of|a couple of|first match|first game|one occasion)\b/i;
+const LIMITED_OBSERVATIONS=/\b(?:a single|a lone|only one|one|two|three|four|five|six|seven|eight|nine|ten|first match|first game|one occasion)\b/i;
+const VAGUE_SAMPLE=/\b(?:a few|few|several|some|a handful of|a couple of)\s+([a-z][a-z-]{2,})\b/i;
 const UNIVERSAL_RESULT=/\b(?:all|every|everyone|everybody|nobody|nothing|never|always|none|entire|whole|everywhere|permanently|entirely|no longer)\b/i;
 const GLOBAL_ZERO=/\b(?:across (?:the )?(?:whole |entire )?(?:country|region|city|district|town)|nationwide|regionwide|citywide|everywhere|all)\b.{0,85}\bzero\b|\bzero\b.{0,85}\b(?:across (?:the )?(?:country|region|city|district|town)|nationwide|regionwide|citywide|everywhere)\b/i;
 const FINITE_RESULT=/\b(?:all of (?:them|those|these)|every one of (?:them|those|these)|every (?:one of )?(?:the|these|those) (?:sampled|tested|inspected|observed|interviewed)|all (?:sampled|tested|inspected|observed|interviewed)|only (?:the|those|these) (?:two|three|four|five))\b/i;
@@ -30,7 +31,14 @@ export function observableOverreach(premise, conclusion, {inferenceMarker=""}={}
     CONDITIONAL.test(p)||FINITE_RESULT.test(c))return null;
  // A small sample or time-limited observation is not an unqualified result
  // for everybody, all cases, every place or all future times.
- const limited=LIMITED_OBSERVATIONS.test(p)||
+ const vague=VAGUE_SAMPLE.exec(p);
+ // A vague count of unrelated 'options', 'ideas' or similar items does
+ // not establish which *population* the conclusion quantifies. Require a
+ // shared category before treating vague quantifiers as a sampling leap.
+ const matchedCategory=vague?.[1]?.toLowerCase().replace(/s$/,"");
+ const sameCategory=matchedCategory &&
+   new RegExp("\\b"+matchedCategory+"(?:s|es)?\\b","i").test(c);
+ const limited=LIMITED_OBSERVATIONS.test(p)||Boolean(sameCategory)||
     (TIME_SAMPLE.test(p)&&/\b(?:arrived|observed|reported|saw|found|recorded|showed)\b/i.test(p));
  if(limited&&(UNIVERSAL_RESULT.test(c)||GLOBAL_ZERO.test(c)))
   return {label:"unsupported_conclusion",reason:"limited_observation_to_universal_claim"};
