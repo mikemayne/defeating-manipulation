@@ -996,7 +996,7 @@ const realWorldInlineCases = [
  {
   id:'new-suggesting-that', marker:'suggesting that',
   text:'The researchers compared two groups with the same medical records, suggesting that the measured difference might be important.',
-  premise:'The researchers compared two groups with the same medical records,',
+  premise:'The researchers compared two groups with the same medical records',
   conclusion:'the measured difference might be important.'
  },
  {
