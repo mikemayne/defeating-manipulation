@@ -1,6 +1,7 @@
 import { windows } from "./text-windows.mjs";
 import { isSemanticCandidate, selectSemanticTechnique, semanticMatchStrength } from "./semantic-policy.mjs";
 import { hasSemanticEvidence } from "./semantic-evidence.mjs";
+import { hasRuleEvidence } from "./rule-evidence.mjs";
 
 // Shared by the Firefox worker and the stand-alone evaluation runner.
 export function compilePatternRules(catalogue, patternCatalogue) {
@@ -54,6 +55,7 @@ export async function matchText(text, { techniques, rules, prototypes = [], embe
      rule.regex.lastIndex++;
      continue;
     }
+    if (!hasRuleEvidence(rule.technique.id, part.text, found.index, found[0])) continue;
     const start = part.offsets[found.index];
     const end = part.offsets[found.index + found[0].length - 1] + 1;
     if (start === undefined || end === undefined) continue;
