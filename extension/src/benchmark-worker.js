@@ -7,6 +7,7 @@ import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { analyseArguments, ARGUMENT_LABELS } from "./argument-analysis.mjs";
 import { validateArgumentCases, generatedArgumentCase } from "../../evaluation/argument-generator.mjs";
+import { validateArgumentStructureCases, inspectArgumentStructure } from "../../evaluation/argument-structure-evaluator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
 import { generatedConcealedCase } from "../../evaluation/concealed-generator.mjs";
@@ -135,23 +136,28 @@ async function startRun(message) {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
   const consistency = mode === "consistency";
   const argumentMode = mode === "argument_support";
+  const structureMode = mode === "argument_structure";
   const positive = mode === "positive_rules" || mode === "positive_ai";
   const concealed = mode === "concealed_rules" || mode === "concealed_ai";
-  if (!["rules", "ai", "consistency", "argument_support", "positive_rules", "positive_ai",
+  if (!["rules", "ai", "consistency", "argument_support", "argument_structure", "positive_rules", "positive_ai",
    "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
+  if (structureMode && source !== "uploaded")
+   throw Error("Argument structure tests require a local JSON/JSONL upload");
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
   const ids = concealed ? concealedPatterns.map(pattern => pattern.id) :
    techniques.map(t => t.id);
-  const seeds = argumentMode ? validateArgumentCases(rawSeeds) :
+  const seeds = structureMode ? validateArgumentStructureCases(rawSeeds) :
+   argumentMode ? validateArgumentCases(rawSeeds) :
    consistency ? validateConsistencyCases(rawSeeds) : validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
-  const limit = consistency || argumentMode || concealed ? 10000 : 1000000;
+  const limit = consistency || argumentMode || structureMode || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
-  const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
+  const rules = consistency || argumentMode || structureMode || positive ? [] : compilePatternRules(catalogue, patterns);
   if (consistency || argumentMode) await initialiseConsistencyModel();
+  else if (structureMode) self.postMessage({ type:"stage", message:"Checking extracted arguments locally (no AI download)…" });
   else if (mode === "concealed_ai") await initialiseConcealedModel(techniques);
   else if (mode === "ai" || mode === "positive_ai") await initialiseModel(techniques);
   else self.postMessage({ type: "stage",
@@ -169,8 +175,13 @@ async function startRun(message) {
     argumentMode ? generatedArgumentCase(seeds, i, Number(seed) || 2026) :
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
-   let matches, argumentAssessments = [], argumentDiagnostics = [];
-   if (argumentMode) {
+   let matches, argumentAssessments = [], argumentDiagnostics = [], structureCheck = null;
+   if (structureMode) {
+    structureCheck = inspectArgumentStructure(item);
+    matches = structureCheck.predicted.map(label => ({
+     start:0, end:item.text.length, technique:{id:label}, kind:"structure_check"
+    }));
+   } else if (argumentMode) {
     argumentAssessments = await analyseArguments(item.text, nliScorer, {
      onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
     });
@@ -210,7 +221,7 @@ async function startRun(message) {
     if (match.start < 0 || match.end > item.text.length || match.start >= match.end)
      throw Error("Invalid match offsets in " + item.id);
    }
-   const expected = [...new Set(item.expected)].sort();
+   const expected = [...new Set(structureMode ? structureCheck.expected : item.expected)].sort();
    const predicted = [...new Set(matches.map(match => match.technique.id))].sort();
    const expectedSet = new Set(expected), predictedSet = new Set(predicted);
    const missing = expected.filter(value => !predictedSet.has(value));
@@ -270,6 +281,7 @@ async function startRun(message) {
       decisivePremise: assessment.evidenceText, basis: assessment.basis,
       reason: assessment.reason || null
      })) : [],
+     structureCheck: structureMode ? structureCheck : null,
      argumentDiagnostics: argumentMode ? argumentDiagnostics.map(item => ({
       conclusion: item.conclusion, modelConclusion: item.modelConclusion, verdict: item.verdict,
       inferenceMarker: item.inferenceMarker, inline: item.inline,
