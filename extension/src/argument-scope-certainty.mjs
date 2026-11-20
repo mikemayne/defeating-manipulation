@@ -55,7 +55,7 @@ function preliminaryToGuarantee(p,c){
   'completed_robust_results_or_stated_deterministic_rule',
   'positive_early_stage_observation',{claimStrength:'absolute_final'});
 }
-const SIMPLE_FEATURE=/\bthe\s+([a-z-]+(?:\s+(?!(?:now|recently|already)\b)[a-z-]+){0,2})\s+(?:now\s+)?(?:includes?|uses?|features?|has|added|introduced|installed)\s+(?:a|an|the)?\s*([a-z-]+(?:\s+[a-z-]+){0,5})\s*$/i;
+const SIMPLE_FEATURE=/\bthe\s+([a-z-]+(?:\s+(?!(?:now|recently|already)\b)[a-z-]+){0,2})\s+(?:now\s+)?(?:includes?|uses?|features?|has|added|introduced|installed)\s+(?:a|an|the)?\s*([a-z-]+(?:\s+[a-z-]+){0,5})\s*[.!?]?\s*$/i;
 const FEATURE_CHANGE=/\b(?:new|extra|revised|replacement|colour.coded|color.coded|improved|upgraded|larger|smaller|clearer|higher|wider|simpler|accessible|redesigned|menu|icons?|buttons?|labels?|font|contrast|type|navigation|sign|handle|checklist|light)\b/i;
 const ZERO_RISK=/\bthe\s+([a-z-]+(?:\s+(?!(?:will|never|cannot)\b)[a-z-]+){0,2})\s+(?:will\s+)?(?:never|cannot|can't)\s+(?:cause|experience|suffer|have)\s+(?:an?\s+)?(?:accident|failure|injury|risk|problem|outage)\b.{0,65}\b(?:under any circumstances|ever|again|at all|in any situation)\b/i;
 const UNIVERSAL_ACCESS=/\b(?:every|all)\s+(?:person|people|user|users)\s+with\s+(?:any|every|a)\s+disabilit(?:y|ies)\s+can\s+use\s+every\s+(?:feature|function|service)\s+of\s+(?:the\s+)?([a-z-]+(?:\s+[a-z-]+){0,2})\s+independently\b/i;
