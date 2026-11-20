@@ -1115,6 +1115,99 @@
         "strukelj2018",
         "apa_distinctiveness_effect"
       ]
+    },
+    {
+      "id": "moral_authority_instead_of_argument",
+      "title": "Moral authority as a substitute for argument",
+      "category": "Argumentation",
+      "summary": "Invoking a moral principle to dismiss an argument or demand silence without addressing the claim being made.",
+      "tags": [
+        "moral pressure",
+        "argument avoidance",
+        "shaming",
+        "silencing",
+        "moral authority"
+      ],
+      "status": "starter",
+      "definition": "The speaker appeals to an important moral value, such as dignity, fairness or protecting others, and treats that value as sufficient reason to end a disagreement. Rather than explaining what is wrong with a particular claim, the speaker labels the act of questioning it as immoral. The principle may be entirely reasonable; the manipulation lies in using its moral authority as a substitute for reasoning. The result can be outward compliance without any change in belief.",
+      "observable_features": [
+        "An argument is dismissed with a moral label such as 'offensive', 'disrespectful' or 'hateful' without an explanation of which claim is wrong or why.",
+        "The speaker treats asking a question or requesting evidence as proof of bad character rather than responding to the question.",
+        "The audience is told that a decent person would agree or remain silent, instead of being offered reasons to reconsider.",
+        "Shame, exclusion or reputational consequences are raised as alternatives to engaging with the substance of an argument.",
+        "The original claim is left unanswered while attention shifts to the supposed moral status of the person making it."
+      ],
+      "example": "'That's offensive. A decent person wouldn't even ask that question. This discussion is over.'",
+      "examples": [
+        "That's offensive. A decent person wouldn't even ask that question. This discussion is over.",
+        "If you question this proposal, you've already shown you don't care about fairness.",
+        "We don't need to explain the policy to people who disagree with it. Their objections tell us everything we need to know about them.",
+        "Your evidence is irrelevant. The fact that you're challenging this shows what kind of person you are."
+      ],
+      "reader_effect": "Can pressure people to stop speaking without persuading them. The disagreement may remain unresolved and become associated with humiliation or loss of freedom rather than the original moral question. A justified objection to harassment, threats or abuse is not automatically this pattern: the identifying feature is using condemnation to avoid answering a substantive argument.",
+      "references": []
+    },
+    {
+      "id": "provoking_backlash",
+      "title": "Provoking backlash",
+      "category": "Social influence",
+      "summary": "Attaching excessive pressure or punishment to a reasonable principle in a way that can make people reject the principle itself.",
+      "tags": [
+        "backlash",
+        "psychological reactance",
+        "disproportionate pressure",
+        "moral overreach",
+        "association"
+      ],
+      "status": "starter",
+      "definition": "A broadly defensible principle is presented together with a rigid, humiliating or disproportionate demand. People who might otherwise agree with the principle can come to associate it with coercion and react against it. The pressure can shift attention away from the reason for the principle and towards resistance to how it is enforced. This can be exploited by someone seeking to discredit the principle, but neither hostile intent nor a deliberate plan can be inferred from the wording alone.",
+      "observable_features": [
+        "A principle such as kindness, fairness or safety is equated with an unusually harsh punishment for a minor or ambiguous breach.",
+        "The speaker insists that questioning an enforcement rule proves opposition to the underlying principle.",
+        "An ordinary mistake is treated as equivalent to deliberate harm, with little attention to context, intent or proportionality.",
+        "Public humiliation or exclusion is framed as the necessary expression of a positive value.",
+        "A later response rejects the whole principle by pointing to an excessive demand made in its name."
+      ],
+      "example": "'Anyone who uses an outdated expression, even accidentally, should be publicly shamed. That's what respecting people means.'",
+      "examples": [
+        "Anyone who uses an outdated expression, even accidentally, should be publicly shamed. That's what respecting people means.",
+        "If you care about fairness, you'll support banning anyone who asks whether this rule is fair.",
+        "One minor mistake proves they don't deserve to take part in the conversation.",
+        "They want people publicly punished for an honest mistake. If that's what respect means, I want nothing to do with it."
+      ],
+      "reader_effect": "Can turn support for a valuable principle into resentment towards it. People may start defending themselves against a perceived loss of autonomy rather than thinking about the original value. It is important to distinguish reasonable boundaries against abuse from disproportionate enforcement, and to avoid treating a backlash as proof that the original principle is wrong.",
+      "references": []
+    },
+    {
+      "id": "turning_disagreement_into_freedom_conflict",
+      "title": "Turning disagreement into a freedom conflict",
+      "category": "Framing",
+      "summary": "Redirecting a disagreement about whether a claim is sound into a dispute about whether someone is allowed to say it.",
+      "tags": [
+        "freedom framing",
+        "censorship framing",
+        "deflection",
+        "reactance",
+        "argument shift"
+      ],
+      "status": "starter",
+      "definition": "A question about the accuracy, fairness or merits of a statement is reframed as a question about the speaker's freedom to express it. Criticism, disagreement, social pressure and actual restrictions on speech can be blurred together. If the audience feels its freedom is threatened, defending the right to speak may displace examination of the original claim. The freedom issue may sometimes be genuine; identifying this pattern means checking whether it has replaced, rather than answered, the original argument.",
+      "observable_features": [
+        "A factual criticism is answered with 'so we're not allowed to say that now?' instead of addressing the factual objection.",
+        "Someone's disagreement is described as censorship or silencing without showing what restriction is actually being imposed.",
+        "The conversation moves from 'Is this true or fair?' to 'Who gets to tell me what I can say?'",
+        "The ability or right to express an opinion is offered as though it establishes the opinion's truth.",
+        "A real threat of punishment or exclusion is used to avoid revisiting the merits of the disputed statement."
+      ],
+      "example": "'The figures in your post are wrong.' 'So now we're not even allowed to question the figures? Free speech means nothing anymore.'",
+      "examples": [
+        "The figures in your post are wrong. So now we're not even allowed to question the figures? Free speech means nothing anymore.",
+        "You said my claim was misleading. Apparently you're trying to decide what everyone is allowed to think.",
+        "I don't agree with what you said. Oh, so you're saying I should be silenced?",
+        "They told her to stop talking instead of answering her question. Now the argument is about whether she has the freedom to ask it."
+      ],
+      "reader_effect": "Can make people defend their autonomy more strongly than they defend the claim itself. The original evidence or reasoning goes unexamined while the parties argue over freedom, censorship and authority. Disagreement is not automatically censorship, but a credible threat to someone's ability to speak is a separate issue that may deserve attention.",
+      "references": []
     }
   ]
 }
