@@ -58,7 +58,7 @@
     {
       "id": "validating_emotional_experience",
       "expressions": [
-        "\\b(?:i (?:can see|understand) (?:that|why) (?:was|felt|is) (?:upsetting|painful|difficult|frustrating)|that (?:sounds|must have been) (?:upsetting|painful|difficult))\\b",
+        "\\b(?:i (?:can see|understand) (?:that|why (?:that|it)) (?:was|felt|is) (?:upsetting|painful|difficult|frustrating)|that (?:sounds|must have been) (?:upsetting|painful|difficult))\\b",
         "\\b(?:i want to understand what it was like for you|it makes sense that you (?:feel|felt) (?:upset|hurt|frustrated|angry))\\b"
       ]
     },
