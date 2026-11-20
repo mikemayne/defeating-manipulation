@@ -45,7 +45,9 @@ const negatives=[
  ['quoted-alias','Ada is a programmer.','"she" was in the report.'],
  ['name-only-no-pronoun','Ada submitted the form.','Ada received a reply.'],
  ['unique-unknown-role','Ada completed a report.','the journalist was promoted.'],
- ['two-candidates','The scientist Ada met Ben.','She presented results.']
+ ['two-candidates','The scientist Ada met Ben.','She presented results.'],
+ ['other-unnamed-actor','Ada is an engineer. The supervisor is a writer.','She was invited.'],
+ ['other-unnamed-profession','Ada is a candidate. The coordinator arrived.','She was invited.']
 ];
 for(const [id,premise,conclusion] of negatives) {
  const got=normaliseEntitiesForNli({premise},conclusion);
