@@ -58,7 +58,7 @@
    title.textContent = technique.title;
    const summary = document.createElement("div");
    summary.textContent = match.kind === "spelling" ?
-     "Possible correction bait — don\u2019t take it. Correcting a typo can give a post attention and engagement. The error may be accidental." :
+     "Possible correction bait — don\u2019t take it. Correcting a typo creates engagement; insulting the author may also make people who agree with them defensive. The error may be accidental." :
      technique.summary || "";
    if (match.kind === "inconsistency") {
      const other = document.createElement("div");
