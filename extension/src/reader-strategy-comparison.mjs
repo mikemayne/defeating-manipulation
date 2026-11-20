@@ -140,8 +140,8 @@ export async function compareReaderStrategies(source,scoreContinuation,{
    context,progressive,
    contextChangedByEarlierJoins:changed,
    sameChoice:context.choice===progressive.choice,
-   progressiveReconstructionAtBoundary:
-    reconstructedPrefix(source,boundary.punctuationStart,edits),
+   progressiveReconstructionThroughSecond:
+    reconstructedPrefix(source,boundary.second.end,edits),
    neuralCallsForCase:modelCalls
   });
   lastEnd=boundary.punctuationEnd;
