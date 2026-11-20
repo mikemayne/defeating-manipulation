@@ -1243,3 +1243,6 @@ await import('./test-argument-bounded-logic.mjs');
 
 // Offline scope-overreach negatives must abstain rather than create red flags.
 await import('./test-argument-overreach.mjs');
+
+// Keep unique role-linked coreferences aligned for NLI; ambiguous actors abstain.
+await import('./test-argument-entity-normalisation.mjs');
