@@ -250,3 +250,32 @@ relationships** mode is needed to measure behaviour under real local
 embedding outputs. These fixtures are constructed for regression testing,
 so do not equate a perfect score with real-world accuracy. Use a newly
 written held-out set containing harder mixed and contextual statements.
+
+
+## Whole-argument support benchmark
+
+`evaluation/argument-support-examples.json` contains 96 fictional
+labelled examples: 24 each of supported, unsupported, contradicted,
+and non-assessable text. The argument analyser is in
+`extension/src/argument-analysis.mjs`, using the **same NLI model and
+scorer** as the existing contradiction pass.
+
+The parser only targets a stated inference ("Therefore", "Thus", "This
+proves", etc.) and gathers up to five premise sentences, at most 780
+characters, across adjacent paragraphs. It caps the total number of
+conclusions in a selection, so its work is bounded. Supported verdicts
+appear in the benchmark but are not red-underlined in Firefox. Contradicted
+and insufficiently supported conclusions are underlined red; ambiguous NLI
+results abstain. Neutrality is not proof of falsehood or malicious intent.
+
+The test lab exposes a new **Arguments — premise and conclusion (local
+NLI)** mode. In uploaded JSON/JSONL tests, expected is one of
+`["supported_conclusion"]`, `["unsupported_conclusion"]`,
+`["contradictory_claims"]`, or `[]`.
+
+GitHub validation covers hundreds of deterministic parsing/scoring cases
+and preserves the old 200-case contradiction test. It does **not**
+download the local NLI weights. The actual model must be evaluated
+separately in Firefox. Meaningful validation requires new examples with
+unstated premises, uncertain conclusions, partial evidence, long-range
+dependencies and shifts in population, time or causal claims.
