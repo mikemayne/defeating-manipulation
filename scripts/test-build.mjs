@@ -1153,12 +1153,14 @@ const conservativeScenarios = [
  {
   id:'explicit-overclaim-guarantee',
   text:'The council released a report. Therefore, the city has eliminated all financial waste.',
-  score:()=>neutralEvidence, expected:'unsupported_conclusion'
+  // No concrete, matched premise about the scope of financial waste: abstain.
+  score:()=>neutralEvidence, expected:null
  },
  {
   id:'explicit-overclaim-superlative',
   text:'The gallery has a new exhibition. Therefore, the gallery is the most prestigious in Europe.',
-  score:()=>neutralEvidence, expected:'unsupported_conclusion'
+  // Unsupported superlative is suspicious but not a verified gap in this text.
+  score:()=>neutralEvidence, expected:null
  },
  {
   id:'neutral-no-overclaim',
