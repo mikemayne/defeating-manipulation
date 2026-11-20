@@ -718,22 +718,26 @@ const evidenceExamples = [
  {
   id: 'single relevant premise beats combined neutral',
   text: 'The station has step-free access to platform two. The office opens on weekdays. Therefore, the station has step-free access to platform two.',
-  score: (premise) => premise.startsWith('The station has') ?
+  score: (premise) => premise.startsWith('The station has') &&
+    !premise.includes('office opens') ?
    evidenceNli.entailed : evidenceNli.unsupported,
   expected: 'supported_conclusion'
  },
  {
   id: 'individual contradictory premise beats combined uncertainty',
   text: 'The school serves vegetarian lunches on Fridays. Its kitchen employs six cooks. Therefore, the school serves no vegetarian lunches on Fridays.',
-  score: (premise) => premise.startsWith('The school serves') ||
-    premise.startsWith('the school serves') ?
+  score: (premise, hypothesis) =>
+    !premise.includes('six cooks') && !hypothesis.includes('six cooks') &&
+    premise.toLowerCase().startsWith('the school serves') &&
+    hypothesis.toLowerCase().includes('school serves') ?
     evidenceNli.contradicted : evidenceNli.ambiguous,
   expected: 'contradictory_claims'
  },
  {
   id: 'single neutral premise rescues unsupported inference',
   text: 'The council published its annual spending report. The report describes the previous year. Therefore, the council has eliminated all financial waste.',
-  score: (premise) => premise.startsWith('The council published') ?
+  score: (premise) => premise.startsWith('The council published') &&
+    !premise.includes('report describes') ?
     evidenceNli.unsupported : evidenceNli.ambiguous,
   expected: 'unsupported_conclusion'
  },
@@ -747,7 +751,8 @@ const evidenceExamples = [
  {
   id: 'contradiction wins over repeated supporting claim',
   text: 'The clinic provides eye tests on Tuesdays. The clinic does not provide eye tests on Tuesdays. Therefore, the clinic provides eye tests on Tuesdays.',
-  score: (premise) => premise.includes('does not provide') ?
+  score: (premise, hypothesis) =>
+    premise.includes('does not provide') || hypothesis.includes('does not provide') ?
     evidenceNli.contradicted : evidenceNli.unsupported,
   expected: 'contradictory_claims'
  },
