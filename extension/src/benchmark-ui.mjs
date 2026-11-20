@@ -271,6 +271,11 @@ function failureReport(data) {
        ? "(abstained — insufficient evidence to judge; no underline)"
        : "(abstained)")) +
      (a.reason ? " | Decision: " + a.reason : "") +
+     (a.proofGraph?.proof ? " | JS verified proof: " + a.proofGraph.proof +
+      " (" + a.proofGraph.edges + " graph edges)" : "") +
+     (a.proofGraph?.status === "undetermined" && a.proofGraph.missingLinks?.length
+      ? " | Missing proof link (unverified, no underline): " +
+       a.proofGraph.missingLinks[0].statement : "") +
      (a.reasoningBridge ? " | Verified bridge: " + a.reasoningBridge.reason +
       " (" + a.reasoningBridge.steps + " steps)" : "") +
      (a.propositionNormalization ? " | Structured facts: " +
