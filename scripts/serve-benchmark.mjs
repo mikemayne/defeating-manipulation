@@ -7,6 +7,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = "127.0.0.1", port = 4173;
 const allowed = new Set([
  "/extension/benchmark.html",
+ "/extension/paraphraser.html",
+ "/extension/src/paragraph-paraphraser-ui.mjs",
+ "/extension/paragraph-paraphraser-worker.js",
  "/extension/real-data.html",
  "/extension/src/real-data-ui.mjs",
  "/evaluation/real-corpus.mjs",

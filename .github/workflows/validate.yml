@@ -21,6 +21,8 @@ jobs:
           node-version: '22'
       - name: Validate catalogue and generated pages
         run: node scripts/test-build.mjs
+      - name: Validate paragraph paraphraser pipeline
+        run: node scripts/test-paraphraser.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
@@ -30,3 +32,4 @@ jobs:
           npm run build
           test -s matcher-worker.js
           test -s benchmark-worker.js
+          test -s paragraph-paraphraser-worker.js

@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "node build.mjs && esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js && esbuild src/benchmark-worker.js --bundle --format=esm --platform=browser --outfile=benchmark-worker.js",
+    "build": "node build.mjs && esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js && esbuild src/benchmark-worker.js --bundle --format=esm --platform=browser --outfile=benchmark-worker.js && esbuild src/paragraph-paraphraser-worker.js --bundle --format=esm --platform=browser --outfile=paragraph-paraphraser-worker.js",
     "dev": "npm run build && web-ext run --source-dir .",
     "evaluate": "node evaluate.mjs --strict",
     "evaluate:ai": "node evaluate.mjs --semantic",
