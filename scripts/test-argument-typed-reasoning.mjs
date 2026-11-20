@@ -81,3 +81,41 @@ for(const [p,c] of numberNegatives)assert.equal(inferTypedNumericRelation(p,c),n
 assert.ok(extractQuantifiedPropositions('All seven lockers were sealed.').length>0);
 assert.ok(extractTypedNumericalFacts('We recorded 20 widgets in April and 24 widgets in May.').length===2);
 console.log(`Typed reasoning tests: ${quantPositive.length} quantifier positives, ${quantNegatives.length} quantifier abstentions, ${numberPositive.length} numeric positives, ${numberNegatives.length} numeric abstentions passed.`);
+
+// Wiring: verified source-grounded results override mistaken NLI guesses,
+// while tentative arguments remain recognised but undecided.
+const {extractArguments} = await import('../extension/src/argument-clauses.mjs');
+const {inspectArgumentProof} = await import('../extension/src/argument-proof-graph.mjs');
+const {combineArgumentEvidence,analyseArguments,argumentFindings} =
+ await import('../extension/src/argument-analysis.mjs');
+const tentativeSource=
+ 'The festival may change its entry arrangement. This suggests that some visitors could wait longer.';
+const tent=extractArguments(tentativeSource);
+assert.equal(tent.length,1,'Tentative inference is still an argument');
+assert.equal(tent[0].conclusion.text,tentativeSource.slice(tent[0].conclusion.start,tent[0].conclusion.end),
+ 'Tentative conclusion offsets must match the original source');
+assert.equal(extractArguments('The station changed its menu. This suggests a different recipe.').length,0,
+ 'A bare suggestion is not necessarily a premise-conclusion argument');
+const quantifiedProof=inspectArgumentProof(
+ 'Every storage crate was sealed yesterday.',
+ 'One storage crate was not sealed yesterday.');
+assert.equal(quantifiedProof.verified?.label,'contradictory_claims');
+assert.equal(quantifiedProof.verified?.basis,'quantifier');
+const numericProof=inspectArgumentProof(
+ 'The independent ledger lists exactly 37 consignments, including 8 fragile consignments.',
+ 'The total number of consignments was 40.');
+assert.equal(numericProof.verified?.label,'contradictory_claims');
+const falseSupport={contradiction:0.001,neutral:0.001,entailment:0.998};
+const corrected=combineArgumentEvidence([
+ {kind:'combined',text:'Every storage crate was sealed yesterday.',forward:falseSupport}
+],'One storage crate was not sealed yesterday.');
+assert.equal(corrected?.label,'contradictory_claims');
+assert.equal(corrected?.status,'verified_javascript_proof');
+const neutrals={contradiction:0.001,neutral:0.998,entailment:0.001};
+const diag=[];
+const tentAnalysis=await analyseArguments(tentativeSource,async()=>neutrals,
+ {onDiagnostic:value=>diag.push(value)});
+assert.equal(diag.length,1);
+assert.deepEqual(argumentFindings(tentAnalysis),[],
+ 'Qualified, unproved suggestions should not turn into red errors');
+console.log('Typed argument graph / score correction / tentative extraction integration passed.');
