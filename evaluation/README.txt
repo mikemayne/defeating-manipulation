@@ -178,3 +178,18 @@ The public catalogue now contains **Inconsistent or unsupported reasoning**.
 It explicitly distinguishes contradictory claims from conclusions insufficiently
 supported by the evidence **provided** in the passage. The latter is a planned
 whole-argument analysis feature, not a capability established by these tests.
+
+
+## Public red argument-consistency library
+
+The standalone inconsistency pattern pages are generated from
+`inconsistency-patterns.json`. They are separate from the blue
+manipulation catalogue and green positive catalogue. The builder renders
+all entries and includes them in the sitemap automatically; validation
+checks each entry's page and red background. A new pattern only needs
+another JSON entry, not a new hardcoded HTML component.
+
+Current local NLI tests cover claim contradictions. Unsupported or
+supported *conclusions* are library descriptions for a future
+whole-argument analyser and should not be scored as capabilities of the
+current contradiction model.
