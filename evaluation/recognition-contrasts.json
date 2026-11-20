@@ -1,0 +1,401 @@
+{
+  "version": 1,
+  "description": "Independently worded fictional structural-rule positive and hard-negative regression passages; not copied from the private news holdout set.",
+  "variants": [
+    "original"
+  ],
+  "cases": [
+    {
+      "id": "contrast-positive-001-bandwagon",
+      "text": "Almost everyone in the club has enrolled, therefore you should register too.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-002-false_dilemma",
+      "text": "Either the council approves the arena or the whole district will collapse financially.",
+      "expected": [
+        "false_dilemma"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-003-ad_hominem",
+      "text": "He is a fool, so his argument is worthless.",
+      "expected": [
+        "ad_hominem"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-004-straw_man",
+      "text": "You suggest a review of fees, so you clearly want to abolish all payments.",
+      "expected": [
+        "straw_man"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-005-slippery_slope",
+      "text": "If we make one exception to the permits, all the controls will disappear.",
+      "expected": [
+        "slippery_slope"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-006-appeal_to_ignorance",
+      "text": "No one has proved this treatment is dangerous, so it must be safe.",
+      "expected": [
+        "appeal_to_ignorance"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-007-post_hoc",
+      "text": "Revenue grew after the conference, so the conference caused the change.",
+      "expected": [
+        "post_hoc"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-008-cherry_picking",
+      "text": "These figures prove our plan is a success; ignore the other results.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-009-tu_quoque",
+      "text": "You criticise the train operator for delays, but you were late yourself, so your complaint is invalid.",
+      "expected": [
+        "tu_quoque"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-010-appeal_to_emotion",
+      "text": "You must approve this because doing otherwise would break her heart.",
+      "expected": [
+        "appeal_to_emotion"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-011-presupposition",
+      "text": "When will the manager finally admit that he concealed the information?",
+      "expected": [
+        "presupposition"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-012-firsthand_evidence_requirement",
+      "text": "Unless you personally witnessed the incident, you cannot reach a conclusion about it.",
+      "expected": [
+        "firsthand_evidence_requirement"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-013-manufactured_consensus",
+      "text": "The whole district agrees with the proposal, despite no survey being carried out.",
+      "expected": [
+        "manufactured_consensus"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-014-invoking_an_imagined_audience",
+      "text": "The committee will hate your suggestion, so you should be silent.",
+      "expected": [
+        "invoking_an_imagined_audience"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-015-poisoning_the_well",
+      "text": "Before you listen to the advisor, remember she cannot be trusted.",
+      "expected": [
+        "poisoning_the_well"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-016-whataboutism",
+      "text": "Why criticise the waste at the zoo when another organisation has a bigger deficit?",
+      "expected": [
+        "whataboutism"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-017-double_standards",
+      "text": "Our director should be forgiven for the same mistake, but the trainee should be punished.",
+      "expected": [
+        "double_standards"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-018-moving_goalposts",
+      "text": "I said the device needed one successful run, but now I demand another ten tests.",
+      "expected": [
+        "moving_goalposts"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-019-appeal_to_authority",
+      "text": "A famous singer backs the construction, so it must be scientifically sound.",
+      "expected": [
+        "appeal_to_authority"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-020-guilt_appeal",
+      "text": "If you truly cared about the community, you would approve without debate.",
+      "expected": [
+        "guilt_appeal"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-021-scapegoating",
+      "text": "Every problem in the office is caused by one group of interns.",
+      "expected": [
+        "scapegoating"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-022-bandwagon",
+      "text": "Millions of residents use this service, therefore it must be the best service.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-023-bandwagon",
+      "text": "The majority of pupils prefer the candidate, therefore you should support her.",
+      "expected": [
+        "bandwagon"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-024-appeal_to_ignorance",
+      "text": "The allegation has not been disproved, so it must be true.",
+      "expected": [
+        "appeal_to_ignorance"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-positive-025-cherry_picking",
+      "text": "We found three studies that confirm the idea; ignore the other evidence.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-001",
+      "text": "Almost every member of the club has paid their annual fee.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-002",
+      "text": "The whole neighbourhood attended the festival, according to the organisers.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-003",
+      "text": "The council will vote on an arena proposal next month.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-004",
+      "text": "The mayor gave two options but stated that several alternatives remained open.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-005",
+      "text": "The advisor disagreed with the consultant's calculations.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-006",
+      "text": "The school decided to review the fees following a public consultation.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-007",
+      "text": "If the permit is changed, the building inspector will conduct another inspection.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-008",
+      "text": "No one has submitted evidence about the safety of the device yet.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-009",
+      "text": "Revenue increased after the new venue opened, according to financial records.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-010",
+      "text": "The survey reported both favourable and unfavourable results in the appendix.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-011",
+      "text": "The operator was late, and the passenger made a complaint.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-012",
+      "text": "Participants said the decision affected their families emotionally.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-013",
+      "text": "The manager explained when the meeting would take place.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-014",
+      "text": "Inspectors personally visited the site before issuing their written report.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-015",
+      "text": "The whole district was surveyed and most participants supported the proposal.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-016",
+      "text": "The committee is scheduled to vote on the suggestion tomorrow.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-017",
+      "text": "The advisor was invited to present the findings at a public hearing.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-018",
+      "text": "The zoo reported higher spending than in the previous financial year.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-019",
+      "text": "The manager and the trainee were both given written warnings for the same mistake.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-020",
+      "text": "An updated testing target was agreed by both sides before the first test.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-021",
+      "text": "The singer attended the opening ceremony and thanked the engineers.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-022",
+      "text": "Community residents were invited to submit comments before the proposal was approved.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-023",
+      "text": "The group of interns met with the senior staff to discuss office procedures.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-024",
+      "text": "Most voters said they preferred candidate B in the representative survey.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-025",
+      "text": "The data show that nobody found a safety problem in the completed trials.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-026",
+      "text": "The new study cites three research papers and also describes their limitations.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-027",
+      "text": "Two alternative plans are being assessed, but others may still be proposed.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-028",
+      "text": "The consultant said the director was foolish to ignore the evidence.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-029",
+      "text": "The chairman predicted that the committee might reject the proposal, based on its published voting rules.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-030",
+      "text": "The report does not establish whether the disruption was connected to the permit change.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-031",
+      "text": "Last year's lack of test results does not demonstrate that the device is safe.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "contrast-negative-032",
+      "text": "The report considered road repairs and listed costs alongside the main budget.",
+      "expected": [],
+      "gate": true
+    }
+  ]
+}
