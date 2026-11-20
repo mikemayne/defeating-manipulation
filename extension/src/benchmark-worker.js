@@ -6,6 +6,7 @@ import { validateConsistencyCases, generatedConsistencyCase } from "../../evalua
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { analyseArguments, ARGUMENT_LABELS } from "./argument-analysis.mjs";
+import { ARGUMENT_REASONER_MODEL, evaluateArgumentsWithReasoner } from "./argument-reasoner.mjs";
 import { validateArgumentCases, generatedArgumentCase } from "../../evaluation/argument-generator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
@@ -21,7 +22,7 @@ const MAX_EMBED_CACHE = 4000;
 const MODEL = "Xenova/all-MiniLM-L6-v2";
 let running = false, stopRequested = false;
 let extractor, cachedCatalogueKey, prototypes = [], positivePrototypes = [], cache = new Map();
-let nliScorer;
+let nliScorer, argumentGenerator;
 
 async function embed(texts) {
  if (!texts.length) return [];
@@ -84,6 +85,34 @@ async function initialiseConsistencyModel() {
  return nliScorer;
 }
 
+async function initialiseArgumentReasoner() {
+ if (argumentGenerator) return argumentGenerator;
+ self.postMessage({ type:"stage",
+  message:"Loading the optional local argument reasoning model (larger download; no cloud inference)…" });
+ // A separate, explicitly opted-in model. Try browser GPU first;
+ // use quantized WASM CPU only when GPU initialization is unavailable.
+ try {
+  argumentGenerator = await pipeline("text-generation", ARGUMENT_REASONER_MODEL,
+   { dtype:"q4", device:"webgpu" });
+ } catch (error) {
+  console.warn("WebGPU argument model unavailable; attempting CPU:", error);
+  self.postMessage({ type:"stage",
+   message:"WebGPU unavailable; loading quantized local CPU reasoning model…" });
+  argumentGenerator = await pipeline("text-generation", ARGUMENT_REASONER_MODEL,
+   { dtype:"q8", device:"wasm" });
+ }
+ return argumentGenerator;
+}
+async function generateReasoning(messages) {
+ const generator = await initialiseArgumentReasoner();
+ const result = await generator(messages, {
+  max_new_tokens: 125, do_sample: false, return_full_text: false
+ });
+ const generated = result?.[0]?.generated_text;
+ if (typeof generated === "string") return generated;
+ if (Array.isArray(generated)) return String(generated.at(-1)?.content || "");
+ return String(generated?.content || "");
+}
 async function parseUpload(file) {
  if (!file) throw Error("Choose a JSON or JSONL test file");
  self.postMessage({ type: "stage", message: "Reading the local test file…" });
@@ -134,10 +163,11 @@ async function startRun(message) {
  try {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
   const consistency = mode === "consistency";
-  const argumentMode = mode === "argument_support";
+  const argumentReasoning = mode === "argument_reasoning";
+  const argumentMode = mode === "argument_support" || argumentReasoning;
   const positive = mode === "positive_rules" || mode === "positive_ai";
   const concealed = mode === "concealed_rules" || mode === "concealed_ai";
-  if (!["rules", "ai", "consistency", "argument_support", "positive_rules", "positive_ai",
+  if (!["rules", "ai", "consistency", "argument_support", "argument_reasoning", "positive_rules", "positive_ai",
    "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
@@ -151,7 +181,8 @@ async function startRun(message) {
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
   const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
-  if (consistency || argumentMode) await initialiseConsistencyModel();
+  if (argumentReasoning) await initialiseArgumentReasoner();
+  else if (consistency || argumentMode) await initialiseConsistencyModel();
   else if (mode === "concealed_ai") await initialiseConcealedModel(techniques);
   else if (mode === "ai" || mode === "positive_ai") await initialiseModel(techniques);
   else self.postMessage({ type: "stage",
@@ -169,8 +200,20 @@ async function startRun(message) {
     argumentMode ? generatedArgumentCase(seeds, i, Number(seed) || 2026) :
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
-   let matches, argumentAssessments = [], argumentDiagnostics = [];
-   if (argumentMode) {
+   let matches, argumentAssessments = [], argumentDiagnostics = [], reasonerAssessments = [];
+   if (argumentReasoning) {
+    reasonerAssessments = await evaluateArgumentsWithReasoner(item.text, generateReasoning, {
+     onProgress: ({ completed, total: argumentTotal }) => {
+      if (argumentTotal) self.postMessage({ type:"stage",
+       message:"Reasoning about argument " + Math.min(completed + 1, argumentTotal) + "/" + argumentTotal +
+        " (" + (i + 1) + "/" + total + " passages)" });
+     }
+    });
+    matches = reasonerAssessments.filter(assessment => assessment.label).map(assessment => ({
+     start: assessment.conclusion.start, end: assessment.conclusion.end,
+     technique: { id:assessment.label }, kind:"argument_assessment"
+    }));
+   } else if (argumentMode) {
     argumentAssessments = await analyseArguments(item.text, nliScorer, {
      onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
     });
@@ -262,7 +305,12 @@ async function startRun(message) {
       pressure: item.text.slice(match.start, match.end),
       relatedNegative: match.negativePattern
      })) : [],
-     argumentAssessments: argumentMode ? argumentAssessments.map(assessment => ({
+     reasoningResults: argumentReasoning ? reasonerAssessments.map(assessment => ({
+      label: assessment.rawLabel, reason: assessment.reason,
+      premise: assessment.premise, conclusion: assessment.conclusion.text,
+      marker: assessment.conclusion.marker
+     })) : [],
+     argumentAssessments: argumentMode && !argumentReasoning ? argumentAssessments.map(assessment => ({
       label: assessment.label, premise: assessment.premise,
       conclusion: assessment.conclusion.text,
       inferenceMarker: assessment.conclusion.marker,
@@ -270,7 +318,7 @@ async function startRun(message) {
       decisivePremise: assessment.evidenceText, basis: assessment.basis,
       reason: assessment.reason || null
      })) : [],
-     argumentDiagnostics: argumentMode ? argumentDiagnostics.map(item => ({
+     argumentDiagnostics: argumentMode && !argumentReasoning ? argumentDiagnostics.map(item => ({
       conclusion: item.conclusion, verdict: item.verdict,
       inferenceMarker: item.inferenceMarker, inline: item.inline,
       reason: item.reason || null,
