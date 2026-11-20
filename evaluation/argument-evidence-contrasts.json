@@ -1,0 +1,330 @@
+{
+  "version": 1,
+  "description": "Three user-reported real browser NLI failure diagnostics, plus independently worded regression controls. Scores are stored as [contradiction, neutral, entailment]. This fixture replays the model output at that point in time; it is not a fresh model benchmark.",
+  "cases": [
+    {
+      "id": "published-report-not-proof",
+      "group": "reported-failure",
+      "text": "The council has published its spending report online. The report covers the previous financial year.\nAs a result, the council has eliminated all financial waste.",
+      "expected": "unsupported_conclusion",
+      "scores": {
+        "combined": {
+          "forward": [
+            0.974,
+            0.026,
+            0
+          ],
+          "reverse": [
+            0.001,
+            0.949,
+            0.05
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.992,
+            0.008,
+            0
+          ],
+          "reverse": [
+            0.001,
+            0.95,
+            0.049
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.589,
+            0.411,
+            0.001
+          ]
+        }
+      }
+    },
+    {
+      "id": "one-platform-does-not-prove-every",
+      "group": "reported-failure",
+      "text": "The train station has step-free access to platform two. Its ticket office is open on weekdays.\nThis proves that every platform at the station is accessible to every traveller.",
+      "expected": "unsupported_conclusion",
+      "scores": {
+        "combined": {
+          "forward": [
+            0.998,
+            0.001,
+            0.001
+          ],
+          "reverse": [
+            0.004,
+            0.95,
+            0.046
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.998,
+            0.001,
+            0.001
+          ],
+          "reverse": [
+            0.83,
+            0.1,
+            0.07
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.001,
+            0.999,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "id": "cafe-menu-not-proof-organic",
+      "group": "reported-failure",
+      "text": "The cafe sells soup at lunchtime. It also stocks tea and coffee.\nIt follows that the cafe uses only organic ingredients.",
+      "expected": "unsupported_conclusion",
+      "scores": {
+        "combined": {
+          "forward": [
+            1,
+            0,
+            0
+          ],
+          "reverse": [
+            0.001,
+            0.949,
+            0.05
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.685,
+            0.314,
+            0.001
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.999,
+            0.001,
+            0
+          ],
+          "reverse": [
+            0,
+            0.95,
+            0.05
+          ]
+        }
+      }
+    },
+    {
+      "id": "one-bus-ramp-not-every-bus",
+      "group": "fresh-scope",
+      "text": "Bus 14 has a wheelchair ramp. The driver received new instructions.\nTherefore, every bus on the route has a wheelchair ramp.",
+      "expected": "unsupported_conclusion",
+      "scores": {
+        "combined": {
+          "forward": [
+            0.997,
+            0.002,
+            0.001
+          ],
+          "reverse": [
+            0.81,
+            0.15,
+            0.04
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.998,
+            0.001,
+            0.001
+          ],
+          "reverse": [
+            0.87,
+            0.1,
+            0.03
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.005,
+            0.99,
+            0.005
+          ]
+        }
+      }
+    },
+    {
+      "id": "one-device-broken-contradicts-every-working",
+      "group": "true-contradiction-control",
+      "text": "One device in the batch was broken. The inspection was conducted on Monday.\nTherefore, every device in the batch was working.",
+      "expected": "contradictory_claims",
+      "scores": {
+        "combined": {
+          "forward": [
+            0.995,
+            0.003,
+            0.002
+          ],
+          "reverse": [
+            0.93,
+            0.04,
+            0.03
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.998,
+            0.001,
+            0.001
+          ],
+          "reverse": [
+            0.94,
+            0.04,
+            0.02
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.005,
+            0.99,
+            0.005
+          ]
+        }
+      }
+    },
+    {
+      "id": "one-bridge-closed-contradicts-all-open",
+      "group": "true-contradiction-control",
+      "text": "The north bridge is closed. A team completed its survey.\nTherefore, all bridges are open.",
+      "expected": "contradictory_claims",
+      "scores": {
+        "combined": {
+          "forward": [
+            0.992,
+            0.004,
+            0.004
+          ],
+          "reverse": [
+            0.96,
+            0.03,
+            0.01
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.997,
+            0.002,
+            0.001
+          ],
+          "reverse": [
+            0.96,
+            0.03,
+            0.01
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.01,
+            0.97,
+            0.02
+          ]
+        }
+      }
+    },
+    {
+      "id": "direct-negation-still-contradiction",
+      "group": "true-contradiction-control",
+      "text": "The bookshop opens on Thursdays. It sells second-hand books.\nTherefore, the bookshop never opens on Thursdays.",
+      "expected": "contradictory_claims",
+      "scores": {
+        "combined": {
+          "forward": [
+            0.99,
+            0.005,
+            0.005
+          ],
+          "reverse": [
+            0.96,
+            0.02,
+            0.02
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.999,
+            0,
+            0.001
+          ],
+          "reverse": [
+            0.96,
+            0.03,
+            0.01
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.01,
+            0.98,
+            0.01
+          ]
+        }
+      }
+    },
+    {
+      "id": "supported-explicit-universal-premise",
+      "group": "supported-control",
+      "text": "Every platform in the station is accessible. The ticket office is open daily.\nTherefore, every platform in the station is accessible.",
+      "expected": "supported_conclusion",
+      "scores": {
+        "combined": {
+          "forward": [
+            0.01,
+            0.08,
+            0.91
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.01,
+            0.98,
+            0.01
+          ]
+        }
+      }
+    },
+    {
+      "id": "uncertain-not-enough-to-classify",
+      "group": "abstain-control",
+      "text": "The testing team evaluated the device. It considered several options.\nTherefore, the design is safe for all uses.",
+      "expected": null,
+      "scores": {
+        "combined": {
+          "forward": [
+            0.29,
+            0.42,
+            0.29
+          ]
+        },
+        "premise_1": {
+          "forward": [
+            0.32,
+            0.37,
+            0.31
+          ]
+        },
+        "premise_2": {
+          "forward": [
+            0.36,
+            0.39,
+            0.25
+          ]
+        }
+      }
+    }
+  ]
+}
