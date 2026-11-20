@@ -1,4 +1,5 @@
 import { extractArguments } from "./argument-clauses.mjs";
+import { explicitConflict, specificEvidenceGap } from "./argument-evidence-checks.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -17,109 +18,20 @@ function scoresValid(scores) {
  return scores && ["contradiction", "neutral", "entailment"].every(
   key => Number.isFinite(scores[key]));
 }
-// A subset doesn't disprove a universal claim: "platform two is accessible"
-// is not evidence that *every* platform is accessible, but neither is it
-// evidence against that proposition. Keep quantifier scope separate from
-// semantic polarity instead of relying on raw NLI contradiction scores.
-const UNIVERSAL = /\b(?:all|every|each)\s+([a-z][a-z'-]*)\b/gi;
-const EXPLICIT_RESTRICTION_OR_NEGATION =
- /\b(?:not|no|never|none|nothing|neither|without|only|except|cannot|can't|won't|wasn't|isn't|aren't|doesn't|didn't|don't)\b/i;
-const OPPOSING_WORDS = [
- [/\b(?:open|opened)\b/i, /\b(?:closed|shut)\b/i],
- [/\b(?:accessible|accessibility)\b/i, /\b(?:inaccessible)\b/i],
- [/\b(?:safe|safely)\b/i, /\b(?:unsafe|dangerous|hazardous)\b/i],
- [/\b(?:passed|passing|pass)\b/i, /\b(?:failed|failing|fail)\b/i],
- [/\b(?:allowed|permitted)\b/i, /\b(?:banned|prohibited|forbidden)\b/i],
- [/\b(?:available)\b/i, /\b(?:unavailable)\b/i],
- [/\b(?:working|operational)\b/i, /\b(?:broken|inoperable)\b/i],
- [/\b(?:present|exists?)\b/i, /\b(?:absent|missing)\b/i]
-];
-function singular(word) {
- return word.endsWith("ies") && word.length > 4 ? word.slice(0,-3) + "y" :
-  word.endsWith("s") && !word.endsWith("ss") && word.length > 3 ?
-   word.slice(0,-1) : word;
-}
-function scopeWidening(premise, conclusion) {
- if (!premise || !conclusion ||
-     EXPLICIT_RESTRICTION_OR_NEGATION.test(premise) ||
-     EXPLICIT_RESTRICTION_OR_NEGATION.test(conclusion) ||
-     OPPOSING_WORDS.some(([a,b]) =>
-      (a.test(premise) && b.test(conclusion)) ||
-      (b.test(premise) && a.test(conclusion)))) return false;
-
- const words = new Set((premise.toLowerCase().match(/[a-z][a-z'-]*/g) || [])
-  .map(singular));
- const premiseUniversals = new Set(
-  [...premise.matchAll(UNIVERSAL)].map(match => singular(match[1].toLowerCase())));
- for (const match of conclusion.matchAll(UNIVERSAL)) {
-  const noun = singular(match[1].toLowerCase());
-  if (words.has(noun) && !premiseUniversals.has(noun)) return true;
- }
- return false;
-}
-
-// A neutral NLI score means "not entailed", NOT "no reasonable evidential
-// support". A red unsupported finding needs an *observable overclaim*,
-// not merely a semantic-model neutral prediction.
-//
-// Conservative, fast, domain-general indicators: categorical universals,
-// absolute guarantees, superlatives and claims of total resolution. These are
-// signals to scrutinise the scope of the provided evidence, not proof that
-// the conclusion is false. Qualified claims are not automatically supported;
-// without an entailment signal, they must abstain instead of turning red.
-const UNIVERSAL_SCOPE =
- /\b(?:all|every|each|everyone|everybody|everything|entire|whole)\b/i;
-const NEGATIVE_SCOPE =
- /\b(?:never|none|nobody|nothing|no|no one)\b/i;
-const EXCLUSIVE_SCOPE =
- /\b(?:only|always)\b/i;
-const CATEGORICAL_ABSOLUTES =
- /\b(?:completely|entirely|totally|absolutely|guaranteed|forever|everlasting|infallible|perfectly|flawless|zero|fully|eliminated|eradicated|solved|cured|proven|proved|definitively)\b/i;
-const SUPERLATIVE_SCOPE =
- /\b(?:best|worst|safest|healthiest|highest|lowest|greatest|most|least|fastest|slowest|strongest|weakest|largest|smallest|certainly)\b/i;
-const QUALIFIED_INFERENCE =
- /\b(?:may|might|could|can|perhaps|possibly|potentially|probably|plausibly|likely|unlikely|appears?|seems?|suggests?|indicates?|tends?\s+to|is\s+possible|is\s+plausible)\b/i;
-
-// The claimed scope should not be considered broader just because the
-// premise uses a universal too. The entailment model still determines
-// whether the details actually match; if it is neutral we abstain.
-function conclusionScopeCue(conclusion, premise) {
- // Distinguish *types* of quantification. "No damage in three
- // buildings" cannot justify "every building is safe"; a stray
- // negative word in the premise must not mask universal expansion.
- if (UNIVERSAL_SCOPE.test(conclusion) && !UNIVERSAL_SCOPE.test(premise))
-  return "universal_scope";
- if (NEGATIVE_SCOPE.test(conclusion) && !NEGATIVE_SCOPE.test(premise))
-  return "categorical_denial";
- if (EXCLUSIVE_SCOPE.test(conclusion) && !EXCLUSIVE_SCOPE.test(premise))
-  return "exclusive_scope";
- if (CATEGORICAL_ABSOLUTES.test(conclusion) &&
-     !CATEGORICAL_ABSOLUTES.test(premise))
-  return "categorical_certainty";
- if (SUPERLATIVE_SCOPE.test(conclusion) &&
-     !SUPERLATIVE_SCOPE.test(premise))
-  return "comparative_superlative";
- // If both contain an absolute word, that does not mean they match,
- // but the lexical rule alone is insufficient to label the leap.
- return null;
-}
-
+// NLI is a sentence-pair classifier, not a proof engine. Use its scores as
+// candidates, then check whether the *actual evidence and conclusion* contain
+// an observable mismatch. This is a deliberately conservative policy.
 export function assessNeutralArgumentEvidence(premise, conclusion, verdict) {
  if (!verdict || verdict.label !== "unsupported_conclusion")
   return { verdict, status:"model_verdict" };
- // A high NLI neutral score is just absence of deductive entailment.
- // Never turn cautious scientific/causal claims into red errors solely
- // from that signal. Explicit categorical assertions still need
- // independent evidence for their full scope.
- if (QUALIFIED_INFERENCE.test(conclusion))
-  return { verdict:null, status:"evidential_support_uncertain",
-   reason:"qualified_claim_not_entailed" };
- const cue = conclusionScopeCue(conclusion, premise);
- if (cue) return { verdict:{...verdict,
-  reason:"observable_overclaim_" + cue},
-  status:"observable_overclaim", reason:"observable_overclaim_" + cue };
+ const gap = specificEvidenceGap(premise, conclusion);
+ if (gap.verified)
+  return { verdict:{...verdict, reason:gap.reason}, status:"observable_overclaim",
+   reason:gap.reason };
+ // An NLI neutral prediction, comparative word, or universal quantifier alone
+ // cannot establish that the supplied argument is invalid.
  return { verdict:null, status:"evidential_support_uncertain",
-  reason:"neutral_or_asymmetric_nli_is_not_sufficient_to_judge_support" };
+  reason:"no_specific_evidence_gap" };
 }
 
 export function classifyArgumentScore(forward, reverse = null) {
@@ -161,16 +73,24 @@ export function combineArgumentEvidence(scored, conclusionText = "") {
   let verdict = item.repeated
    ? { label: "supported_conclusion", score: 1 }
    : classifyArgumentScore(item.forward, item.reverse);
-  // NLI occasionally calls "one platform is accessible" contradictory to
-  // "every platform is accessible." The first is narrower evidence, not an
-  // assertion that any other platform is inaccessible. Only downgrade a
-  // contradiction when the positive quantifier expands the stated scope
-  // without explicit opposing evidence. Do not change genuine negations.
-  if (verdict?.label === "contradictory_claims" &&
-      scopeWidening(item.text, conclusionText))
-   verdict = { label: "unsupported_conclusion",
-    score: verdict.score, reason: "scope_expansion" };
-  const evidence = assessNeutralArgumentEvidence(item.text, conclusionText, verdict);
+  let evidence = null;
+  if (verdict?.label === "contradictory_claims") {
+   const conflict = explicitConflict(item.text, conclusionText);
+   if (!conflict.verified) {
+    // Extremely high bidirectional NLI disagreement can still be a spurious
+    // comparison of different claims (as in the election-majority pilot).
+    const gap = specificEvidenceGap(item.text, conclusionText);
+    if (gap.verified) verdict = { label:"unsupported_conclusion",
+     score:verdict.score, reason:gap.reason };
+    else {
+     verdict = null;
+     evidence = { verdict:null, status:"evidential_support_uncertain",
+      reason:"nli_contradiction_without_explicit_conflict" };
+    }
+   }
+  }
+  if (!evidence)
+   evidence = assessNeutralArgumentEvidence(item.text, conclusionText, verdict);
   return { ...item, verdict:evidence.verdict, evidenceStatus:evidence.status,
    evidenceReason:evidence.reason || null };
  });
