@@ -23,6 +23,16 @@ function asRule(sentence){
  if(n&&!HEDGE.test(n[1])&&!HEDGE.test(n[2]))return {condition:n[2].replace(/[.]$/,''),consequence:n[1],kind:'necessary',source:sentence};
  return null;
 }
+// Return a literal negative of a simple affirmative copular proposition.
+// No fuzzy synonym matching, nested negation, modals or implied identities.
+function copularNegation(text){
+ const s=normalize(text);
+ if(HEDGE.test(s)||/\b(?:not|never|no|neither|nor|unless|except|only if)\b/i.test(s))return null;
+ const m=/^(.{3,120}?)\s+(is|are|was|were)\s+(.{2,120})$/i.exec(s);
+ if(!m||/\b(?:and|or|if|then|because)\b/i.test(m[1])||
+    /\b(?:and|or|if|then|because)\b/i.test(m[3]))return null;
+ return normalize(m[1]+' '+m[2]+' not '+m[3]);
+}
 function opposition(left,right){
  const a=normalize(left),b=normalize(right);
  const neg=(s)=>s.replace(/\b(?:not|never|no)\s+/g,'').replace(/\b(?:isn't|aren't|wasn't|weren't|doesn't|don't|didn't|cannot|can't|won't)\b/g,'');
@@ -87,6 +97,23 @@ export function inspectArgumentProof(premise,conclusion){
   graph.edges.push(edge(found.id,goalId,'identical_proposition'));
   graph.status='proved';graph.verified={label:'supported_conclusion',reason:'bounded_conditional_chain',
    chain:graph.edges.filter(x=>x.to===found.id||x.to===goalId),basis:'graph'};
+  return graph;
+ }
+ // Modus tollens: if P then Q; not Q; therefore not P.
+ // Recognise only exact copular negations of BOTH Q and P. This never
+ // licenses affirming the consequent or denying the antecedent.
+ for(const r of rules.filter(x=>x.kind==='sufficient')){
+  const notQ=copularNegation(r.consequence);
+  const notP=copularNegation(r.condition);
+  if(!notQ||!notP||normalize(goal)!==notP)continue;
+  const contrary=entries.find(x=>normalize(x.text)===notQ);
+  if(!contrary||graph.nodes.length>=MAX_NODES)continue;
+  graph.edges.push(edge(contrary.id,goalId,'negated_consequent'));
+  graph.edges.push(edge(r.id,goalId,'modus_tollens'));
+  graph.status='proved';
+  graph.verified={label:'supported_conclusion',reason:'bounded_modus_tollens',
+   chain:[edge(contrary.id,goalId,'negated_consequent'),
+    edge(r.id,goalId,'modus_tollens')],basis:'graph'};
   return graph;
  }
  // A direct and exact proposition negation can be shown as a verified
