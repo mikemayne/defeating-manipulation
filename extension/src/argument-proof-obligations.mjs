@@ -17,6 +17,7 @@ const EXPLICIT_PRECISION=/\b(?:exactly|precisely)\s+(?:\d+(?:\.\d+)?\s*(?:%|perc
 const SCALE=/\b(?:next\s+\d+|next\s+few|every\s+future|throughout\s+(?:the\s+)?(?:next|coming)|forever|ever again|entire|every|all|nationwide|districtwide|regionwide|citywide|in the country|in the region|in the district|in Europe|across the country)\b/i;
 const PLANNED=/\b(?:plans?|planning|propos(?:ed|al)|feasibility\s+stud(?:y|ies)|consultation|intention|draft|strategy|forecast|commissions? a study)\b/i;
 const COMPLETED=/\b(?:already\s+(?:built|completed|finished|open|running|delivered)|have all been|has been|are now|is now|fully built|completed|finished|achieved|realised|realized|operational|open to the public)\b/i;
+const DOCUMENTARY_EVIDENCE=/\b(?:report|review|audit|survey|research|analysis|financial statement|assessment)\b/i;
 const SOURCE_SUPPORTS_PLAN=/\b(?:implemented|already built|already delivered|completed|fully funded|opened|finished|operational|now open|was constructed|has been completed)\b/i;
 
 function statementCount(s){return s.split(/[.!?]+\s*/).filter(x=>x.trim()).length;}
@@ -60,6 +61,9 @@ export function inferExplicitProofObligationGap(premise,conclusion,{inferenceMar
   statementCount(p)>2 || supportedBySamePopulation(p,c))return null;
  const finite=LOCAL_EVENT.test(p)||FINITE_OBSERVATION.test(p);
  if(!finite)return null;
+ // A published report may contain additional evidence outside this excerpt.
+ // Lack of a derived proof does not justify a red underline.
+ if(DOCUMENTARY_EVIDENCE.test(p) && !PLANNED.test(p))return null;
  // Plan publication cannot by itself establish plan completion, even when
  // it is a detailed or properly published plan.
  if(PLANNED.test(p)&&COMPLETED.test(c)&&!SOURCE_SUPPORTS_PLAN.test(p))
