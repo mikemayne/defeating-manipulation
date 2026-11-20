@@ -9,10 +9,12 @@
     "benchmark:dev": "npm run build && npm run benchmark"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.7.2"
+    "@huggingface/transformers": "^3.7.2",
+    "nspell": "^2.1.5"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",
-    "web-ext": "^8.9.0"
+    "web-ext": "^8.9.0",
+    "dictionary-en-gb": "^3.0.0"
   }
 }
