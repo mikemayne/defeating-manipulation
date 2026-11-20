@@ -969,3 +969,86 @@ assert.ok(benchmarkUI.includes('data.realTracks') &&
  benchmarkUI.includes('Human rationale (assigned before testing):'),
  'Real result view displays separate performance and human-grounded failure details');
 console.log('Real-world corpus collector: provenance, blinding, export, exclusions and stratified metrics validated.');
+
+
+// The first authentic 23-case pilot exposed in-sentence argument markers
+// ("which means", "indicates that") that the 96 synthetic examples omitted.
+// These checks validate exact extraction, not the correctness of reasoning.
+const realWorldInlineCases = [
+ {
+  id:'pilot-longitudinal', marker:'which means',
+  text:'The COVID-19 Infection Survey is a longitudinal study, which means participants can test positive more than once.',
+  premise:'The COVID-19 Infection Survey is a longitudinal study',
+  conclusion:'participants can test positive more than once.'
+ },
+ {
+  id:'pilot-kitchen', marker:'indicates that',
+  text:'Illness in persons who had eaten food prepared in only one kitchen indicates that the contamination might have occurred in that kitchen.',
+  premise:'Illness in persons who had eaten food prepared in only one kitchen',
+  conclusion:'the contamination might have occurred in that kitchen.'
+ },
+ {
+  id:'new-which-means', marker:'which means',
+  text:'The inspectors completed the checks required under the published protocol, which means the inspection has now finished.',
+  premise:'The inspectors completed the checks required under the published protocol',
+  conclusion:'the inspection has now finished.'
+ },
+ {
+  id:'new-suggesting-that', marker:'suggesting that',
+  text:'The researchers compared two groups with the same medical records, suggesting that the measured difference might be important.',
+  premise:'The researchers compared two groups with the same medical records',
+  conclusion:'the measured difference might be important.'
+ },
+ {
+  id:'new-which-implies', marker:'which implies',
+  text:'The team recorded a sharp decrease in detected cases, which implies the recorded case rate may be falling.',
+  premise:'The team recorded a sharp decrease in detected cases',
+  conclusion:'the recorded case rate may be falling.'
+ }
+];
+for(const test of realWorldInlineCases) {
+ const args = argumentEngine.extractArguments(test.text);
+ assert.equal(args.length, 1, 'Recognise genuine in-sentence inference: '+test.id);
+ assert.equal(args[0].premise, test.premise, 'Retain actual premise text: '+test.id);
+ assert.equal(args[0].conclusion.text, test.conclusion, 'Retain actual conclusion: '+test.id);
+ assert.ok(args[0].conclusion.marker.includes(test.marker),
+  'Identify inference marker: '+test.id);
+ assert.equal(test.text.slice(args[0].conclusion.start,args[0].conclusion.end),
+  test.conclusion, 'Retain precise highlight offsets: '+test.id);
+}
+const inlineHardNegatives = [
+ 'The report suggests that the programme is safe for all residents.',
+ 'The observer said that the collected evidence indicates that the bridge is open.',
+ 'Our team reviewed the budget for the year, which means we should reconsider the total.',
+ 'The data were collected from multiple sites, which means we might need to revise the study.',
+ 'The newspaper reported that a manager stated that none of the teams agreed.',
+ 'The report states that collecting more observations might be useful.'
+];
+for(const text of inlineHardNegatives)
+ assert.deepEqual(argumentEngine.extractArguments(text), [],
+  'Do not manufacture an assessable factual premise from reporting or advice');
+const unsupportedInline =
+ 'After inspecting three of the twenty school buildings, the officials found no damage, which means every school building is safe.';
+const inlineArgs = argumentEngine.extractArguments(unsupportedInline);
+assert.equal(inlineArgs.length, 1, 'Detect scope-expanding argument even though the author says "which means"');
+const inlineScores = await argumentEngine.analyseArguments(unsupportedInline,
+ async () => ({contradiction:0.01,neutral:0.98,entailment:0.01}));
+assert.equal(inlineScores[0]?.label,'unsupported_conclusion',
+ 'Argumentative connectives must not be treated as evidence of support');
+const supportedInline = await argumentEngine.analyseArguments(realWorldInlineCases[2].text,
+ async () => ({contradiction:0.01,neutral:0.01,entailment:0.98}));
+assert.equal(supportedInline[0]?.label,'supported_conclusion',
+ 'Local NLI can classify an in-sentence argument when the evidence supports it');
+let inlineDiagnostics = [];
+await argumentEngine.analyseArguments(realWorldInlineCases[0].text,
+ async () => ({contradiction:0.01,neutral:0.98,entailment:0.01}),{
+ onDiagnostic: diagnostic => inlineDiagnostics.push(diagnostic)
+});
+assert.equal(inlineDiagnostics[0]?.inline,true,
+ 'In-sentence findings identify their parsing mode in failure diagnostics');
+assert.match(inlineDiagnostics[0]?.inferenceMarker||'', /which means/,
+ 'Failed real text includes the original connective for diagnosis');
+assert.ok(benchmarkWorker.includes('inferenceMarker: assessment.conclusion.marker') &&
+ benchmarkUI.includes('Marker: '),
+ 'The test lab explains where each real-world conclusion was extracted');
+console.log('Authentic in-sentence arguments: extraction, offsets, no-argument controls and NLI separation passed.');

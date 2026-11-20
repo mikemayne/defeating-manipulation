@@ -228,13 +228,16 @@ function failureReport(data) {
      " | Premises: " + a.premise + " | Conclusion: " + a.conclusion +
      (a.decisivePremise ? " | Decisive evidence: " + a.decisivePremise : "") +
      (a.basis ? " | Basis: " + a.basis : "") +
-     (a.reason ? " | Decision: " + a.reason : ""));
+     (a.reason ? " | Decision: " + a.reason : "") +
+     (a.inferenceMarker ? " | Marker: " + a.inferenceMarker : ""));
   }
   if (item.argumentDiagnostics?.length) {
    const fmt = n => typeof n === "number" && Number.isFinite(n) ? n.toFixed(3) : "-";
    lines.push("NLI evidence diagnostics (C=contradiction, N=neutral, E=entailment):");
    for (const a of item.argumentDiagnostics) {
     lines.push("  Conclusion: " + a.conclusion +
+     (a.inferenceMarker ? " | Marker: " + a.inferenceMarker : "") +
+     (a.inline ? " [inline]" : "") +
      " | Verdict: " + (a.verdict || "(abstained)") +
      (a.reason ? " | Decision: " + a.reason : ""));
     for (const x of a.comparisons) {
