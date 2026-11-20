@@ -279,4 +279,29 @@ for (const item of semanticContrasts) {
  }
 }
 
-console.log('Build, matching-core, benchmark and semantic-precision checks passed.');
+// Cover all published techniques with at least one instance to embed, rather
+// than silently leaving categories impossible to identify with local AI.
+// This tests the catalogue, not model generalisation.
+for (const technique of extensionCatalogue.techniques) {
+ const samples = [technique.example, ...(technique.examples || [])]
+  .filter(value => typeof value === 'string' && value.trim());
+ assert.ok(samples.length >= 1, 'Matcher has no semantic examples for: ' + technique.id);
+}
+
+// Independent wording and neutral near misses verify the new structural rules
+// without importing the separate user-held news evaluation dataset.
+const recognitionCases = JSON.parse(
+ fs.readFileSync('evaluation/recognition-contrasts.json', 'utf8')).cases;
+const recognitionErrors = [];
+for (const item of recognitionCases) {
+ const found = await matchingCore.matchText(item.text,
+  { techniques: extensionCatalogue.techniques, rules: compiled });
+ const predicted = [...new Set(found.map(match => match.technique.id))].sort();
+ const expected = [...new Set(item.expected)].sort();
+ if (JSON.stringify(predicted) !== JSON.stringify(expected))
+  recognitionErrors.push({ id: item.id, expected, predicted });
+}
+assert.deepEqual(recognitionErrors, [],
+ 'Recognise fresh rhetorical structures without flagging neutral near misses');
+
+console.log('Build, matching-core, benchmark, semantic precision and broad-coverage checks passed.');
