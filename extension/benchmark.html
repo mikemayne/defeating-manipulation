@@ -83,16 +83,16 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <h2 id="results-title">Results</h2>
 <div id="stats" class="stats"></div>
 <p id="summary-note" class="note"></p>
-<div class="actions"><button id="copy" disabled>Copy failure details</button><span id="copied" role="status" aria-live="polite"></span></div>
+<div class="actions"><button id="copy" disabled>Copy failure details</button><button class="secondary" id="download-predictions" hidden disabled>Download predictions JSON</button><span id="copied" role="status" aria-live="polite"></span></div>
 <p id="failure-note" class="note"></p>
 <section id="real-breakdown" hidden>
 <h2>Results by real-world sampling strategy</h2>
 <p class="note">Natural sampling estimates performance on typical passages; challenge sampling focuses on passages selected for their argument. These are different populations and should not be averaged uncritically.</p>
 <div class="tablewrap"><table><thead><tr><th>Sample</th><th class="num">Cases</th><th class="num">Exact</th><th class="num">Precision</th><th class="num">Recall</th></tr></thead><tbody id="real-track-results"></tbody></table></div>
 </section>
-<h2>Most frequent classification errors</h2>
-<div class="tablewrap"><table><thead><tr><th>Expected → Detected</th><th class="num">Cases</th></tr></thead><tbody id="confusion"></tbody></table></div>
-<h2 style="margin-top:28px">Per-technique performance</h2>
+<h2 id="confusion-title">Most frequent classification errors</h2>
+<div class="tablewrap"><table><thead><tr><th id="confusion-column">Expected → Detected</th><th class="num">Cases</th></tr></thead><tbody id="confusion"></tbody></table></div>
+<h2 id="per-technique-title" style="margin-top:28px">Per-technique performance</h2>
 <div class="tablewrap"><table><thead><tr><th>Technique</th><th class="num">Found / Expected</th><th class="num">Missed</th><th class="num">Extra matches</th></tr></thead><tbody id="per-technique"></tbody></table></div>
 </section>
 <footer>Local test utility · Uses the extension's matching core; the local AI model may be downloaded once and cached by the browser. The page sends no selected text or test results to a server.</footer>
