@@ -333,3 +333,11 @@ assert.ok(extensionWorker.includes('findInconsistencies(data.text, scorePair)'),
  'Firefox worker runs the second local pass');
 assert.ok(selectionScript.includes('const BLUE =') && selectionScript.includes('RED = "#dc2626"'),
  'Firefox highlighter retains the existing colours and adds red');
+
+assert.ok(selectionScript.includes('const covering = valid.filter('),
+ 'Overlapping findings are preserved instead of ranked away');
+assert.ok(selectionScript.includes('linear-gradient(') &&
+ selectionScript.includes('layers.join(",")'),
+ 'Overlapping findings draw multiple coloured underline layers');
+assert.ok(selectionScript.includes('show(mark, span.matches)'),
+ 'Hovering overlapping text displays every matching finding');
