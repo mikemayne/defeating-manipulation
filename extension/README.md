@@ -849,3 +849,34 @@ Run `node scripts/test-argument-safety.mjs` to exercise literal regex
 escaping, script-like input, malformed model payloads, getter rejection,
 prototype-pollution payloads and safe UI rendering. This change does not
 alter model size, inference calls or analytical thresholds.
+
+
+### Explicit proof obligations for absolute conclusions
+
+The second-pass paragraph analyser additionally checks a small, bounded
+set of **observable evidence-type mismatches**: a finite action or narrow
+observation presented as proof of universal/future certainty, a local
+observation promoted to a national ranking, an unmeasured *precise*
+causal outcome, or a published plan described as already implemented.
+
+This is **not** the same as saying that any conclusion with a missing proof
+is unsupported. The source premise and the conclusion must have an
+identifiable, asymmetrical evidence requirement. An open-world missing
+logical link by itself remains a **no-underline diagnostic**. Explicit
+conditional rules, direct measurements, complete population reports,
+quotations, hedges, completed plans and an existing independently
+verified logical proof block this classification.
+
+The independent `argument-proof-obligations.mjs` module returns a
+limited `unsupported_conclusion` candidate with an evidence-obligation
+type and observed-evidence type only when it verifies that mismatch.
+The existing classifier retains contradiction and supported-result
+precedence. Benchmark diagnostics display the obligation, supplied
+evidence type and rule reason. The model, NLI call count, text offsets,
+colours and first-pass manipulative-language matching are unchanged.
+
+Run `node scripts/test-argument-proof-obligations.mjs` for newly written
+positive and adversarial negative cases, plus the full repository suite.
+**Do not adjust this logic against the previously exposed 200-case
+development set.** Generalisation and precision must be judged with
+another unseen, independently labelled corpus.
