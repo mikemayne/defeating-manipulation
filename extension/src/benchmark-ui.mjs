@@ -236,6 +236,7 @@ function failureReport(data) {
    lines.push("NLI evidence diagnostics (C=contradiction, N=neutral, E=entailment):");
    for (const a of item.argumentDiagnostics) {
     lines.push("  Conclusion: " + a.conclusion +
+     (a.modelConclusion ? " | Model hypothesis: " + a.modelConclusion : "") +
      (a.inferenceMarker ? " | Marker: " + a.inferenceMarker : "") +
      (a.inline ? " [inline]" : "") +
      " | Verdict: " + (a.verdict ||

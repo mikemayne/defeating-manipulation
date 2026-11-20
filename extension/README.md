@@ -471,3 +471,26 @@ Keep the 101-case real-world benchmark unchanged and rerun in Firefox to
 measure the tradeoff: false red markings should become less likely, while
 unsupported-argument recall may stay low or fall. Metrics must report
 abstention and misses honestly, not relabel reference cases.
+
+
+### Complete model hypotheses in a single paragraph
+
+The local argument analyser uses the **same quantised NLI model**. The
+`src/argument-claim-normalisation.mjs` module can fill in an unambiguous shared
+subject for the *model hypothesis only*. For instance, `The service raised
+prices and therefore expects higher revenue` is compared as `The service
+expects higher revenue`, but the original text is always retained for
+highlighting and attribution.
+
+Quoted assertions, conversational asides, and unassessable inferences should
+not be silently treated as the author's own factual conclusions. Source
+offsets and the conservative evidence checks remain unchanged.
+
+Run `node scripts/test-media-social-arguments.mjs` for independent **fictional**
+positive and negative structural tests. Project validation includes those
+tests and verifies the NLI hypothesis and original underline positions.
+
+Real media and social-media collections are kept **outside the repository**;
+no scraped passages, source URLs, or downloadable corpus is committed.
+Testing the unchanged browser NLI model on a separate, independently labelled
+paragraph collection is still needed before claiming real-world improvement.

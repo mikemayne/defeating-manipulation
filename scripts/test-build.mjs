@@ -1219,3 +1219,6 @@ await import('./test-argument-clauses.mjs');
 // Independent hard negatives and specific evidence-gap contrasts. NLI weights
 // remain unchanged and the 101-case source-linked corpus stays held out.
 await import('./test-argument-evidence.mjs');
+
+// Fictional single-paragraph claim-completion and offset regression tests.
+await import('./test-media-social-arguments.mjs');

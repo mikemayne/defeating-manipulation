@@ -22,8 +22,24 @@ const FOLLOWING_REASON = /^(?:this|that)\s+is\s+because\s+/i;
 
 function words(text) { return (text.match(WORD) || []).length; }
 function insideOpenQuote(text) {
- // A connective inside a quoted example is not the document's own inference.
- return ((text.match(/['\"“”‘’]/g) || []).length % 2) !== 0;
+ // Count actual quotation marks, not apostrophes inside contractions
+ // ("it's", "we've") or possessives, which are common in social posts.
+ let double=false, single=false;
+ for (let i=0;i<text.length;i++) {
+  const ch=text[i];
+  if (ch==='"' || ch==='“' || ch==='”') double=!double;
+  else if (ch==="'" || ch==='‘' || ch==='’') {
+   if (/[\p{L}\p{N}]/u.test(text[i-1]||'') &&
+       /[\p{L}\p{N}]/u.test(text[i+1]||'')) continue;
+   single=!single;
+  }
+ }
+ return double || single;
+}
+function insideOpenParenthesis(text) {
+ // "(therefore ...)" can be an aside, joke, or an elliptical comparison.
+ // It is not enough to establish the author's own premise/conclusion link.
+ return (text.match(/\(/g) || []).length > (text.match(/\)/g) || []).length;
 }
 function paragraphBreaks(between) { return Math.floor((between.match(/\n/g) || []).length / 2); }
 
@@ -72,7 +88,8 @@ function argument(source, premise, conclusion, marker, inline=true) {
      conclusion.end <= conclusion.start || words(premise.text) < 3 ||
      words(conclusion.text) < 3 || conclusion.text.length < 12 ||
      conclusion.text.length > MAX_CONCLUSION_CHARS ||
-     /[?!]\s*$/.test(conclusion.text) || NORMATIVE.test(conclusion.text)) return null;
+     /[?!]\s*$/.test(conclusion.text) || NORMATIVE.test(conclusion.text) ||
+     /^to\s+(?:suggest|say|claim|argue|assume|imply|infer|believe|think|conclude)\b/i.test(conclusion.text)) return null;
  return {premise:premise.text, premises:[premise],
   conclusion:{...conclusion, marker:marker.toLowerCase(), inline},
   start:Math.min(premise.start, conclusion.start),
@@ -120,7 +137,7 @@ function inside(source, s) {
  while ((m=RESULT_MARKER.exec(t))) {
   if (m.index === 0) continue;
   let before=t.slice(0,m.index);
-  if (insideOpenQuote(before)) continue;
+  if (insideOpenQuote(before) || insideOpenParenthesis(before)) continue;
   // "and therefore" makes the conjunction part of the bridge.
   const tail=/\s+and\s*$/i.exec(before);
   const beforeEnd=m.index-(tail?.[0].length||0);
@@ -128,7 +145,9 @@ function inside(source, s) {
   const cons=span(source,start+RESULT_MARKER.lastIndex,s.end);
   // "physics is, therefore, necessary" splits an unfinished predicate;
   // a following "This is because" sentence is handled below.
-  if (words(prem.text) < 5 ||
+  // Short social posts can contain a complete 3-word premise ("It's not
+  // tangible") followed by a longer claim; preserve those candidates.
+  if (words(prem.text) < 3 ||
       /\b(?:is|are|was|were|be|been|being|has|have|had|can|could|may|might|will|would|must|shall|should)\s*$/i.test(prem.text)) continue;
   const a=argument(source,prem,cons,m[0].trim());
   if(a) return a;

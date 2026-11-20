@@ -271,7 +271,7 @@ async function startRun(message) {
       reason: assessment.reason || null
      })) : [],
      argumentDiagnostics: argumentMode ? argumentDiagnostics.map(item => ({
-      conclusion: item.conclusion, verdict: item.verdict,
+      conclusion: item.conclusion, modelConclusion: item.modelConclusion, verdict: item.verdict,
       inferenceMarker: item.inferenceMarker, inline: item.inline,
       reason: item.reason || null,
       status: item.status || null,
