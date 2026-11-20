@@ -377,3 +377,37 @@ real-world accuracy with the size, selection procedure, class mix,
 inter-rater disagreement, exclusions and failure examples. Verify
 rights before sharing excerpts; OGL and Open Parliament material has
 its own attribution conditions.
+
+
+## Experimental second model for authentic evidential support
+
+A confirmed fresh 23-case real-world NLI rerun scored 18/23, with all
+five genuine supported arguments called `unsupported_conclusion`.
+After the inline parser fix, no arguments were missed; all five
+received high `neutral` rather than `entailment` probabilities.
+These five cases involve statistical selection bias, entropy and
+irreversibility, observed infection transmission, longitudinal
+testing, and tentative outbreak-source attribution.
+
+This is a **task mismatch**: MNLI neutrality does not mean an argument
+offers no meaningful probabilistic support. Simply reducing its
+neutral threshold would damage the carefully validated synthetic
+contradiction and unsupported-inference examples.
+
+To test a different task definition without altering the original
+model, the Matcher Test Lab offers **Arguments — evidence strength
+(experimental local LLM)**. The optional quantized instruction model
+uses the same extracted premises/conclusion but is asked whether
+the evidence provides meaningful, appropriately qualified support;
+`uncertain` is an allowed outcome. The model is downloaded once
+and inference is performed in Firefox, without a paid API key.
+
+Rerun the **exact same 23-case uploaded file** in this mode and copy
+the failure details. Compare results against the original NLI mode,
+including the 18 ordinary passages. Then collect a fresh independent
+held-out corpus with real contradictions and unsupported inferences,
+not just supported conclusions, to assess whether the new mode
+actually improves generalisation.
+
+CI only checks the integration and parsing using simulated outputs.
+No real-model accuracy claim is made until its inference is measured.
