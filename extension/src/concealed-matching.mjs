@@ -17,7 +17,7 @@ export const concealedPatterns = compile(catalogue.patterns);
 const MAX_GAP = catalogue.maxGap || 260;
 const quoteOrReport = /\b(?:according to|reported|quoted|described|example|phrases? (?:like|such as)|said|stated|claimed|wrote|told)\b/i;
 const linking = /\b(?:but|however|yet|unless|otherwise|except|only if|although|in fact|instead)\b/i;
-const directPressure = /\b(?:must|have to|need to|are required to|or else|if you (?:don't|do not|won't|refuse)|unless you|you(?:'ll| will) (?:lose|be (?:punished|excluded|fired|removed|banned|shamed))|we(?:'ll| will) (?:punish|fire|exclude|ban|remove|shame|expose)|if you really cared|you(?:'re| are) (?:selfish|disloyal|ungrateful)|the only acceptable)\b/i;
+const directPressure = /\b(?:must|have to|need to|are required to|or else|if you (?:don't|do not|won't|refuse)|unless you|you(?:'ll| will) (?:lose|be (?:punished|excluded|fired|removed|banned|shamed))|we(?:'ll| will) (?:punish|fire|exclude|ban|remove|shame|expose)|if you really cared|if you (?:valued|loved|respected)|a (?:good|decent|loyal) (?:friend|colleague|parent|person|teammate) would|if you disagree|you(?:'re| are) (?:selfish|disloyal|ungrateful)|the only acceptable)\b/i;
 const boundary = /[.!?]/g;
 
 function hits(text, expressions) {
