@@ -124,7 +124,10 @@ function buildSummary(data, elapsedMs, cancelled) {
    recall: percentage(metrics.tp, metrics.tp + metrics.fn)
   })),
   failureSamples: data.failures, capturedFailures: data.failures.length,
-  paragraphStages: data.paragraphStages
+  paragraphStages: data.paragraphStages,
+  unlabelledScan: data.unlabelledScan,
+  predictions: data.unlabelledScan ? data.predictions : null,
+  predictionCounts: data.unlabelledScan ? data.predictionCounts : null
  };
 }
 async function startRun(message) {
@@ -150,13 +153,16 @@ async function startRun(message) {
   const seeds = argumentMode ? validateArgumentParagraphCases(rawSeeds) :
    consistency ? validateConsistencyCases(rawSeeds) : validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
+  const unlabelledScan = argumentMode &&
+   seeds.every(item => !Object.hasOwn(item,"expected_argument"));
   const limit = consistency || argumentMode || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
   const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
   // Structural-only files do not load the NLI model. A labelled 'expected'
   // field, including [], explicitly opts that row into reasoning evaluation.
-  const needsNli = argumentMode && seeds.some(item => Object.hasOwn(item, "expected"));
+  const needsNli = argumentMode &&
+   seeds.some(item => Object.hasOwn(item, "expected") || item.analyse_reasoning === true);
   if (consistency || needsNli) await initialiseConsistencyModel();
   else if (argumentMode) self.postMessage({type:"stage",
    message:"Checking argument structure locally (no AI download)…"});
@@ -169,8 +175,9 @@ async function startRun(message) {
   const data = { tested: 0, requested: total, exact: 0, tp: 0, fp: 0, fn: 0,
    negativeCount: 0, falsePositiveNegatives: 0, confusion: {}, perTechnique: {},
    realTracks: {}, failures: [],
-   paragraphStages: argumentMode ? { structure:{total:0,exact:0},
-    reasoning:{total:0,exact:0} } : null };
+   paragraphStages: argumentMode && !unlabelledScan ? { structure:{total:0,exact:0},
+    reasoning:{total:0,exact:0} } : null,
+   unlabelledScan, predictions: [], predictionCounts: {} };
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
@@ -184,7 +191,7 @@ async function startRun(message) {
     matches = structureCheck.predicted.map(label => ({
      start:0, end:item.text.length, technique:{id:label}, kind:"structure_check"
     }));
-    if (Object.hasOwn(item, "expected")) {
+    if (Object.hasOwn(item, "expected") || item.analyse_reasoning === true) {
      argumentAssessments = await analyseArguments(item.text, nliScorer, {
       onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
      });
@@ -224,6 +231,33 @@ async function startRun(message) {
    for (const match of matches) {
     if (match.start < 0 || match.end > item.text.length || match.start >= match.end)
      throw Error("Invalid match offsets in " + item.id);
+   }
+   if (unlabelledScan) {
+    const labels = [...new Set(argumentAssessments.map(a=>a.label))].sort();
+    const extracted = structureCheck.hypotheses.map(h=>({
+     sourceConclusion:h.sourceConclusion, modelConclusion:h.modelConclusion,
+     start:h.start,end:h.end,marker:h.marker
+    }));
+    const key=labels.join(", ") || (extracted.length ? "(no reasoning label)" : "(no extracted argument)");
+    data.predictionCounts[key]=(data.predictionCounts[key]||0)+1;
+    data.predictions.push({
+     id:item.id, text:item.text, source_url:item.source_url||null,
+     source_annotation:item.source_annotation||null,
+     extracted_arguments:extracted, predicted_labels:labels,
+     assessments:argumentAssessments.map(a=>({
+      label:a.label,premise:a.premise,conclusion:a.conclusion.text,
+      score:a.score,basis:a.basis,reason:a.reason||null
+     })),
+     diagnostics:argumentDiagnostics
+    });
+    data.tested++;
+    const now=performance.now();
+    if(now-lastUpdate>220 || i===total-1){
+     self.postMessage({type:"progress",runId:id,completed:data.tested,total});
+     lastUpdate=now;
+     await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    continue;
    }
    const expected = [...new Set(argumentMode
     ? [...structureCheck.expected, ...(item.expected ?? [])] : item.expected)].sort();
