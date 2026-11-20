@@ -3870,7 +3870,7 @@
     },
     {
       "id": "syn-v2-contradictory-101",
-      "text": "The final report counted 12 complaints for option an and 15 for option B. Therefore, option A had more complaints than option B in that report.",
+      "text": "The final report counted 12 complaints for option A and 15 for option B. Therefore, option A had more complaints than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3881,7 +3881,7 @@
     },
     {
       "id": "syn-v2-contradictory-102",
-      "text": "The final report counted 12 orders for option an and 16 for option B. Therefore, option A had more orders than option B in that report.",
+      "text": "The final report counted 12 orders for option A and 16 for option B. Therefore, option A had more orders than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3892,7 +3892,7 @@
     },
     {
       "id": "syn-v2-contradictory-103",
-      "text": "The final report counted 12 votes for option an and 17 for option B. Therefore, option A had more votes than option B in that report.",
+      "text": "The final report counted 12 votes for option A and 17 for option B. Therefore, option A had more votes than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3903,7 +3903,7 @@
     },
     {
       "id": "syn-v2-contradictory-104",
-      "text": "The final report counted 12 signatures for option an and 18 for option B. Therefore, option A had more signatures than option B in that report.",
+      "text": "The final report counted 12 signatures for option A and 18 for option B. Therefore, option A had more signatures than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3914,7 +3914,7 @@
     },
     {
       "id": "syn-v2-contradictory-105",
-      "text": "The final report counted 12 samples for option an and 19 for option B. Therefore, option A had more samples than option B in that report.",
+      "text": "The final report counted 12 samples for option A and 19 for option B. Therefore, option A had more samples than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3925,7 +3925,7 @@
     },
     {
       "id": "syn-v2-contradictory-106",
-      "text": "The final report counted 15 complaints for option an and 18 for option B. Consequently, option A had more complaints than option B in that report.",
+      "text": "The final report counted 15 complaints for option A and 18 for option B. Consequently, option A had more complaints than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3936,7 +3936,7 @@
     },
     {
       "id": "syn-v2-contradictory-107",
-      "text": "The final report counted 15 orders for option an and 19 for option B. Consequently, option A had more orders than option B in that report.",
+      "text": "The final report counted 15 orders for option A and 19 for option B. Consequently, option A had more orders than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3947,7 +3947,7 @@
     },
     {
       "id": "syn-v2-contradictory-108",
-      "text": "The final report counted 15 votes for option an and 20 for option B. Consequently, option A had more votes than option B in that report.",
+      "text": "The final report counted 15 votes for option A and 20 for option B. Consequently, option A had more votes than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3958,7 +3958,7 @@
     },
     {
       "id": "syn-v2-contradictory-109",
-      "text": "The final report counted 15 signatures for option an and 21 for option B. Consequently, option A had more signatures than option B in that report.",
+      "text": "The final report counted 15 signatures for option A and 21 for option B. Consequently, option A had more signatures than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3969,7 +3969,7 @@
     },
     {
       "id": "syn-v2-contradictory-110",
-      "text": "The final report counted 15 samples for option an and 22 for option B. Consequently, option A had more samples than option B in that report.",
+      "text": "The final report counted 15 samples for option A and 22 for option B. Consequently, option A had more samples than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3980,7 +3980,7 @@
     },
     {
       "id": "syn-v2-contradictory-111",
-      "text": "The final report counted 18 complaints for option an and 21 for option B. Thus, option A had more complaints than option B in that report.",
+      "text": "The final report counted 18 complaints for option A and 21 for option B. Thus, option A had more complaints than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -3991,7 +3991,7 @@
     },
     {
       "id": "syn-v2-contradictory-112",
-      "text": "The final report counted 18 orders for option an and 22 for option B. Thus, option A had more orders than option B in that report.",
+      "text": "The final report counted 18 orders for option A and 22 for option B. Thus, option A had more orders than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4002,7 +4002,7 @@
     },
     {
       "id": "syn-v2-contradictory-113",
-      "text": "The final report counted 18 votes for option an and 23 for option B. Thus, option A had more votes than option B in that report.",
+      "text": "The final report counted 18 votes for option A and 23 for option B. Thus, option A had more votes than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4013,7 +4013,7 @@
     },
     {
       "id": "syn-v2-contradictory-114",
-      "text": "The final report counted 18 signatures for option an and 24 for option B. Thus, option A had more signatures than option B in that report.",
+      "text": "The final report counted 18 signatures for option A and 24 for option B. Thus, option A had more signatures than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4024,7 +4024,7 @@
     },
     {
       "id": "syn-v2-contradictory-115",
-      "text": "The final report counted 18 samples for option an and 25 for option B. Thus, option A had more samples than option B in that report.",
+      "text": "The final report counted 18 samples for option A and 25 for option B. Thus, option A had more samples than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4035,7 +4035,7 @@
     },
     {
       "id": "syn-v2-contradictory-116",
-      "text": "The final report counted 21 complaints for option an and 24 for option B. Hence, option A had more complaints than option B in that report.",
+      "text": "The final report counted 21 complaints for option A and 24 for option B. Hence, option A had more complaints than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4046,7 +4046,7 @@
     },
     {
       "id": "syn-v2-contradictory-117",
-      "text": "The final report counted 21 orders for option an and 25 for option B. Hence, option A had more orders than option B in that report.",
+      "text": "The final report counted 21 orders for option A and 25 for option B. Hence, option A had more orders than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4057,7 +4057,7 @@
     },
     {
       "id": "syn-v2-contradictory-118",
-      "text": "The final report counted 21 votes for option an and 26 for option B. Hence, option A had more votes than option B in that report.",
+      "text": "The final report counted 21 votes for option A and 26 for option B. Hence, option A had more votes than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4068,7 +4068,7 @@
     },
     {
       "id": "syn-v2-contradictory-119",
-      "text": "The final report counted 21 signatures for option an and 27 for option B. Hence, option A had more signatures than option B in that report.",
+      "text": "The final report counted 21 signatures for option A and 27 for option B. Hence, option A had more signatures than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4079,7 +4079,7 @@
     },
     {
       "id": "syn-v2-contradictory-120",
-      "text": "The final report counted 21 samples for option an and 28 for option B. Hence, option A had more samples than option B in that report.",
+      "text": "The final report counted 21 samples for option A and 28 for option B. Hence, option A had more samples than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4090,7 +4090,7 @@
     },
     {
       "id": "syn-v2-contradictory-121",
-      "text": "The final report counted 26 complaints for option an and 29 for option B. It follows that option A had more complaints than option B in that report.",
+      "text": "The final report counted 26 complaints for option A and 29 for option B. It follows that option A had more complaints than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4101,7 +4101,7 @@
     },
     {
       "id": "syn-v2-contradictory-122",
-      "text": "The final report counted 26 orders for option an and 30 for option B. It follows that option A had more orders than option B in that report.",
+      "text": "The final report counted 26 orders for option A and 30 for option B. It follows that option A had more orders than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4112,7 +4112,7 @@
     },
     {
       "id": "syn-v2-contradictory-123",
-      "text": "The final report counted 26 votes for option an and 31 for option B. It follows that option A had more votes than option B in that report.",
+      "text": "The final report counted 26 votes for option A and 31 for option B. It follows that option A had more votes than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4123,7 +4123,7 @@
     },
     {
       "id": "syn-v2-contradictory-124",
-      "text": "The final report counted 26 signatures for option an and 32 for option B. It follows that option A had more signatures than option B in that report.",
+      "text": "The final report counted 26 signatures for option A and 32 for option B. It follows that option A had more signatures than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
@@ -4134,7 +4134,7 @@
     },
     {
       "id": "syn-v2-contradictory-125",
-      "text": "The final report counted 26 samples for option an and 33 for option B. It follows that option A had more samples than option B in that report.",
+      "text": "The final report counted 26 samples for option A and 33 for option B. It follows that option A had more samples than option B in that report.",
       "expected_argument": true,
       "expected": [
         "contradictory_claims"
