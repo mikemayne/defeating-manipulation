@@ -2,6 +2,7 @@
 // This module finds candidate premise/conclusion relationships; it never judges
 // whether a conclusion is supported. Keep that decision in the NLI layer.
 import { attributedSource } from './consistency.mjs';
+import { inferImplicitArguments } from './implicit-arguments.mjs';
 
 const MAX_STATEMENTS = 80;
 const MAX_ARGUMENTS = 8;
@@ -203,7 +204,7 @@ function precedingPremises(source, statements, index) {
  }
  return preceding;
 }
-export function extractArguments(source) {
+export function extractArguments(source, {includeImplicit=false}={}) {
  const statements=extractArgumentStatements(source);
  const results=[];
  for (let i=0;i<statements.length && results.length<MAX_ARGUMENTS;i++) {
@@ -252,6 +253,17 @@ export function extractArguments(source) {
   results.push({premise:combined, premises:prior,
    conclusion:{...conclusion,marker:marker[1].toLowerCase()},
    start:prior[0].start,end:conclusion.end});
+ }
+ if (includeImplicit && results.length<MAX_ARGUMENTS) {
+  const explicitConclusions=new Set(results.map(a=>a.conclusion.start+":"+a.conclusion.end));
+  const implicit=inferImplicitArguments(source,statements,{limit:Math.min(3,MAX_ARGUMENTS-results.length)});
+  for(const candidate of implicit){
+   const key=candidate.conclusion.start+":"+candidate.conclusion.end;
+   if(!explicitConclusions.has(key)) {
+    results.push(candidate);
+    explicitConclusions.add(key);
+   }
+  }
  }
  return results;
 }
