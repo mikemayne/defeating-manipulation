@@ -7,6 +7,19 @@ const words = sentence => new Set((sentence.toLowerCase().match(/[a-z0-9]{3,}/g)
  .filter(word => !STOP.has(word)));
 const temporal = sentence => (sentence.toLowerCase().match(/\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|today|yesterday|tomorrow|last year|next year|in 20\d\d)\b/g) || []).join(" ");
 
+// Distinguish a claim made by the writer from a report of what somebody said.
+// "The manager said X. The spokesperson said not-X." reports disagreement,
+// not an internally contradictory article. Only use clear leading attributions;
+// ambiguous wording is left for the existing NLI/context checks.
+export function attributedSource(sentence) {
+ const text = sentence.trim();
+ let match = text.match(/^(?:(?:the|an?|our)\s+)?([a-z][a-z'-]*(?:\s+[a-z][a-z'-]*){0,3})\s+(?:said|says|stated|states|claimed|claims|reported|reports|announced|announces|argued|argues|maintained|maintains|insisted|insists|asserted|asserts|wrote|writes|testified|testifies)\b/i);
+ if (!match) {
+  match = text.match(/^(?:according to|as (?:stated|reported) by)\s+(?:(?:the|an?|our)\s+)?([a-z][a-z'-]*(?:\s+[a-z][a-z'-]*){0,3})\s*[,;]/i);
+ }
+ return match ? match[1].toLowerCase().replace(/\s+/g, " ") : null;
+}
+
 export function extractClaims(source) {
  const claims = [];
  // Split on sentence terminators, semicolons and explicit line boundaries.
@@ -21,7 +34,7 @@ export function extractClaims(source) {
   if (text.length > 400 || (text.match(/\b[\w'-]+\b/g) || []).length < 4 ||
       /\?\s*$/.test(text) ||
       /^(?:if|suppose|imagine|hypothetically|for example|e\.g\.)\b/i.test(text)) continue;
-  claims.push({ text, start, end });
+  claims.push({ text, start, end, attributedTo: attributedSource(text) });
   if (claims.length >= MAX_CLAIMS) break;
  }
  return claims;
@@ -39,6 +52,10 @@ export function candidatePairs(claims) {
    // Different explicit periods do not, on their own, contradict each other.
    const t1 = temporal(claims[i].text), t2 = temporal(claims[j].text);
    if (t1 && t2 && t1 !== t2) continue;
+   // Reports from distinct identifiable speakers can disagree without the
+   // surrounding passage making two incompatible claims of its own.
+   if (claims[i].attributedTo && claims[j].attributedTo &&
+       claims[i].attributedTo !== claims[j].attributedTo) continue;
    ranked.push({ i, j, rank: 3 * common + 2 / (j - i) });
   }
  }
