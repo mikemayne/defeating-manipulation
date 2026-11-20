@@ -14,10 +14,12 @@ const PROXY=/\b(?:shares?|followers?|likes?|views?|downloads?|five.star|star rat
 const CERTAINTY=/\b(?:most popular|safest|best in|certain to win|sure to win|guaranteed to win|definitely win|will inevitably win|no (?:privacy|security|health|safety)(?:\s+or\s+(?:privacy|security|health|safety))?\s+risks?|cannot possibly|guaranteed|nothing can|every|all)\b/i;
 const FORECAST=/\b(?:published|posted|announced|released|unveiled|launched|introduced|adopted)\b.{0,70}\b(?:plan|strategy|proposal|policy|forecast|announcement)\b/i;
 const COMPLETED=/\b(?:all|every|zero|entire|whole|permanently|eliminated|eradicated|ended|solved|prevented|cannot possibly|guaranteed|never)\b/i;
-// A bounded completed intervention cannot, by itself, establish a
+// A bounded, concrete intervention cannot, by itself, establish a
 // universal or permanent outcome. This deliberately excludes rules,
 // exhaustive premises and contingent conclusions via the main gates below.
-const LOCAL_INTERVENTION=/\b(?:added|installed|replaced|redesigned|repainted|changed|introduced|purchased|bought|launched|started|began|opened|published|released|announced|held|attended|commissioned|planted|removed|offered|hired|updated|repaired|upgraded)\b/i;
+// Publishing, attending or announcing information is excluded: such texts may
+// contain actual evidence that must be assessed on its own terms.
+const LOCAL_INTERVENTION=/\b(?:added|installed|replaced|redesigned|repainted|changed|introduced|purchased|bought|launched|started|began|opened|planted|removed|offered|hired|updated|repaired|upgraded)\b/i;
 const STRONG_UNIVERSAL=/\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|entirely|guaranteed|without exception)\b/i;
 const QUOTED_LABEL=/\b(?:used the words|used the phrase|wrote the words|claimed in (?:an?|the) (?:advert|advertisement|marketing)|labelled itself)\b/i;
 function isHedged(text){
