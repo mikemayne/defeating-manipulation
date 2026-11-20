@@ -166,6 +166,13 @@ function renderResults(data) {
    (lastMode === "argument_support" || lastMode === "argument_reasoning") ? " cases with no explicit conclusion to assess." :
    " cases with no expected technique.") +
   " Results describe this test dataset, not accuracy on unseen writing.";
+ if (lastMode === "argument_reasoning") {
+  const counts = data.reasonerOutputs || {};
+  $("summary-note").textContent +=
+   " Local model replies: " +
+   Object.entries(counts).map(([status, number]) => status + "=" + number).join(", ") +
+   ". Invalid output is a format failure, not a reasoning verdict.";
+ }
  tableRows($("confusion"), data.confusion.slice(0, 20)
   .map(item => [item.pair, number(item.count)]), "No classification errors.");
  tableRows($("per-technique"), data.perTechnique
@@ -225,10 +232,15 @@ function failureReport(data) {
   if (item.reasoningResults?.length) {
    lines.push("Experimental local argument reasoning (not NLI scores):");
    for (const judgement of item.reasoningResults) {
-    lines.push("  " + judgement.label + " | Conclusion: " + judgement.conclusion +
+    lines.push("  " + judgement.label +
+     " | Parse: " + (judgement.parseStatus || "unknown") +
+     " | Conclusion: " + judgement.conclusion +
      " | Premises: " + judgement.premise +
      " | Explanation: " + judgement.reason +
      (judgement.marker ? " | Marker: " + judgement.marker : ""));
+    if (typeof judgement.rawOutput === "string")
+     lines.push("    Actual model output (max 700 characters): " +
+      JSON.stringify(judgement.rawOutput));
    }
   }
   if (item.argumentAssessments?.length) {
