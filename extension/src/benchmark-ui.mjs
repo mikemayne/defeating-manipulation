@@ -19,9 +19,10 @@ function updateSource() {
  const argumentMode = mode.value === "argument_paragraph";
  const readerMode = mode.value === "reader_inference";
  const boundaryMode = mode.value === "reader_boundary";
+ const compareMode = mode.value === "reader_compare";
  // One uploaded paragraph test schema, with optional NLI labels.
- source.options[0].disabled = argumentMode || readerMode || boundaryMode;
- if ((argumentMode || readerMode || boundaryMode) && source.value !== "uploaded") source.value = "uploaded";
+ source.options[0].disabled = argumentMode || readerMode || boundaryMode || compareMode;
+ if ((argumentMode || readerMode || boundaryMode || compareMode) && source.value !== "uploaded") source.value = "uploaded";
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
  const positive = mode.value.startsWith("positive_");
@@ -29,10 +30,12 @@ function updateSource() {
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
- count.max = consistency || argumentMode || readerMode || boundaryMode || concealed ? 10000 : 1000000;
+ count.max = consistency || argumentMode || readerMode || boundaryMode || compareMode || concealed ? 10000 : 1000000;
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
-  ? boundaryMode
+  ? compareMode
+   ? 'Upload the same 1,000 real-world {id,text} examples to compare progressive joins against original-context joins, using the same four candidate wordings and local model. Results show agreement and latency. Accuracy is only shown if a case includes expected_boundaries:[{offset,choice}], judged by a human; otherwise accuracy is unknown.'
+   : boundaryMode
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. Four-way local language-model comparison: original punctuation, no punctuation, and, but. One-time model download; scores indicate linguistic plausibility, not human reader percentages. Original text is never modified.'
    : readerMode
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. This runs an experimental local NLI probe for seven possible reader interpretations, including no implied connection; all model scores are uncalibrated, not percentages of readers or accuracy.'
@@ -136,6 +139,45 @@ function tableRows(body, rows, emptyLabel) {
 }
 function renderResults(data) {
  results.hidden = false;
+ if(data.compareMode){
+  const m=data.strategyComparison||{};
+  const accuracy=m.labelled?(
+   " | Context accuracy: "+percent(100*m.correctContext/m.labelled)+
+   " | Progressive accuracy: "+percent(100*m.correctProgressive/m.labelled)
+  ):" | Accuracy not measured: no reference labels";
+  $("stats").replaceChildren(
+   metric("Cases scanned",number(data.total)),
+   metric("Cases with boundaries",number(m.casesWithBoundaries||0)),
+   metric("Joins compared",number(m.pairs||0)),
+   metric("Approaches disagree",number(m.disagree||0)),
+   metric("Cumulative context changed",number(m.changedContext||0)),
+   metric("Neural comparisons",number(m.modelCalls||0)),
+   metric("Elapsed, seconds",oneDecimal(data.elapsedSeconds))
+  );
+  $("real-breakdown").hidden=true;
+  $("summary-note").textContent=
+   "Two strategies use the same four choices and local causal model. The progressive variant applies earlier confident joins; original-context uses unedited text. Their agreement is not accuracy."+
+   accuracy+
+   (m.unmatchedLabels?" | Unmatched gold offsets: "+m.unmatchedLabels:"");
+  const values=new Set([...Object.keys(m.byContext||{}),...Object.keys(m.byProgressive||{})]);
+  tableRows($("confusion"),[...values].sort().map(key=>[
+   key,number(m.byContext?.[key]||0)+" / "+number(m.byProgressive?.[key]||0)
+  ]),"No scorable boundaries");
+  tableRows($("per-technique"),m.labelled?[
+   ["Original-context",m.correctContext+" / "+m.labelled,
+    m.labelled-m.correctContext,percent(100*m.correctContext/m.labelled)],
+   ["Progressive",m.correctProgressive+" / "+m.labelled,
+    m.labelled-m.correctProgressive,percent(100*m.correctProgressive/m.labelled)]
+  ]:[],"No human labels: upload expected_boundaries offsets to score reference agreement.");
+  $("confusion-title").textContent="Replacement selections: context / progressive";
+  $("confusion-column").textContent="Choice";
+  $("per-technique-title").textContent="Reference-label comparison (if provided)";
+  $("failure-note").textContent="Export includes every original offset, both rankings, reconstruction, matched labels, and differences.";
+  copyButton.disabled=false;copyButton.textContent="Copy comparison";
+  downloadButton.hidden=false;downloadButton.disabled=false;
+  $("copied").textContent="";
+  return;
+ }
  if(data.boundaryMode){
   $("stats").replaceChildren(
    metric("Cases scanned",number(data.total)),
@@ -392,6 +434,50 @@ function failureReport(data) {
  }
  return lines.join("\n");
 }
+function comparisonReport(data){
+ const m=data.strategyComparison||{};
+ const lines=[
+  "Defeating Manipulation — Context vs Progressive Reconstruction",
+  "Model: local causal LM; same 4 choices and same length budget",
+  "Real-world predictions are UNLABELLED unless expected_boundaries supplied",
+  "Cases: "+data.total+" / "+data.requested,
+  "Cases with joins: "+m.casesWithBoundaries,
+  "Joins compared: "+m.pairs,
+  "Agree: "+m.agree+" | Disagree: "+m.disagree,
+  "Progressive context modified by previous joins: "+m.changedContext,
+  "Actual model calls (reused candidates cached): "+m.modelCalls,
+  "Elapsed seconds: "+oneDecimal(data.elapsedSeconds),
+  "Reference labels scored: "+m.labelled,
+  ...(m.labelled?[
+   "Context correct: "+m.correctContext+" / "+m.labelled,
+   "Progressive correct: "+m.correctProgressive+" / "+m.labelled
+  ]:["Accuracy cannot be calculated without human reference labels"]),
+  "","ALL CASES"
+ ];
+ for(const item of data.predictions){
+  lines.push("","--- "+item.id+" ---","Text: "+item.text);
+  if(!item.boundaries.length)lines.push("(no eligible boundary)");
+  for(const p of item.boundaries){
+   const gold=item.expected_boundaries?.find(x=>x.offset===p.punctuationStart);
+   lines.push("Offset: "+p.punctuationStart+
+    " | Boundary: "+p.boundaryKind+
+    " | Gold: "+(gold?.choice??"(unlabelled)"),
+    "Context: "+p.context.choice+
+    (p.context.uncertain?" (uncertain)":"")+
+    " | Scores: "+p.context.candidates.map(x=>
+     x.id+"="+(x.score===null?"N/A":x.score.toFixed(3))).join(", "),
+    "Progressive: "+p.progressive.choice+
+    (p.progressive.uncertain?" (uncertain)":"")+
+    " | Scores: "+p.progressive.candidates.map(x=>
+     x.id+"="+(x.score===null?"N/A":x.score.toFixed(3))).join(", "),
+    "Earlier joins affected context: "+p.contextChangedByEarlierJoins+
+    " | Disagree: "+(!p.sameChoice),
+    "Cumulative reconstruction: "+p.progressiveReconstructionAtBoundary
+   );
+  }
+ }
+ return lines.join("\n");
+}
 function boundaryReport(data){
  const lines=[
   "Defeating Manipulation — Four-way Punctuation Experiment",
@@ -511,6 +597,10 @@ async function copyTextToClipboard(text, successMessage) {
 }
 copyButton.addEventListener("click", async () => {
  if (!lastResult) return;
+ if(lastResult.compareMode){
+  await copyTextToClipboard(comparisonReport(lastResult),"Copied A/B comparison");
+  return;
+ }
  if(lastResult.boundaryMode){
   await copyTextToClipboard(boundaryReport(lastResult),"Copied punctuation rankings");
   return;
@@ -527,8 +617,14 @@ copyButton.addEventListener("click", async () => {
  await copyTextToClipboard(failureReport(lastResult), "Copied failure details");
 });
 downloadButton.addEventListener("click", () => {
- if (!lastResult?.unlabelledScan && !lastResult?.readerMode && !lastResult?.boundaryMode) return;
- const payload=lastResult.boundaryMode ? JSON.stringify({
+ if (!lastResult?.unlabelledScan && !lastResult?.readerMode && !lastResult?.boundaryMode && !lastResult?.compareMode) return;
+ const payload=lastResult.compareMode ? JSON.stringify({
+  schema_version:1,mode:"reader_context_vs_progressive",
+  total:lastResult.total,summary:lastResult.strategyComparison,
+  predictions:lastResult.predictions,
+  score_type:"mean_conditional_token_log_probability",
+  scores_are_human_percentages:false
+ },null,2)+"\n" : lastResult.boundaryMode ? JSON.stringify({
   schema_version:1,mode:"reader_boundary_reconstruction",
   total:lastResult.total,counts:lastResult.boundaryCounts,
   boundaries:lastResult.boundaryPairs,predictions:lastResult.predictions,
@@ -545,7 +641,8 @@ downloadButton.addEventListener("click", () => {
  const blob=new Blob([payload],{type:"application/json"});
  const url=URL.createObjectURL(blob);
  const anchor=document.createElement("a");
- anchor.href=url;anchor.download=lastResult.boundaryMode?
+ anchor.href=url;anchor.download=lastResult.compareMode?
+  "reader-strategies-context-vs-progressive.json":lastResult.boundaryMode?
   "reader-boundary-replacements.json":lastResult.readerMode?
   "reader-interpretation-predictions.json":"real-world-argument-predictions.json";
  document.body.append(anchor);anchor.click();anchor.remove();
@@ -583,7 +680,7 @@ function catalogues() {
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
- const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value.startsWith("concealed_")
+ const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare" || mode.value.startsWith("concealed_")
   ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
   setError("Choose a test count between 1 and " + number(maximum) + ".");
@@ -610,7 +707,7 @@ runButton.addEventListener("click", async () => {
   const [catalogue, patterns, manipulationFixture, consistencyFixture,
    positiveFixture, concealedFixture] = await catalogues();
   const fixture = mode.value === "consistency" ? consistencyFixture :
-   (mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary") ? {cases:[]} :
+   (mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare") ? {cases:[]} :
    mode.value.startsWith("positive_") ? positiveFixture :
    mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;
   runId++;
