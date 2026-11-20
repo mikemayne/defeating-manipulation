@@ -546,3 +546,19 @@ authored fictional positive and negative controls. Re-run the identical
 downloaded dataset after merging for a regression comparison, then verify
 performance on a different independently annotated sample before claiming
 generalisation.
+
+## Possible correction bait (spelling)
+
+When selected English text contains a likely spelling mistake, the extension
+underlines that word in blue with the warning: **“Possible correction bait —
+don't take it.”** The feature is intentionally cautious: it uses an offline
+en-GB dictionary and only marks words with a plausible one-edit correction,
+skipping capitalised names, links, handles and common service names. A warning
+is not evidence that an author deliberately misspelled something. The extension
+does not display suggested corrections or tell readers to reply.
+
+Firefox's native spelling marks are not exposed through a WebExtensions read
+API, so this check uses the open-source `nspell` engine and a bundled dictionary.
+Build with `npm run build` before running the unpacked extension. The generated
+`spell-en-gb.aff` and `spell-en-gb.dic` files remain local to the extension.
+The en-GB dictionary and affix data are licensed (MIT AND BSD), and nspell is MIT.

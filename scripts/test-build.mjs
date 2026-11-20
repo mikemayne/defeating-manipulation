@@ -1234,3 +1234,6 @@ await import('./test-argument-relations.mjs');
 
 // PR #28 reconciled against current matcher, with fictional hard negatives.
 await import('./test-four-patterns.mjs');
+
+// Typos are potential attention hooks, never proof of author intent.
+await import('./test-spelling-bait.mjs');

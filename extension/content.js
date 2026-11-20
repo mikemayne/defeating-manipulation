@@ -46,6 +46,7 @@
  // finding; this is not yet a concealed-manipulation judgement.
  const priority = match => match.kind === "argument_support" ? 5 :
    match.kind === "inconsistency" ? 4 :
+   match.kind === "spelling" ? 3.5 :
    match.technique.category === "Concealed manipulation" ? 3 :
    match.technique.category === "Positive" ? 1 : 2;
  const eligible = node => node.parentElement &&
@@ -56,7 +57,9 @@
    const title = document.createElement("strong");
    title.textContent = technique.title;
    const summary = document.createElement("div");
-   summary.textContent = technique.summary || "";
+   summary.textContent = match.kind === "spelling" ?
+     "Possible correction bait — don\u2019t take it. Correcting a typo can give a post attention and engagement. The error may be accidental." :
+     technique.summary || "";
    if (match.kind === "inconsistency") {
      const other = document.createElement("div");
      other.textContent = "Conflicting passage: “" + match.otherText + "”";
@@ -81,7 +84,8 @@
    }
    summary.style.margin = "6px 0 8px";
    const strength = document.createElement("div");
-   strength.textContent = match.kind === "inconsistency" ? "Inference: possible contradiction" :
+   strength.textContent = match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
+     match.kind === "inconsistency" ? "Inference: possible contradiction" :
      match.kind === "concealed" ? "Relationship: positive wording followed by pressure (check context)" :
      match.kind === "argument_support" ? "Inference: premise-to-conclusion support (check context)" :
      match.method === "pattern" ? "Match: Rule" :

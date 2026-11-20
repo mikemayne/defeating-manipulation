@@ -1,4 +1,6 @@
 import { pipeline, env } from "@huggingface/transformers";
+import nspell from "nspell";
+import { findSpellingBait } from "./spelling-bait.mjs";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
 import { findInconsistencies } from "./consistency.mjs";
@@ -25,7 +27,7 @@ async function scorePair(premise, hypothesis) {
  const score = await inferenceModelPromise;
  return score ? score(premise, hypothesis) : null;
 }
-let extractor, techniques = [], rules = [], prototypes = [], positivePrototypes = [], initialising;
+let extractor, spellchecker, techniques = [], rules = [], prototypes = [], positivePrototypes = [], initialising;
 
 async function embed(texts) {
  const result = [];
@@ -41,6 +43,13 @@ async function embed(texts) {
 async function initialise(catalogue, patternCatalogue) {
  techniques = catalogue.techniques || [];
  rules = compilePatternRules(catalogue, patternCatalogue);
+ // Load the packaged dictionary locally. Failure only disables spelling hints.
+ const spellingReady = Promise.all(["aff", "dic"].map(async ext => {
+  const response = await fetch(new URL("./spell-en-gb." + ext, self.location.href));
+  if (!response.ok) throw new Error("Cannot load bundled spelling dictionary");
+  return response.text();
+ })).then(([aff, dic]) => { spellchecker = nspell({ aff, dic }); })
+  .catch(error => console.warn("Local spellcheck unavailable:", error));
  try {
   extractor = await pipeline("feature-extraction", MODEL, { dtype: "q8" });
   const entries = prototypeEntries(techniques);
@@ -57,6 +66,7 @@ async function initialise(catalogue, patternCatalogue) {
   prototypes = [];
   positivePrototypes = [];
  }
+ await spellingReady;
  self.postMessage({ type: "ready" });
 }
 
@@ -70,6 +80,8 @@ self.addEventListener("message", async event => {
  if (data.type !== "match") return;
  try {
   await initialising;
+  const spellingMatches = findSpellingBait(data.text, spellchecker,
+   techniques.find(item => item.id === "deliberate_errors"));
   const matches = await matchText(data.text, { techniques, rules, prototypes,
    embed: extractor ? embed : null });
   // Separate green pass: do not let it compete with the established negative
@@ -107,7 +119,7 @@ self.addEventListener("message", async event => {
    console.warn("Local argument analysis unavailable:", error);
   }
   self.postMessage({ id: data.id,
-   matches: [...matches, ...positiveMatches, ...concealedMatches,
+   matches: [...matches, ...spellingMatches, ...positiveMatches, ...concealedMatches,
     ...inconsistencies, ...argumentIssues] });
  } catch (error) {
   self.postMessage({ id: data.id, error: String(error?.message || error) });
