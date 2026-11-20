@@ -61,6 +61,10 @@ export function extractBoundaryProbes(source,{maxPairs=MAX_PAIRS}={}){
  }
  const limit=Math.min(MAX_STRATEGY_PAIRS,maxPairs);
  if(unique.length<=limit)return unique;
+ // The historical two-boundary diagnostic sampled first + last. The new
+ // progressive chain must instead use consecutive boundaries, otherwise
+ // skipped middle joins cannot contribute to the growing reconstruction.
+ if(limit>2)return unique.slice(0,limit);
  if(limit===1)return [unique[0]];
  return [unique[0],unique[unique.length-1]];
 }
