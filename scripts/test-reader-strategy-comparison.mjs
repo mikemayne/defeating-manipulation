@@ -71,4 +71,17 @@ const long=await compareReaderStrategies(repeated,async (_a,b)=>b.startsWith(" a
 assert.equal(long.length,5,"All five boundaries should be scored, not just two");
 assert.ok(long.at(-1).contextChangedByEarlierJoins);
 assert.ok(long.every(x=>x.punctuationStart>=0 && x.punctuationEnd>x.punctuationStart));
+assert.ok(out[1].progressiveReconstructionThroughSecond.includes(
+ "but he raised them but his supporters protested"),
+ "Analysis-only output should include the entire accumulated reconstruction");
+const longMany=Array.from({length:11},(_,i)=>
+ ["Alpha arrived very late","Beta entered the building","Gamma reviewed the papers",
+ "Delta called the manager","Epsilon checked the records","Zeta joined the meeting",
+ "Eta posted the results","Theta inspected the device","Iota carried the parcels",
+ "Kappa finished the work","Lambda explained the decision"][i]+".").join(" ");
+const consecutive=await compareReaderStrategies(longMany,async()=>-2,{maxPairs:8});
+assert.equal(consecutive.length,8,"Bound a longer chain at eight consecutive joins");
+const allPoints=extractBoundaryProbes(longMany,{maxPairs:8}).map(x=>x.punctuationStart);
+assert.ok(allPoints.every((x,i)=>i===0||x>allPoints[i-1]));
+assert.ok(consecutive.every((x,i)=>x.punctuationStart===allPoints[i]));
 console.log("Strategy comparison: context/progressive, growing joins, caching, ties, gold metrics and multiple boundaries passed.");
