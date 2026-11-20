@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "description": "Original artificial contrast tests for attribution-aware consistency: disagreement between sources does not make an article internally inconsistent. Premise-to-conclusion support is a later feature.",
+  "cases": [
+    {
+      "id": "sources-different-1",
+      "group": "different_sources",
+      "text": "The manager said the library charged a fee for entry. The spokesperson said the library offered free entry.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-1",
+      "group": "same_source",
+      "text": "The manager said the library charged a fee for entry. The manager later said the library offered free entry.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-2",
+      "group": "different_sources",
+      "text": "The director said the museum was open on Sunday. The auditor said the museum was closed on Sunday.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-2",
+      "group": "same_source",
+      "text": "The director said the museum was open on Sunday. The director later said the museum was closed on Sunday.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-3",
+      "group": "different_sources",
+      "text": "The treasurer said the clinic accepted cash payments. The councillor said the clinic refused cash payments.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-3",
+      "group": "same_source",
+      "text": "The treasurer said the clinic accepted cash payments. The treasurer later said the clinic refused cash payments.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-4",
+      "group": "different_sources",
+      "text": "The operator said the rail service had completed all inspections. The inspector said the rail service had not completed any inspections.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-4",
+      "group": "same_source",
+      "text": "The operator said the rail service had completed all inspections. The operator later said the rail service had not completed any inspections.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-5",
+      "group": "different_sources",
+      "text": "The chairperson said the school was hiring new staff. The secretary said the school was not hiring any new staff.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-5",
+      "group": "same_source",
+      "text": "The chairperson said the school was hiring new staff. The chairperson later said the school was not hiring any new staff.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-6",
+      "group": "different_sources",
+      "text": "The owner said the community centre had increased capacity. The accountant said the community centre had reduced capacity.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-6",
+      "group": "same_source",
+      "text": "The owner said the community centre had increased capacity. The owner later said the community centre had reduced capacity.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-7",
+      "group": "different_sources",
+      "text": "The administrator said the recycling centre was open to visitors. The representative said the recycling centre was closed to visitors.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-7",
+      "group": "same_source",
+      "text": "The administrator said the recycling centre was open to visitors. The administrator later said the recycling centre was closed to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-8",
+      "group": "different_sources",
+      "text": "The researcher said the laboratory published its results. The reviewer said the laboratory had not published its results.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-8",
+      "group": "same_source",
+      "text": "The researcher said the laboratory published its results. The researcher later said the laboratory had not published its results.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-9",
+      "group": "different_sources",
+      "text": "The organiser said the market had an online booking system. The official said the market did not have any online booking system.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-9",
+      "group": "same_source",
+      "text": "The organiser said the market had an online booking system. The organiser later said the market did not have any online booking system.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-10",
+      "group": "different_sources",
+      "text": "The supervisor said the hotel offered a refund. The coordinator said the hotel refused all refunds.",
+      "expected": []
+    },
+    {
+      "id": "sources-same-10",
+      "group": "same_source",
+      "text": "The supervisor said the hotel offered a refund. The supervisor later said the hotel refused all refunds.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-named-different",
+      "group": "different_sources",
+      "text": "Jane Smith stated the station was open. Mark Taylor stated the station was closed.",
+      "expected": []
+    },
+    {
+      "id": "sources-according-to",
+      "group": "different_sources",
+      "text": "According to the auditor, the project is complete. According to the manager, the project is incomplete.",
+      "expected": []
+    },
+    {
+      "id": "sources-according-to-same",
+      "group": "same_source",
+      "text": "According to the manager, the project is complete. According to the manager, the project is incomplete.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-unattributed",
+      "group": "direct_contradiction",
+      "text": "The station is open every weekday. The station is closed every weekday.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "sources-different-years",
+      "group": "different_dates",
+      "text": "In 2024 the gallery charged admission. In 2025 the gallery did not charge admission.",
+      "expected": []
+    }
+  ]
+}
