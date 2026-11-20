@@ -515,3 +515,34 @@ Real media and social-media collections are kept **outside the repository**;
 no scraped passages, source URLs, or downloadable corpus is committed.
 Testing the unchanged browser NLI model on a separate, independently labelled
 paragraph collection is still needed before claiming real-world improvement.
+
+
+### Single-paragraph media reasoning: structural coverage and explicit relations
+
+The argument analyser retains the same local `Xenova/distilbert-base-uncased-mnli`
+model. A new extraction pass covers factual `X, so Y` clauses and leading
+`That means / That proves / That guarantees`, while preserving the original
+conclusion offsets and preceding premises in a single paragraph. Explanations
+such as `Because of the rain, the event was cancelled` are not assumed to be
+self-contained arguments.
+
+The separate, deterministic `src/argument-claim-relations.mjs` checks only
+narrow observable relationships: same-topic opposite actions, a clearly
+conflicting venue ticket claim, and a limited sample being presented as a
+whole-population result. The rules require matching scope and abstain for
+different dates, groups, locations, resale tickets or qualified conclusions.
+A verified opposing relationship can prevent a bad high-confidence model
+entailment from becoming a false `supported_conclusion` verdict.
+
+**Rule match scores are binary indicators, not calibrated probabilities or
+independent corroboration.** Do not treat a sentence as factually false or
+its author as dishonest solely because a supplied premise and conclusion
+appear inconsistent. Unknown cases still abstain without red underlines.
+
+These changes were motivated by a user-run 100-paragraph exploratory
+media/social benchmark (80/100 structural, 35/100 reasoning before this
+change). The corpus **is not included or committed**; CI exercises separately
+authored fictional positive and negative controls. Re-run the identical
+downloaded dataset after merging for a regression comparison, then verify
+performance on a different independently annotated sample before claiming
+generalisation.

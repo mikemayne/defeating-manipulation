@@ -1,6 +1,7 @@
 import { extractArguments } from "./argument-clauses.mjs";
 import { normaliseClaimForNli } from "./argument-claim-normalisation.mjs";
 import { explicitConflict, specificEvidenceGap } from "./argument-evidence-checks.mjs";
+import { observableContradiction, observableSamplingLeap } from "./argument-claim-relations.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -75,7 +76,25 @@ export function combineArgumentEvidence(scored, conclusionText = "") {
    ? { label: "supported_conclusion", score: 1 }
    : classifyArgumentScore(item.forward, item.reverse);
   let evidence = null;
-  if (verdict?.label === "contradictory_claims") {
+  // The NLI model has returned confident entailment for literal opposites.
+  // For very narrow, same-scope propositions, a deterministic relation
+  // check can override that error; uncertain cases still abstain.
+  const otherPremises = scored.some(s => s.kind.startsWith("premise_"));
+  const atomic = !(item.kind === "combined" && otherPremises);
+  const direct = atomic
+   ? observableContradiction(item.text, conclusionText) : {verified:false};
+  const leap = atomic && !direct.verified
+   ? observableSamplingLeap(item.text, conclusionText) : {verified:false};
+  if (direct.verified) {
+   verdict = {label:"contradictory_claims",score:1,
+    reason:"rule_based_"+direct.reason};
+   evidence = {verdict,status:"verified_explicit_relation",reason:direct.reason};
+  } else if (leap.verified && !explicitConflict(item.text,conclusionText).verified) {
+   verdict = {label:"unsupported_conclusion",score:1,
+    reason:"rule_based_"+leap.reason};
+   evidence = {verdict,status:"verified_sample_scope_leap",reason:leap.reason};
+  }
+  if (!evidence && verdict?.label === "contradictory_claims") {
    const conflict = explicitConflict(item.text, conclusionText);
    if (!conflict.verified) {
     // Extremely high bidirectional NLI disagreement can still be a spurious
