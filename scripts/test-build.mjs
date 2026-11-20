@@ -1228,3 +1228,6 @@ await import('./test-media-social-arguments.mjs');
 
 // The lab runs one single-paragraph upload mode, not retired parallel argument modes.
 await import('./test-argument-paragraph-upload.mjs');
+
+// Narrow, model-independent premise/conclusion relations and false-red guards.
+await import('./test-argument-relations.mjs');
