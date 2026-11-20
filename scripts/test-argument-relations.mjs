@@ -19,6 +19,7 @@ const contrasts=[
  {id:'one-event',premise:'A poll of thirty concert visitors praised the new arena.',conclusion:'The whole city supports the new arena.',expected:'gap'},
  {id:'most-comments',premise:'Most comments under the housing post support the proposal.',conclusion:'All citizens in the county support the housing proposal.',expected:'gap'},
  {id:'single-route',premise:'One cycle track in the district has new lighting.',conclusion:'Every cycle track in the district has new lighting.',expected:'gap'},
+ {id:'different-speakers',premise:'The editor said the theatre opens on Monday.',conclusion:'The manager said the theatre closes on Monday.',expected:'none'},
  {id:'different-dates',premise:'The library opens to visitors on Tuesday.',conclusion:'The library is closed to visitors on Wednesday.',expected:'none'},
  {id:'different-groups',premise:'Children enter the theatre free of charge.',conclusion:'Adults must pay an admission fee at the theatre.',expected:'none'},
  {id:'different-areas',premise:'The northern car park is open this morning.',conclusion:'The southern car park is closed this morning.',expected:'none'},
