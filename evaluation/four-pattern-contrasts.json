@@ -1,0 +1,335 @@
+{
+  "version": 1,
+  "description": "Independent fictional mechanism-focused positives and hard-negative counterexamples. These are original regression cases, not copies of the user's separately held news data.",
+  "variants": [
+    "original"
+  ],
+  "cases": [
+    {
+      "id": "precision-positive-1-cherry_picking",
+      "text": "Five offices reported higher productivity, so the reform is obviously successful; disregard all the remaining reports.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-2-cherry_picking",
+      "text": "The two favourable trials were encouraging, therefore the medicine is proven effective; omit the other clinical findings.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-3-cherry_picking",
+      "text": "A few towns reported growth, so the strategy must work everywhere; ignore the contrary data.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-4-cherry_picking",
+      "text": "Some respondents liked the proposal, thus public approval is universal; exclude all the negative responses.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-5-red_herring",
+      "text": "Why debate the safety of the bridge when there are so many problems with the football stadium?",
+      "expected": [
+        "red_herring"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-6-red_herring",
+      "text": "Why examine the errors in the council records when there are more urgent issues involving litter?",
+      "expected": [
+        "red_herring"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-7-red_herring",
+      "text": "Why talk about our company's unpaid bills when there are countless problems in the tourist industry?",
+      "expected": [
+        "red_herring"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-8-red_herring",
+      "text": "Why question the new equipment's reliability when there are much bigger crises in local housing?",
+      "expected": [
+        "red_herring"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-9-loaded_language",
+      "text": "This shameful, despicable measure is another outrageous embarrassment.",
+      "expected": [
+        "loaded_language"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-10-loaded_language",
+      "text": "The proposal's grotesque design is absolutely deplorable.",
+      "expected": [
+        "loaded_language"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-11-loaded_language",
+      "text": "An appalling and revolting decision by an incompetent board.",
+      "expected": [
+        "loaded_language"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-12-loaded_language",
+      "text": "Such scandalous, abhorrent rhetoric is disgraceful.",
+      "expected": [
+        "loaded_language"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-13-appeal_to_fear",
+      "text": "If you refuse to subscribe now, your loved ones may face catastrophe.",
+      "expected": [
+        "appeal_to_fear"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-14-appeal_to_fear",
+      "text": "If you don't purchase this protective plan, your children could face disaster.",
+      "expected": [
+        "appeal_to_fear"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-15-appeal_to_fear",
+      "text": "If you do not join the service this week, your family could suffer a tragedy.",
+      "expected": [
+        "appeal_to_fear"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-positive-16-appeal_to_fear",
+      "text": "If you fail to renew the subscription immediately, your children may be at risk of serious harm.",
+      "expected": [
+        "appeal_to_fear"
+      ],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-1",
+      "text": "The regional offices reported higher productivity, but the remaining reports are still being reviewed.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-2",
+      "text": "The two clinical trials were successful, although subsequent trials may be needed.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-3",
+      "text": "The strategy reported improvements in four towns and worsening results in three.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-4",
+      "text": "Five offices found higher employment, but auditors examined all the remaining reports.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-5",
+      "text": "The analyst excluded invalid readings only after explaining why each was unreliable.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-6",
+      "text": "The analyst said the experiment succeeded, so researchers planned a follow-up trial.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-7",
+      "text": "The presenter explained which other measurements were ignored and why.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-8",
+      "text": "The editor instructed staff to ignore other documents that were no longer relevant to the subject.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-9",
+      "text": "The project team discussed possible evidence of cherry picking in its methodological review.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-10",
+      "text": "The council's decision was described as appalling by one attendee and welcomed by several others.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-11",
+      "text": "The newspaper quoted two words from the signs: appalling and shameful.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-12",
+      "text": "The classification list included the terms grotesque and revolting for editorial review.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-13",
+      "text": "The article reported that residents used the word disgraceful when discussing local transport.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-14",
+      "text": "A gallery of disgusting photographs was described without quoting any of the captions.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-15",
+      "text": "The meeting considered whether an emotional description of the proposal was justified.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-16",
+      "text": "Why discuss the timetable when the timetable has not yet been published?",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-17",
+      "text": "The chair asked why the safety review needed to be discussed when all attendees had received it.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-18",
+      "text": "The two separate committees discussed local housing and tourism in the same session.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-19",
+      "text": "Why debate the water shortage when there are more urgent problems with repairing water pipes?",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-20",
+      "text": "The journalist asked why talk about the budget when there are serious issues with the budget's calculations.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-21",
+      "text": "The housing department explained that bridge repairs were a separate project.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-22",
+      "text": "If you don't buy a ticket this evening, the early booking discount will end.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-23",
+      "text": "If you do not purchase the equipment, the store will not deliver it.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-24",
+      "text": "If you fail to renew your membership, you will lose access to the online portal.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-25",
+      "text": "If you refuse to sign up, you can still read all the public information.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-26",
+      "text": "Buyers were warned that damaged electrical cables can present a genuine danger to children.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-27",
+      "text": "The safety authority issued a documented warning about a wildfire evacuation.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-28",
+      "text": "The company published the dates on which purchase orders could be submitted.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-29",
+      "text": "The hospital advised households to keep medicines secured away from children.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-30",
+      "text": "The family wanted to compare insurance options before deciding whether to subscribe.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-31",
+      "text": "The annual review found evidence of catastrophic floods but did not recommend buying anything.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-32",
+      "text": "The technician reported an appalling smell and a damaged ventilation pipe.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "precision-negative-33",
+      "text": "The investigation referred to shameful and outrageous language in a quoted speech.",
+      "expected": [],
+      "gate": true
+    }
+  ]
+}
