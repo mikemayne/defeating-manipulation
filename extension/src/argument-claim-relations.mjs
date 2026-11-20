@@ -83,6 +83,8 @@ const SOME_CLOSE=/\b(?:shops?|branches?|stores?)\b.{0,45}\b(?:will|would)\s+clos
 export function observableContradiction(premise,conclusion) {
  const p=String(premise||''),c=String(conclusion||'');
  const shared=sharedScope(p,c);
+ if(/\b(?:may|might|could|possibly|perhaps|apparently)\b/i.test(c))
+  return {verified:false,reason:'qualified_conclusion'};
  if(!shared?.length)return {verified:false,reason:'no_unambiguous_shared_scope'};
  const normalizedP=p.replace(/\brather than\s+\w+\b/gi,'');
  const normalizedC=c.replace(/\brather than\s+\w+\b/gi,'');
