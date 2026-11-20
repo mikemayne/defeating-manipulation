@@ -8,6 +8,7 @@ import {inferNumericTemporalConstraint} from './argument-numeric-temporal.mjs';
 import {inferSupportedDerivation} from './argument-supported-derivations.mjs';
 import {inferExplicitPolicyPrerequisite} from './argument-policy-prerequisites.mjs';
 import {inferGeneralisedPremiseProof} from './argument-generalised-proofs.mjs';
+import {inferClosedScopeRelation} from './argument-closed-scope.mjs';
 
 const MAX_NODES=40,MAX_DEPTH=3;
 const QUOTE=/["“”]/;
@@ -80,9 +81,10 @@ export function inspectArgumentProof(premise,conclusion){
  const derived=inferSupportedDerivation(p,goal);
  const policy=inferExplicitPolicyPrerequisite(p,goal);
  const generalised=inferGeneralisedPremiseProof(p,goal);
+ const closedScope=inferClosedScopeRelation(p,goal);
  // A disagreement between independent deterministic interpreters means a
  // malformed/ambiguous proposition or scope: do not pick a winner.
- const verifiedRelations=[numeric,typed,quantified,temporal,derived,policy,generalised].filter(Boolean);
+ const verifiedRelations=[numeric,typed,quantified,temporal,derived,policy,generalised,closedScope].filter(Boolean);
  if(new Set(verifiedRelations.map(x=>x.label)).size>1){
   graph.missingLinks.push({type:'conflicting_proof_interpreters',
    statement:goal,neededFor:goal,certainty:'unverified'});
