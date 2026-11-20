@@ -7,7 +7,7 @@ const MONTHS=['january','february','march','april','may','june','july','august',
 const MONTH_PART=MONTHS.join('|');
 const UNITS='cm|mm|kg|centimetres?|centimeters?|millimetres?|millimeters?|metres?|meters?|kilograms?|degrees?';
 const RULE_MARKED=/\ball\s+([a-z-]{3,30})\s+(?:marked|labelled|labeled)\s+([a-z-]{3,25})\s+(?:require|must undergo)\s+(?:a|an)\s+([a-z-]+(?:\s+[a-z-]+){0,3})(?=[.!?]|$)/gi;
-const FACT_MARKED=/\bthe\s+([a-z-]{3,30})\s+assigned\s+to\s+([a-z-]{2,25})\s+is\s+(?:marked|labelled|labeled)\s+([a-z-]{3,25})\b/gi;
+const FACT_MARKED=/\bthe\s+([a-z-]{3,30})\s+assigned\s+to\s+([a-z-]{2,25})\s+is\s+(?:also\s+|additionally\s+)?(?:marked|labelled|labeled)\s+([a-z-]{3,25})\b/gi;
 const CLAIM_MARKED=/\bthe\s+([a-z-]{3,30})\s+assigned\s+to\s+([a-z-]{2,25})\s+(?:requires|must undergo)\s+(?:a|an)\s+([a-z-]+(?:\s+[a-z-]+){0,3})(?=\s+under\s+that\s+rule\b|[.!?]|$)/gi;
 const THRESHOLD=new RegExp('\\bthe\\s+([a-z-]+(?:\\s+[a-z-]+){0,2})\\s+(?:activates|engages|sounds|triggers)\\s+if\\s+the\\s+([a-z-]+(?:\\s+[a-z-]+){0,2})\\s+reads\\s+(below|under|above|over)\\s+(\\d+(?:\\.\\d+)?)\\s+('+UNITS+')\\b','gi');
 const READING=new RegExp('\\bthe\\s+([a-z-]+(?:\\s+[a-z-]+){0,2})\\s+(?:currently|now)\\s+reads\\s+(\\d+(?:\\.\\d+)?)\\s+('+UNITS+')\\b','gi');
