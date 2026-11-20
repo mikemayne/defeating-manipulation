@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {inferQuantifierRelation,extractQuantifiedPropositions} from '../extension/src/argument-quantifiers.mjs';
 import {inferTypedNumericRelation,extractTypedNumericalFacts} from '../extension/src/argument-numeric-relations.mjs';
 import {inferNumericTemporalConstraint} from '../extension/src/argument-numeric-temporal.mjs';
+import {inferSupportedDerivation} from '../extension/src/argument-supported-derivations.mjs';
 
 // Fresh, independent controls, distinct from the labelled 200-paragraph
 // corpus. The same rules must resist changed groups, scopes and modalities.
@@ -204,6 +205,76 @@ const temporalNegative=[
 ];
 for(const [id,p,c] of temporalNegative)
  assert.equal(inferNumericTemporalConstraint(p,c),null,'numeric/temporal abstention '+id);
+// Novel controls for arithmetically provable conclusions: no NLI confidence
+// shortcut and no assumption that partial inventories are exhaustive.
+const derivedPositives=[
+ ['cost','The cab fare is £15 plus £4 for each of three extra stops.',
+  'This journey costs £27 before any tip.'],
+ ['remaining','Three of the eleven lamps were moved to storage, leaving eight in the main gallery.',
+  'Eight of the original eleven lamps remain there.'],
+ ['inventory','The clinic inventory identifies seven unused stretchers and two in service.',
+  'The inventory accounts for nine stretchers in total.'],
+ ['travel','The trip planner gives a 18-minute cycle and a 31-minute bus journey for the same trip.',
+  'Its cycling estimate is thirteen minutes shorter.'],
+ ['conditional','If the drainage level drops below six metres, the inlet pump shuts down. The gauge now reads 5.5 metres.',
+  'The stated shutdown condition has been met.']
+];
+for(const [id,p,c] of derivedPositives){
+ const got=inferSupportedDerivation(p,c);
+ assert.equal(got?.label,'supported_conclusion',id+': '+JSON.stringify(got));
+ assert.ok(got.verified&&got.chain.at(-1).type==='javascript_proof',id);
+}
+const derivedNegatives=[
+ ['wrong-total','The cab fare is £15 plus £4 for each of three extra stops.',
+  'This journey costs £29 before any tip.'],
+ ['wrong-currency','The cab fare is $15 plus $4 for each of three extra stops.',
+  'This journey costs £27 before any tip.'],
+ ['missing-stop-count','The cab fare is £15 plus £4 per extra stop.',
+  'This journey costs £27 before any tip.'],
+ ['other-charge','The cab fare is £15 plus £4 for each of three extra stops, plus a £5 surcharge.',
+  'This journey costs £27 before any tip.'],
+ ['left-does-not-add','Three of the eleven lamps were moved to storage, leaving seven in the main gallery.',
+  'Eight of the original eleven lamps remain there.'],
+ ['different-items','Three of the eleven lamps were moved to storage, leaving eight in the main gallery.',
+  'Eight of the original eleven chairs remain there.'],
+ ['unclear-remaining','Three of the eleven lamps were moved to storage.',
+  'Eight of the original eleven lamps remain there.'],
+ ['inventory-overlap','The clinic inventory identifies seven available stretchers and two in service.',
+  'The inventory accounts for nine stretchers in total.'],
+ ['inventory-wrong-sum','The clinic inventory identifies seven unused stretchers and two in service.',
+  'The inventory accounts for eleven stretchers in total.'],
+ ['inventory-different-item','The clinic inventory identifies seven unused stretchers and two in service.',
+  'The inventory accounts for nine wheelchairs in total.'],
+ ['travel-different-trip','The trip planner gives a 18-minute cycle and a 31-minute bus journey for separate trips.',
+  'Its cycling estimate is thirteen minutes shorter.'],
+ ['travel-wrong-difference','The trip planner gives a 18-minute cycle and a 31-minute bus journey for the same trip.',
+  'Its cycling estimate is fourteen minutes shorter.'],
+ ['gauge-not-low','If the drainage level drops below six metres, the inlet pump shuts down. The gauge now reads 7.2 metres.',
+  'The stated shutdown condition has been met.'],
+ ['gauge-other','If the drainage level drops below six metres, the inlet pump shuts down. Another gauge now reads 5.5 metres.',
+  'The stated shutdown condition has been met.'],
+ ['gauge-unit-mismatch','If the drainage level drops below six metres, the inlet pump shuts down. The gauge now reads 5.5 feet.',
+  'The stated shutdown condition has been met.'],
+ ['gauge-hedged','If the drainage level drops below six metres, the inlet pump might shut down. The gauge now reads 5.5 metres.',
+  'The stated shutdown condition has been met.']
+];
+for(const [id,p,c] of derivedNegatives)
+ assert.equal(inferSupportedDerivation(p,c),null,id+' must abstain');
+// Month names are not modal verbs: a source date in May must still be parsed.
+const calendarPositive=[
+ ['The pageant ends on 28 April and today is 2 May.','The pageant has already ended.'],
+ ['The carnival ends on 14 May and tonight is 15 May.','The carnival has already ended.']
+];
+for(const [p,c] of calendarPositive)
+ assert.equal(inferNumericTemporalConstraint(p,c)?.label,'supported_conclusion','calendar-May month parsing: '+p);
+const calendarNegative=[
+ ['The pageant may end on 28 April and today is 2 May.','The pageant has already ended.'],
+ ['The pageant ends on 28 April and today might be 2 May.','The pageant has already ended.'],
+ ['The pageant ends on 28 April and today is 2 April.','The pageant has already ended.'],
+ ['The pageant ends on 28 April and today is 2 May.','The parade has already ended.']
+];
+for(const [p,c] of calendarNegative)
+ assert.equal(inferNumericTemporalConstraint(p,c),null,'calendar claim must abstain: '+p+' / '+c);
 assert.ok(extractQuantifiedPropositions('All seven lockers were sealed.').length>0);
 assert.ok(extractTypedNumericalFacts('We recorded 20 widgets in April and 24 widgets in May.').length===2);
 console.log(`Typed reasoning tests: ${quantPositive.length} quantifier positives, ${quantNegatives.length} quantifier abstentions, ${numberPositive.length} numeric positives, ${numberNegatives.length} numeric abstentions passed.`);
@@ -236,6 +307,15 @@ const temporalCombined=combineArgumentEvidence([
   forward:{contradiction:0.995,neutral:0.004,entailment:0.001}}
 ],temporalPositive[6][2]);
 assert.equal(temporalCombined?.label,'supported_conclusion');
+for(const [id,p,c] of derivedPositives){
+ const verified=inspectArgumentProof(p,c);
+ assert.equal(verified.verified?.label,'supported_conclusion','graph: '+id+': '+JSON.stringify(verified.verified));
+}
+const guarded=combineArgumentEvidence([{
+ kind:'combined',text:derivedPositives[0][1],
+ forward:{contradiction:0.996,neutral:0.003,entailment:0.001}
+}],derivedPositives[0][2]);
+assert.equal(guarded?.label,'supported_conclusion','Arithmetic proof overrides neural contradiction');
 const quantifiedProof=inspectArgumentProof(
  'Every storage crate was sealed yesterday.',
  'One storage crate was not sealed yesterday.');
