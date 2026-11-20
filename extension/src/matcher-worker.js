@@ -108,6 +108,7 @@ self.addEventListener("message", async event => {
    inconsistencies = await findInconsistencies(data.text, memoScore);
    stage("Checking whether conclusions follow from the evidence…");
    const assessed = await analyseArguments(data.text, memoScore, {
+    includeImplicit:true,
     onProgress: ({ completed, total }) => {
      if (total) stage("Checking conclusion " + Math.min(completed + 1, total) +
       " of " + total + "…");

@@ -193,6 +193,7 @@ async function startRun(message) {
     }));
     if (Object.hasOwn(item, "expected") || item.analyse_reasoning === true) {
      argumentAssessments = await analyseArguments(item.text, nliScorer, {
+      includeImplicit:unlabelledScan,
       onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
      });
      // This is only a benchmark classification; supported conclusions are
@@ -236,7 +237,10 @@ async function startRun(message) {
     const labels = [...new Set(argumentAssessments.map(a=>a.label))].sort();
     const extracted = structureCheck.hypotheses.map(h=>({
      sourceConclusion:h.sourceConclusion, modelConclusion:h.modelConclusion,
-     start:h.start,end:h.end,marker:h.marker
+     start:h.start,end:h.end,marker:h.marker,
+     inferred:h.inferred||false,
+     inferredConnector:h.inferredConnector||null,
+     analysisText:h.analysisText||null
     }));
     const key=labels.join(", ") || (extracted.length ? "(no reasoning label)" : "(no extracted argument)");
     data.predictionCounts[key]=(data.predictionCounts[key]||0)+1;

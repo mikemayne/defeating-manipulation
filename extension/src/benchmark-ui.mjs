@@ -364,7 +364,9 @@ function unlabelledReport(data) {
     (a.reason ? " | Reason: " + a.reason : ""));
   for (const h of item.extracted_arguments)
    lines.push("Extracted conclusion: " + h.sourceConclusion +
-    " | Model hypothesis: " + h.modelConclusion);
+    " | Model hypothesis: " + h.modelConclusion +
+    (h.inferred ? " | Inferred connector: " + h.inferredConnector +
+     " | Analysis-only reconstruction: " + h.analysisText : ""));
  }
  return lines.join("\n");
 }

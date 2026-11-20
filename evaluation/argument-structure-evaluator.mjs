@@ -43,13 +43,18 @@ export function validateArgumentParagraphCases(cases) {
 }
 
 export function inspectArgumentStructure(item) {
- const candidates = extractArguments(item.text);
+ const candidates = extractArguments(item.text, {
+  includeImplicit:!Object.hasOwn(item,"expected_argument")
+ });
  const hypotheses = candidates.map(candidate => ({
   sourceConclusion: candidate.conclusion.text,
   modelConclusion: normaliseClaimForNli(candidate).text,
   start: candidate.conclusion.start,
   end: candidate.conclusion.end,
-  marker: candidate.conclusion.marker
+  marker: candidate.conclusion.marker,
+  inferred: candidate.inferred || false,
+  inferredConnector: candidate.inferredConnector || null,
+  analysisText: candidate.inferred ? candidate.analysisText : null
  }));
  for (const candidate of hypotheses) {
   if (candidate.start < 0 || candidate.end > item.text.length ||
