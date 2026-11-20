@@ -3,6 +3,7 @@ const mode = $("mode"), source = $("source"), count = $("count"), seed = $("seed
 const file = $("file"), runButton = $("run"), stopButton = $("stop");
 const status = $("status"), progress = $("progress"), progressCount = $("progress-count");
 const message = $("message"), results = $("results"), copyButton = $("copy");
+const downloadButton = $("download-predictions");
 let runner = null, running = false, lastResult = null, lastMode = "", lastSource = "";
 let runId = 0, loadCatalogues;
 
@@ -146,11 +147,21 @@ function renderResults(data) {
   tableRows($("per-technique"),[],"Unlabelled: accuracy and per-technique failures are not defined.");
   $("failure-note").textContent="Prediction-only run — download all " + number(data.predictions.length) + " results for review.";
   copyButton.disabled=false;
-  copyButton.textContent="Download predictions JSON";
+  copyButton.textContent="Copy results";
+  downloadButton.hidden=false;
+  downloadButton.disabled=false;
+  $("confusion-title").textContent="Most frequent predictions";
+  $("confusion-column").textContent="Predicted label";
+  $("per-technique-title").textContent="Per-technique performance (requires labels)";
   $("copied").textContent="";
   return;
  }
  copyButton.textContent="Copy failures";
+ downloadButton.hidden=true;
+ downloadButton.disabled=true;
+ $("confusion-title").textContent="Most frequent classification errors";
+ $("confusion-column").textContent="Expected → Detected";
+ $("per-technique-title").textContent="Per-technique performance";
  const grid = $("stats");
  grid.replaceChildren(
   metric("Tests completed", number(data.total)),
@@ -322,27 +333,45 @@ function failureReport(data) {
  }
  return lines.join("\n");
 }
-copyButton.addEventListener("click", async () => {
- if (!lastResult) return;
- if(lastResult.unlabelledScan){
-  const payload=JSON.stringify({
-   schema_version:1,mode:"prediction_only_unlabelled",total:lastResult.total,
-   counts:lastResult.predictionCounts,predictions:lastResult.predictions
-  },null,2)+"\n";
-  const blob=new Blob([payload],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const anchor=document.createElement("a");
-  anchor.href=url;anchor.download="real-world-argument-predictions.json";
-  document.body.append(anchor);anchor.click();anchor.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-  $("copied").textContent="Predictions downloaded locally";
-  return;
+function unlabelledReport(data) {
+ const lines = [
+  "Defeating Manipulation — Real-world Argument Scan",
+  "Mode: prediction-only (unlabelled; no accuracy metrics)",
+  "Scanned: " + data.total + " / " + data.requested,
+  "Arguments extracted: " + data.predictions.filter(x => x.extracted_arguments.length).length,
+  "Cases with reasoning verdicts: " + data.predictions.filter(x => x.predicted_labels.length).length,
+  "Elapsed (seconds): " + oneDecimal(data.elapsedSeconds),
+  "",
+  "PREDICTION SUMMARY"
+ ];
+ for (const [label, count] of Object.entries(data.predictionCounts || {})
+  .sort((a,b) => b[1]-a[1]))
+  lines.push(label + ": " + count);
+ lines.push("", "ALL CASES (" + data.predictions.length + ")");
+ for (const item of data.predictions) {
+  lines.push("", "--- " + item.id + " ---",
+   "Text: " + item.text,
+   "Predicted labels: " + (item.predicted_labels.join(", ") || "(none)"),
+   "Extracted arguments: " + item.extracted_arguments.length);
+  if (item.source_url) lines.push("Source: " + item.source_url);
+  if (item.source_annotation)
+   lines.push("Source annotation (not gold): " +
+    (item.source_annotation.label || "(none)"));
+  for (const a of item.assessments || [])
+   lines.push("Assessment: " + a.label +
+    " | Premise: " + a.premise +
+    " | Conclusion: " + a.conclusion +
+    (a.reason ? " | Reason: " + a.reason : ""));
+  for (const h of item.extracted_arguments)
+   lines.push("Extracted conclusion: " + h.sourceConclusion +
+    " | Model hypothesis: " + h.modelConclusion);
  }
- if (!lastResult.incorrect) return;
- const text = failureReport(lastResult);
+ return lines.join("\n");
+}
+async function copyTextToClipboard(text, successMessage) {
  try {
   await navigator.clipboard.writeText(text);
-  $("copied").textContent = "Copied failure details";
+  $("copied").textContent = successMessage;
  } catch {
   const field = document.createElement("textarea");
   field.value = text;
@@ -351,8 +380,31 @@ copyButton.addEventListener("click", async () => {
   field.select();
   const copied = document.execCommand("copy");
   field.remove();
-  $("copied").textContent = copied ? "Copied failure details" : "Clipboard unavailable";
+  $("copied").textContent = copied ? successMessage : "Clipboard unavailable";
  }
+}
+copyButton.addEventListener("click", async () => {
+ if (!lastResult) return;
+ if (lastResult.unlabelledScan) {
+  await copyTextToClipboard(unlabelledReport(lastResult), "Copied scan results");
+  return;
+ }
+ if (!lastResult.incorrect) return;
+ await copyTextToClipboard(failureReport(lastResult), "Copied failure details");
+});
+downloadButton.addEventListener("click", () => {
+ if (!lastResult?.unlabelledScan) return;
+ const payload=JSON.stringify({
+  schema_version:1,mode:"prediction_only_unlabelled",total:lastResult.total,
+  counts:lastResult.predictionCounts,predictions:lastResult.predictions
+ },null,2)+"\n";
+ const blob=new Blob([payload],{type:"application/json"});
+ const url=URL.createObjectURL(blob);
+ const anchor=document.createElement("a");
+ anchor.href=url;anchor.download="real-world-argument-predictions.json";
+ document.body.append(anchor);anchor.click();anchor.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ $("copied").textContent="Predictions downloaded locally";
 });
 function catalogues() {
  return loadCatalogues ||= Promise.all([
