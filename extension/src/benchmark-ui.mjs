@@ -17,9 +17,10 @@ function setError(text) {
 }
 function updateSource() {
  const argumentMode = mode.value === "argument_paragraph";
+ const readerMode = mode.value === "reader_inference";
  // One uploaded paragraph test schema, with optional NLI labels.
- source.options[0].disabled = argumentMode;
- if (argumentMode && source.value !== "uploaded") source.value = "uploaded";
+ source.options[0].disabled = argumentMode || readerMode;
+ if ((argumentMode || readerMode) && source.value !== "uploaded") source.value = "uploaded";
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
  const positive = mode.value.startsWith("positive_");
@@ -27,10 +28,12 @@ function updateSource() {
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
- count.max = consistency || argumentMode || concealed ? 10000 : 1000000;
+ count.max = consistency || argumentMode || readerMode || concealed ? 10000 : 1000000;
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
-  ? argumentMode
+  ? readerMode
+   ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. This runs an experimental local NLI probe for seven possible reader interpretations, including no implied connection; all model scores are uncalibrated, not percentages of readers or accuracy.'
+   : argumentMode
    ? 'Upload JSON/JSONL with {id, text}. For unlabelled real-world scans, add analyse_reasoning:true to run local NLI; these runs report predictions, never accuracy. To score a labelled benchmark, provide expected_argument:true/false and optional expected:[reasoning label]. No text leaves this computer.'
    : consistency
    ? 'Upload JSON/JSONL containing {id, text, expected}, where expected is [] or ["argument_inconsistency"]. All analysis stays in this browser.'
@@ -130,6 +133,34 @@ function tableRows(body, rows, emptyLabel) {
 }
 function renderResults(data) {
  results.hidden = false;
+ if(data.readerMode){
+  const grid=$("stats");
+  grid.replaceChildren(
+   metric("Cases scanned",number(data.total)),
+   metric("Cases with readable boundaries",number(data.readerCasesWithPairs)),
+   metric("Cases with existing rule-extracted arguments",number(data.readerExistingParserCases)),
+   metric("Relationships scored",number(data.readerPairs)),
+   metric("Uncertain relationships",number(data.readerCounts?.uncertain||0)),
+   metric("Elapsed time, seconds",oneDecimal(data.elapsedSeconds))
+  );
+  $("real-breakdown").hidden=true;
+  $("summary-note").textContent="Experimental interpretation ranking using local NLI. These are not human reader percentages, validation scores or factual claims. The original input is unchanged. Review the complete per-option scores in the local JSON download.";
+  tableRows($("confusion"),Object.entries(data.readerCounts||{})
+   .sort((a,b)=>b[1]-a[1]).map(([label,count])=>[label,number(count)]),
+   "No scorable statement boundaries.");
+  tableRows($("per-technique"),[],
+   "Reader agreement cannot be measured without human annotations.");
+  $("confusion-title").textContent="Most likely interpretations (provisional)";
+  $("confusion-column").textContent="Relation / uncertain";
+  $("per-technique-title").textContent="Human-reader validation (not yet measured)";
+  $("failure-note").textContent="Results are prediction-only. Unscored single-statement excerpts remain in the export.";
+  copyButton.disabled=false;
+  copyButton.textContent="Copy results";
+  downloadButton.hidden=false;
+  downloadButton.disabled=false;
+  $("copied").textContent="";
+  return;
+ }
  if(data.unlabelledScan){
   const grid=$("stats");
   grid.replaceChildren(
@@ -335,6 +366,36 @@ function failureReport(data) {
  }
  return lines.join("\n");
 }
+function readerReport(data) {
+ const lines=[
+  "Defeating Manipulation — Reader Interpretation Probe",
+  "Model: local NLI zero-shot hypotheses (uncalibrated; no human reader labels)",
+  "Cases: "+data.total+" / "+data.requested,
+  "Cases with statement boundaries: "+data.readerCasesWithPairs,
+  "Existing rule-extracted argument passages: "+data.readerExistingParserCases,
+  "Scored relationships: "+data.readerPairs,
+  "Elapsed (seconds): "+oneDecimal(data.elapsedSeconds),
+  "",
+  "INTERPRETATIONS"
+ ];
+ for(const [label,count] of Object.entries(data.readerCounts||{})
+  .sort((a,b)=>b[1]-a[1]))lines.push(label+": "+count);
+ for(const item of data.predictions){
+  lines.push("","--- "+item.id+" ---","Text: "+item.text,
+   "Existing rule-extracted arguments: "+item.existing_rule_arguments.length);
+  if(!item.interpretations.length)lines.push("No scorable boundary");
+  for(const relation of item.interpretations){
+   lines.push("First: "+relation.first.text,
+    "Second: "+relation.second.text,
+    "Likely interpretation (provisional): "+relation.interpretation,
+    "Proposed connector: "+(relation.proposedConnector??"(none)"),
+    "Boundary: "+relation.boundaryKind,
+    "Scores (uncalibrated NLI entailment): "+relation.options.map(x=>
+     x.relation+"="+(x.score===null?"unavailable":x.score.toFixed(3))).join(" | "));
+  }
+ }
+ return lines.join("\n");
+}
 function unlabelledReport(data) {
  const lines = [
   "Defeating Manipulation — Real-world Argument Scan",
@@ -394,6 +455,10 @@ async function copyTextToClipboard(text, successMessage) {
 }
 copyButton.addEventListener("click", async () => {
  if (!lastResult) return;
+ if (lastResult.readerMode) {
+  await copyTextToClipboard(readerReport(lastResult), "Copied reader interpretations");
+  return;
+ }
  if (lastResult.unlabelledScan) {
   await copyTextToClipboard(unlabelledReport(lastResult), "Copied scan results");
   return;
@@ -402,15 +467,21 @@ copyButton.addEventListener("click", async () => {
  await copyTextToClipboard(failureReport(lastResult), "Copied failure details");
 });
 downloadButton.addEventListener("click", () => {
- if (!lastResult?.unlabelledScan) return;
- const payload=JSON.stringify({
+ if (!lastResult?.unlabelledScan && !lastResult?.readerMode) return;
+ const payload=lastResult.readerMode ? JSON.stringify({
+  schema_version:1,mode:"reader_inference_unlabelled",
+  total:lastResult.total,reader_counts:lastResult.readerCounts,
+  reader_pairs:lastResult.readerPairs,predictions:lastResult.predictions,
+  model_scores_are_human_percentages:false
+ },null,2)+"\n" : JSON.stringify({
   schema_version:1,mode:"prediction_only_unlabelled",total:lastResult.total,
   counts:lastResult.predictionCounts,predictions:lastResult.predictions
  },null,2)+"\n";
  const blob=new Blob([payload],{type:"application/json"});
  const url=URL.createObjectURL(blob);
  const anchor=document.createElement("a");
- anchor.href=url;anchor.download="real-world-argument-predictions.json";
+ anchor.href=url;anchor.download=lastResult.readerMode?
+  "reader-interpretation-predictions.json":"real-world-argument-predictions.json";
  document.body.append(anchor);anchor.click();anchor.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
  $("copied").textContent="Predictions downloaded locally";
@@ -446,7 +517,7 @@ function catalogues() {
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
- const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value.startsWith("concealed_")
+ const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value.startsWith("concealed_")
   ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
   setError("Choose a test count between 1 and " + number(maximum) + ".");
@@ -473,7 +544,7 @@ runButton.addEventListener("click", async () => {
   const [catalogue, patterns, manipulationFixture, consistencyFixture,
    positiveFixture, concealedFixture] = await catalogues();
   const fixture = mode.value === "consistency" ? consistencyFixture :
-   mode.value === "argument_paragraph" ? {cases:[]} :
+   (mode.value === "argument_paragraph" || mode.value === "reader_inference") ? {cases:[]} :
    mode.value.startsWith("positive_") ? positiveFixture :
    mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;
   runId++;
