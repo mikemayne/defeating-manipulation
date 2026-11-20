@@ -302,3 +302,36 @@ not actual model performance. Rerun the 96 cases unchanged in the
 Firefox **Arguments — premise and conclusion (local NLI)** mode and
 inspect the expanded failure report to decide whether further model
 or confidence-policy changes are justified.
+
+
+### Distinguishing missing support from a contradiction (96-case retest)
+
+The second real-model run on the *unchanged* 96 argument cases achieved
+93/96 exact (96.9%), 98.6% precision and 95.8% recall, with zero false
+positives among the 24 no-argument controls. All 24 supported and all
+24 genuinely contradicted conclusions were detected; the remaining
+three errors were all cases of insufficient support.
+
+The local NLI sometimes produced a near-certain **forward contradiction**
+when a premise merely failed to justify an unrelated conclusion, with
+a near-zero contradiction score in the opposite direction. Strongly
+asymmetric results are now treated as evidence that the conclusion
+**isn't established by the supplied premises** rather than proof of
+a contradiction. Broad universal conclusions (`every`, `all`,
+`each`) are also treated as unsupported when the cited evidence
+describes only a narrower positive instance and gives no opposing
+evidence. Explicit negation, exclusions and contrary predicates remain
+eligible for the contradiction category.
+
+`evaluation/argument-evidence-contrasts.json` contains all three
+recorded NLI diagnostic traces plus independently worded controls.
+CI replays the exact recorded scores and verifies that genuine counter-
+examples, clear negation, supported conclusions and ambiguous outputs
+are not silently reclassified. This validates the **decision rules**;
+it does not rerun the real local neural model.
+
+Rerun **Arguments — premise and conclusion (local NLI)** using the
+same default 96 cases to measure the real-model improvement. The
+failure-copy report now also includes the decision reason
+(`scope_expansion` or `asymmetric_nli`) where applicable. The
+quantifier check is deliberately limited, not a general proof engine.
