@@ -28,7 +28,10 @@ export function prototypeTexts(technique) {
 
 export function prototypeEntries(techniques) {
  return techniques.flatMap((technique, techniqueIndex) =>
-  prototypeTexts(technique).map(text => ({ techniqueIndex, text })));
+  // A misspelling is orthographic evidence, not semantic similarity.
+  // Otherwise a correctly spelled example could trigger a false warning.
+  technique.id === "deliberate_errors" ? [] :
+   prototypeTexts(technique).map(text => ({ techniqueIndex, text })));
 }
 
 export function cosineSimilarity(a, b) {
