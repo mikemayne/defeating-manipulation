@@ -1,4 +1,5 @@
 import { extractArguments } from "./argument-clauses.mjs";
+import { normaliseClaimForNli } from "./argument-claim-normalisation.mjs";
 import { explicitConflict, specificEvidenceGap } from "./argument-evidence-checks.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
@@ -122,6 +123,10 @@ export async function analyseArguments(source, scorePair,
  const assessments = [];
  for (let i = 0; i < candidates.length; i++) {
   const argument = candidates[i];
+  // A public post may elide a shared subject: use the completed proposition
+  // only for inference, never replace the source text or underline offsets.
+  const normalised = normaliseClaimForNli(argument);
+  const hypothesis = normalised.text;
   onProgress?.({ completed: i, total: candidates.length });
 
   const texts = [
@@ -135,21 +140,22 @@ export async function analyseArguments(source, scorePair,
   const scored = [];
   for (const item of texts) {
    const repeated = normalizedAssertion(item.text) ===
-    normalizedAssertion(argument.conclusion.text);
+    normalizedAssertion(hypothesis);
    // Exact repetition is safely supported without trusting model scores;
    // all other comparisons use the actual local NLI model.
    const forward = repeated
     ? { contradiction: 0, neutral: 0, entailment: 1 }
-    : await scorePair(item.text, argument.conclusion.text);
+    : await scorePair(item.text, hypothesis);
    let reverse = null;
    if (scoresValid(forward) && forward.contradiction >= 0.84 &&
        forward.contradiction > forward.neutral)
-    reverse = await scorePair(argument.conclusion.text, item.text);
+    reverse = await scorePair(hypothesis, item.text);
    scored.push({ ...item, repeated, forward, reverse });
   }
-  const result = combineArgumentEvidence(scored, argument.conclusion.text);
+  const result = combineArgumentEvidence(scored, hypothesis);
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
+   modelConclusion: normalised.expanded ? hypothesis : null,
    inferenceMarker: argument.conclusion.marker,
    inline: argument.conclusion.inline || false,
    comparisons: scored.map(({ kind, text, repeated, forward, reverse }) =>
