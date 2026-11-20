@@ -5,6 +5,7 @@ import { generatedCase, validateSeeds } from "../../evaluation/benchmark-generat
 import { validateConsistencyCases, generatedConsistencyCase } from "../../evaluation/inconsistency-generator.mjs";
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
+import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -113,8 +114,10 @@ async function startRun(message) {
  try {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
   const consistency = mode === "consistency";
-  if (!["rules", "ai", "consistency"].includes(mode)) throw Error("Unknown matcher mode");
-  const techniques = catalogue.techniques || [];
+  const positive = mode === "positive_rules" || mode === "positive_ai";
+  if (!["rules", "ai", "consistency", "positive_rules", "positive_ai"].includes(mode))
+   throw Error("Unknown matcher mode");
+  const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
   const seeds = consistency ? validateConsistencyCases(rawSeeds) :
    validateSeeds(rawSeeds, techniques.map(t => t.id));
@@ -122,9 +125,9 @@ async function startRun(message) {
   const limit = consistency ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
-  const rules = consistency ? [] : compilePatternRules(catalogue, patterns);
+  const rules = consistency ? [] : positive ? null : compilePatternRules(catalogue, patterns);
   if (consistency) await initialiseConsistencyModel();
-  else if (mode === "ai") await initialiseModel(techniques);
+  else if (mode === "ai" || mode === "positive_ai") await initialiseModel(techniques);
   else self.postMessage({ type: "stage", message: "Running deterministic pattern tests…" });
 
   const data = { tested: 0, requested: total, exact: 0, tp: 0, fp: 0, fn: 0,
@@ -137,6 +140,10 @@ async function startRun(message) {
     generatedCase(seeds, i, Number(seed) || 2026);
    const matches = consistency ?
     await findInconsistencies(item.text, nliScorer) :
+    positive ? await matchPositiveText(item.text, {
+     prototypes: mode === "positive_ai" ? prototypes : [],
+     embed: mode === "positive_ai" ? embed : null
+    }) :
     await matchText(item.text, {
      techniques, rules, prototypes: mode === "ai" ? prototypes : [],
      embed: mode === "ai" ? embed : null
