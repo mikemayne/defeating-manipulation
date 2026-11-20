@@ -679,7 +679,7 @@ for (const text of headingsAndNoInference)
  assert.deepEqual(argumentEngine.extractArguments(text), [],
   'Reports, missing premises, and advice do not become factual conclusions');
 assert.ok(benchmarkPage.includes('value="argument_support"') &&
- benchmarkWorker.includes('analyseArguments(item.text, nliScorer)') &&
+ benchmarkWorker.includes('analyseArguments(item.text, nliScorer,') &&
  benchmarkUI.includes('argument-support-examples.json') &&
  localServer.includes('/evaluation/argument-support-examples.json'),
  'Argument NLI lab uses actual local NLI model and dedicated dataset');
@@ -697,3 +697,101 @@ assert.ok(selectionScript.includes('match.kind === "argument_support"') &&
  selectionScript.includes('"inconsistency-patterns"'),
  'New red findings explain their premises and link to the red catalogue');
 console.log('Argument support: 480 parser/verdict variants, NLI lab and nonblocking Firefox UI validated.');
+
+
+// Real local NLI previously missed obvious conclusions when an irrelevant
+// second premise diluted the relation. These controlled-score regressions
+// test how the analyser fuses premise-level and combined NLI evidence.
+// The browser test lab still measures real neural predictions separately.
+const evidenceNli = {
+ entailed: { contradiction: 0.01, neutral: 0.01, entailment: 0.98 },
+ contradicted: { contradiction: 0.98, neutral: 0.01, entailment: 0.01 },
+ unsupported: { contradiction: 0.01, neutral: 0.98, entailment: 0.01 },
+ ambiguous: { contradiction: 0.31, neutral: 0.43, entailment: 0.26 }
+};
+const evidenceExamples = [
+ {
+  id: 'repeated premise beats combined neutral',
+  text: 'The library opens to visitors every Sunday. Admission is free for children. Therefore, the library opens to visitors every Sunday.',
+  score: () => evidenceNli.unsupported, expected: 'supported_conclusion'
+ },
+ {
+  id: 'single relevant premise beats combined neutral',
+  text: 'The station has step-free access to platform two. The office opens on weekdays. Therefore, the station has step-free access to platform two.',
+  score: (premise) => premise.startsWith('The station has') &&
+    !premise.includes('office opens') ?
+   evidenceNli.entailed : evidenceNli.unsupported,
+  expected: 'supported_conclusion'
+ },
+ {
+  id: 'individual contradictory premise beats combined uncertainty',
+  text: 'The school serves vegetarian lunches on Fridays. Its kitchen employs six cooks. Therefore, the school serves no vegetarian lunches on Fridays.',
+  score: (premise, hypothesis) =>
+    !premise.includes('six cooks') && !hypothesis.includes('six cooks') &&
+    premise.toLowerCase().startsWith('the school serves') &&
+    hypothesis.toLowerCase().includes('school serves') ?
+    evidenceNli.contradicted : evidenceNli.ambiguous,
+  expected: 'contradictory_claims'
+ },
+ {
+  id: 'single neutral premise rescues unsupported inference',
+  text: 'The council published its annual spending report. The report describes the previous year. Therefore, the council has eliminated all financial waste.',
+  score: (premise) => premise.startsWith('The council published') &&
+    !premise.includes('report describes') ?
+    evidenceNli.unsupported : evidenceNli.ambiguous,
+  expected: 'unsupported_conclusion'
+ },
+ {
+  id: 'combined premises may be needed for valid inference',
+  text: 'All registered visitors receive a badge. Maria is a registered visitor. Therefore, Maria receives a badge.',
+  score: (premise) => premise.includes('All registered visitors') && premise.includes('Maria is') ?
+    evidenceNli.entailed : evidenceNli.unsupported,
+  expected: 'supported_conclusion'
+ },
+ {
+  id: 'contradiction wins over repeated supporting claim',
+  text: 'The clinic provides eye tests on Tuesdays. The clinic does not provide eye tests on Tuesdays. Therefore, the clinic provides eye tests on Tuesdays.',
+  score: (premise, hypothesis) =>
+    premise.includes('does not provide') || hypothesis.includes('does not provide') ?
+    evidenceNli.contradicted : evidenceNli.unsupported,
+  expected: 'contradictory_claims'
+ },
+ {
+  id: 'uncertain results abstain',
+  text: 'The museum has opened a new exhibition. The centre has a cafe. Therefore, the museum is the safest in the world.',
+  score: () => evidenceNli.ambiguous, expected: null
+ }
+];
+for (const item of evidenceExamples) {
+ const diagnostics = [];
+ const assessments = await argumentEngine.analyseArguments(item.text,
+  async (premise, hypothesis) => item.score(premise, hypothesis),
+  { onDiagnostic: result => diagnostics.push(result) });
+ assert.equal(assessments[0]?.label || null, item.expected, item.id);
+ assert.equal(diagnostics.length, 1, 'One explicit inference: ' + item.id);
+ assert.equal(diagnostics[0].comparisons.length, 3,
+  'Both individual premises and their combination are assessed: ' + item.id);
+ assert.equal(diagnostics[0].verdict, item.expected,
+  'Score diagnostics include the actual outcome: ' + item.id);
+ if (item.expected === 'supported_conclusion')
+  assert.equal(argumentEngine.argumentFindings(assessments).length, 0,
+   'Supported evidence never generates a red error: ' + item.id);
+}
+assert.equal(argumentEngine.combineArgumentEvidence([
+ {kind:'combined',text:'x and y',forward:evidenceNli.unsupported},
+ {kind:'premise_1',text:'x',forward:evidenceNli.entailed}
+]).label,'supported_conclusion','A neutral combined score cannot override relevant support');
+assert.equal(argumentEngine.combineArgumentEvidence([
+ {kind:'combined',text:'x and y',forward:evidenceNli.entailed},
+ {kind:'premise_1',text:'x',forward:evidenceNli.contradicted,
+  reverse:evidenceNli.contradicted}
+]).label,'contradictory_claims','Verified contradictory evidence takes precedence over partial support');
+assert.equal(argumentEngine.combineArgumentEvidence([
+ {kind:'combined',text:'x and y',forward:evidenceNli.ambiguous},
+ {kind:'premise_1',text:'x',forward:evidenceNli.ambiguous}
+]),null,'Low-confidence evidence does not fabricate an unsupported conclusion');
+assert.ok(benchmarkWorker.includes('onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)') &&
+ benchmarkUI.includes('NLI evidence diagnostics') &&
+ benchmarkUI.includes('Reverse C'),
+ 'Every failed real-model argument exposes all combined and individual NLI scores');
+console.log('Argument evidence fusion: combined vs individual, contradiction priority, exact repetition and diagnostics passed.');

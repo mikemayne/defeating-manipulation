@@ -162,9 +162,11 @@ async function startRun(message) {
     argumentMode ? generatedArgumentCase(seeds, i, Number(seed) || 2026) :
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
-   let matches, argumentAssessments = [];
+   let matches, argumentAssessments = [], argumentDiagnostics = [];
    if (argumentMode) {
-    argumentAssessments = await analyseArguments(item.text, nliScorer);
+    argumentAssessments = await analyseArguments(item.text, nliScorer, {
+     onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
+    });
     // Supported conclusions appear only in this benchmark's classification,
     // not as red highlights in the Firefox extension.
     matches = argumentAssessments.map(assessment => ({
@@ -242,7 +244,15 @@ async function startRun(message) {
      })) : [],
      argumentAssessments: argumentMode ? argumentAssessments.map(assessment => ({
       label: assessment.label, premise: assessment.premise,
-      conclusion: assessment.conclusion.text, score: Number(assessment.score.toFixed(3))
+      conclusion: assessment.conclusion.text, score: Number(assessment.score.toFixed(3)),
+      decisivePremise: assessment.evidenceText, basis: assessment.basis
+     })) : [],
+     argumentDiagnostics: argumentMode ? argumentDiagnostics.map(item => ({
+      conclusion: item.conclusion, verdict: item.verdict,
+      comparisons: item.comparisons.map(pair => ({
+       kind: pair.kind, premise: pair.premise, repeated: pair.repeated,
+       forward: pair.forward, reverse: pair.reverse
+      }))
      })) : []
     });
    }

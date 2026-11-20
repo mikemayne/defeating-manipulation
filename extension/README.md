@@ -201,3 +201,33 @@ CI exercises the parser, evidence gathering and decision logic using
 deterministic scorer outputs, **not** the browser's real NLI inference.
 Run the test lab in Firefox to assess the real model, and add fresh,
 independently written examples before claiming general accuracy.
+
+
+### Per-premise evidence fusion (after the first browser benchmark)
+
+The first real `argument_support` run on the default 96 cases reported
+84.4% exact classifications: 8 contradicted conclusions were missed,
+5 unsupported conclusions were missed, and 2 supported conclusions were
+incorrectly classed as unsupported. The extractor found all 72 examples
+with explicit conclusions, so we refined **NLI evidence scoring** rather
+than changing the extraction markers or the test fixture.
+
+A single concatenated premise can cause sentence-pair NLI to overlook
+a decisive sentence when another sentence concerns a different fact.
+The analyser now scores the **combined premises and each individual
+premise**, retaining the joint score for genuine multi-step arguments.
+A verified contradiction in any premise takes precedence over support;
+a clearly supported statement takes precedence over unrelated neutral
+evidence; otherwise sufficiently confident neutral evidence can trigger
+**Insufficient evidence provided to support this conclusion**. Exact
+repetitions of the conclusion are safely recognised as supported.
+
+The **Copy failure details** output for this mode now includes every
+combined and individual NLI score (contradiction, neutral, entailment,
+plus reverse contradiction where checked), even when the model abstains.
+This makes it possible to distinguish an extraction problem, a model
+misclassification and an over-strict decision threshold.
+
+This refinement is covered by deterministic CI tests; actual accuracy
+must be measured by rerunning **the same 96 cases in Firefox**. Existing
+blue, green, turquoise, and pairwise-red detection remain unchanged.

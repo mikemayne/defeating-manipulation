@@ -77,13 +77,23 @@ export function extractArguments(source) {
 
 export const ARGUMENT_LABELS = ["contradictory_claims", "unsupported_conclusion", "supported_conclusion"];
 
+// The combined premise is needed for genuinely multi-step inferences, but
+// sentence-pair NLI models can lose a clear signal when an irrelevant sentence
+// is concatenated with the decisive premise. Keep both views of the evidence.
+function normalizedAssertion(text) {
+ return text.toLowerCase().replace(/^[\s"'“”‘’]+|[\s"'“”‘’.!?;:,]+$/g, "")
+  .replace(/\s+/g, " ").trim();
+}
+function scoresValid(scores) {
+ return scores && ["contradiction", "neutral", "entailment"].every(
+  key => Number.isFinite(scores[key]));
+}
 export function classifyArgumentScore(forward, reverse = null) {
- if (!forward || !["contradiction","neutral","entailment"].every(
-  key => Number.isFinite(forward[key]))) return null;
+ if (!scoresValid(forward)) return null;
  const { contradiction, neutral, entailment } = forward;
  if (contradiction >= 0.84 && contradiction > neutral && contradiction > entailment) {
-  if (!reverse || !Number.isFinite(reverse.contradiction) ||
-      reverse.contradiction < 0.70 || reverse.contradiction <= reverse.neutral) return null;
+  if (!scoresValid(reverse) || reverse.contradiction < 0.70 ||
+      reverse.contradiction <= reverse.neutral) return null;
   return { label: "contradictory_claims",
    score: Math.min(contradiction, reverse.contradiction) };
  }
@@ -97,21 +107,67 @@ export function classifyArgumentScore(forward, reverse = null) {
  return null;
 }
 
-export async function analyseArguments(source, scorePair, { onProgress } = {}) {
+// A verdict supported by any individual premise is better than a neutral
+// verdict caused by adding irrelevant premises to the same NLI input.
+// A contradictory premise wins over a supporting one: the supplied set of
+// premises is then internally inconsistent. Uncertain scores abstain.
+export function combineArgumentEvidence(scored) {
+ const classified = scored.map(item => ({
+  ...item, verdict: item.repeated
+   ? { label: "supported_conclusion", score: 1 }
+   : classifyArgumentScore(item.forward, item.reverse)
+ }));
+ for (const type of ["contradictory_claims", "supported_conclusion", "unsupported_conclusion"]) {
+  const matches = classified.filter(item => item.verdict?.label === type);
+  if (matches.length) {
+   const winner = matches.sort((a, b) => b.verdict.score - a.verdict.score)[0];
+   return { ...winner.verdict, evidenceText: winner.text, basis: winner.kind };
+  }
+ }
+ return null;
+}
+
+export async function analyseArguments(source, scorePair,
+ { onProgress, onDiagnostic } = {}) {
  if (typeof scorePair !== "function") return [];
  const candidates = extractArguments(source);
  const assessments = [];
  for (let i = 0; i < candidates.length; i++) {
   const argument = candidates[i];
   onProgress?.({ completed: i, total: candidates.length });
-  const forward = await scorePair(argument.premise, argument.conclusion.text);
-  let reverse = null;
-  if (forward?.contradiction >= 0.84 && forward.contradiction > forward.neutral)
-   reverse = await scorePair(argument.conclusion.text, argument.premise);
-  const result = classifyArgumentScore(forward, reverse);
+
+  const texts = [
+   { kind: "combined", text: argument.premise },
+   ...argument.premises.map((statement, index) => ({
+    kind: "premise_" + (index + 1), text: statement.text
+   }))
+  ].filter((item, index, all) =>
+   all.findIndex(other => other.text === item.text) === index);
+
+  const scored = [];
+  for (const item of texts) {
+   const repeated = normalizedAssertion(item.text) ===
+    normalizedAssertion(argument.conclusion.text);
+   // Exact repetition is safely supported without trusting model scores;
+   // all other comparisons use the actual local NLI model.
+   const forward = repeated
+    ? { contradiction: 0, neutral: 0, entailment: 1 }
+    : await scorePair(item.text, argument.conclusion.text);
+   let reverse = null;
+   if (scoresValid(forward) && forward.contradiction >= 0.84 &&
+       forward.contradiction > forward.neutral)
+    reverse = await scorePair(argument.conclusion.text, item.text);
+   scored.push({ ...item, repeated, forward, reverse });
+  }
+  const result = combineArgumentEvidence(scored);
+  onDiagnostic?.({
+   conclusion: argument.conclusion.text,
+   comparisons: scored.map(({ kind, text, repeated, forward, reverse }) =>
+    ({ kind, premise: text, repeated, forward, reverse })),
+   verdict: result?.label || null
+  });
   if (!result) continue;
   assessments.push({ ...argument, ...result,
-   // Purely an assessment of these premises, not an absolute statement of truth.
    explanation: result.label === "supported_conclusion"
     ? "The supplied premises appear to support this conclusion at the stated level."
     : result.label === "contradictory_claims"
