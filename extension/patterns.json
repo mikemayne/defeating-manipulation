@@ -92,7 +92,8 @@
       "id": "red_herring",
       "expressions": [
         "\\bwhy worry about .{1,100}\\bwhen there are (?:other )?(?:people|others)\\b",
-        "\\bwhat about .{1,100}\\binstead of answering\\b"
+        "\\bwhat about .{1,100}\\binstead of answering\\b",
+        "\\bwhy (?:discuss|debate|examine|question|investigate|focus on|talk about)\\b[^.!?]{10,155}\\bwhen there (?:are|is)\\b[^.!?]{6,105}\\b(?:problem|issue|trouble|crisis|concern|difficulty|failure|complaint)s?\\b"
       ]
     },
     {
@@ -136,7 +137,10 @@
         "\\bthis (?:diet|method|product|treatment) works because i found .{1,50}\\b(?:people|reviews|examples) .{0,60}\\b(?:online|on the internet)\\b",
         "\\bhere are (?:three|four|five) examples proving .{1,80}\\b(?:ignore|excluding|despite) (?:the )?(?:other|contrary) evidence\\b",
         "\\b(?:proves?|shows?|confirms?|demonstrates?)\\b[^.!?]{0,110}[,;]\\s*(?:just\\s+)?(?:ignore|discount|exclude|leave out)\\b[^.!?]{0,70}\\b(?:other|remaining|contrary|conflicting|negative|opposing)\\b",
-        "\\b(?:ignore|discount|exclude|leave out)\\b[^.!?]{0,55}\\b(?:other|remaining|contrary|conflicting|negative|opposing)\\b[^.!?]{0,120}\\b(?:proves?|shows?|confirms?)\\b"
+        "\\b(?:ignore|discount|exclude|leave out)\\b[^.!?]{0,55}\\b(?:other|remaining|contrary|conflicting|negative|opposing)\\b[^.!?]{0,120}\\b(?:proves?|shows?|confirms?)\\b",
+        "\\b(?:one|two|three|four|five|six|\\d+)\\s+[^.!?;]{5,115}\\b(?:show|prove|demonstrate|reported?|found)\\b[^.!?;]{0,110}[;,]\\s*(?:so|therefore)\\b[^.!?;]{5,90}[;,]\\s*(?:ignore|discount|exclude|leave out)\\b[^.!?;]{0,70}\\b(?:other|remaining|rest|contrary|negative|conflicting)\\b",
+        "\\b(?:one|two|three|four|five|six|\\d+)\\s+[^.!?;]{5,115}\\b(?:reported?|found|showed|demonstrated)\\b[^.!?;]{5,110}\\b(?:so|therefore)\\b[^.!?;]{5,110}[;,]\\s*(?:ignore|discount|exclude|leave out)\\b[^.!?;]{0,70}\\b(?:other|remaining|rest|contrary|negative|conflicting)\\b",
+        "\\b(?:one|two|three|four|five|six|\\d+)\\s+[^.!?;]{5,140}\\b(?:so|therefore)\\b[^.!?;]{5,95};\\s*(?:ignore|discount|exclude|leave out)\\b[^.!?;]{0,70}\\b(?:other|remaining|rest|contrary|negative|conflicting)\\b"
       ]
     },
     {
@@ -200,6 +204,18 @@
       "id": "scapegoating",
       "expressions": [
         "\\b(?:every|all)\\b[^.!?]{0,100}\\b(?:problem|difficulty|crisis|failure)\\b[^.!?]{0,105}\\b(?:caused by|blame|fault of)\\b[^.!?]{0,90}\\b(?:one|only|single)\\b[^.!?]{0,60}\\b(?:group|people|visitors|community|newcomers|workers)\\b"
+      ]
+    },
+    {
+      "id": "loaded_language",
+      "expressions": [
+        "^(?:this|that|the)\\s+(?:appalling|shameful|grotesque|disgraceful|outrageous|revolting|abhorrent)\\b[^.!?]{0,125}\\b(?:appalling|shameful|grotesque|disgraceful|outrageous|revolting|abhorrent)\\b"
+      ]
+    },
+    {
+      "id": "appeal_to_fear",
+      "expressions": [
+        "\\bif you (?:do not|don't|fail to|refuse to)\\b[^.!?]{4,135}\\b(?:your|the)\\s+(?:entire|whole)?\\s*(?:family|children|loved ones|community|neighbours|neighbors)\\b[^.!?]{0,120}\\b(?:catastrophe|disaster|danger|harm|ruin|grave risk|terrible consequences)\\b"
       ]
     }
   ]
