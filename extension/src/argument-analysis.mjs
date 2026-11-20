@@ -1,5 +1,6 @@
 import { extractArguments } from "./argument-clauses.mjs";
 import { normaliseClaimForNli } from "./argument-claim-normalisation.mjs";
+import { normaliseEntitiesForNli, normaliseEntityTextForNli } from "./argument-entity-normalisation.mjs";
 import { explicitConflict, specificEvidenceGap } from "./argument-evidence-checks.mjs";
 import { observableContradiction, observableSamplingLeap } from "./argument-claim-relations.mjs";
 import { boundedArgumentLogic } from "./argument-bounded-logic.mjs";
@@ -168,7 +169,10 @@ export async function analyseArguments(source, scorePair,
   // A public post may elide a shared subject: use the completed proposition
   // only for inference, never replace the source text or underline offsets.
   const normalised = normaliseClaimForNli(argument);
-  const hypothesis = normalised.text;
+  // First bring uniquely identified names, roles and subject pronouns to
+  // a shared referent for NLI only. The claim-completion pass is separate.
+  const entities = normaliseEntitiesForNli(argument, normalised.text);
+  const hypothesis = entities.hypothesis;
   onProgress?.({ completed: i, total: candidates.length });
 
   const texts = [
@@ -181,27 +185,32 @@ export async function analyseArguments(source, scorePair,
 
   const scored = [];
   for (const item of texts) {
-   const repeated = normalizedAssertion(item.text) ===
+   const modelPremise = normaliseEntityTextForNli(item.text, entities);
+   const repeated = normalizedAssertion(modelPremise) ===
     normalizedAssertion(hypothesis);
    // Exact repetition is safely supported without trusting model scores;
    // all other comparisons use the actual local NLI model.
    const forward = repeated
     ? { contradiction: 0, neutral: 0, entailment: 1 }
-    : await scorePair(item.text, hypothesis);
+    : await scorePair(modelPremise, hypothesis);
    let reverse = null;
    if (scoresValid(forward) && forward.contradiction >= 0.84 &&
        forward.contradiction > forward.neutral)
-    reverse = await scorePair(hypothesis, item.text);
-   scored.push({ ...item, repeated, forward, reverse });
+    reverse = await scorePair(hypothesis, modelPremise);
+   scored.push({ ...item, modelPremise, repeated, forward, reverse });
   }
-  const result = combineArgumentEvidence(scored, hypothesis, {inferenceMarker:argument.conclusion.marker});
+  // Explicit-logic checks continue to use the original statements and
+  // completed *source* conclusion, not canonicalised NLI text.
+  const result = combineArgumentEvidence(scored, normalised.text, {inferenceMarker:argument.conclusion.marker});
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
-   modelConclusion: normalised.expanded ? hypothesis : null,
+   modelConclusion: normalised.expanded || entities.changed ? hypothesis : null,
+   entityNormalization: entities.changed ? {name:entities.name,canonical:entities.canonical} : null,
    inferenceMarker: argument.conclusion.marker,
    inline: argument.conclusion.inline || false,
-   comparisons: scored.map(({ kind, text, repeated, forward, reverse }) =>
-    ({ kind, premise: text, repeated, forward, reverse })),
+   comparisons: scored.map(({ kind, text, modelPremise, repeated, forward, reverse }) =>
+    ({ kind, premise: text, modelPremise: modelPremise!==text?modelPremise:null,
+     repeated, forward, reverse })),
    verdict: result?.label || null,
    status:result?.status || (result?.label ? "model_verdict" : "model_uncertain"),
    reason: result?.reason || null
