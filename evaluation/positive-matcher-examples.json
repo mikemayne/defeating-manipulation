@@ -1,0 +1,510 @@
+{
+  "version": 1,
+  "description": "72 labelled fictional smoke and precision cases for the positive-pattern matcher: 12 catalogue examples, 24 new positive statements and 36 neutral or negative near misses. These are small synthetic fixtures, not independent real-world accuracy evidence.",
+  "cases": [
+    {
+      "id": "restoring_agency-original",
+      "text": "“You have the information. Take the time you need, and make the choice that is right for you.”",
+      "expected": [
+        "restoring_agency"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "restoring_agency-fresh-1",
+      "text": "The decision is yours, and you may take the time you need.",
+      "expected": [
+        "restoring_agency"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "restoring_agency-fresh-2",
+      "text": "You don't have to decide right now; make the choice that feels right for you.",
+      "expected": [
+        "restoring_agency"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "restoring_agency-negative-1",
+      "text": "The manager has already made the decision for everyone.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "restoring_agency-negative-2",
+      "text": "The contract specifies that choices must be final by Friday.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "restoring_agency-negative-3",
+      "text": "You have no choice; do it immediately.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "welcoming_disagreement-original",
+      "text": "“I see it differently, but I'd like to understand why you disagree.”",
+      "expected": [
+        "welcoming_disagreement"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "welcoming_disagreement-fresh-1",
+      "text": "It's fine to disagree with me about the budget.",
+      "expected": [
+        "welcoming_disagreement"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "welcoming_disagreement-fresh-2",
+      "text": "Please challenge my argument if you've seen different figures.",
+      "expected": [
+        "welcoming_disagreement"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "welcoming_disagreement-negative-1",
+      "text": "The survey recorded how many people disagreed with the changes.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "welcoming_disagreement-negative-2",
+      "text": "I disagree with the proposal because of its cost.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "welcoming_disagreement-negative-3",
+      "text": "Anyone who disagrees will be expelled from the group.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "separating_observation_from_interpretation-original",
+      "text": "“I saw the door open. I don't know who opened it or why.”",
+      "expected": [
+        "separating_observation_from_interpretation"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "separating_observation_from_interpretation-fresh-1",
+      "text": "I noticed the light was on. I don't know who switched it on.",
+      "expected": [
+        "separating_observation_from_interpretation"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "separating_observation_from_interpretation-fresh-2",
+      "text": "I saw a broken window. I can't know who caused the damage.",
+      "expected": [
+        "separating_observation_from_interpretation"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "separating_observation_from_interpretation-negative-1",
+      "text": "I noticed the light was on and I know precisely who switched it on.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "separating_observation_from_interpretation-negative-2",
+      "text": "The witness saw a broken window and identified the owner.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "separating_observation_from_interpretation-negative-3",
+      "text": "The meeting minutes separated observation and interpretation into columns.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "acknowledging_uncertainty-original",
+      "text": "“That's my best reading, but I don't have enough information to be certain.”",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "acknowledging_uncertainty-fresh-1",
+      "text": "I could be wrong about the figures.",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "acknowledging_uncertainty-fresh-2",
+      "text": "We cannot say for certain without more measurements.",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "acknowledging_uncertainty-negative-1",
+      "text": "The report says there was enough information to reach a firm conclusion.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "acknowledging_uncertainty-negative-2",
+      "text": "She explained why some respondents were uncertain.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "acknowledging_uncertainty-negative-3",
+      "text": "It is certain beyond any reasonable doubt, and we will not reconsider.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "respecting_boundaries-original",
+      "text": "“Understood. We can leave that subject there.”",
+      "expected": [
+        "respecting_boundaries"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "respecting_boundaries-fresh-1",
+      "text": "I won't push you to discuss that again.",
+      "expected": [
+        "respecting_boundaries"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "respecting_boundaries-fresh-2",
+      "text": "I'll respect your boundary and stop asking.",
+      "expected": [
+        "respecting_boundaries"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "respecting_boundaries-negative-1",
+      "text": "He crossed a physical boundary marked on the map.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "respecting_boundaries-negative-2",
+      "text": "The committee voted to extend the boundary by five metres.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "respecting_boundaries-negative-3",
+      "text": "I heard your request but will keep pressing until you agree.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "proportionate_response-original",
+      "text": "“It's worth fixing, but it isn't urgent. Let's deal with it tomorrow.”",
+      "expected": [
+        "proportionate_response"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "proportionate_response-fresh-1",
+      "text": "This isn't an emergency. We can address this next week.",
+      "expected": [
+        "proportionate_response"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "proportionate_response-fresh-2",
+      "text": "It's worth addressing, but it isn't urgent.",
+      "expected": [
+        "proportionate_response"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "proportionate_response-negative-1",
+      "text": "The emergency services responded to the urgent situation.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "proportionate_response-negative-2",
+      "text": "It is urgent, so cancel everything and deal with it now.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "proportionate_response-negative-3",
+      "text": "The report examined how response times changed over several years.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "encouraging_independent_thought-original",
+      "text": "“Here are the sources I used. Have a look and see what conclusion you reach.”",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "encouraging_independent_thought-fresh-1",
+      "text": "Check the sources for yourself before deciding.",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "encouraging_independent_thought-fresh-2",
+      "text": "Read the evidence and draw your own conclusion.",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "encouraging_independent_thought-negative-1",
+      "text": "The researchers wrote a report on independent thinking.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "encouraging_independent_thought-negative-2",
+      "text": "The sources were checked by the editor yesterday.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "encouraging_independent_thought-negative-3",
+      "text": "The teacher told the class exactly which conclusion they must reach.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "validating_emotional_experience-original",
+      "text": "“I can see that was upsetting, and I want to understand what it was like for you.”",
+      "expected": [
+        "validating_emotional_experience"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "validating_emotional_experience-fresh-1",
+      "text": "That must have been painful to experience.",
+      "expected": [
+        "validating_emotional_experience"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "validating_emotional_experience-fresh-2",
+      "text": "I understand why that was upsetting for you.",
+      "expected": [
+        "validating_emotional_experience"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "validating_emotional_experience-negative-1",
+      "text": "The report counted how many patients described a difficult recovery.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "validating_emotional_experience-negative-2",
+      "text": "You are too sensitive, and your feelings are ridiculous.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "validating_emotional_experience-negative-3",
+      "text": "The newspaper examined trends in reported pain after surgery.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "transparent_reasoning-original",
+      "text": "“I'm recommending this because of these two constraints; if either is wrong, my recommendation changes.”",
+      "expected": [
+        "transparent_reasoning"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "transparent_reasoning-fresh-1",
+      "text": "My recommendation would change if the costs increase.",
+      "expected": [
+        "transparent_reasoning"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "transparent_reasoning-fresh-2",
+      "text": "These are the assumptions behind my conclusion.",
+      "expected": [
+        "transparent_reasoning"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "transparent_reasoning-negative-1",
+      "text": "The recommendation was approved by the board on Monday.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "transparent_reasoning-negative-2",
+      "text": "The report mentioned evidence and assumptions in its methodology section.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "transparent_reasoning-negative-3",
+      "text": "My recommendation is final, whatever the evidence shows.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "supporting_informed_choice-original",
+      "text": "“These are the available options, what each involves, and where you can check the details.”",
+      "expected": [
+        "supporting_informed_choice"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "supporting_informed_choice-fresh-1",
+      "text": "Here are your options and the risks of each.",
+      "expected": [
+        "supporting_informed_choice"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "supporting_informed_choice-fresh-2",
+      "text": "Compare the options and the benefits for each.",
+      "expected": [
+        "supporting_informed_choice"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "supporting_informed_choice-negative-1",
+      "text": "The company announced that its options had expired.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "supporting_informed_choice-negative-2",
+      "text": "The report compared options but did not offer any guidance.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "supporting_informed_choice-negative-3",
+      "text": "There is only one option and I won't tell you the risks.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "taking_responsibility-original",
+      "text": "“I interrupted you. That wasn't fair. I'll let you finish.”",
+      "expected": [
+        "taking_responsibility"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "taking_responsibility-fresh-1",
+      "text": "I was wrong. I'll correct the mistake.",
+      "expected": [
+        "taking_responsibility"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "taking_responsibility-fresh-2",
+      "text": "That was my mistake, and I take responsibility for the error.",
+      "expected": [
+        "taking_responsibility"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "taking_responsibility-negative-1",
+      "text": "The manager stated that the previous employee was responsible.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "taking_responsibility-negative-2",
+      "text": "Someone made a mistake, but nobody knows who.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "taking_responsibility-negative-3",
+      "text": "You are to blame; I refuse to apologise.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "respecting_attention-original",
+      "text": "“No need to answer now. Let me know if and when you have time.”",
+      "expected": [
+        "respecting_attention"
+      ],
+      "group": "positive_original"
+    },
+    {
+      "id": "respecting_attention-fresh-1",
+      "text": "Take your time to reply.",
+      "expected": [
+        "respecting_attention"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "respecting_attention-fresh-2",
+      "text": "You don't need to respond immediately.",
+      "expected": [
+        "respecting_attention"
+      ],
+      "group": "positive_new"
+    },
+    {
+      "id": "respecting_attention-negative-1",
+      "text": "The company measured attention spans during the trial.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "respecting_attention-negative-2",
+      "text": "Answer this immediately or you will be punished.",
+      "expected": [],
+      "group": "hard_negative"
+    },
+    {
+      "id": "respecting_attention-negative-3",
+      "text": "The notice says the meeting must begin promptly at nine.",
+      "expected": [],
+      "group": "hard_negative"
+    }
+  ]
+}
