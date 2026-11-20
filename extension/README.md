@@ -610,35 +610,51 @@ independent fictional positive cases and difficult counterexamples. The
 previous 100-paragraph development dataset is not committed; rerun it, then
 test new independently annotated paragraphs before claiming general accuracy.
 
+### Open-class reference normalisation before local NLI
 
-### Normalising name, role and pronoun references before NLI
+Before each paragraph-level NLI comparison, the analyser performs one
+**deterministic, local, premise-grounded reference normalisation pass**.
 
-The experimental paragraph analyser performs a **local, deterministic entity
-normalisation pass before sending premise/conclusion pairs to the existing
-local NLI model**. For example:
+For example, a paragraph may explicitly say:
 
-- Original premise: `All shortlisted candidates were invited. Ada is on that shortlist.`
-- Original conclusion: `She was invited.`
-- Model premise: `All shortlisted candidates were invited. The candidate is on that shortlist.`
-- Model conclusion: `The candidate was invited.`
+- `Mara is a marine biologist. She wrote the report.`
+- Conclusion: `The marine biologist prepared a report.`
 
-A name is mapped to `the candidate`, `the applicant` or another explicit
-singular role **only when a unique named person can be linked to that role**,
-such as a stated role or a matched shortlist rule. A second named person, an
-interviewer or other possible referent, a quotation or missing role information
-causes the normaliser to abstain. Plural class statements (`all candidates`)
-are never replaced by the singular `the candidate`; that would change the
-logic of the argument. Explicit declarations such as `Ada is a candidate`
-are retained to preserve the identity evidence.
+The model can compare the canonical subject `the marine biologist` across
+these statements instead of treating a name, role description and subject
+pronoun as unrelated strings.
 
-Normalised strings are **model inputs only**. All displayed/source text,
-underline offsets, deterministic logical checks and quotations use the
-unmodified original. The failure report displays both original and normalised
-model inputs when a rewrite occurs. The existing quantised NLI model, its size
-and number of scoring comparisons remain unchanged.
+**No occupations, roles or job titles are hardcoded.** Instead, the
+normaliser identifies a short noun phrase *actually stated* in the paragraph
+through grammatical constructions such as `Mara is a marine biologist`,
+`Mara, a marine biologist, ...`, `the marine biologist Mara ...`,
+`Mara served as a marine biologist` and `Mara is one of the researchers`.
+The description itself is taken from the source; the code has only a small
+set of general grammatical cues and safety exclusions, not a role catalogue.
+If no role is established but a single named person can be safely linked to
+a sentence-initial `she` or `he`, the pronoun is replaced with the
+*name*, not an invented role.
 
-This is intentionally a conservative initial reference-resolution pass, **not
-general unrestricted coreference resolution**. It does not rewrite all
-pronouns, assume a person's gender from their name or resolve ambiguous
-interviews, reported speech or multi-person dialogue. New fictional regression
-tests cover both safe replacements and false-identity counterexamples.
+Crucially, `All applicants on the shortlist were invited; Ada was on that
+shortlist` **does not prove** that Ada is an applicant. In that case the
+normaliser may change `she` to `Ada`, but will *not* rename Ada
+`the applicant` without a separate explicit membership statement.
+
+The pass abstains when multiple individuals or competing unnamed actors
+could be referenced, where there are multiple plausible descriptions,
+inside quotations and in unclear reported speech. It avoids rewriting
+embedded/subordinate pronouns, plural class statements and indefinite
+references it cannot resolve safely. This is **open-class, conservative
+reference normalisation**, not unrestricted semantic coreference.
+
+Both the original source wording and its underline offsets are preserved.
+Rule-based argument checks still use the original premises; only the local
+NLI model sees the normalised copies. The benchmark failure report retains
+original evidence and displays changed model inputs alongside it. Model
+size, weights and the number of NLI scoring comparisons are unchanged.
+
+Run `scripts/test-argument-entity-normalisation.mjs` for independent,
+fictional open-class role examples and hard-negative identity controls.
+The existing 100-paragraph dataset remains private and is not committed;
+the exact browser benchmark and a fresh independent dataset are still
+needed to measure model accuracy and false-positive effects.
