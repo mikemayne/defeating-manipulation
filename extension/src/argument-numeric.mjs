@@ -165,7 +165,7 @@ function pairedValues(p,c){
 // association. Resolve +,-,*,/ only with same-unit operands and explicit
 // count factors. Multi-term general parsing is intentionally bounded.
 function explicitEquation(p,c){
- if(!timeCompatible(p,c)||EXCEPT.test(p)||EXCEPT.test(c))return null;
+ if(!timeCompatible(p,c)||EXCEPT.test(p)||EXCEPT.test(c)||/\b(?:for each|each of|per item|per stop|per person)\b/i.test(p))return null;
  const vals=mentions(p).filter(x=>x.unit!==null);
  const out=mentions(c).filter(x=>x.unit!==null);
  if(vals.length!==2||out.length!==1||vals[0].unit!==vals[1].unit||vals[0].unit!==out[0].unit)return null;
@@ -182,6 +182,26 @@ function explicitEquation(p,c){
   [{type:'arithmetic',operator,left:vals[0].value,right:vals[1].value,result:value,claimed:out[0].value,unit:vals[0].unit,consistent:ok}]);
 }
 
+
+// Explicit flat charge plus a unit rate times a stated quantity. No
+// implicit rate, implied number of items or inferred future costs.
+function rateArithmetic(p,c){
+ if(HEDGE.test(p)||EXCEPT.test(p)||EXCEPT.test(c)||!timeCompatible(p,c)||
+  sharedTopic(p,c)<1)return null;
+ const rate=new RegExp(String.raw`([£$€])\s*(${DIGIT})\s+(?:plus|\+)\s*([£$€])\s*(${DIGIT})\s+(?:(?:for\s+each\s+of)|(?:per\s+[a-z-]+\s+for))\s+(${QUANTITY})\b`,'i').exec(p);
+ if(!rate||rate[1]!==rate[3])return null;
+ const n=parseNumber(rate[5]);
+ if(!Number.isFinite(n)||!Number.isInteger(n)||n<0||n>10000)return null;
+ const outputs=mentions(c).filter(x=>x.unit===normalizeUnit(rate[1]));
+ if(outputs.length!==1||!/(?:costs?|total|sum|fare|fee|price|charge|amount)/i.test(c))return null;
+ const first=quantize(Number(rate[2]),normalizeUnit(rate[1]));
+ const each=quantize(Number(rate[4]),normalizeUnit(rate[1]));
+ const calculated=first+each*n,observed=outputs[0].value;
+ const ok=sameNumeric(calculated,observed);
+ return valueResult(ok?'supported_conclusion':'contradictory_claims','explicit_flat_plus_unit_rate',p,c,
+  [{type:'arithmetic',operator:'base + rate * quantity',base:first,rate:each,
+    count:n,result:calculated,claimed:observed,unit:normalizeUnit(rate[1]),consistent:ok}]);
+}
 
 // A stated physical lower/upper bound is incompatible with an observation
 // outside that bound, provided measurement units and described scope align.
@@ -206,5 +226,5 @@ export function extractNumericalPropositions(text){return mentions(String(text||
 export function inferNumericRelation(premise,conclusion){
  if(typeof premise!=='string'||typeof conclusion!=='string'||!premise.trim()||!conclusion.trim()||
    premise.length>1600||conclusion.length>400||QUOTED.test(premise)||QUOTED.test(conclusion)||HEDGE.test(conclusion))return null;
- return exactValue(premise,conclusion)||explicitBound(premise,conclusion)||pairedValues(premise,conclusion)||explicitEquation(premise,conclusion);
+ return exactValue(premise,conclusion)||explicitBound(premise,conclusion)||rateArithmetic(premise,conclusion)||pairedValues(premise,conclusion)||explicitEquation(premise,conclusion);
 }
