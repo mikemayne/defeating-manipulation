@@ -54,3 +54,26 @@ const negatives=[
 ];
 for(const [p,c] of negatives)assert.equal(gap(p,c),null,`False evidence gap: ${p} => ${c}`);
 console.log(`Proof obligations: ${positives.length} verified asymmetry cases; ${negatives.length} adversarial abstentions passed.`);
+
+// End-to-end: a missing proof alone stays diagnostic-only, but an explicit
+// finite-to-absolute claim-strength mismatch is a justified supplied-evidence gap.
+const {combineArgumentEvidence,analyseArguments,argumentFindings}
+ = await import('../extension/src/argument-analysis.mjs');
+const neutral={contradiction:0.001,neutral:0.998,entailment:0.001};
+const p='A theatre bought a new curtain.';
+const c='All future performances are guaranteed to sell out.';
+const result=combineArgumentEvidence([{kind:'combined',text:p,forward:neutral}],c);
+assert.equal(result?.label,'unsupported_conclusion');
+assert.ok(['verified_evidence_type_mismatch','verified_scope_overreach'].includes(result?.status));
+const uncertain=await analyseArguments(
+ 'The town replaced a broken streetlamp. Therefore traffic might be safer tonight.',
+ async()=>neutral);
+assert.deepEqual(argumentFindings(uncertain),[],'A tentative effect does not turn red');
+const captured=[];
+const overclaim=await analyseArguments(
+ 'The district installed a new touchscreen. Therefore every resident will now understand every policy.',
+ async()=>neutral,{onDiagnostic:row=>captured.push(row)});
+assert.equal(captured.length,1);
+assert.equal(captured[0].proofObligation?.reason,'finite_event_to_absolute_outcome');
+assert.equal(overclaim[0]?.label,'unsupported_conclusion');
+console.log('Proof obligation integration, no-red hedged outcome and benchmark diagnostics passed.');
