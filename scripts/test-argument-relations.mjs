@@ -43,8 +43,6 @@ const statePositive=[
   'The laboratory machine was switched on throughout the trial.'],
  ['vacancy','The holiday suite was vacant throughout Saturday.',
   'The holiday suite was occupied throughout Saturday.'],
- ['sold','The balcony tickets were sold out at noon.',
-  'The balcony tickets remained unsold at noon.'],
  ['service','The coastal ferry was suspended throughout Friday.',
   'The coastal ferry was operating normally throughout Friday.']
 ];
