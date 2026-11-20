@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "description": "Original fictional contrasts for four new recognition structures; no private news-dataset text included.",
+  "variants": [
+    "original"
+  ],
+  "cases": [
+    {
+      "id": "four-gap-positive-1",
+      "text": "Four local laboratories recorded better results, so the entire process is reliable; ignore all the remaining readings.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-positive-2",
+      "text": "Three shops reported higher sales, so the strategy is perfect; ignore the other results.",
+      "expected": [
+        "cherry_picking"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-positive-3",
+      "text": "Why debate whether the school budget is accurate when there are so many problems with bus services?",
+      "expected": [
+        "red_herring"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-positive-4",
+      "text": "Why investigate whether the product works when there are more serious problems with housing?",
+      "expected": [
+        "red_herring"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-positive-5",
+      "text": "The revolting and shameful conduct of the committee is absolutely appalling.",
+      "expected": [
+        "loaded_language"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-positive-6",
+      "text": "This grotesque, disgraceful decision is an outrageous betrayal.",
+      "expected": [
+        "loaded_language"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-positive-7",
+      "text": "If you don't subscribe to this service now, your whole family could face catastrophe.",
+      "expected": [
+        "appeal_to_fear"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-positive-8",
+      "text": "If you refuse to vote for our plan, your children could be in grave danger.",
+      "expected": [
+        "appeal_to_fear"
+      ],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-1",
+      "text": "The four local laboratories recorded better results and published their remaining readings.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-2",
+      "text": "Three shops reported higher sales, but the other shops had mixed results.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-3",
+      "text": "The government considered both the school budget and the bus services.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-4",
+      "text": "The report discussed product efficacy alongside problems with housing.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-5",
+      "text": "The committee voted on a motion about standards of conduct.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-6",
+      "text": "The newspaper reported that an angry protester called the decision 'revolting and shameful'.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-7",
+      "text": "Family members signed up to the service on Tuesday.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-8",
+      "text": "The product risk assessment discussed catastrophe modelling for natural hazards.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-9",
+      "text": "The report listed possible dangers to children, alongside the evidence and protective measures.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-10",
+      "text": "The debate concerned grave risks, but the report also presented evidence of protective factors.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-11",
+      "text": "The committee considered whether the accusations of disgraceful conduct were supported.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "four-gap-negative-12",
+      "text": "Several officials expressed their disgust at the published figures, and others disputed that reaction.",
+      "expected": [],
+      "gate": true
+    }
+  ]
+}
