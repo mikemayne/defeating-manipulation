@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
-import { mkdir, readdir, copyFile } from "node:fs/promises";
+import { mkdir, readdir, copyFile, writeFile } from "node:fs/promises";
+import britishEnglish from "dictionary-en-gb";
 
 const require = createRequire(import.meta.url);
 let entry;
@@ -23,3 +24,9 @@ if (!files.some(name => name.endsWith(".mjs")) ||
 }
 for (const file of files) await copyFile(join(dist, file), join(destination, file));
 console.log(`Copied ${files.length} ONNX Runtime assets into extension/ort`);
+
+// The browser worker has no access to Node filesystem APIs. Ship only local
+// Hunspell data alongside the built worker; it is not fetched from the web.
+await writeFile(resolve("spell-en-gb.aff"), britishEnglish.aff);
+await writeFile(resolve("spell-en-gb.dic"), britishEnglish.dic);
+console.log("Bundled the offline en-GB spelling dictionary");
