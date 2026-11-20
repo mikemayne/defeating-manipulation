@@ -36,7 +36,7 @@ export function paraphrasePrompt(paragraph) {
   "add a new accusation or inference that is not supported by the text. " +
   "Do NOT label any manipulation pattern or judge whether the point is true. " +
   "Output only the rewritten paragraph.\n\n" +
-  "Paragraph: " + paragraph + "\\n\\nParaphrase:";
+  "Paragraph: " + paragraph + "\n\nParaphrase:";
 }
 
 function numericTokens(text) {
