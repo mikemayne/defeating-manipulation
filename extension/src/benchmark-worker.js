@@ -9,6 +9,7 @@ import { analyseArguments } from "./argument-analysis.mjs";
 import { scoreReaderInterpretations, validateReaderCases } from "./reader-interpretation.mjs";
 import { rankBoundaryChoices } from "./reader-boundary-scorer.mjs";
 import { createBoundaryLanguageScorer } from "./reader-language-model.mjs";
+import { compareReaderStrategies,validateStrategyCases,summarizeStrategyComparison } from "./reader-strategy-comparison.mjs";
 import { validateArgumentParagraphCases, inspectArgumentStructure } from "../../evaluation/argument-structure-evaluator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
@@ -130,7 +131,7 @@ function buildSummary(data, elapsedMs, cancelled) {
   failureSamples: data.failures, capturedFailures: data.failures.length,
   paragraphStages: data.paragraphStages,
   unlabelledScan: data.unlabelledScan,
-  predictions: data.unlabelledScan || data.readerMode || data.boundaryMode ? data.predictions : null,
+  predictions: data.unlabelledScan || data.readerMode || data.boundaryMode || data.compareMode ? data.predictions : null,
   predictionCounts: data.unlabelledScan ? data.predictionCounts : null,
   readerMode: data.readerMode, readerCounts: data.readerMode ? data.readerCounts : null,
   readerPairs: data.readerMode ? data.readerPairs : null,
@@ -139,7 +140,9 @@ function buildSummary(data, elapsedMs, cancelled) {
   boundaryMode:data.boundaryMode,
   boundaryCounts:data.boundaryMode?data.boundaryCounts:null,
   boundaryPairs:data.boundaryMode?data.boundaryPairs:null,
-  boundaryCasesWithPairs:data.boundaryMode?data.boundaryCasesWithPairs:null
+  boundaryCasesWithPairs:data.boundaryMode?data.boundaryCasesWithPairs:null,
+  compareMode:data.compareMode,
+  strategyComparison:data.compareMode?summarizeStrategyComparison(data.predictions):null
  };
 }
 async function startRun(message) {
@@ -153,24 +156,25 @@ async function startRun(message) {
   const argumentMode = mode === "argument_paragraph";
   const readerMode = mode === "reader_inference";
   const boundaryMode = mode === "reader_boundary";
+  const compareMode = mode === "reader_compare";
   const positive = mode === "positive_rules" || mode === "positive_ai";
   const concealed = mode === "concealed_rules" || mode === "concealed_ai";
-  if (!["rules", "ai", "consistency", "argument_paragraph", "reader_inference", "reader_boundary", "positive_rules", "positive_ai",
+  if (!["rules", "ai", "consistency", "argument_paragraph", "reader_inference", "reader_boundary", "reader_compare", "positive_rules", "positive_ai",
    "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
-  if ((argumentMode || readerMode || boundaryMode) && source !== "uploaded")
+  if ((argumentMode || readerMode || boundaryMode || compareMode) && source !== "uploaded")
    throw Error("Argument and reader-interpretation tests require a local JSON/JSONL upload");
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
   const ids = concealed ? concealedPatterns.map(pattern => pattern.id) :
    techniques.map(t => t.id);
-  const seeds = (readerMode || boundaryMode) ? validateReaderCases(rawSeeds) :
+  const seeds = compareMode ? validateStrategyCases(rawSeeds) : (readerMode || boundaryMode) ? validateReaderCases(rawSeeds) :
    argumentMode ? validateArgumentParagraphCases(rawSeeds) :
    consistency ? validateConsistencyCases(rawSeeds) : validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
   const unlabelledScan = argumentMode &&
    seeds.every(item => !Object.hasOwn(item,"expected_argument"));
-  const limit = consistency || argumentMode || readerMode || boundaryMode || concealed ? 10000 : 1000000;
+  const limit = consistency || argumentMode || readerMode || boundaryMode || compareMode || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
   const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
@@ -178,7 +182,7 @@ async function startRun(message) {
   // field, including [], explicitly opts that row into reasoning evaluation.
   const needsNli = argumentMode &&
    seeds.some(item => Object.hasOwn(item, "expected") || item.analyse_reasoning === true);
-  if (boundaryMode){
+  if (boundaryMode || compareMode){
    if(!boundaryLanguageScorer)
     boundaryLanguageScorer=await createBoundaryLanguageScorer({
      onStatus:message=>self.postMessage({type:"stage",message})
@@ -198,7 +202,7 @@ async function startRun(message) {
    realTracks: {}, failures: [],
    paragraphStages: argumentMode && !unlabelledScan ? { structure:{total:0,exact:0},
     reasoning:{total:0,exact:0} } : null,
-   unlabelledScan, readerMode, boundaryMode, predictions: [], predictionCounts: {},
+   unlabelledScan, readerMode, boundaryMode, compareMode, predictions: [], predictionCounts: {},
    readerCounts:{}, readerPairs:0, readerCasesWithPairs:0,
    readerExistingParserCases:0,
    boundaryCounts:{}, boundaryPairs:0, boundaryCasesWithPairs:0 };
@@ -210,6 +214,24 @@ async function startRun(message) {
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
    let matches, argumentAssessments = [], argumentDiagnostics = [], structureCheck = null;
+   if(compareMode){
+    const comparisons=await compareReaderStrategies(item.text,boundaryLanguageScorer);
+    const modelCalls=comparisons.length?comparisons.at(-1).neuralCallsForCase:0;
+    data.predictions.push({
+     id:item.id,text:item.text,
+     expected_boundaries:item.expected_boundaries||[],
+     source_url:item.source_url||null,
+     boundaries:comparisons,modelCalls
+    });
+    data.tested++;
+    const now=performance.now();
+    if(now-lastUpdate>220 || i===total-1){
+     self.postMessage({type:"progress",runId:id,completed:data.tested,total});
+     lastUpdate=now;
+     await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    continue;
+   }
    if(boundaryMode){
     const boundaries=await rankBoundaryChoices(item.text,boundaryLanguageScorer);
     data.boundaryPairs+=boundaries.length;

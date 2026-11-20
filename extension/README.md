@@ -916,3 +916,46 @@ positive, negative and end-to-end controls) or the full `test-build` script.
 Improvements to that now-seen benchmark will be development-set results,
 not a generalisation claim: evaluate with another independently labelled
 unseen corpus.
+
+
+## Context vs progressive reader reconstruction (experimental)
+
+The Matcher Test Lab's **Reader strategies — context vs progressive (A/B test)**
+mode runs the two methods on the **same uploaded cases** and uses the existing
+quantised local DistilGPT2 language model and the same four candidate wordings:
+original punctuation, no punctuation/word, "and", or "but".
+
+- **Original-context**: score each potential join against preceding original
+  text, independently of how earlier joins scored.
+- **Progressive**: after a confident choice at one boundary, put that
+  analysis-only replacement into the context used at the next boundary.
+- **Both**: preserve the input and exact original punctuation offsets; never
+  change visible text, never feed provisional joins to the red-underline
+  engine. Both use the same 130-character left context budget and same
+  continuation; identical neural inputs are memoized.
+- **Safety of comparison**: uncertain or low-margin choices default to
+  keeping original punctuation. The run scores at most eight consecutive
+  eligible boundaries per excerpt; longer paragraphs are truncated for this
+  experimental mode. There may be additional model passes for the
+  progressive strategy, so its total runtime can be longer.
+- **Reference accuracy**: the 1,000 real-world excerpts have no human ratings
+  of preferred joins. For these, the lab reports relative decisions, model
+  calls, and how often the strategies disagree, **not accuracy**. Optionally
+  provide \`expected_boundaries: [{"offset": 23, "choice": "but"}]\`
+  on an uploaded case, where \`offset\` points to the exact **zero-based
+  punctuation character** in the original text and \`choice\` is
+  \`keep\`, \`nothing\`, \`and\`, or \`but\`. Accuracy is calculated only for
+  labelled boundaries that were eligible for analysis; unmatched label
+  counts are also shown.
+- **Synthetic reference pilot**: upload
+  \`evaluation/reader-strategy-synthetic-reference.json\`: 54 fictional
+  cases with 108 developer-authored reference choices. This is a regression
+  and face-validity check, **not evidence of accuracy in real readers**.
+  The private 1,000-case real-world corpus is not included in the repository.
+
+The four options measure the local model's preferred *wording*, not actual
+human agreement and not causality. Even a grammatically natural "but" or "and"
+does not by itself establish an argument or the cause of an event. Human
+reader annotations are needed before any claim that one strategy is more
+accurate at predicting interpretation.
+
