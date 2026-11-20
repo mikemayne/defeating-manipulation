@@ -106,3 +106,24 @@ lines, but it does not establish accuracy on novel writing. As the library
 grows, add more independently written, reviewed examples and keep some aside
 as a held-out test set for genuine generalisation measurements. The local lab
 is intentionally *not* copied into the public GitHub Pages deployment.
+
+
+## Broader technique recognition (local AI)
+
+The extension catalogue now contains representative *usage statements* for all
+54 negative technique categories. In earlier versions, 15 categories had neither
+semantic prototypes nor deterministic rules, so the algorithm could not possibly
+identify them. The shared matcher still uses the same conservative semantic
+similarity threshold and margin; neither was lowered.
+
+Structural rule coverage has also expanded for distinguishable argument forms.
+Run `node scripts/test-build.mjs` to check the 57 independent fictional
+positive and neutral contrasts in `evaluation/recognition-contrasts.json`.
+These tests validate rules and offsets, but do *not* certify MiniLM performance.
+
+Keep the independently collected news-paraphrase JSON held out of this repository
+and run it through the local test lab after each update. Compare false positives
+and recall to the previous 185-case AI benchmark (10% recall, zero false
+positives). Do not claim an AI improvement until the actual offline model has
+run on the new source. A model may lose precision when more prototype examples
+are introduced; this is why we keep separate held-out cases.
