@@ -1256,3 +1256,6 @@ await import('./test-argument-bridges.mjs');
 // Check immutable synthetic benchmark bytes and gold-label counts ONLY.
 // Deliberately never score or parse its paragraphs during CI.
 await import('./validate-frozen-argument-corpus.mjs');
+
+// General JS arithmetic and source-grounded graph proof + adversarial abstention.
+await import('./test-argument-proof-graph.mjs');

@@ -7,6 +7,7 @@ import { boundedArgumentLogic } from "./argument-bounded-logic.mjs";
 import { observableOverreach } from "./argument-overreach.mjs";
 import { structurePropositions } from "./argument-propositions.mjs";
 import { inferReasoningBridge } from "./argument-bridges.mjs";
+import { inspectArgumentProof } from "./argument-proof-graph.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -75,7 +76,7 @@ export function classifyArgumentScore(forward, reverse = null) {
 // verdict caused by adding irrelevant premises to the same NLI input.
 // A contradictory premise wins over a supporting one: the supplied set of
 // premises is then internally inconsistent. Uncertain scores abstain.
-export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker="",structured=null,bridge=undefined} = {}) {
+export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker="",structured=null,bridge=undefined,proof=undefined} = {}) {
  // Structured arithmetic, explicit exclusions and a limited set of
  // quantified conditions are more reliable than MNLI guesses. Keep them
  // separate from neural probabilities and ensure contradictory evidence wins.
@@ -85,6 +86,10 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
  // from original words. A null result leaves existing abstentions intact.
  const verifiedBridge = bridge === undefined
   ? inferReasoningBridge(complete, conclusionText) : bridge;
+ // JavaScript verifies numbers and explicit conditional proofs independently
+ // of neural entailment scores. Missing graph links are advisory ONLY.
+ const verifiedProof = proof===undefined
+  ? inspectArgumentProof(complete,conclusionText) : proof;
  const bounded = boundedArgumentLogic(complete, conclusionText);
  // An overclaim needs an observable *scope leap*, not merely an NLI-neutral
  // score. Explicit contradictions and bounded entailments take precedence.
@@ -134,6 +139,13 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
    evidence = assessNeutralArgumentEvidence(item.text, conclusionText, verdict);
   return { ...item, verdict:evidence.verdict, evidenceStatus:evidence.status,
    evidenceReason:evidence.reason || null };
+ });
+ if (verifiedProof?.verified) classified.push({
+  kind:"checked_proposition_graph",text:complete,
+  verdict:{label:verifiedProof.verified.label,score:1,
+   reason:verifiedProof.verified.reason},
+  evidenceStatus:"verified_javascript_proof",
+  evidenceReason:verifiedProof.verified.reason
  });
  if (verifiedBridge) classified.push({
   kind:"reasoning_bridge",text:complete,
@@ -197,6 +209,7 @@ export async function analyseArguments(source, scorePair,
   // Source assertions, not NLI rewrites, determine any verified relation.
   const propositions = structurePropositions(argument.premise, normalised.text);
   const bridge = inferReasoningBridge(argument.premise, normalised.text);
+  const proof = inspectArgumentProof(argument.premise, normalised.text);
   onProgress?.({ completed: i, total: candidates.length });
 
   const texts = [
@@ -226,7 +239,7 @@ export async function analyseArguments(source, scorePair,
   // Explicit-logic checks continue to use the original statements and
   // completed *source* conclusion, not canonicalised NLI text.
   const result = combineArgumentEvidence(scored, normalised.text,
-   {inferenceMarker:argument.conclusion.marker,structured:propositions,bridge});
+   {inferenceMarker:argument.conclusion.marker,structured:propositions,bridge,proof});
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
    modelConclusion: normalised.expanded || entities.changed ? hypothesis : null,
@@ -235,6 +248,16 @@ export async function analyseArguments(source, scorePair,
     claimKind:propositions.conclusion.kind,
     relation:propositions.relation?.reason || null},
    reasoningBridge:bridge ? {reason:bridge.reason,steps:bridge.chain.length} : null,
+   proofGraph:{
+    status:proof.status,
+    sourceFacts:proof.numericFacts.length,
+    nodes:proof.nodes.length,edges:proof.edges.length,
+    proof:proof.verified?.reason || null,
+    proofTrace:proof.verified?.chain || null,
+    missingLinks:proof.missingLinks.map(item=>({
+     kind:item.type, statement:item.statement, certainty:item.certainty
+    }))
+   },
    inferenceMarker: argument.conclusion.marker,
    inline: argument.conclusion.inline || false,
    comparisons: scored.map(({ kind, text, modelPremise, repeated, forward, reverse }) =>

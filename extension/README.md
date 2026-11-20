@@ -765,3 +765,52 @@ negative tests are in `scripts/test-argument-bridges.mjs` and
 reasoning change before testing a new, independently labelled corpus.
 The existing private 100-paragraph set must not be committed or used
 to tune the next round.
+
+
+## JavaScript arithmetic and bounded proof graph (second-pass reasoning)
+
+The independent **paragraph-level argument analyser** now constructs a
+local, source-grounded proposition graph before neural inference. This
+does **not** alter the sentence-level manipulation matcher. Its
+structured JavaScript checks can override mistaken numerical NLI predictions
+only when every required fact, scope and operation is explicitly verified.
+
+New modules:
+
+- `extension/src/argument-numeric.mjs`: number words, decimals, currency
+  expressed as integer minor units, selected compatible measurement-unit
+  conversions, exact same-scope values, open-class named-item comparisons,
+  explicit two-term arithmetic, explicitly stated flat-fee plus per-item rate × quantity arithmetic, and stated min/max bounds. Calculations
+  themselves are performed in JavaScript.
+- `extension/src/argument-proof-graph.mjs`: source premise nodes, explicit
+  sufficient or necessary conditional rules, derived inference nodes,
+  rule-labelled edges and a goal node. Forward chaining is limited to
+  three steps and 40 nodes; direct statement negation is narrowly checked.
+  Numerical proofs are represented in the same graph, with source-to-goal
+  traces.
+
+**Backward reasoning:** if the conclusion cannot be derived, the graph
+identifies a stated rule's unsatisfied antecedent where available, or
+reports that no verified derivation was found. This is an **unverified
+missing-link diagnostic only**. Failure to construct a derivation does
+*not* prove that the conclusion is unsupported, false or deliberately
+manipulative. Incomplete chains therefore **never produce a red underline
+by themselves**. Explicit and confidently verified contradictions do.
+
+The original source spans and highlighting offsets remain unchanged.
+There are no extra local NLI calls, and no new model or network request.
+The browser benchmark diagnostics include numeric proof reasons, graph
+edge counts and *unverified* missing links for failure inspection.
+
+**Boundaries:** this is a conservative symbolic interpreter, not a complete
+natural-language theorem prover. It abstains on unclear entity references,
+mismatched dates/units, exceptions, quotations, insufficiently scoped
+arithmetic, and nonliteral or tentative claims. The numerical extractor
+is presently deterministic; a future locally executed model could propose
+typed facts, but proposed facts must be independently checked against
+the original text before JavaScript uses them as evidence.
+
+Run `node scripts/test-argument-proof-graph.mjs` for independently authored
+positive and adversarial controls, or `node scripts/test-build.mjs` for the
+full repository suite. **Do not tune this implementation to the frozen
+200-case synthetic benchmark**; use new blind tests to evaluate generalisation.
