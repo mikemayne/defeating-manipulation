@@ -135,6 +135,8 @@ function renderResults(data) {
   grid.replaceChildren(
    metric("Real-world cases scanned",number(data.total)),
    metric("Arguments extracted",number(data.predictions.filter(x=>x.extracted_arguments.length).length)),
+   metric("AI candidate passages (provisional)",number(data.predictions.filter(x=>
+    x.extracted_arguments.some(h=>h.reconstructionMethod==="model_nli_directional_entailment")).length)),
    metric("Cases with reasoning verdicts",number(data.predictions.filter(x=>x.predicted_labels.length).length)),
    metric("Speed, cases/sec",number(Math.round(data.casesPerSecond))),
    metric("Elapsed time, seconds",oneDecimal(data.elapsedSeconds))
@@ -339,6 +341,8 @@ function unlabelledReport(data) {
   "Mode: prediction-only (unlabelled; no accuracy metrics)",
   "Scanned: " + data.total + " / " + data.requested,
   "Arguments extracted: " + data.predictions.filter(x => x.extracted_arguments.length).length,
+  "AI candidate passages (provisional): " + data.predictions.filter(x =>
+   x.extracted_arguments.some(h => h.reconstructionMethod==="model_nli_directional_entailment")).length,
   "Cases with reasoning verdicts: " + data.predictions.filter(x => x.predicted_labels.length).length,
   "Elapsed (seconds): " + oneDecimal(data.elapsedSeconds),
   "",
@@ -366,7 +370,10 @@ function unlabelledReport(data) {
    lines.push("Extracted conclusion: " + h.sourceConclusion +
     " | Model hypothesis: " + h.modelConclusion +
     (h.inferred ? " | Inferred connector: " + h.inferredConnector +
-     " | Analysis-only reconstruction: " + h.analysisText : ""));
+     " | Analysis-only reconstruction: " + h.analysisText +
+     (h.reconstructionMethod ? " | Method: " + h.reconstructionMethod : "") +
+     (Number.isFinite(h.relationScore) ?
+      " | Model directional entailment: " + h.relationScore.toFixed(3) : "") : ""));
  }
  return lines.join("\n");
 }
