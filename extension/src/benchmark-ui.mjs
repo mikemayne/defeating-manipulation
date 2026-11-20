@@ -18,22 +18,27 @@ function updateSource() {
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
  const positive = mode.value.startsWith("positive_");
+ const concealed = mode.value.startsWith("concealed_");
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
- count.max = consistency ? 10000 : 1000000;
- if (!count.dataset.edited) count.value = consistency ? 200 : positive ? 72 : 25000;
+ count.max = consistency || concealed ? 10000 : 1000000;
+ if (!count.dataset.edited) count.value = consistency ? 200 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
   ? consistency
    ? 'Upload JSON/JSONL containing {id, text, expected}, where expected is [] or ["argument_inconsistency"]. All analysis stays in this browser.'
-   : positive
-    ? "Upload JSON/JSONL containing {id, text, expected}. Expected IDs must be from the positive-pattern library. All analysis stays in this browser."
-    : "Upload JSON/JSONL containing {id, text, expected} using manipulation technique IDs. All analysis stays in this browser."
+   : concealed
+    ? "Upload JSON/JSONL with {id, text, expected}, where expected contains a concealed-pattern ID (e.g. choice_with_coercion) or []. No uploads leave this browser."
+    : positive
+     ? "Upload JSON/JSONL containing {id, text, expected}. Expected IDs must be from the positive-pattern library. All analysis stays in this browser."
+     : "Upload JSON/JSONL containing {id, text, expected} using manipulation technique IDs. All analysis stays in this browser."
   : consistency
    ? "200 labelled fictional cases: direct contradictions, paraphrases, consistent claims, different speakers/dates and hypotheticals. Generated variations test robustness, not independent accuracy."
-   : positive
-    ? "72 labelled fictional cases: 36 constructive statements and 36 neutral or misleading lookalikes. Generated repetitions are regression tests, not independent accuracy evidence."
-    : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
+   : concealed
+    ? "96 fictional cases: 48 positive openings undermined by targeted pressure and 48 hard negatives. Tests relationships, not just green/blue co-occurrence; no intent inferred."
+    : positive
+     ? "72 labelled fictional cases: 36 constructive statements and 36 neutral or misleading lookalikes. Generated repetitions are regression tests, not independent accuracy evidence."
+     : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
 }
 count.addEventListener("input", () => { count.dataset.edited = "true"; });
 mode.addEventListener("change", updateSource);
@@ -133,6 +138,7 @@ function renderResults(data) {
   "Evaluated " + number(data.total) + " cases, including " + number(data.negativeCount) +
   (lastMode === "consistency" ? " cases with no expected inconsistency." :
    lastMode.startsWith("positive_") ? " cases with no expected positive pattern." :
+   lastMode.startsWith("concealed_") ? " cases with no expected concealed relationship." :
    " cases with no expected technique.") +
   " Results describe this test dataset, not accuracy on unseen writing.";
  tableRows($("confusion"), data.confusion.slice(0, 20)
@@ -178,6 +184,13 @@ function failureReport(data) {
    for (const pair of item.detectedPairs)
     lines.push("  " + pair.score + " | " + pair.text + " <> " + pair.otherText);
   }
+  if (item.concealedLinks?.length) {
+   lines.push("Relationship findings:");
+   for (const link of item.concealedLinks)
+    lines.push("  " + link.pattern + " | Positive: " + link.positive +
+     " | Pressure: " + link.pressure +
+     (link.relatedNegative ? " | Negative pattern: " + link.relatedNegative : ""));
+  }
  }
  return lines.join("\n");
 }
@@ -219,13 +232,18 @@ function catalogues() {
   fetch(new URL("../../evaluation/positive-matcher-examples.json", import.meta.url)).then(response => {
    if (!response.ok) throw Error("Cannot load the positive-pattern examples");
    return response.json();
+  }),
+  fetch(new URL("../../evaluation/concealed-pattern-examples.json", import.meta.url)).then(response => {
+   if (!response.ok) throw Error("Cannot load the concealed-pattern examples");
+   return response.json();
   })
  ]);
 }
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
- const maximum = mode.value === "consistency" ? 10000 : 1000000;
+ const maximum = mode.value === "consistency" || mode.value.startsWith("concealed_")
+  ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
   setError("Choose a test count between 1 and " + number(maximum) + ".");
   return;
@@ -248,9 +266,11 @@ runButton.addEventListener("click", async () => {
  results.hidden = true;
  setError("");
  try {
-  const [catalogue, patterns, manipulationFixture, consistencyFixture, positiveFixture] = await catalogues();
+  const [catalogue, patterns, manipulationFixture, consistencyFixture,
+   positiveFixture, concealedFixture] = await catalogues();
   const fixture = mode.value === "consistency" ? consistencyFixture :
-   mode.value.startsWith("positive_") ? positiveFixture : manipulationFixture;
+   mode.value.startsWith("positive_") ? positiveFixture :
+   mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;
   runId++;
   setupWorker().postMessage({
    type: "start", runId, mode: mode.value, source: source.value,

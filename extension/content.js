@@ -21,7 +21,7 @@
  }
 
  let tooltip;
- const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#0d9488", RED = "#dc2626";
+ const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", RED = "#dc2626";
  const colour = technique => technique.category === "Inconsistency" ? RED :
    technique.category === "Positive" ? GREEN :
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
@@ -44,12 +44,24 @@
      other.textContent = "Conflicting passage: “" + match.otherText + "”";
      other.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
      summary.append(other);
+   } else if (match.kind === "concealed") {
+     const opening = document.createElement("div");
+     opening.textContent = "Positive opening: “" + match.positiveText + "”";
+     opening.style.cssText = `margin-top:8px;padding:7px;border-left:3px solid ${TURQUOISE};`;
+     summary.append(opening);
+     if (match.negativePattern) {
+       const relation = document.createElement("div");
+       relation.textContent = "Related negative pattern: " + match.negativePattern;
+       relation.style.marginTop = "7px";
+       summary.append(relation);
+     }
    }
    summary.style.margin = "6px 0 8px";
    const strength = document.createElement("div");
-   strength.textContent = match.kind === "inconsistency" ? "Inference: possible contradiction" : match.method === "pattern"
-     ? "Match: Rule"
-     : "Match strength: " + (match.strength || "Low");
+   strength.textContent = match.kind === "inconsistency" ? "Inference: possible contradiction" :
+     match.kind === "concealed" ? "Relationship: positive wording followed by pressure (check context)" :
+     match.method === "pattern" ? "Match: Rule" :
+     "Match strength: " + (match.strength || "Low");
    strength.style.cssText = "margin:0 0 8px;font-size:12px;color:#b5d0e5;";
    strength.title = "Match strength is an experimental estimate, not the probability that the text is manipulative.";
    const link = document.createElement("a");
@@ -59,7 +71,7 @@
    link.rel = "noopener noreferrer";
    link.style.color = "#7ee4e7";
    tooltip.append(title, summary, strength);
-   if (match.kind !== "inconsistency") tooltip.append(link);
+   if (match.kind !== "inconsistency" && match.kind !== "concealed") tooltip.append(link);
    const r = mark.getBoundingClientRect();
    tooltip.style.display = "block";
    tooltip.style.left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - 350)) + "px";

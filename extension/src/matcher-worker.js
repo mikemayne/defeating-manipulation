@@ -4,6 +4,7 @@ import { embeddingRows } from "./embedding-rows.mjs";
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
+import { findConcealedPatterns } from "./concealed-matching.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -76,12 +77,16 @@ self.addEventListener("message", async event => {
    prototypes: positivePrototypes,
    embed: extractor ? embed : null
   });
-  // The two analyses share the same selection and return one result set.
-  // A missing NLI model never prevents ordinary pattern highlighting.
+  const concealedMatches = findConcealedPatterns(data.text, {
+   positiveMatches, negativeMatches: matches
+  });
+  // The analyses share the selection. A missing NLI model never prevents
+  // ordinary blue, green or turquoise highlighting.
   let inconsistencies = [];
   try { inconsistencies = await findInconsistencies(data.text, scorePair); }
   catch (error) { console.warn("Consistency analysis unavailable:", error); }
-  self.postMessage({ id: data.id, matches: [...matches, ...positiveMatches, ...inconsistencies] });
+  self.postMessage({ id: data.id,
+   matches: [...matches, ...positiveMatches, ...concealedMatches, ...inconsistencies] });
  } catch (error) {
   self.postMessage({ id: data.id, error: String(error?.message || error) });
  }

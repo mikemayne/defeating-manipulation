@@ -1,0 +1,678 @@
+{
+  "version": 1,
+  "description": "96 individually written fictional relation-level cases: 48 examples of a positive rhetorical opening immediately undercut by a demand/penalty, and 48 difficult negatives including respectful disagreement, unrelated content, legitimate deadlines, separate speakers and quoted examples. Smoke tests, not independent real-world accuracy.",
+  "cases": [
+    {
+      "id": "choice_with_coercion-01",
+      "group": "choice_with_coercion",
+      "text": "No pressure, but you must sign the pledge or you will lose your position.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-02",
+      "group": "choice_with_coercion",
+      "text": "The choice is yours. If you refuse to agree, we'll publish your name.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-03",
+      "group": "choice_with_coercion",
+      "text": "The decision is yours, but you have to support this proposal.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-04",
+      "group": "choice_with_coercion",
+      "text": "You can decide for yourself, but if you don't approve it, we'll remove you.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-05",
+      "group": "choice_with_coercion",
+      "text": "Take the time you need. However, you must sign this agreement or be excluded.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-06",
+      "group": "choice_with_coercion",
+      "text": "No pressure. Unless you accept the conditions, you'll lose your place.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-07",
+      "group": "choice_with_coercion",
+      "text": "The choice is yours, yet the only acceptable decision is to agree.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-08",
+      "group": "choice_with_coercion",
+      "text": "It's up to you, but anyone who refuses must leave the team.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-09",
+      "group": "choice_with_coercion",
+      "text": "You don't have to agree right now. But you must agree by tonight.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-10",
+      "group": "choice_with_coercion",
+      "text": "The decision is yours. But we'll blacklist you if you refuse.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-11",
+      "group": "choice_with_coercion",
+      "text": "Take your time to decide, however you have to vote for my proposal.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "choice_with_coercion-12",
+      "group": "choice_with_coercion",
+      "text": "You are free to choose, but if you don't support us, we'll exclude you.",
+      "expected": [
+        "choice_with_coercion"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-01",
+      "group": "respect_with_penalty",
+      "text": "I respect your right to disagree, but anyone who disagrees must leave the team.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-02",
+      "group": "respect_with_penalty",
+      "text": "It's fine to disagree, yet you must agree with me or I will exclude you.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-03",
+      "group": "respect_with_penalty",
+      "text": "We welcome different opinions, but no one is allowed to disagree here.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-04",
+      "group": "respect_with_penalty",
+      "text": "You are free to disagree. If you disagree, we'll remove you.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-05",
+      "group": "respect_with_penalty",
+      "text": "Feel free to disagree; anyone who objects must leave the group.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-06",
+      "group": "respect_with_penalty",
+      "text": "I respect your opinion, but you have to agree with us.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-07",
+      "group": "respect_with_penalty",
+      "text": "We encourage open discussion. But anyone who says no must leave.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-08",
+      "group": "respect_with_penalty",
+      "text": "I respect your right to disagree. Unless you agree with me, you'll be excluded.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-09",
+      "group": "respect_with_penalty",
+      "text": "We value different views, but you must agree with us.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-10",
+      "group": "respect_with_penalty",
+      "text": "It's okay to disagree, but if you disagree, I'll fire you.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-11",
+      "group": "respect_with_penalty",
+      "text": "Please challenge me, but anyone who objects will be punished.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "respect_with_penalty-12",
+      "group": "respect_with_penalty",
+      "text": "I welcome disagreement, but nobody is allowed to disagree.",
+      "expected": [
+        "respect_with_penalty"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-01",
+      "group": "empathy_with_guilt",
+      "text": "I understand why you're upset, but if you really cared, you'd support me.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-02",
+      "group": "empathy_with_guilt",
+      "text": "I understand this is difficult for you, but you must agree with me.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-03",
+      "group": "empathy_with_guilt",
+      "text": "Your feelings matter, but you're selfish if you refuse.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-04",
+      "group": "empathy_with_guilt",
+      "text": "I can see why you're worried, yet if you really cared about us, you'd sign.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-05",
+      "group": "empathy_with_guilt",
+      "text": "I know you're hurt. A good friend would support this decision.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-06",
+      "group": "empathy_with_guilt",
+      "text": "I care about your feelings, but unless you support me, you'll regret it.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-07",
+      "group": "empathy_with_guilt",
+      "text": "I understand why you're upset, but you don't really care about us.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-08",
+      "group": "empathy_with_guilt",
+      "text": "I know this is hard for you. If you valued the team, you would agree.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-09",
+      "group": "empathy_with_guilt",
+      "text": "Your feelings matter. But you have to approve the request.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-10",
+      "group": "empathy_with_guilt",
+      "text": "I can see why you're concerned, but you're ungrateful if you say no.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-11",
+      "group": "empathy_with_guilt",
+      "text": "I understand why you're worried. If you really cared about your family, you would sign.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "empathy_with_guilt-12",
+      "group": "empathy_with_guilt",
+      "text": "I care about how you feel. You must support me or else.",
+      "expected": [
+        "empathy_with_guilt"
+      ]
+    },
+    {
+      "id": "independence_with_control-01",
+      "group": "independence_with_control",
+      "text": "Think for yourself, but you must agree with me.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-02",
+      "group": "independence_with_control",
+      "text": "Make up your own mind. However, you have to accept my conclusion.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-03",
+      "group": "independence_with_control",
+      "text": "Draw your own conclusion, but there is only one acceptable answer.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-04",
+      "group": "independence_with_control",
+      "text": "Check the evidence for yourself. You must reach my conclusion.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-05",
+      "group": "independence_with_control",
+      "text": "Feel free to challenge my argument, but no one may question my view.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-06",
+      "group": "independence_with_control",
+      "text": "Form your own mind, but you must accept our version.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-07",
+      "group": "independence_with_control",
+      "text": "See what conclusion you reach. Yet you must accept my answer.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-08",
+      "group": "independence_with_control",
+      "text": "You are free to evaluate this evidence, but you have to agree with us.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-09",
+      "group": "independence_with_control",
+      "text": "Review the sources for yourself. If you don't accept my view, you'll lose your position.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-10",
+      "group": "independence_with_control",
+      "text": "You should make your own decision, but you must vote for my proposal.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-11",
+      "group": "independence_with_control",
+      "text": "Check the sources for yourself. Unless you agree with me, we'll exclude you.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "independence_with_control-12",
+      "group": "independence_with_control",
+      "text": "Decide for yourself, but you must accept my conclusion.",
+      "expected": [
+        "independence_with_control"
+      ]
+    },
+    {
+      "id": "contrast-01",
+      "group": "contrast",
+      "text": "No pressure. Take your time to decide.",
+      "expected": []
+    },
+    {
+      "id": "contrast-02",
+      "group": "contrast",
+      "text": "The choice is yours, and the application closes on Friday.",
+      "expected": []
+    },
+    {
+      "id": "contrast-03",
+      "group": "contrast",
+      "text": "It is your choice whether to join, but the session begins at nine.",
+      "expected": []
+    },
+    {
+      "id": "contrast-04",
+      "group": "contrast",
+      "text": "The decision is yours. Please tell us what you decide when you're ready.",
+      "expected": []
+    },
+    {
+      "id": "contrast-05",
+      "group": "contrast",
+      "text": "You have to agree to the published safety rules to enter. It is your choice whether to attend.",
+      "expected": []
+    },
+    {
+      "id": "contrast-06",
+      "group": "contrast",
+      "text": "No pressure. The chair discussed the budget. You must agree with me.",
+      "expected": []
+    },
+    {
+      "id": "contrast-07",
+      "group": "contrast",
+      "text": "No pressure about the proposal.\n\nYou must agree with me.",
+      "expected": []
+    },
+    {
+      "id": "contrast-08",
+      "group": "contrast",
+      "text": "No pressure, but please check whether the timetable works for you.",
+      "expected": []
+    },
+    {
+      "id": "contrast-09",
+      "group": "contrast",
+      "text": "Take the time you need, but please let the organisers know by Monday.",
+      "expected": []
+    },
+    {
+      "id": "contrast-10",
+      "group": "contrast",
+      "text": "No pressure, but the offer expires at the advertised deadline.",
+      "expected": []
+    },
+    {
+      "id": "contrast-11",
+      "group": "contrast",
+      "text": "The director said no pressure. The manager said you must agree with us.",
+      "expected": []
+    },
+    {
+      "id": "contrast-12",
+      "group": "contrast",
+      "text": "The article quoted the phrase 'No pressure' as an example of reassuring language.",
+      "expected": []
+    },
+    {
+      "id": "contrast-13",
+      "group": "contrast",
+      "text": "I respect your right to disagree, and I would like to hear your objections.",
+      "expected": []
+    },
+    {
+      "id": "contrast-14",
+      "group": "contrast",
+      "text": "It's fine to disagree, but I disagree with your conclusion about the timetable.",
+      "expected": []
+    },
+    {
+      "id": "contrast-15",
+      "group": "contrast",
+      "text": "We welcome different opinions, and all comments will be recorded fairly.",
+      "expected": []
+    },
+    {
+      "id": "contrast-16",
+      "group": "contrast",
+      "text": "Feel free to disagree, but please allow other speakers to finish.",
+      "expected": []
+    },
+    {
+      "id": "contrast-17",
+      "group": "contrast",
+      "text": "I respect your opinion, but the figures in your chart are not correct.",
+      "expected": []
+    },
+    {
+      "id": "contrast-18",
+      "group": "contrast",
+      "text": "We encourage open discussion. People may question the plan without penalty.",
+      "expected": []
+    },
+    {
+      "id": "contrast-19",
+      "group": "contrast",
+      "text": "I welcome disagreement. The rules require registration before the meeting.",
+      "expected": []
+    },
+    {
+      "id": "contrast-20",
+      "group": "contrast",
+      "text": "I respect your right to disagree.\n\nAnyone who disagrees must leave.",
+      "expected": []
+    },
+    {
+      "id": "contrast-21",
+      "group": "contrast",
+      "text": "You must agree with me. I respect your right to disagree.",
+      "expected": []
+    },
+    {
+      "id": "contrast-22",
+      "group": "contrast",
+      "text": "The first speaker said we welcome different opinions. The second speaker said you must agree with us.",
+      "expected": []
+    },
+    {
+      "id": "contrast-23",
+      "group": "contrast",
+      "text": "We welcome different opinions. The reporter quoted the words 'you must agree with us' from the old campaign.",
+      "expected": []
+    },
+    {
+      "id": "contrast-24",
+      "group": "contrast",
+      "text": "Please challenge me, but keep criticism focused on the argument, not the speaker.",
+      "expected": []
+    },
+    {
+      "id": "contrast-25",
+      "group": "contrast",
+      "text": "I understand why you're upset. Let me know if you want to discuss it.",
+      "expected": []
+    },
+    {
+      "id": "contrast-26",
+      "group": "contrast",
+      "text": "Your feelings matter, and you are free to decline the invitation.",
+      "expected": []
+    },
+    {
+      "id": "contrast-27",
+      "group": "contrast",
+      "text": "I know you're hurt, but we can discuss it at a better time.",
+      "expected": []
+    },
+    {
+      "id": "contrast-28",
+      "group": "contrast",
+      "text": "I understand this is difficult for you. You do not have to agree.",
+      "expected": []
+    },
+    {
+      "id": "contrast-29",
+      "group": "contrast",
+      "text": "I care about your feelings, but it is important to explain the risks.",
+      "expected": []
+    },
+    {
+      "id": "contrast-30",
+      "group": "contrast",
+      "text": "I understand why you're worried, but more information is needed before deciding.",
+      "expected": []
+    },
+    {
+      "id": "contrast-31",
+      "group": "contrast",
+      "text": "I understand why you're upset.\n\nIf you really cared, you would agree.",
+      "expected": []
+    },
+    {
+      "id": "contrast-32",
+      "group": "contrast",
+      "text": "I understand why you're upset. The auditor reviewed the figures. If you really cared, you'd agree.",
+      "expected": []
+    },
+    {
+      "id": "contrast-33",
+      "group": "contrast",
+      "text": "I understand why you're worried. The journalist reported that someone said 'if you really cared'.",
+      "expected": []
+    },
+    {
+      "id": "contrast-34",
+      "group": "contrast",
+      "text": "If you really cared, you would agree. I understand why you're upset.",
+      "expected": []
+    },
+    {
+      "id": "contrast-35",
+      "group": "contrast",
+      "text": "Your feelings matter, but it would be unfair to ignore the evidence.",
+      "expected": []
+    },
+    {
+      "id": "contrast-36",
+      "group": "contrast",
+      "text": "I can see why you're concerned, but I need to leave at six.",
+      "expected": []
+    },
+    {
+      "id": "contrast-37",
+      "group": "contrast",
+      "text": "Think for yourself and review the published evidence.",
+      "expected": []
+    },
+    {
+      "id": "contrast-38",
+      "group": "contrast",
+      "text": "Make up your own mind, but please consider the alternative explanation.",
+      "expected": []
+    },
+    {
+      "id": "contrast-39",
+      "group": "contrast",
+      "text": "Check the sources for yourself before deciding which report to trust.",
+      "expected": []
+    },
+    {
+      "id": "contrast-40",
+      "group": "contrast",
+      "text": "Draw your own conclusion; there are several possible interpretations.",
+      "expected": []
+    },
+    {
+      "id": "contrast-41",
+      "group": "contrast",
+      "text": "You are free to evaluate this evidence, but the full report is not available until Friday.",
+      "expected": []
+    },
+    {
+      "id": "contrast-42",
+      "group": "contrast",
+      "text": "Think for yourself.\n\nYou must accept my conclusion.",
+      "expected": []
+    },
+    {
+      "id": "contrast-43",
+      "group": "contrast",
+      "text": "You must agree with me. Think for yourself.",
+      "expected": []
+    },
+    {
+      "id": "contrast-44",
+      "group": "contrast",
+      "text": "Think for yourself. The committee voted on Tuesday. You must agree with me.",
+      "expected": []
+    },
+    {
+      "id": "contrast-45",
+      "group": "contrast",
+      "text": "Review the sources for yourself. The reporter quoted the slogan 'you must agree with me'.",
+      "expected": []
+    },
+    {
+      "id": "contrast-46",
+      "group": "contrast",
+      "text": "You should make your own decision, but I think the second option is stronger.",
+      "expected": []
+    },
+    {
+      "id": "contrast-47",
+      "group": "contrast",
+      "text": "Form your own mind. The director said that everyone must accept the conclusion.",
+      "expected": []
+    },
+    {
+      "id": "contrast-48",
+      "group": "contrast",
+      "text": "You are free to challenge my argument; here is the data that could change my mind.",
+      "expected": []
+    }
+  ]
+}

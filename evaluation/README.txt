@@ -219,3 +219,34 @@ Do not treat co-occurrence of green and blue matches as proof of concealment.
 That relationship has not yet been trained or tested. The local matcher shows
 both patterns where they occupy separate spans, and preserves blue if they
 overlap.
+
+
+## Turquoise relation-level benchmark (not just co-occurrence)
+
+The Firefox analyser now checks for a positive rhetorical opening being
+undermined by nearby coercion. Definitions are maintained as data in
+`extension/src/concealed-patterns.json`, and detection runs through the
+shared `extension/src/concealed-matching.mjs` module.
+
+The test lab provides **Concealed manipulation — relationships (rules)**
+and **Concealed manipulation — local AI + relationships**. For the second
+mode, MiniLM first detects positive and negative patterns separately;
+their matches become additional evidence for a structural relationship
+test. A quoted disagreement, unrelated negative phrase or normal
+information such as an application deadline is not automatically concealment.
+
+The 96-case sample file `evaluation/concealed-pattern-examples.json`
+has 48 positive examples for four structural variants and 48 intentionally
+challenging non-examples. Expected labels are pattern IDs from the
+concealed-patterns JSON, e.g. `choice_with_coercion`,
+`respect_with_penalty`, `empathy_with_guilt`, and
+`independence_with_control`. Upload a new JSON or JSONL file with
+`expected: []` for a non-example.
+
+GitHub Actions tests the explicit relationship rules over 480
+deterministically generated variants and verifies the browser integration.
+It does **not** run MiniLM inference in Firefox: the new **local AI +
+relationships** mode is needed to measure behaviour under real local
+embedding outputs. These fixtures are constructed for regression testing,
+so do not equate a perfect score with real-world accuracy. Use a newly
+written held-out set containing harder mixed and contextual statements.
