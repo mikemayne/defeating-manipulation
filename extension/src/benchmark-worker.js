@@ -193,6 +193,7 @@ async function startRun(message) {
     }));
     if (Object.hasOwn(item, "expected") || item.analyse_reasoning === true) {
      argumentAssessments = await analyseArguments(item.text, nliScorer, {
+      includeImplicit:unlabelledScan,
       onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
      });
      // This is only a benchmark classification; supported conclusions are
