@@ -324,8 +324,7 @@ function catalogues() {
   fetch(new URL("../../evaluation/concealed-pattern-examples.json", import.meta.url)).then(response => {
    if (!response.ok) throw Error("Cannot load the concealed-pattern examples");
    return response.json();
-  }),
-  Promise.resolve(null)
+  })
  ]);
 }
 runButton.addEventListener("click", async () => {
