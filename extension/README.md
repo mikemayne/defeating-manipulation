@@ -181,27 +181,42 @@ with an indeterminate progress bar rather than a bogus percentage or busy
 mouse cursor. The hover popup shows the premises for each flagged
 conclusion, and links to its red pattern entry.
 
-### Whole-argument benchmark
+### Single-paragraph argument benchmark
 
-Open the Matcher Test Lab and choose **Arguments — premise and conclusion
-(local NLI)**. The default is **96 fictional cases**:
-24 supported conclusions, 24 unsupported inferences, 24 contradictions,
-and 24 passages without an explicit assessable conclusion. You can also
-upload a labelled JSON/JSONL file with `id`, `text` and
-`expected`: one of `["supported_conclusion"]`,
-`["unsupported_conclusion"]`, `["contradictory_claims"]`,
-or `[]` for passages that should not receive a verdict.
+The Matcher Test Lab now has **one** argument-testing mode:
+**Arguments — single paragraph (structure + optional NLI)**.
+The retired, separate `argument_support` and `argument_structure` test modes
+are no longer available. Existing 96-case synthetic argument tests still run
+as development regressions, but are no longer a selectable browser mode.
 
-The test lab uses the same local NLI scoring and argument extraction as
-Firefox, reports precision/recall for all three classes, and includes the
-premises and conclusion in failure details. The prior 200-case
-**Inconsistencies — local NLI** contradiction benchmark remains separate.
+Choose **Dataset: Upload labelled JSON / JSONL** and provide an array of
+cases or an object with a `cases` array. Each row contains:
 
-CI exercises the parser, evidence gathering and decision logic using
-deterministic scorer outputs, **not** the browser's real NLI inference.
-Run the test lab in Firefox to assess the real model, and add fresh,
-independently written examples before claiming general accuracy.
+```json
+{
+  "id": "fictional-example-01",
+  "text": "The council increased rents and therefore expects more revenue.",
+  "expected_argument": true,
+  "expected_model_conclusion": "The council expects more revenue.",
+  "expected": ["supported_conclusion"]
+}
+```
 
+Only `id`, `text`, and `expected_argument` are required. The optional
+`expected_model_conclusion` tests the exact normalized NLI input. The
+optional `expected` array is one of `[]`, `["supported_conclusion"]`,
+`["unsupported_conclusion"]` or `["contradictory_claims"]`. **Only rows
+with an explicit `expected` field invoke the unchanged local NLI model**.
+An empty array means an independently labelled abstention/no-verdict
+reference, not missing metadata.
+
+The lab reports separate exact structure and reasoning counts, as well as
+combined metrics and detailed misses. Downloaded test data stays local.
+Reference labels must be assigned independently before inspecting predictions;
+the tests do not establish political truth or a writer's intent.
+
+CI tests the new metadata schema and the unchanged local analyser using
+fictional cases. Live browser accuracy requires a separate labelled corpus.
 
 ### Per-premise evidence fusion (after the first browser benchmark)
 
@@ -259,6 +274,14 @@ must be rerun to verify improvement before changing thresholds again.
 
 ## Benchmark authentic real-world arguments (recommended after synthetic tests)
 
+**Note for older datasets:** the archived real-world collector exports the
+retired `{id, text, expected}`-only argument schema. Its files are **not**
+accepted by the current paragraph test mode unless the independently labelled
+`expected_argument` property is added to each row. The older source files
+remain outside the new test workflow. Do not infer structure labels from NLI
+predictions.
+
+
 The template-generated 96-case argument dataset is a **regression test**.
 Even 96/96 correct does not establish reliability on unknown writing.
 For a meaningful external test, use the new
@@ -286,8 +309,7 @@ uncertain cases. Back it up before clearing site data. The local server
 does not accept uploads or send selection text to any third party.
 Respect source licences if redistributing your exported excerpts.
 
-In the Matcher Test Lab, choose **Arguments — premise and conclusion
-(local NLI)**, set **Dataset: Upload labelled JSON / JSONL**, select the
+In the Matcher Test Lab, choose **Arguments — single paragraph (structure + optional NLI)**, set **Dataset: Upload labelled JSON / JSONL**, select the
 exported file, and run. Results now show separate exact accuracy,
 precision and recall for **natural** and **challenge** sampling and
 include the publication URL plus original human rationale in copied
@@ -355,8 +377,7 @@ serious browser sluggishness, and generated gibberish instead of a
 meaningful argument classification.
 
 The code no longer loads or runs that model; the test-lab option and
-model module are removed. The pre-existing local MNLI argument-support
-mode and original red highlighter remain intact and fast.
+model module are removed. The single-paragraph local MNLI evaluation path and the original red highlighter remain intact.
 
 **Important distinction:** on the same real-text pilot, the NLI
 extractor found the five scientific arguments, but its neutral class
@@ -429,7 +450,7 @@ negative independent examples and checks exact source offsets. Run it with
 `node scripts/test-argument-clauses.mjs` from the repository root; it is
 also part of `node scripts/test-build.mjs` validation.
 
-Rerun **Arguments — premise and conclusion (local NLI)** on the unchanged
+Rerun **Arguments — single paragraph (structure + optional NLI)** on the unchanged
 101-case JSON and inspect the NLI diagnostics, actual red false positives,
 recall, and runtime. Changes to extraction can expose new NLI limitations;
 keep the pilot's labels unchanged until independent review.

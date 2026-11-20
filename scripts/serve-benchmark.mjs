@@ -18,8 +18,7 @@ const allowed = new Set([
  "/evaluation/matcher-examples.json",
  "/evaluation/inconsistency-examples.json",
  "/evaluation/positive-matcher-examples.json",
- "/evaluation/concealed-pattern-examples.json",
- "/evaluation/argument-support-examples.json"
+ "/evaluation/concealed-pattern-examples.json"
 ]);
 const mime = file => {
  if (file.endsWith(".html")) return "text/html; charset=utf-8";
