@@ -276,6 +276,9 @@ function failureReport(data) {
      (a.proofGraph?.status === "undetermined" && a.proofGraph.missingLinks?.length
       ? " | Missing proof link (unverified, no underline): " +
        a.proofGraph.missingLinks[0].statement : "") +
+     (a.proofObligation ? " | Evidence obligation: " +
+      a.proofObligation.requires + " | Supplied: " +
+      a.proofObligation.observed + " | Gap: " + a.proofObligation.reason : "") +
      (a.reasoningBridge ? " | Verified bridge: " + a.reasoningBridge.reason +
       " (" + a.reasoningBridge.steps + " steps)" : "") +
      (a.propositionNormalization ? " | Structured facts: " +
