@@ -138,6 +138,7 @@ function renderResults(data) {
   grid.replaceChildren(
    metric("Cases scanned",number(data.total)),
    metric("Cases with readable boundaries",number(data.readerCasesWithPairs)),
+   metric("Cases with existing rule-extracted arguments",number(data.readerExistingParserCases)),
    metric("Relationships scored",number(data.readerPairs)),
    metric("Uncertain relationships",number(data.readerCounts?.uncertain||0)),
    metric("Elapsed time, seconds",oneDecimal(data.elapsedSeconds))
@@ -371,6 +372,7 @@ function readerReport(data) {
   "Model: local NLI zero-shot hypotheses (uncalibrated; no human reader labels)",
   "Cases: "+data.total+" / "+data.requested,
   "Cases with statement boundaries: "+data.readerCasesWithPairs,
+  "Existing rule-extracted argument passages: "+data.readerExistingParserCases,
   "Scored relationships: "+data.readerPairs,
   "Elapsed (seconds): "+oneDecimal(data.elapsedSeconds),
   "",
@@ -379,7 +381,8 @@ function readerReport(data) {
  for(const [label,count] of Object.entries(data.readerCounts||{})
   .sort((a,b)=>b[1]-a[1]))lines.push(label+": "+count);
  for(const item of data.predictions){
-  lines.push("","--- "+item.id+" ---","Text: "+item.text);
+  lines.push("","--- "+item.id+" ---","Text: "+item.text,
+   "Existing rule-extracted arguments: "+item.existing_rule_arguments.length);
   if(!item.interpretations.length)lines.push("No scorable boundary");
   for(const relation of item.interpretations){
    lines.push("First: "+relation.first.text,
