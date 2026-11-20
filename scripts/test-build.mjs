@@ -1273,3 +1273,5 @@ await import('./test-argument-typed-reasoning.mjs');
 
 // Verified policy applications, necessary conditions and finite prerequisites.
 await import('./test-argument-policy-prerequisites.mjs');
+// Open-class scoped logic, exact units, event dates and adversarial controls.
+await import('./test-argument-generalised-proofs.mjs');
