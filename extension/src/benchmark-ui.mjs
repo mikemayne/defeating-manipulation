@@ -17,18 +17,23 @@ function setError(text) {
 function updateSource() {
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
+ const positive = mode.value.startsWith("positive_");
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
  count.max = consistency ? 10000 : 1000000;
- if (!count.dataset.edited) count.value = consistency ? 200 : 25000;
+ if (!count.dataset.edited) count.value = consistency ? 200 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
   ? consistency
    ? 'Upload JSON/JSONL containing {id, text, expected}, where expected is [] or ["argument_inconsistency"]. All analysis stays in this browser.'
-   : "Upload JSON/JSONL containing {id, text, expected} using technique IDs. All analysis stays in this browser."
+   : positive
+    ? "Upload JSON/JSONL containing {id, text, expected}. Expected IDs must be from the positive-pattern library. All analysis stays in this browser."
+    : "Upload JSON/JSONL containing {id, text, expected} using manipulation technique IDs. All analysis stays in this browser."
   : consistency
    ? "200 labelled fictional cases: direct contradictions, paraphrases, consistent claims, different speakers/dates and hypotheticals. Generated variations test robustness, not independent accuracy."
-   : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
+   : positive
+    ? "72 labelled fictional cases: 36 constructive statements and 36 neutral or misleading lookalikes. Generated repetitions are regression tests, not independent accuracy evidence."
+    : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
 }
 count.addEventListener("input", () => { count.dataset.edited = "true"; });
 mode.addEventListener("change", updateSource);
@@ -127,6 +132,7 @@ function renderResults(data) {
  $("summary-note").textContent =
   "Evaluated " + number(data.total) + " cases, including " + number(data.negativeCount) +
   (lastMode === "consistency" ? " cases with no expected inconsistency." :
+   lastMode.startsWith("positive_") ? " cases with no expected positive pattern." :
    " cases with no expected technique.") +
   " Results describe this test dataset, not accuracy on unseen writing.";
  tableRows($("confusion"), data.confusion.slice(0, 20)
@@ -209,6 +215,10 @@ function catalogues() {
   fetch(new URL("../../evaluation/inconsistency-examples.json", import.meta.url)).then(response => {
    if (!response.ok) throw Error("Cannot load the inconsistency examples");
    return response.json();
+  }),
+  fetch(new URL("../../evaluation/positive-matcher-examples.json", import.meta.url)).then(response => {
+   if (!response.ok) throw Error("Cannot load the positive-pattern examples");
+   return response.json();
   })
  ]);
 }
@@ -238,8 +248,9 @@ runButton.addEventListener("click", async () => {
  results.hidden = true;
  setError("");
  try {
-  const [catalogue, patterns, manipulationFixture, consistencyFixture] = await catalogues();
-  const fixture = mode.value === "consistency" ? consistencyFixture : manipulationFixture;
+  const [catalogue, patterns, manipulationFixture, consistencyFixture, positiveFixture] = await catalogues();
+  const fixture = mode.value === "consistency" ? consistencyFixture :
+   mode.value.startsWith("positive_") ? positiveFixture : manipulationFixture;
   runId++;
   setupWorker().postMessage({
    type: "start", runId, mode: mode.value, source: source.value,
