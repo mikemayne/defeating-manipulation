@@ -1268,3 +1268,6 @@ await import('./test-argument-safety.mjs');
 
 // Source-grounded quantified propositions, numeric categories and safe abstentions.
 await import('./test-argument-typed-reasoning.mjs');
+
+// Verified policy applications, necessary conditions and finite prerequisites.
+await import('./test-argument-policy-prerequisites.mjs');

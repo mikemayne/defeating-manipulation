@@ -10,7 +10,9 @@ const MAX_PREMISE_CHARS = 780;
 const MAX_CONCLUSION_CHARS = 280;
 const MAX_PARAGRAPH_BREAKS = 1;
 const WORD = /\b[\w'-]+\b/g;
-const NORMATIVE = /\b(?:should|ought|recommend|consider|prefer|hope|wish)\b|\b(?:we|you)\s+(?:(?:may|might|could|can)\s+)?(?:need to|want to|plan to|intend to)\b/i;
+// 'Residents may consider visiting' describes a tentative inference;
+// 'Consider visiting' and 'you may consider visiting' are recommendations.
+const NORMATIVE = /\b(?:should|ought|recommend|hope|wish)\b|^(?:please\s+)?(?:consider|prefer)\b|\b(?:we|you)\s+(?:(?:may|might|could|can)\s+)?(?:need to|want to|plan to|intend to|consider|prefer)\b/i;
 const LEADING_CONCLUSION = /^(?:(?:and|but)\s+)?(therefore|thus|hence|consequently|accordingly|as a result|it follows that|we can conclude that|(?:this|that) (?:shows|proves|demonstrates|confirms|means|guarantees|suggests|indicates|implies)(?: that)?|these (?:results|findings) (?:show|prove|demonstrate)(?: that)?|the evidence (?:shows|proves)(?: that)?|so)\s*[,;:\s]\s*/i;
 const INLINE_SO = /,\s*so\s+(?!that\b)/gi;
 const RESULT_MARKER = /\b(?:therefore|thus|hence|consequently|accordingly|as a result)\b\s*[,;:]?\s*/gi;
