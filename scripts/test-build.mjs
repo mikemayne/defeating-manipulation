@@ -1240,3 +1240,6 @@ await import('./test-spelling-bait.mjs');
 
 // Independent fictional bounded-arithmetic and quantifier logic controls.
 await import('./test-argument-bounded-logic.mjs');
+
+// Offline scope-overreach negatives must abstain rather than create red flags.
+await import('./test-argument-overreach.mjs');
