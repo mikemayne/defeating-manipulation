@@ -780,7 +780,7 @@ New modules:
 - `extension/src/argument-numeric.mjs`: number words, decimals, currency
   expressed as integer minor units, selected compatible measurement-unit
   conversions, exact same-scope values, open-class named-item comparisons,
-  explicit two-term arithmetic, and stated min/max bounds. Calculations
+  explicit two-term arithmetic, explicitly stated flat-fee plus per-item rate × quantity arithmetic, and stated min/max bounds. Calculations
   themselves are performed in JavaScript.
 - `extension/src/argument-proof-graph.mjs`: source premise nodes, explicit
   sufficient or necessary conditional rules, derived inference nodes,
