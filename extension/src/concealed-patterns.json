@@ -65,7 +65,7 @@
         "\\b(?:that (?:sounds|must have been) (?:upsetting|painful|difficult)|i want to understand what it was like for you)\\b"
       ],
       "negativeCues": [
-        "\\b(?:if you really cared(?: about (?:me|us|your family|the team))?|if you (?:loved|respected|valued) (?:me|us|your family|the team)|you(?:'re| are) (?:selfish|disloyal|ungrateful) (?:if|unless|for)\\b|(?:you (?:don't|do not) (?:really )?care (?:about|if)\\b)|(?:a (?:good|decent|loyal) (?:friend|colleague|parent|person|teammate) would (?:agree|support|say yes|sign))\\b",
+        "\\b(?:if you really cared(?: about (?:me|us|your family|the team))?|if you (?:loved|respected|valued) (?:me|us|your family|the team)|you(?:'re| are) (?:selfish|disloyal|ungrateful) (?:if|unless|for)|you (?:don't|do not) (?:really )?care (?:about|if)|a (?:good|decent|loyal) (?:friend|colleague|parent|person|teammate) would (?:agree|support|say yes|sign))\\b",
         "\\b(?:you (?:must|have to|need to|are required to) (?:agree|support|endorse|approve|accept|comply|back|vote for|sign (?:the|this|our) (?:pledge|petition|statement|agreement))\\b|(?:you(?:'ll| will) (?:lose|be (?:fired|excluded|punished|banned|removed|shamed)|regret)\\b)|(?:we(?:'ll| will) (?:fire|exclude|punish|ban|remove|shame|blacklist|expose|publish your name|tell everyone)\\b)|(?:if you (?:don't|do not|won't|refuse to) (?:agree|support|approve|accept|comply|sign|vote)\\b)|(?:unless you (?:agree|support|approve|accept|comply|sign|vote)\\b)|(?:or else\\b)|(?:you (?:are|you're) (?:selfish|disloyal|ungrateful|a coward)\\b)|(?:if you really cared\\b)|(?:anyone who (?:disagrees|refuses|says no)\\b[^.!?]{0,50}\\b(?:must leave|will be|is not welcome|cannot stay)))"
       ]
     },
