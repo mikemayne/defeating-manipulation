@@ -18,9 +18,10 @@ function setError(text) {
 function updateSource() {
  const argumentMode = mode.value === "argument_paragraph";
  const readerMode = mode.value === "reader_inference";
+ const boundaryMode = mode.value === "reader_boundary";
  // One uploaded paragraph test schema, with optional NLI labels.
- source.options[0].disabled = argumentMode || readerMode;
- if ((argumentMode || readerMode) && source.value !== "uploaded") source.value = "uploaded";
+ source.options[0].disabled = argumentMode || readerMode || boundaryMode;
+ if ((argumentMode || readerMode || boundaryMode) && source.value !== "uploaded") source.value = "uploaded";
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
  const positive = mode.value.startsWith("positive_");
@@ -28,10 +29,12 @@ function updateSource() {
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
- count.max = consistency || argumentMode || readerMode || concealed ? 10000 : 1000000;
+ count.max = consistency || argumentMode || readerMode || boundaryMode || concealed ? 10000 : 1000000;
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
-  ? readerMode
+  ? boundaryMode
+   ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. Four-way local language-model comparison: original punctuation, no punctuation, and, but. One-time model download; scores indicate linguistic plausibility, not human reader percentages. Original text is never modified.'
+   : readerMode
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. This runs an experimental local NLI probe for seven possible reader interpretations, including no implied connection; all model scores are uncalibrated, not percentages of readers or accuracy.'
    : argumentMode
    ? 'Upload JSON/JSONL with {id, text}. For unlabelled real-world scans, add analyse_reasoning:true to run local NLI; these runs report predictions, never accuracy. To score a labelled benchmark, provide expected_argument:true/false and optional expected:[reasoning label]. No text leaves this computer.'
@@ -133,6 +136,29 @@ function tableRows(body, rows, emptyLabel) {
 }
 function renderResults(data) {
  results.hidden = false;
+ if(data.boundaryMode){
+  $("stats").replaceChildren(
+   metric("Cases scanned",number(data.total)),
+   metric("Cases with tested punctuation",number(data.boundaryCasesWithPairs)),
+   metric("Boundaries scored",number(data.boundaryPairs)),
+   metric("Uncertain (kept original)",number(data.boundaryCounts?.["uncertain (kept original)"]||0)),
+   metric("Elapsed time, seconds",oneDecimal(data.elapsedSeconds))
+  );
+  $("real-breakdown").hidden=true;
+  $("summary-note").textContent="Four complete candidate wordings scored using a local language model. Higher mean conditional token log probability = more linguistically plausible, not a measured reader percentage. Close results keep the original. No input text is changed.";
+  tableRows($("confusion"),Object.entries(data.boundaryCounts||{})
+   .sort((a,b)=>b[1]-a[1]).map(([label,count])=>[label,number(count)]),
+   "No candidate punctuation boundary.");
+  tableRows($("per-technique"),[],"Human-reader accuracy has not been measured.");
+  $("confusion-title").textContent="Preferred replacement (provisional)";
+  $("confusion-column").textContent="Replacement";
+  $("per-technique-title").textContent="Reader validation (not yet measured)";
+  $("failure-note").textContent="Download predictions for all candidate scores, original source offsets and analysis-only reconstructions.";
+  copyButton.disabled=false;copyButton.textContent="Copy results";
+  downloadButton.hidden=false;downloadButton.disabled=false;
+  $("copied").textContent="";
+  return;
+ }
  if(data.readerMode){
   const grid=$("stats");
   grid.replaceChildren(
@@ -366,6 +392,36 @@ function failureReport(data) {
  }
  return lines.join("\n");
 }
+function boundaryReport(data){
+ const lines=[
+  "Defeating Manipulation — Four-way Punctuation Experiment",
+  "Model: local distilgpt2 causal LM, quantized q8",
+  "Scores: mean conditional token log probability, NOT reader agreement",
+  "Scanned: "+data.total+" / "+data.requested,
+  "Cases with boundaries: "+data.boundaryCasesWithPairs,
+  "Boundaries tested: "+data.boundaryPairs,
+  "Elapsed (seconds): "+oneDecimal(data.elapsedSeconds),
+  "","REPLACEMENT SUMMARY"
+ ];
+ for(const [label,count] of Object.entries(data.boundaryCounts||{})
+  .sort((a,b)=>b[1]-a[1]))lines.push(label+": "+count);
+ lines.push("","ALL CASES");
+ for(const item of data.predictions){
+  lines.push("","--- "+item.id+" ---","Text: "+item.text);
+  if(!item.boundaries.length)lines.push("No candidate punctuation boundary");
+  for(const b of item.boundaries){
+   lines.push("Punctuation: "+b.punctuation+
+    " | Original offset: "+b.punctuationStart+
+    " | Boundary type: "+b.boundaryKind,
+    "Selected: "+b.choice+(b.uncertain?" (uncertain; original retained)":""),
+    "Before: "+b.first.text,"After: "+b.second.text,
+    "Analysis-only reconstruction: "+b.analysisText,
+    "Scores (higher is better): "+b.candidates.map(c=>
+     c.id+"="+(c.score===null?"N/A":c.score.toFixed(3))).join(" | "));
+  }
+ }
+ return lines.join("\n");
+}
 function readerReport(data) {
  const lines=[
   "Defeating Manipulation — Reader Interpretation Probe",
@@ -455,6 +511,10 @@ async function copyTextToClipboard(text, successMessage) {
 }
 copyButton.addEventListener("click", async () => {
  if (!lastResult) return;
+ if(lastResult.boundaryMode){
+  await copyTextToClipboard(boundaryReport(lastResult),"Copied punctuation rankings");
+  return;
+ }
  if (lastResult.readerMode) {
   await copyTextToClipboard(readerReport(lastResult), "Copied reader interpretations");
   return;
@@ -467,8 +527,13 @@ copyButton.addEventListener("click", async () => {
  await copyTextToClipboard(failureReport(lastResult), "Copied failure details");
 });
 downloadButton.addEventListener("click", () => {
- if (!lastResult?.unlabelledScan && !lastResult?.readerMode) return;
- const payload=lastResult.readerMode ? JSON.stringify({
+ if (!lastResult?.unlabelledScan && !lastResult?.readerMode && !lastResult?.boundaryMode) return;
+ const payload=lastResult.boundaryMode ? JSON.stringify({
+  schema_version:1,mode:"reader_boundary_reconstruction",
+  total:lastResult.total,counts:lastResult.boundaryCounts,
+  boundaries:lastResult.boundaryPairs,predictions:lastResult.predictions,
+  scores_are_human_percentages:false
+ },null,2)+"\n" : lastResult.readerMode ? JSON.stringify({
   schema_version:1,mode:"reader_inference_unlabelled",
   total:lastResult.total,reader_counts:lastResult.readerCounts,
   reader_pairs:lastResult.readerPairs,predictions:lastResult.predictions,
@@ -480,7 +545,8 @@ downloadButton.addEventListener("click", () => {
  const blob=new Blob([payload],{type:"application/json"});
  const url=URL.createObjectURL(blob);
  const anchor=document.createElement("a");
- anchor.href=url;anchor.download=lastResult.readerMode?
+ anchor.href=url;anchor.download=lastResult.boundaryMode?
+  "reader-boundary-replacements.json":lastResult.readerMode?
   "reader-interpretation-predictions.json":"real-world-argument-predictions.json";
  document.body.append(anchor);anchor.click();anchor.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -517,7 +583,7 @@ function catalogues() {
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
- const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value.startsWith("concealed_")
+ const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value.startsWith("concealed_")
   ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
   setError("Choose a test count between 1 and " + number(maximum) + ".");
@@ -544,7 +610,7 @@ runButton.addEventListener("click", async () => {
   const [catalogue, patterns, manipulationFixture, consistencyFixture,
    positiveFixture, concealedFixture] = await catalogues();
   const fixture = mode.value === "consistency" ? consistencyFixture :
-   (mode.value === "argument_paragraph" || mode.value === "reader_inference") ? {cases:[]} :
+   (mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary") ? {cases:[]} :
    mode.value.startsWith("positive_") ? positiveFixture :
    mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;
   runId++;

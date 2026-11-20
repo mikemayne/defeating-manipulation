@@ -89,7 +89,7 @@ export function extractReaderPairs(source,{maxPairs=MAX_PAIRS}={}){
  pairs.sort((a,b)=>a.boundaryOffset-b.boundaryOffset);
  // Prefer the first and last boundary on longer paragraphs, to avoid
  // exhausting the fixed neural budget only on the opening two sentences.
- const limit=Math.min(MAX_PAIRS,maxPairs);
+ const limit=Math.min(20,maxPairs);
  if(pairs.length<=limit)return pairs;
  if(limit===1)return [pairs[0]];
  return [pairs[0],pairs[pairs.length-1]];
