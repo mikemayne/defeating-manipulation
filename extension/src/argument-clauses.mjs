@@ -241,8 +241,8 @@ export function extractArguments(source) {
   const conclusion=span(source,s.start+marker[0].length,s.end);
   // A tentative marker still introduces an argument, but it should not
   // misparse a bare suggestion or recommendation as a factual conclusion.
-  const tentative=/\\b(?:suggests|indicates|implies)\\b/i.test(marker[1]);
-  if(tentative && !/\\b(?:may|might|could|would|will|is|are|was|were|has|have|can)\\b/i.test(conclusion.text))continue;
+  const tentative=/\b(?:suggests|indicates|implies)\b/i.test(marker[1]);
+  if(tentative && !/\b(?:may|might|could|would|will|is|are|was|were|has|have|can)\b/i.test(conclusion.text))continue;
   if (words(conclusion.text)<3 || conclusion.text.length<12 ||
       conclusion.text.length>MAX_CONCLUSION_CHARS || /[?!]\s*$/.test(conclusion.text) ||
       NORMATIVE.test(conclusion.text)) continue;
