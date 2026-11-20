@@ -179,6 +179,60 @@ function scopeWidening(premise, conclusion) {
  return false;
 }
 
+// A neutral NLI score means "not entailed", NOT "no reasonable evidential
+// support". A red unsupported finding needs an *observable overclaim*,
+// not merely a semantic-model neutral prediction.
+//
+// Conservative, fast, domain-general indicators: categorical universals,
+// absolute guarantees, superlatives and claims of total resolution. These are
+// signals to scrutinise the scope of the provided evidence, not proof that
+// the conclusion is false. Qualified claims are not automatically supported;
+// without an entailment signal, they must abstain instead of turning red.
+const CLAIMED_UNIVERSALS =
+ /\b(?:all|every|each|everyone|everybody|everything|entire|whole|only|always|never|none|nobody|nothing|no one|everyone's)\b/i;
+const CATEGORICAL_ABSOLUTES =
+ /\b(?:completely|entirely|totally|absolutely|guaranteed|forever|everlasting|infallible|perfectly|flawless|zero|fully|eliminated|eradicated|solved|cured|proven|proved|definitively)\b/i;
+const SUPERLATIVE_SCOPE =
+ /\b(?:best|worst|safest|healthiest|highest|lowest|greatest|most|least|fastest|slowest|strongest|weakest|largest|smallest|certainly)\b/i;
+const QUALIFIED_INFERENCE =
+ /\b(?:may|might|could|can|perhaps|possibly|potentially|probably|plausibly|likely|unlikely|appears?|seems?|suggests?|indicates?|tends?\s+to|is\s+possible|is\s+plausible)\b/i;
+
+// The claimed scope should not be considered broader just because the
+// premise uses a universal too. The entailment model still determines
+// whether the details actually match; if it is neutral we abstain.
+function conclusionScopeCue(conclusion, premise) {
+ if (CLAIMED_UNIVERSALS.test(conclusion) &&
+     !CLAIMED_UNIVERSALS.test(premise))
+  return "universal_scope";
+ if (CATEGORICAL_ABSOLUTES.test(conclusion) &&
+     !CATEGORICAL_ABSOLUTES.test(premise))
+  return "categorical_certainty";
+ if (SUPERLATIVE_SCOPE.test(conclusion) &&
+     !SUPERLATIVE_SCOPE.test(premise))
+  return "comparative_superlative";
+ // If both contain an absolute word, that does not mean they match,
+ // but the lexical rule alone is insufficient to label the leap.
+ return null;
+}
+
+export function assessNeutralArgumentEvidence(premise, conclusion, verdict) {
+ if (!verdict || verdict.label !== "unsupported_conclusion")
+  return { verdict, status:"model_verdict" };
+ // A high NLI neutral score is just absence of deductive entailment.
+ // Never turn cautious scientific/causal claims into red errors solely
+ // from that signal. Explicit categorical assertions still need
+ // independent evidence for their full scope.
+ if (QUALIFIED_INFERENCE.test(conclusion))
+  return { verdict:null, status:"evidential_support_uncertain",
+   reason:"qualified_claim_not_entailed" };
+ const cue = conclusionScopeCue(conclusion, premise);
+ if (cue) return { verdict:{...verdict,
+  reason:"observable_overclaim_" + cue},
+  status:"observable_overclaim", reason:"observable_overclaim_" + cue };
+ return { verdict:null, status:"evidential_support_uncertain",
+  reason:"neutral_or_asymmetric_nli_is_not_sufficient_to_judge_support" };
+}
+
 export function classifyArgumentScore(forward, reverse = null) {
  if (!scoresValid(forward)) return null;
  const { contradiction, neutral, entailment } = forward;
@@ -204,7 +258,7 @@ export function classifyArgumentScore(forward, reverse = null) {
   return { label: "supported_conclusion", score: entailment };
  if (neutral >= 0.78 && neutral > entailment + 0.15 &&
      neutral > contradiction + 0.15)
-  return { label: "unsupported_conclusion", score: neutral };
+  return { label: "unsupported_conclusion", score: neutral, reason:"nli_neutral" };
  // Ambiguous model output: do not turn uncertainty into a red accusation.
  return null;
 }
@@ -227,7 +281,9 @@ export function combineArgumentEvidence(scored, conclusionText = "") {
       scopeWidening(item.text, conclusionText))
    verdict = { label: "unsupported_conclusion",
     score: verdict.score, reason: "scope_expansion" };
-  return { ...item, verdict };
+  const evidence = assessNeutralArgumentEvidence(item.text, conclusionText, verdict);
+  return { ...item, verdict:evidence.verdict, evidenceStatus:evidence.status,
+   evidenceReason:evidence.reason || null };
  });
  for (const type of ["contradictory_claims", "supported_conclusion", "unsupported_conclusion"]) {
   const matches = classified.filter(item => item.verdict?.label === type);
@@ -236,6 +292,16 @@ export function combineArgumentEvidence(scored, conclusionText = "") {
    return { ...winner.verdict, evidenceText: winner.text, basis: winner.kind };
   }
  }
+ // Preserve a separate reason when the conclusion is unassessed.
+ // No claim about its truth or evidential soundness can be derived
+ // from a neutral entailment classification.
+ const abstained = classified.find(item =>
+  item.evidenceStatus === "evidential_support_uncertain");
+ if (abstained) return {
+  label:null, status:"evidential_support_uncertain",
+  reason:abstained.evidenceReason, evidenceText:abstained.text,
+  basis:abstained.kind
+ };
  return null;
 }
 
@@ -279,9 +345,10 @@ export async function analyseArguments(source, scorePair,
    comparisons: scored.map(({ kind, text, repeated, forward, reverse }) =>
     ({ kind, premise: text, repeated, forward, reverse })),
    verdict: result?.label || null,
+   status:result?.status || (result?.label ? "model_verdict" : "model_uncertain"),
    reason: result?.reason || null
   });
-  if (!result) continue;
+  if (!result?.label) continue;
   assessments.push({ ...argument, ...result,
    explanation: result.label === "supported_conclusion"
     ? "The supplied premises appear to support this conclusion at the stated level."
