@@ -14,9 +14,10 @@ assert.throws(() => normaliseParagraphInputs([{id:"same",text:"A"},{id:"same",te
 assert.throws(() => normaliseParagraphInputs([{id:"broken"}]), /text string/);
 
 const prompt = paraphrasePrompt("The council has not approved the plan.");
-assert.match(prompt, /MOST IMPORTANT: preserve the exact/);
-assert.match(prompt, /implied accusations, suggested causal links/);
-assert.match(prompt, /Do NOT neutralise persuasive content/);
+assert.match(prompt, /PRIMARY WEIGHT/);
+assert.match(prompt, /sentence or phrase/);
+assert.match(prompt, /Preserve implied accusations, suggested/);
+assert.match(prompt, /Do NOT bury the key persuasive point/);
 assert.match(prompt, /Do NOT label any manipulation pattern/);
 assert.ok(prompt.includes("The council has not approved the plan."));
 assert.deepEqual(assessParaphrase("A majority supported the proposal.",
