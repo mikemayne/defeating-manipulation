@@ -306,3 +306,40 @@ implicit arguments will often be missed. This is an important and
 measurable coverage limitation, not a reason to rewrite the article
 to fit the matcher or to relabel it as "no argument." Maintain the
 original text and label, then use the failures to decide what to improve.
+
+
+### First authentic-text pilot: important coverage gap
+
+The first source-linked real-world pilot used **23 genuine excerpts**
+(18 ordinary passages and 5 independently labelled supported arguments).
+The existing analyser correctly left all 18 ordinary passages unflagged
+but found **none of the five supported arguments**: three were
+misclassified as insufficiently supported and two were not extracted
+at all. Accuracy was 18/23 (78.3%). The zero precision and recall
+reflect **zero correctly labelled supported examples**; they do not
+provide a useful estimate of performance across all argument types.
+
+Two genuine conclusions appeared **inside** a sentence, introduced by
+`which means` and `indicates that`, rather than beginning a new sentence
+with `Therefore`. This update adds conservative in-sentence extraction
+for these and related evidential verbs, including qualified factual
+claims with `might`, `may`, `can` or `could`. Recommendations such as
+`we should consider` remain excluded. It keeps the exact source-text
+offsets, reports the inference marker in diagnostic output, and does
+not treat the connective itself as proof that the reasoning is sound.
+
+**What this does not solve:** the remaining three real-world passages
+used technical or probabilistic reasoning. A neutral score from a
+sentence-pair entailment model does not assess how much scientific
+evidence supports a cautious inference, and a real argument may depend
+on background knowledge not present in the selection. Automatically
+declaring every `therefore`, `which means` or `indicates that`
+conclusion supported would conceal weak arguments, not fix them.
+
+Rerun the **same 23-case uploaded pilot** to check extraction coverage
+and inspect the newly available diagnostics for the two inline cases.
+Expect that the overall 78.3% accuracy may **not** improve until we
+add better argument-specific reasoning, rather than merely broader
+trigger phrases. For a valid external performance estimate, gather
+a **new held-out set** with real supported, unsupported and
+contradicted conclusions labelled before seeing predictions.
