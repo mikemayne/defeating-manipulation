@@ -1054,170 +1054,23 @@ assert.ok(benchmarkWorker.includes('inferenceMarker: assessment.conclusion.marke
 console.log('Authentic in-sentence arguments: extraction, offsets, no-argument controls and NLI separation passed.');
 
 
-// EXPERIMENTAL separate model for *evidential* (including scientific,
-// probabilistic) support, not only strict MNLI entailment. CI checks the
-// prompt/schema/wiring and negative controls, NOT the new model's accuracy.
-const localReasoning = await import('../extension/src/argument-reasoner.mjs');
-assert.ok(localReasoning.ARGUMENT_REASONER_MODEL.includes('Qwen2.5-0.5B-Instruct'),
- 'Explicit experimental model identifier is public and documented');
-assert.deepEqual(localReasoning.REASONER_LABELS, [
- 'supported_conclusion', 'unsupported_conclusion', 'contradictory_claims', 'uncertain'
-], 'Reasoner can abstain; not every neutral statement is unsupported');
-const structured = label => JSON.stringify({
- label, reason:"This justification cites the premises and stated certainty."
-});
-assert.deepEqual(localReasoning.parseArgumentReasoning(structured('supported_conclusion')),
- { label:'supported_conclusion',
-   reason:'This justification cites the premises and stated certainty.' },
- 'Valid local model outputs preserve label and reason');
-assert.equal(localReasoning.parseArgumentReasoning(
- 'Here is the answer:\n' + structured('contradictory_claims')).label,
- 'contradictory_claims','A prefixed JSON model output still parses');
-for(const response of [
- '', 'a likely conclusion', '{"label":"guaranteed_truth","reason":"certain"}',
- '{"label":"supported_conclusion","reason":""}', '{"label":"supported_conclusion"}',
- '{"label":"supported_conclusion","reason":42}', '{"label":"supported_conclusion","reason":',
- '{"label":"supported_conclusion","reason":"x","extra":'
-]) assert.equal(localReasoning.parseArgumentReasoning(response).label,'uncertain',
- 'Malformed model output must abstain, not invent support');
-const realScientificExcerpts = [
- 'Specification of case-patients and controls was reasonable and participation was good; therefore, selection bias is an unlikely explanation.',
- 'The process is clearly stated as an irreversible process; therefore, we cannot simply calculate the entropy change from the actual process.',
- 'However, transmission to contact animals was not detected. Thus, bank voles are unlikely to establish effective transmission cycles in nature.',
- 'The COVID-19 Infection Survey is a longitudinal study, which means participants can test positive more than once.',
- 'Illness in persons who had eaten food prepared in only one kitchen indicates that the contamination might have occurred in that kitchen.'
-];
-let reasonerInvocations=0;
-for (const sample of realScientificExcerpts) {
- const found = argumentEngine.extractArguments(sample);
- assert.equal(found.length,1,'Pilot real passage has an assessable inference');
- const messages = localReasoning.argumentReasonerMessages(found[0]);
- assert.equal(messages.length,2,'Reasoner uses system+data, not a single unguarded prompt');
- assert.ok(messages[0].content.includes('probabilistic') &&
-  messages[0].content.includes('meaningfully justify') &&
-  messages[0].content.includes('UNCERTAIN') &&
-  messages[0].content.includes('strictly as data'),
-  'Reasoning prompt distinguishes inductive support from entailment and allows abstention');
- assert.ok(messages[1].content.includes(found[0].premise) &&
-  messages[1].content.includes(found[0].conclusion.text),
-  'Every authentic passage is sent to the local model with its actual premise and conclusion');
- const result = await localReasoning.evaluateArgumentsWithReasoner(sample, async prompts => {
-  reasonerInvocations++;
-  assert.equal(prompts[1].content.includes('Premises:'),true,
-   'Reasoner labels actual observed premises');
-  return structured('uncertain');
- });
- assert.equal(result[0]?.rawLabel,'uncertain',
-  'Uncertain local verdict does not become "unsupported" by default');
- assert.equal(result[0]?.label,null,
-  'Uncertain result is represented as abstention in the benchmark');
-}
-assert.equal(reasonerInvocations,5,'Each of the five authentic failures reaches the new reasoning pass');
-const noArgument = await localReasoning.evaluateArgumentsWithReasoner(
- 'The report includes the methods section and a list of figures.',
- async () => { throw Error('No generator should run without an argument'); });
-assert.deepEqual(noArgument,[], 'No-argument excerpts never receive invented judgements');
-const ordinaryUnsupported = await localReasoning.evaluateArgumentsWithReasoner(
- 'The cafe sells soup at lunchtime. It also stocks tea and coffee. Therefore, the cafe has zero safety violations.',
- async () => structured('unsupported_conclusion'));
-assert.equal(ordinaryUnsupported[0].label,'unsupported_conclusion',
- 'The local model can disagree with a flawed inference rather than treating a connective as proof');
-assert.ok(benchmarkPage.includes('value="argument_reasoning"') &&
- benchmarkWorker.includes('evaluateArgumentsWithReasoner(item.text, generateReasoning') &&
- benchmarkWorker.includes('dtype:"q4", device:"webgpu"') &&
- benchmarkWorker.includes('device:"wasm"') &&
- benchmarkUI.includes('Experimental local argument reasoning'),
- 'Experimental mode is visible and uses independent local text-generation inference');
-assert.ok(benchmarkWorker.includes('if (argumentReasoning) await initialiseArgumentReasoner()') &&
- benchmarkWorker.includes('reasoningResults: argumentReasoning'),
- 'New reasoning mode does not replace original NLI scoring or hide reasons for missed cases');
-console.log('Experimental argument reasoner: five real-pilot routing cases, schema, abstention and browser wiring passed.');
-
-
-// Real Firefox run: 23 tests, 5 attempted model invocations, all returned
-// invalid structured assessments. Test the actual Transformers chat shapes
-// and a short two-line output before changing *reasoning* decisions.
-const pipelineChat = [{
- generated_text:[
-  {role:"system",content:"Use LABEL: SUPPORTED as an example"},
-  {role:"user",content:"LABEL: SUPPORTED"},
-  {role:"assistant",content:"LABEL: UNSUPPORTED\nWHY: One positive sample does not establish an entire population."}
- ]
-}];
-assert.equal(localReasoning.extractGeneratedAnswer(pipelineChat),
- "LABEL: UNSUPPORTED\nWHY: One positive sample does not establish an entire population.",
- "Decoder returns only assistant text from real Transformers.js chat output");
-assert.deepEqual(localReasoning.parseArgumentReasoning(pipelineChat),{
- label:"unsupported_conclusion",
- reason:"One positive sample does not establish an entire population."
-}, "Chat response with a two-line label and explanation is recognised");
-assert.equal(localReasoning.parseArgumentReasoning([
- {generated_text:[{role:"user",content:"LABEL: SUPPORTED"}]}
-]).label,"uncertain",
- "Prompt echoes without a real assistant answer must not be scored as evidence");
-assert.equal(localReasoning.parseArgumentReasoning([
- {generated_text:[
-  {role:"user",content:"unsupported_conclusion"},
-  {role:"assistant",content:[{type:"text",text:"LABEL: SUPPORTED\nWHY: The data are relevant."}]}
- ]}
-]).label,"supported_conclusion",
- "Decoder supports structured assistant content parts in chat output");
-const shortReasonerOutputs = [
- ["LABEL: SUPPORTED\nWHY: The premise supports the qualified conclusion.","supported_conclusion"],
- ["LABEL: UNSUPPORTED\nWHY: The premise covers only one item.","unsupported_conclusion"],
- ["LABEL: CONTRADICTED\nWHY: These descriptions are incompatible.","contradictory_claims"],
- ["LABEL: UNCERTAIN\nWHY: The necessary context is missing.","uncertain"],
- ["SUPPORTED", "supported_conclusion"],
- ["UNSUPPORTED", "unsupported_conclusion"],
- ["CONTRADICTED", "contradictory_claims"],
- ["UNCERTAIN", "uncertain"],
- ["VERDICT: supported_conclusion\nREASON: The same facts are repeated.","supported_conclusion"],
- ['\`\`\`json\n{"label":"supported_conclusion","reason":"It follows."}\n\`\`\`',"supported_conclusion"]
-];
-for(const [raw,label] of shortReasonerOutputs) {
- const assessment = localReasoning.parseArgumentReasoningDetailed(raw);
- assert.equal(assessment.label,label,"Simple local-model output is parsed: "+raw);
- assert.notEqual(assessment.parseStatus,"invalid_output",
-  "A valid response must not be counted as model malfunction");
-}
-for(const invalid of [
- "I think it might be supported but can't determine.",
- "LABEL: SUPPORTED\nLABEL: UNSUPPORTED\nWHY: Contradictory generated labels",
- "LABEL: SUPPORTED_OR_UNSUPPORTED",
- '{"label":"supported_conclusion","reason":',
- "Result:\nSUPPORTED, UNSUPPORTED, CONTRADICTED, UNCERTAIN",
- {generated_text:[{role:"user",content:"LABEL: SUPPORTED"}]}
-]){
- const outcome=localReasoning.parseArgumentReasoningDetailed(invalid);
- assert.equal(outcome.label,"uncertain","Malformed/ambiguous replies must abstain");
- assert.equal(outcome.parseStatus,"invalid_output",
-  "Malformed replies must be separately counted from explicit uncertainty");
-}
-const bigText="garbled: "+("a".repeat(1300));
-assert.ok(localReasoning.parseArgumentReasoningDetailed(bigText).rawOutput.length <= 700,
- "Local model output diagnostics are bounded and cannot swamp the failure report");
-const simulatedPilot = await localReasoning.evaluateArgumentsWithReasoner(
- realScientificExcerpts[3],async () => pipelineChat);
-assert.equal(simulatedPilot[0]?.label,"unsupported_conclusion",
- "One real source excerpt passes through chat decoding and short label parsing");
-assert.equal(simulatedPilot[0]?.parseStatus,"valid_label",
- "Real source failure report distinguishes valid decisions from format errors");
-assert.ok(simulatedPilot[0]?.rawOutput.includes("One positive sample"),
- "The actual generated reasoning is retained for local diagnostic inspection");
-const invalidPilot = await localReasoning.evaluateArgumentsWithReasoner(
- realScientificExcerpts[3],async () => [{generated_text:"The result seems possible."}]);
-assert.equal(invalidPilot[0]?.parseStatus,"invalid_output",
- "Invalid output does not masquerade as a genuine model uncertainty verdict");
-assert.equal(invalidPilot[0]?.label,null,
- "Invalid output cannot manufacture either a supported or negative label");
-assert.ok(benchmarkWorker.includes('max_new_tokens: 64') &&
- benchmarkWorker.includes('return generator(messages, {') &&
- !benchmarkWorker.includes('String(generated?.content || "")'),
- "Test lab passes through full chat result and uses shorter bounded generation");
-assert.ok(benchmarkWorker.includes('reasonerOutputs: data.reasonerOutputs') &&
- benchmarkWorker.includes('parseStatus: assessment.parseStatus') &&
- benchmarkWorker.includes('rawOutput: assessment.rawOutput') &&
- benchmarkUI.includes('Actual model output (max 700 characters)') &&
- benchmarkUI.includes('Invalid output is a format failure'),
- "Model-response diagnostics and malformed-output counts appear in benchmark results");
-console.log('Local reasoner output recovery: chat shapes, concise verdicts, malformed responses, diagnostic provenance and integration passed.');
+// The experimental Qwen model was removed after genuine browser testing:
+// 94.4 seconds for one case and unusable generated text. Do not regress by
+// restoring the resource-hungry option to this interactive test lab.
+assert.ok(!benchmarkPage.includes('value="argument_reasoning"') &&
+ !benchmarkWorker.includes('argument_reasoning') &&
+ !benchmarkWorker.includes('text-generation') &&
+ !benchmarkWorker.includes('Qwen2.5') &&
+ !benchmarkUI.includes('argument_reasoning'),
+ 'Unsupported browser instruction-model path is completely disabled');
+assert.ok(!fs.existsSync('extension/src/argument-reasoner.mjs'),
+ 'Retired Qwen model module is not shipped to the extension');
+assert.ok(benchmarkPage.includes('value="argument_support"') &&
+ benchmarkWorker.includes('analyseArguments(item.text, nliScorer') &&
+ benchmarkWorker.includes('initialiseConsistencyModel()'),
+ 'Fast local NLI argument analyser is preserved');
+assert.ok(benchmarkPage.includes('value="consistency"') &&
+ benchmarkPage.includes('value="positive_ai"') &&
+ benchmarkPage.includes('value="concealed_ai"'),
+ 'Other matching and consistency modes remain available');
+console.log('Resource-intensive Qwen mode retired; fast NLI and other detectors preserved.');
