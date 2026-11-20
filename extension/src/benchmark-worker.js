@@ -236,7 +236,10 @@ async function startRun(message) {
     const labels = [...new Set(argumentAssessments.map(a=>a.label))].sort();
     const extracted = structureCheck.hypotheses.map(h=>({
      sourceConclusion:h.sourceConclusion, modelConclusion:h.modelConclusion,
-     start:h.start,end:h.end,marker:h.marker
+     start:h.start,end:h.end,marker:h.marker,
+     inferred:h.inferred||false,
+     inferredConnector:h.inferredConnector||null,
+     analysisText:h.analysisText||null
     }));
     const key=labels.join(", ") || (extracted.length ? "(no reasoning label)" : "(no extracted argument)");
     data.predictionCounts[key]=(data.predictionCounts[key]||0)+1;
