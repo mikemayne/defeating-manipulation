@@ -31,7 +31,12 @@ export function hasRuleEvidence(techniqueId, windowText, matchIndex, matchText) 
   return !attribution.test(windowText.slice(start, end));
  }
  if (techniqueId === "red_herring") {
-  const halves = matchText.split(/\bwhen there (?:are|is)\b/i);
+  // Some earlier rules end their match at the word "problems" or
+  // "issues", before naming *which* problem. Compare the full sentence
+  // after the match as well, otherwise "water shortage" vs "water pipes"
+  // and "budget" vs "budget calculations" look unrelated.
+  const context = windowText.slice(matchIndex).split(/[.!?\n]/, 1)[0];
+  const halves = context.split(/\bwhen there (?:are|is)\b/i);
   if (halves.length !== 2) return true;
   // A discussion that moves between two clearly *related* descriptions
   // should not be classified as changing the subject.
