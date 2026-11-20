@@ -107,3 +107,45 @@ A constructive phrase may be quoted, sarcastic, or followed by a manipulative
 demand. A green match identifies the local phrase only: it does **not** certify
 that the passage as a whole is constructive. Detecting a negative pattern
 **concealed behind** a positive one is a separate later relationship classifier.
+
+
+## Turquoise concealed-manipulation relationship analysis
+
+The Firefox selected-text analyser now performs a **fourth**, independent
+pass looking for positive-sounding statements that are subsequently reversed
+by an explicit demand, penalty, threat or shaming condition. For example:
+
+    No pressure, but you must agree with me or lose your place.
+
+The pressure clause receives a **turquoise underline**. The hover text shows
+the preceding positive opening and, where the blue matcher recognises it,
+the related manipulation technique. A relationship finding is a description
+of the passage's structure and is **not proof of an author's intentions**.
+
+The rules and explanations are driven by
+`extension/src/concealed-patterns.json`. Each pattern contains observable
+positive cues, negative cues and the positive/negative technique IDs that
+provide additional model evidence. To extend the library, add a pattern
+entry instead of hardcoding extra tests in the UI. The matcher requires a
+close, connected reversal: merely finding a green and a blue span nearby
+is insufficient. Reports of distinct speakers disagreeing, unrelated
+paragraphs and ordinary deadlines are negative controls.
+
+The local Matcher Test Lab has two new modes:
+**Concealed manipulation — relationships (rules)** and
+**Concealed manipulation — local AI + relationships**. The first is the
+quick, deterministic reference. The second runs both real local MiniLM
+positive and negative passes, then uses those results as additional
+evidence for the **same** relationship classifier.
+
+The initial fixture `evaluation/concealed-pattern-examples.json` contains
+96 fictional cases (48 reversals, 48 difficult non-examples); generated
+variations are also available. Import JSON/JSONL cases with
+`{"id":"...", "text":"...", "expected":["choice_with_coercion"]}`
+or `"expected":[]`. The failure-copy report includes matched positive and
+pressure passages to make diagnosing false positives straightforward.
+
+**Scope:** this first version targets direct reversal of reassuring wording
+by a clearly coercive statement. Subtle implication, indirect threats,
+sarcasm, long-range persuasion and concealed manipulation that does not
+match these observable mechanisms need further development and testing.
