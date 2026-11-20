@@ -53,8 +53,8 @@ for(const abbr of [
  "Gen. Brown spoke. The crowd listened.",
  "Sen. Lewis spoke. The committee listened.",
  "Rev. Wells spoke. The crowd listened.",
- "The examples, e.g. apples and pears, were listed. We checked.",
- "The examples, i.e. the final group, were listed. We checked.",
+ "The examples, e.g. apples and pears, were listed. We checked everything.",
+ "The examples, i.e. the final group, were listed. We checked everything.",
  "He lives near St. John Street. She lives nearby.",
  "The U.S. government voted. The committee agreed."
 ]){
