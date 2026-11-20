@@ -9,7 +9,8 @@ const positives=[
  ["The inspection recorded five safety problems. This showed that the building was not safe.","anaphoric_inference"],
  ["The report is misleading. The report omitted three of the twelve results.","claim_then_evidence"],
  ["The company filed the wrong numbers. The company reported a different total.","claim_then_evidence"],
- ["The test showed the bridge had defects. The bridge was not safe.","evidence_then_claim"]
+ ["The test showed the bridge had defects. The bridge was not safe.","evidence_then_claim"],
+ ["She received two awards. The ceremony was on Thursday. She was not a loser.","evidence_then_claim"]
 ];
 const negatives=[
  "The park had a new entrance. The older entrance was still open.",
@@ -47,4 +48,4 @@ assert.equal(diagnostic?.inferred,true);
 assert.ok(diagnostic?.analysisText.includes(" because "));
 assert.deepEqual(argumentFindings(assessments),[],
  "A proposed implicit link must not create a red finding");
-console.log("Discourse expansion: 5 synthetic positives, 5 negatives, source offsets and abstention passed.");
+console.log("Discourse expansion: 6 synthetic positives, 5 negatives, source offsets and abstention passed.");
