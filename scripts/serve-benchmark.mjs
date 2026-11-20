@@ -11,7 +11,8 @@ const allowed = new Set([
  "/extension/benchmark-worker.js",
  "/extension/techniques.json",
  "/extension/patterns.json",
- "/evaluation/matcher-examples.json"
+ "/evaluation/matcher-examples.json",
+ "/evaluation/inconsistency-examples.json"
 ]);
 const mime = file => {
  if (file.endsWith(".html")) return "text/html; charset=utf-8";
