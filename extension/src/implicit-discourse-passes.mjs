@@ -2,10 +2,10 @@
 // Reconstruction exists only in analysisText. Text/offsets stay original.
 const WORD=/[\p{L}\p{N}]{3,}/gu;
 const STOP=new Set("the and this that these those there their they them because when where while have has had been were was are from with your our into about which could would should will only most more some very just what then said says".split(" "));
-const CLAIM=/\b(?:does(?:n't| not) match|does(?:n't| not) add up|is(?:n't| not) (?:true|correct|fair|ready|credible|reliable|justified|safe)|not (?:true|correct|fair|ready|credible|reliable|justified)|contradict(?:s|ed)?|misleading|inconsistent|unreliable|unjustified|flawed|unfair|incorrect|unacceptable|unconvincing|wrong|not enough|can't be true|cannot be true|does not have|doesn't have|there is no evidence|i don't buy that|i do not buy that|doesn't make sense|does not make sense)\b/i;
-const EVIDENCE=/\b(?:voted|recorded|measured|found|reported|published|counted|inspected|tested|omitted|withheld|paid|charged|increased|decreased|raised|reduced|received|provided|spent|rejected|approved|denied|passed|failed|promised|wrote|showed|says|said|states|stated|confirmed|delivered)\b|\b\d[\d,.]*(?:\s*%)?\b/i;
+const CLAIM=/\b(?:does(?:n't| not) match|does(?:n't| not) add up|is(?:n't| not) (?:true|correct|fair|ready|credible|reliable|justified|safe)|not (?:true|correct|fair|ready|credible|reliable|justified)|contradict(?:s|ed)?|misleading|inconsistent|unreliable|unjustified|flawed|unfair|incorrect|unacceptable|unconvincing|wrong|not enough|can't be true|cannot be true|does not have|doesn't have|there is no evidence|not a|not an|dangerous|the problem|very serious|i don't buy that|i do not buy that|doesn't make sense|does not make sense)\b/i;
+const EVIDENCE=/\b(?:voted|recorded|measured|found|reported|published|counted|inspected|tested|omitted|withheld|paid|charged|increased|decreased|raised|reduced|received|provided|spent|rejected|approved|denied|passed|failed|promised|wrote|showed|says|said|states|stated|confirmed|delivered|got|awarded|served|filed|submitted|blocked|withheld|omitted)\b|\b\d[\d,.]*(?:\s*%)?\b/i;
 const ANAPHORA=/^(?:(?:and|but|well|now)[, ]+)?(?:this|that|it) (?:means|meant|shows|showed|demonstrates|demonstrated|suggests|suggested|indicates|indicated|proves|proved)(?: that)?\s+/i;
-const FINITE=/\b(?:is|are|was|were|has|have|had|does|did|will|would|should|could|can|can't|cannot|won't|paid|voted|recorded|found|measured|reported|said|says|omitted|withheld|filed|changed|approved|rejected|sent|provided|spent|promised|denied|failed|passed|worked|raised|reduced|received|delivered)\b/i;
+const FINITE=/\b(?:is|are|was|were|has|have|had|does|did|will|would|should|could|can|can't|cannot|won't|paid|voted|recorded|found|measured|reported|said|says|omitted|withheld|filed|changed|approved|rejected|sent|provided|spent|promised|denied|failed|passed|worked|raised|reduced|received|delivered|got|awarded|served|filed|submitted|blocked)\b/i;
 function tokens(s){return new Set((s.toLowerCase().match(WORD)||[]).filter(w=>!STOP.has(w)));}
 function related(a,b){
  const A=tokens(a),B=tokens(b);for(const w of A)if(B.has(w))return true;
@@ -15,7 +15,8 @@ function related(a,b){
 function complete(s){return s&&s.text.length>=18&&s.text.length<=430&&
  (s.text.match(WORD)||[]).length>=3&&FINITE.test(s.text)&&
  !/[?!]\s*$/.test(s.text)&&!/[“”]/.test(s.text)&&
- (s.text.match(/"/g)||[]).length<2;}
+ (s.text.match(/"/g)||[]).length<2 &&
+ !/^(?:which|who|whom|whose)\b/i.test(s.text);}
 function stripEnd(s){return s.replace(/[.!?;]+\s*$/,"").trim();}
 function propose(source,premise,conclusion,connector,method){
  return {premise:premise.text,premises:[premise],
@@ -48,8 +49,8 @@ export function recoverDiscourseArguments(source,statements,{limit=3}={}){
   add(statements[i-1],{start,end:start+text.length,text},"therefore","anaphoric_inference");
  }
  // Second pass: relate adjacent evaluative claims and reported evidence.
- for(let i=0;i<statements.length-1;i++){
-  const a=statements[i],b=statements[i+1];
+ for(let i=0;i<statements.length-1;i++)for(let j=i+1;j<=Math.min(statements.length-1,i+2);j++){
+  const a=statements[i],b=statements[j];
   if(!complete(a)||!complete(b)||source.slice(a.end,b.start).includes("\n\n")||
      !related(a.text,b.text))continue;
   const claimA=CLAIM.test(a.text),claimB=CLAIM.test(b.text);
