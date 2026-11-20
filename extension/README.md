@@ -59,3 +59,20 @@ within the same relevant context, or `"expected": []` if it should not be
 highlighted. The lab reports case-level precision/recall and copies failure
 details including any red-highlighted pairs. A model download or inference
 error is reported as an error, not as a successful negative classification.
+
+
+### Reporting disagreements versus contradictory claims
+
+The local inconsistency pass excludes comparisons of clearly attributed claims
+from **different sources** (for example, a manager saying a centre is open
+and a spokesperson saying it is closed). Reporting their disagreement is not
+by itself an inconsistency in the article. Two conflicting claims by the
+**same named source** remain eligible, as do unattributed contradictions.
+The attribution parser is deliberately conservative: ambiguous passages may
+still require manual review.
+
+The public technique entry **Inconsistent or unsupported reasoning** now also
+explains that a conclusion may be unsupported *by the premises actually given*,
+without being disproved. The current local NLI pass is primarily a claim
+contradiction detector; recognising unsupported paragraph-level conclusions
+is a separate, later enhancement and is not yet claimed as a tested ability.
