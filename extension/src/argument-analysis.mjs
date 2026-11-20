@@ -11,7 +11,15 @@ const MAX_PREMISE_CHARS = 780;
 const MAX_CONCLUSION_CHARS = 280;
 const MAX_PARAGRAPH_BREAKS = 1;
 const MARKER = /^(?:(?:and|but)\s+)?(therefore|thus|hence|consequently|accordingly|as a result|it follows that|we can conclude that|this (?:shows|proves|demonstrates|confirms|means)(?: that)?|these (?:results|findings) (?:show|prove|demonstrate)(?: that)?|the evidence (?:shows|proves)(?: that)?|so)\s*[,:\s]\s*/i;
-const NORMATIVE = /\b(?:should|ought|perhaps|possibly|might|may|could|recommend|consider|prefer|hope|wish)\b/i;
+// A cautious scientific prediction is a factual inference to assess, not
+// a recommendation to abstain from. "Might have occurred" and "can test"
+// are different from "we should consider".
+const NORMATIVE = /\b(?:should|ought|recommend|consider|prefer|hope|wish)\b|\b(?:we|you)\s+(?:(?:may|might|could|can)\s+)?(?:need to|want to|plan to|intend to)\b/i;
+// A limited set of directly expressed within-sentence conclusions. The
+// pre-marker clause supplies a premise; the post-marker clause is the claim.
+// This only locates the inference; it is never evidence that it is valid.
+const INLINE_MARKER = /,\s*(?:which|and this)\s+(?:means|suggests|implies)(?:\s+that)?\s+|\b(?:indicates|suggests|implies|demonstrates|shows)\s+that\s+/gi;
+
 
 export function extractArgumentStatements(source) {
  if (typeof source !== "string") return [];
@@ -49,12 +57,53 @@ function explicitConclusion(statement) {
  return { start, end: statement.end, text, marker: match[1].toLowerCase() };
 }
 
+function extractInlineArgument(statement) {
+ if (/[?!]\s*$/.test(statement.text) || attributedSource(statement.text)) return null;
+ INLINE_MARKER.lastIndex = 0;
+ let match;
+ while ((match = INLINE_MARKER.exec(statement.text)) !== null) {
+  const before = statement.text.slice(0, match.index);
+  const after = statement.text.slice(INLINE_MARKER.lastIndex).trim();
+  // Do not treat "the report suggests X" or an empty conclusion as an
+  // evidential argument. Preserve the pre-marker clause verbatim.
+  if ((before.match(/\b[\w'-]+\b/g) || []).length < 7 ||
+      after.length < 12 || after.length > MAX_CONCLUSION_CHARS ||
+      NORMATIVE.test(after)) continue;
+  const leading = before.search(/\S/), premiseEnd = before.trimEnd().length;
+  if (leading < 0 || premiseEnd <= leading) continue;
+  const premise = {
+   start: statement.start + leading,
+   end: statement.start + premiseEnd,
+   text: statement.text.slice(leading, premiseEnd)
+  };
+  // Position the conclusion after its marker while preserving all original
+  // source offsets, including punctuation and capitalization.
+  const offset = statement.text.slice(INLINE_MARKER.lastIndex).search(/\S/);
+  if (offset < 0) continue;
+  const conclusion = {
+   start: statement.start + INLINE_MARKER.lastIndex + offset,
+   end: statement.end,
+   text: statement.text.slice(INLINE_MARKER.lastIndex + offset),
+   marker: match[0].trim().toLowerCase(),
+   inline: true
+  };
+  if (conclusion.text.trim() !== after) continue;
+  return { premise: premise.text, premises: [premise],
+   conclusion, start: premise.start, end: conclusion.end };
+ }
+ return null;
+}
+
 export function extractArguments(source) {
  const statements = extractArgumentStatements(source);
  const argumentsFound = [];
  for (let i = 0; i < statements.length && argumentsFound.length < MAX_ARGUMENTS; i++) {
   const conclusion = explicitConclusion(statements[i]);
-  if (!conclusion) continue;
+  if (!conclusion) {
+   const inline = extractInlineArgument(statements[i]);
+   if (inline) argumentsFound.push(inline);
+   continue;
+  }
   const preceding = [], end = statements[i].start;
   let usedChars = 0, totalParagraphBreaks = 0, cursor = end;
   for (let j = i - 1; j >= 0 && preceding.length < MAX_PREMISES; j--) {
