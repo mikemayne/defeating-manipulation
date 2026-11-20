@@ -472,7 +472,7 @@ function comparisonReport(data){
      x.id+"="+(x.score===null?"N/A":x.score.toFixed(3))).join(", "),
     "Earlier joins affected context: "+p.contextChangedByEarlierJoins+
     " | Disagree: "+(!p.sameChoice),
-    "Cumulative reconstruction: "+p.progressiveReconstructionAtBoundary
+    "Cumulative reconstruction: "+p.progressiveReconstructionThroughSecond
    );
   }
  }
