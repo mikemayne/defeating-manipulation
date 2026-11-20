@@ -365,3 +365,40 @@ limitation must not be concealed by calling neutral "unsupported" with
 unwarranted certainty. Any future solution needs to be fast enough for
 ordinary browsing and evaluated on fresh, independently labelled
 real passages including supported, unsupported and contradicted claims.
+
+
+### Fast, conservative assessment of evidential support
+
+The local NLI model is fast but its **neutral** label means only that
+the conclusion is not *deductively entailed*. It cannot distinguish
+a reasonable statistical/scientific inference from weak evidence
+merely by returning neutral. In the 23-case real-world pilot all five
+supported scientific conclusions were wrongly marked unsupported for
+this reason.
+
+The default local argument checker now takes the conservative route:
+
+- **Genuine contradictions** that pass the existing two-direction NLI
+  check remain red.
+- **Obvious unsupported scope or certainty leaps** remain red when the
+  conclusion makes a categorical universal, absolute guarantee or
+  superlative claim not established by the stated premises. An
+  inference marker such as "therefore" is never proof of correctness.
+- **Insufficient evidence to judge the quality of the inference** means
+  **no underline**. NLI neutrality alone is not enough to flag a
+  factual or qualified conclusion as an error.
+- **Clearly supported conclusions** remain unmarked, and they can still
+  be reported as supported in the benchmark.
+
+The Matcher Test Lab's argument diagnostics now explicitly identify
+`evidential_support_uncertain` with "insufficient evidence to judge;
+no underline". This is *not* the same thing as an affirmative
+`unsupported_conclusion` finding. The real pilot's five neutral
+NLI-score traces, including the inline "which means" and "indicates"
+examples, are preserved in automated abstention tests.
+
+This change **does not claim to have proved** those five scientific
+arguments are supported. It deliberately avoids a misleading red flag
+when the model is unable to assess the relevant background knowledge.
+It runs on the original fast local NLI model and lexical scope checks,
+without any browser-based text-generation model or extra API calls.
