@@ -3,6 +3,7 @@
 // only when the conclusion visibly claims universal/ranking/precise certainty
 // from an explicitly narrow, different kind of evidence.
 const MAX_PREMISE=1200,MAX_CLAIM=340;
+const INFERENCE_LINK=/\b(?:therefore|hence|thus|so|consequently|accordingly|as a result|this (?:means|shows|proves|guarantees)|that (?:means|shows|proves|guarantees)|it follows|indicates|demonstrates)\b/i;
 const HEDGE=/\b(?:might|may|could|possibly|perhaps|likely|appears?|seems?|suggests?|potentially|perhaps|estimate[ds]?|forecast\s+to|might\s+eventually|assuming|in theory)\b/i;
 const QUOTED=/[“”"]/;
 const EXPRESS_RULE=/\b(?:if|whenever|provided that|assuming that|only when|if and only if|because every|since every)\b/i;
@@ -56,7 +57,7 @@ export function inferExplicitProofObligationGap(premise,conclusion,{inferenceMar
  if(typeof premise!=='string'||typeof conclusion!=='string'||
   premise.length>MAX_PREMISE||conclusion.length>MAX_CLAIM)return null;
  const p=premise.trim(),c=conclusion.trim();
- if(!p||!c||QUOTED.test(p)||QUOTED.test(c)||HEDGE.test(c)||
+ if(!p||!c||!INFERENCE_LINK.test(inferenceMarker)||QUOTED.test(p)||QUOTED.test(c)||HEDGE.test(c)||
   EXPRESS_RULE.test(p)||EXPRESS_RULE.test(c)||
   statementCount(p)>1 || supportedBySamePopulation(p,c))return null;
  const finite=LOCAL_EVENT.test(p)||FINITE_OBSERVATION.test(p);
