@@ -41,6 +41,30 @@
       "year": 2022,
       "url": "https://doi.org/10.1177/17504813221101824",
       "notes": "Study of headline/article discrepancies, expressive language, selective citation and distortions in online political reporting."
+    },
+    {
+      "id": "stites2016",
+      "title": "Do Morphemes Matter when Reading Compound Words with Transposed Letters? Evidence from Eye-Tracking and Event-Related Potentials",
+      "authors": "Stites, Federmeier and Christianson",
+      "year": 2016,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5544032/",
+      "notes": "Eye-tracking experiment found longer reading times for misspelled compared with correctly spelled compound words. This supports a reading-disruption mechanism, not deliberate persuasive use."
+    },
+    {
+      "id": "strukelj2018",
+      "title": "One page of text: Eye movements during regular and thorough reading, skimming, and spell checking",
+      "authors": "Strukelj and Niehorster",
+      "year": 2018,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7198234/",
+      "notes": "Eye-tracking research shows how attending to spelling changes reading patterns and can reduce comprehension relative to normal reading. Does not test intentionally planted errors."
+    },
+    {
+      "id": "apa_distinctiveness_effect",
+      "title": "Distinctiveness effect",
+      "authors": "APA Dictionary of Psychology",
+      "year": "n.d.",
+      "url": "https://dictionary.apa.org/distinctiveness-effect",
+      "notes": "Defines the distinctiveness or von Restorff effect: isolated items can be better remembered. Does not establish that arbitrary misspellings cause persuasion."
     }
   ]
 }
