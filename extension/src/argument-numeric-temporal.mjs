@@ -5,6 +5,11 @@ import {parseNumber} from './argument-numeric.mjs';
 const MONTHS=['january','february','march','april','may','june','july','august','september','october','november','december'];
 const COUNT=/(?:\d+(?:\.\d+)?|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)/.source;
 const HEDGE=/\b(?:may|might|could|possibly|perhaps|roughly|about|approximately|estimated|allegedly)\b/i;
+// A calendar date such as '3 May' must not be mistaken for modal 'may'.
+function isHedged(text){
+ const calendarNeutral=text.replace(/\b(?:\d{1,2}\s+May|May\s+\d{1,2}|(?:in|during|throughout|until|by|on)\s+May)\b/gi,'[calendar-month]');
+ return HEDGE.test(calendarNeutral);
+}
 const EXCEPTION=/\b(?:except|unless|another|different|separate|previously|subsequently|revised|alternative)\b/i;
 function result(label,reason,details,p,c){
  return {label,reason,verified:true,chain:[
@@ -71,7 +76,7 @@ function endedByDate(p,c){
 export function inferNumericTemporalConstraint(premise,conclusion){
  if(typeof premise!=='string'||typeof conclusion!=='string'||!premise.trim()||!conclusion.trim()||
   premise.length>1600||conclusion.length>400||/["“”]/.test(premise+conclusion)||
-  HEDGE.test(premise+conclusion)||EXCEPTION.test(premise+conclusion))return null;
+  isHedged(premise+conclusion)||EXCEPTION.test(premise+conclusion))return null;
  return solePlatform(premise,conclusion)||soleLiftLevels(premise,conclusion)||
   allUnderWeight(premise,conclusion)||noStaffAfter(premise,conclusion)||
   endedByDate(premise,conclusion);
