@@ -21,17 +21,21 @@ export function normaliseParagraphInputs(paragraphs) {
 // persuasive implication that the *same analyser* must inspect in pass two.
 export function paraphrasePrompt(paragraph) {
  return "Rewrite the paragraph in clearer, simpler language without changing " +
-  "what it communicates to the reader. MOST IMPORTANT: preserve the exact " +
-  "point being pushed, including implied accusations, suggested causal links, " +
-  "social pressure, implied consequences, insinuations and conclusions. " +
+  "what it communicates to the reader. FIRST identify the sentence or phrase " +
+  "that carries the paragraph's strongest persuasive or potentially misleading " +
+  "point. Give that point PRIMARY WEIGHT in the rewrite: keep its actual " +
+  "assertion and implication clear and prominent, even if it occupies only " +
+  "a few words in the original. Preserve implied accusations, suggested " +
+  "causal links, social pressure, implied consequences and insinuations. " +
   "Make the communicated implication explicit when the wording strongly " +
   "supports it, while distinguishing it from a stated fact (e.g. 'suggests " +
   "that' rather than 'proves that'). Preserve every separate claim, " +
   "qualification, negation, attribution, number and stated reason. " +
-  "Do NOT neutralise persuasive content into a vague topic summary; do NOT " +
+  "Do NOT bury the key persuasive point under background facts or " +
+  "neutralise it into a vague topic summary; do NOT " +
   "add a new accusation or inference that is not supported by the text. " +
   "Do NOT label any manipulation pattern or judge whether the point is true. " +
-  "Output only the rewritten paragraph.\\n\\n" +
+  "Output only the rewritten paragraph.\n\n" +
   "Paragraph: " + paragraph + "\\n\\nParaphrase:";
 }
 
