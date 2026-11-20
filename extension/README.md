@@ -929,6 +929,11 @@ original punctuation, no punctuation/word, "and", or "but".
   text, independently of how earlier joins scored.
 - **Progressive**: after a confident choice at one boundary, put that
   analysis-only replacement into the context used at the next boundary.
+- **JavaScript boundary filter**: treat common titles such as Mr., Mrs.,
+  Ms., Dr., Prof., Gen., Sen., etc. and abbreviations/initials and
+  ellipses as punctuation **inside** sentences, not candidate discourse
+  joins. These are skipped before any model inference. Original spelling
+  and source offsets are retained.
 - **Both**: preserve the input and exact original punctuation offsets; never
   change visible text, never feed provisional joins to the red-underline
   engine. Both use the same 130-character left context budget and same
@@ -949,7 +954,7 @@ original punctuation, no punctuation/word, "and", or "but".
   counts are also shown.
 - **Synthetic reference pilot**: upload
   \`evaluation/reader-strategy-synthetic-reference.json\`: 54 fictional
-  cases with 108 developer-authored reference choices. This is a regression
+  cases with 102 developer-authored reference choices (abbreviation periods are excluded). This is a regression
   and face-validity check, **not evidence of accuracy in real readers**.
   The private 1,000-case real-world corpus is not included in the repository.
 
