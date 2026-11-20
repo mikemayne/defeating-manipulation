@@ -1278,3 +1278,6 @@ await import('./test-argument-generalised-proofs.mjs');
 
 // Prove mutually exclusive register counts, machine intervals and complete lists.
 await import('./test-argument-closed-scope.mjs');
+
+// Exact finite arithmetic, bounded prerequisites and quantifier counterexamples.
+await import('./test-argument-finite-proofs.mjs');
