@@ -9,6 +9,7 @@ import { structurePropositions } from "./argument-propositions.mjs";
 import { inferReasoningBridge } from "./argument-bridges.mjs";
 import { inspectArgumentProof } from "./argument-proof-graph.mjs";
 import { validatedNliScores } from "./argument-safety.mjs";
+import { inferExplicitProofObligationGap } from "./argument-proof-obligations.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -77,7 +78,7 @@ export function classifyArgumentScore(forward, reverse = null) {
 // verdict caused by adding irrelevant premises to the same NLI input.
 // A contradictory premise wins over a supporting one: the supplied set of
 // premises is then internally inconsistent. Uncertain scores abstain.
-export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker="",structured=null,bridge=undefined,proof=undefined} = {}) {
+export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker="",structured=null,bridge=undefined,proof=undefined,claimObligation=undefined} = {}) {
  // Structured arithmetic, explicit exclusions and a limited set of
  // quantified conditions are more reliable than MNLI guesses. Keep them
  // separate from neural probabilities and ensure contradictory evidence wins.
@@ -92,6 +93,16 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
  const verifiedProof = proof===undefined
   ? inspectArgumentProof(complete,conclusionText) : proof;
  const bounded = boundedArgumentLogic(complete, conclusionText);
+ // Claim-strength checks require an observable finite-versus-absolute
+ // evidence mismatch; they do not infer unsoundness from proof absence alone.
+ const proposedObligation = claimObligation === undefined
+  ? inferExplicitProofObligationGap(complete, conclusionText, {inferenceMarker})
+  : claimObligation;
+ const explicitOpposition=observableContradiction(complete, conclusionText).verified ||
+  explicitConflict(complete, conclusionText).verified;
+ const strengthGap=(!verifiedProof?.verified && !verifiedBridge &&
+  !propositionModel.relation && !bounded && !explicitOpposition)
+   ? proposedObligation : null;
  // An overclaim needs an observable *scope leap*, not merely an NLI-neutral
  // score. Explicit contradictions and bounded entailments take precedence.
  const overreach = !bounded &&
@@ -165,6 +176,12 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
   verdict:{label:bounded.label, score:1, reason:bounded.reason},
   evidenceStatus:"verified_bounded_relation", evidenceReason:bounded.reason
  });
+ if (strengthGap) classified.push({
+  kind:"proof_obligation_gap",text:complete,
+  verdict:{label:"unsupported_conclusion",score:1,reason:strengthGap.reason},
+  evidenceStatus:"verified_evidence_type_mismatch",
+  evidenceReason:strengthGap.reason
+ });
  if (overreach) classified.push({
   kind:"overreach_relation", text:complete,
   verdict:{label:"unsupported_conclusion",score:1,reason:overreach.reason},
@@ -211,6 +228,9 @@ export async function analyseArguments(source, scorePair,
   const propositions = structurePropositions(argument.premise, normalised.text);
   const bridge = inferReasoningBridge(argument.premise, normalised.text);
   const proof = inspectArgumentProof(argument.premise, normalised.text);
+  const claimObligation=inferExplicitProofObligationGap(
+   argument.premise,normalised.text,
+   {inferenceMarker:argument.conclusion.marker});
   onProgress?.({ completed: i, total: candidates.length });
 
   const texts = [
@@ -240,7 +260,7 @@ export async function analyseArguments(source, scorePair,
   // Explicit-logic checks continue to use the original statements and
   // completed *source* conclusion, not canonicalised NLI text.
   const result = combineArgumentEvidence(scored, normalised.text,
-   {inferenceMarker:argument.conclusion.marker,structured:propositions,bridge,proof});
+   {inferenceMarker:argument.conclusion.marker,structured:propositions,bridge,proof,claimObligation});
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
    modelConclusion: normalised.expanded || entities.changed ? hypothesis : null,
@@ -249,6 +269,8 @@ export async function analyseArguments(source, scorePair,
     claimKind:propositions.conclusion.kind,
     relation:propositions.relation?.reason || null},
    reasoningBridge:bridge ? {reason:bridge.reason,steps:bridge.chain.length} : null,
+   proofObligation:claimObligation ? {reason:claimObligation.reason,
+    requires:claimObligation.obligation,observed:claimObligation.observed} : null,
    proofGraph:{
     status:proof.status,
     sourceFacts:proof.numericFacts.length,
