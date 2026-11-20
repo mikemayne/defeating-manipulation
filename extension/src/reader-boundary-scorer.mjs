@@ -8,7 +8,7 @@ export const BOUNDARY_CHOICES=Object.freeze([
  {id:"and",label:"and"},
  {id:"but",label:"but"}
 ]);
-const MAX_PAIRS=2,MAX_CONTEXT_LEFT=130,MAX_CONTEXT_RIGHT=95;
+const MAX_PAIRS=2,MAX_STRATEGY_PAIRS=8,MAX_CONTEXT_LEFT=130,MAX_CONTEXT_RIGHT=95;
 function trimSpan(source,start,end){
  while(start<end&&/\s/u.test(source[start]))start++;
  while(end>start&&/\s/u.test(source[end-1]))end--;
@@ -59,7 +59,7 @@ export function extractBoundaryProbes(source,{maxPairs=MAX_PAIRS}={}){
   if(seen.has(p.punctuationStart))continue;
   seen.add(p.punctuationStart);unique.push(p);
  }
- const limit=Math.min(MAX_PAIRS,maxPairs);
+ const limit=Math.min(MAX_STRATEGY_PAIRS,maxPairs);
  if(unique.length<=limit)return unique;
  if(limit===1)return [unique[0]];
  return [unique[0],unique[unique.length-1]];
