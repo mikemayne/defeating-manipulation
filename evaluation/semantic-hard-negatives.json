@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "description": "Independent manually labelled hard-negative and contrastive cases for the actual local AI matcher; use Dataset: Upload labelled JSON in the Matcher Test Lab. Includes examples from the 2026-11-19 AI benchmark plus additional contrasts. These are not new independent real-world data.",
+  "cases": [
+    {
+      "id": "survey-report",
+      "text": "Most people surveyed agreed with the proposal, according to the published results.",
+      "expected": []
+    },
+    {
+      "id": "survey-surrounding-context",
+      "text": "The chair confirmed the date of the next public meeting.\nMost people surveyed agreed with the proposal, according to the published results.\nThe minutes were approved and filed.",
+      "expected": []
+    },
+    {
+      "id": "survey-wrapped",
+      "text": "The document was circulated to everyone earlier that morning.\nMost people surveyed agreed with the proposal,\naccording to the published results.",
+      "expected": []
+    },
+    {
+      "id": "survey-other-reason",
+      "text": "Most people surveyed agreed with the proposal, according to the published results.\nI wore my lucky socks and we won, so my socks caused the victory.",
+      "expected": [
+        "post_hoc"
+      ]
+    },
+    {
+      "id": "survey-unrelated-assertion",
+      "text": "Most people surveyed agreed with the proposal, according to the published results.\nYour argument is wrong because you're an idiot.",
+      "expected": [
+        "ad_hominem"
+      ]
+    },
+    {
+      "id": "survey-unrelated-directive",
+      "text": "Most people surveyed agreed with the proposal, according to the published results.\nYou must either support this policy or face disaster.",
+      "expected": [
+        "false_dilemma"
+      ]
+    },
+    {
+      "id": "survey-unrelated-warning",
+      "text": "If we allow one late submission, soon nobody will meet deadlines.\nMost people surveyed agreed with the proposal, according to the published results.",
+      "expected": [
+        "slippery_slope"
+      ]
+    },
+    {
+      "id": "report-named-technique",
+      "text": "False dilemma\nThe article concluded with a neutral description of the event.",
+      "expected": []
+    },
+    {
+      "id": "report-after-false-dilemma",
+      "text": "There are only two options: support the plan or abandon it.\nThe article concluded with a neutral description of the event.",
+      "expected": [
+        "false_dilemma"
+      ]
+    },
+    {
+      "id": "neutral-consensus-no-inference",
+      "text": "The majority of respondents supported the measure in the published poll.",
+      "expected": []
+    },
+    {
+      "id": "neutral-ordinary-popularity",
+      "text": "The album was popular among many people in the city last year.",
+      "expected": []
+    },
+    {
+      "id": "neutral-description-of-debate",
+      "text": "The newspaper reported that the two groups disagreed and quoted their respective views.",
+      "expected": []
+    },
+    {
+      "id": "neutral-reporting-timing",
+      "text": "The article starts with the date of the event and then describes the timetable without expressing a judgement.",
+      "expected": []
+    },
+    {
+      "id": "positive-bandwagon",
+      "text": "Everyone believes this, so it must be true.",
+      "expected": [
+        "bandwagon"
+      ]
+    },
+    {
+      "id": "positive-bandwagon-cross-sentence",
+      "text": "Everyone believes this. So it must be true.",
+      "expected": [
+        "bandwagon"
+      ]
+    },
+    {
+      "id": "positive-bandwagon-reverse",
+      "text": "The proposal must be correct because everyone agrees with it.",
+      "expected": [
+        "bandwagon"
+      ]
+    },
+    {
+      "id": "positive-survey-used-as-proof",
+      "text": "Most people surveyed agreed with the proposal. Therefore it must be the right choice.",
+      "expected": [
+        "bandwagon"
+      ]
+    },
+    {
+      "id": "positive-narrative-reframing",
+      "text": "The article begins with a confrontation but omits the earlier decision that prompted it.",
+      "expected": [
+        "narrative_reframing"
+      ]
+    }
+  ]
+}

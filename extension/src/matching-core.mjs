@@ -1,5 +1,6 @@
 import { windows } from "./text-windows.mjs";
 import { isSemanticCandidate, selectSemanticTechnique, semanticMatchStrength } from "./semantic-policy.mjs";
+import { hasSemanticEvidence } from "./semantic-evidence.mjs";
 
 // Shared by the Firefox worker and the stand-alone evaluation runner.
 export function compilePatternRules(catalogue, patternCatalogue) {
@@ -73,9 +74,12 @@ export async function matchText(text, { techniques, rules, prototypes = [], embe
    const embedded = candidates.length ? await embed(candidates.map(part => part.text)) : [];
    for (let i = 0; i < candidates.length; i++) {
     const result = selectSemanticTechnique(embedded[i], prototypes, cosineSimilarity);
-    if (result) semantic.push({ start: candidates[i].start, end: candidates[i].end,
-     technique: techniques[result.techniqueIndex], score: result.score,
-     method: "semantic", strength: semanticMatchStrength(result.score, result.margin) });
+    const matchedTechnique = result ? techniques[result.techniqueIndex] : null;
+    if (matchedTechnique && hasSemanticEvidence(matchedTechnique.id, candidates[i].text)) {
+     semantic.push({ start: candidates[i].start, end: candidates[i].end,
+      technique: matchedTechnique, score: result.score,
+      method: "semantic", strength: semanticMatchStrength(result.score, result.margin) });
+    }
    }
   } catch (error) {
    // A model error must not erase exact matches already found by the rules.
