@@ -279,3 +279,26 @@ download the local NLI weights. The actual model must be evaluated
 separately in Firefox. Meaningful validation requires new examples with
 unstated premises, uncertain conclusions, partial evidence, long-range
 dependencies and shifts in population, time or causal claims.
+
+
+### Follow-up to 96-case real-model baseline
+
+Initial `argument_support` real-model results: exact 84.4% (81/96);
+precision 96.6%, recall 79.2%, zero false positives in 24 no-argument
+controls. Of the 15 errors, 8 were missed contradicted conclusions,
+5 missed unsupported conclusions, and 2 supported conclusions were
+called unsupported. All 72 labelled inferences were extracted correctly.
+
+The support scorer now uses both the full combined premises and each
+premise separately. This should avoid masking a direct contradiction
+or an entailed fact behind irrelevant additional statements; it also
+preserves combined-premise reasoning. Exact textual repetitions are
+recognised as supported even when a neural model scores a concatenated
+passage as neutral. The failure-copy export includes full local NLI
+forward/reverse class scores for every premise and the combination.
+
+CI tests controlled scores to validate the fusion policy and abstention,
+not actual model performance. Rerun the 96 cases unchanged in the
+Firefox **Arguments — premise and conclusion (local NLI)** mode and
+inspect the expanded failure report to decide whether further model
+or confidence-policy changes are justified.
