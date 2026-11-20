@@ -226,7 +226,8 @@ export async function analyseArguments(source, scorePair,
    conclusion: argument.conclusion.text,
    comparisons: scored.map(({ kind, text, repeated, forward, reverse }) =>
     ({ kind, premise: text, repeated, forward, reverse })),
-   verdict: result?.label || null
+   verdict: result?.label || null,
+   reason: result?.reason || null
   });
   if (!result) continue;
   assessments.push({ ...argument, ...result,
