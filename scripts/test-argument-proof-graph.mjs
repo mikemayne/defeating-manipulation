@@ -134,6 +134,38 @@ const graphHardNegatives=[
 ];
 for(const [id,p,c] of graphHardNegatives){const x=inspectArgumentProof(p,c);
  assert.equal(x.verified,null,id+': '+JSON.stringify(x.verified));}
+const modusTollensPositive=[
+ ['simple-negation','If the badge is valid, entry is permitted. Entry is not permitted.',
+  'The badge is not valid.'],
+ ['different-object','If the sensor is ready, the alarm is active. The alarm is not active.',
+  'The sensor is not ready.']
+];
+for(const [id,p,c] of modusTollensPositive){
+ const x=inspectArgumentProof(p,c);
+ assert.equal(x.verified?.label,'supported_conclusion',id+': '+JSON.stringify(x));
+ assert.equal(x.verified?.reason,'bounded_modus_tollens',id);
+ assert.ok(x.edges.some(e=>e.rule==='modus_tollens'),id);
+}
+const modusTollensNegatives=[
+ ['affirming-consequent','If the badge is valid, entry is permitted. Entry is permitted.',
+  'The badge is valid.'],
+ ['denying-antecedent','If the badge is valid, entry is permitted. The badge is not valid.',
+  'Entry is not permitted.'],
+ ['different-consequent','If the badge is valid, entry is permitted. Parking is not permitted.',
+  'The badge is not valid.'],
+ ['different-antecedent','If the badge is valid, entry is permitted. Entry is not permitted.',
+  'The passport is not valid.'],
+ ['necessary-only','The badge is valid only if the gate is active. The gate is not active.',
+  'The badge is not valid.'],
+ ['hedged-rule','If the badge is valid, entry might be permitted. Entry is not permitted.',
+  'The badge is not valid.'],
+ ['unrelated-quote','The notice reads "If the badge is valid, entry is permitted." Entry is not permitted.',
+  'The badge is not valid.']
+];
+for(const [id,p,c] of modusTollensNegatives){
+ const x=inspectArgumentProof(p,c);
+ assert.equal(x.verified,null,id+': '+JSON.stringify(x.verified));
+}
 const graphContradiction=inspectArgumentProof(
  'If the gate is open, entry is permitted. The gate is open.', 'Entry is not permitted.');
 assert.equal(graphContradiction.verified?.label,'contradictory_claims',
