@@ -1018,30 +1018,6 @@
         "A conclusion is based on a small selected set of cases without explaining how they were chosen."
       ],
       "example": "This diet works because I found three people online who lost weight using it."
-    },
-    {
-      "id": "argument_inconsistency",
-      "title": "Inconsistent or unsupported reasoning",
-      "category": "Argumentation",
-      "summary": "Statements in an argument may conflict, or a conclusion may go beyond what its stated premises establish.",
-      "tags": [
-        "contradiction",
-        "unsupported conclusion",
-        "insufficient evidence",
-        "non sequitur",
-        "logical support"
-      ],
-      "status": "starter",
-      "definition": "Two claims are inconsistent when, in the same relevant circumstances, they cannot both be true. A different problem occurs when a passage presents facts or observations and then draws a conclusion that those premises do not justify. In that case the evidence provided is insufficient to support the conclusion; this does not mean the conclusion has been disproved, or that supporting evidence cannot exist elsewhere. Reports of disagreement between different sources are not themselves contradictions by the writer.",
-      "observable_features": [
-        "The same source makes incompatible assertions about the same subject, time and conditions.",
-        "A conclusion claims certainty or a broad general rule even though the evidence offered supports only a narrower statement.",
-        "The premises address a different issue from the conclusion, so their truth would not establish it.",
-        "Different sources are accurately quoted as disagreeing; do not assume this makes the article internally inconsistent.",
-        "Where the provided premises do not establish the conclusion, describe the evidence as insufficient rather than claiming the conclusion is necessarily false."
-      ],
-      "example": "Customer satisfaction rose last year, and sales increased. Therefore, the product has been proven completely safe.",
-      "reader_effect": "An unsupported leap can make a conclusion seem established even though its stated evidence is insufficient. A contradiction can confuse which claim to rely on; neither alone settles what is true."
     }
   ]
 }

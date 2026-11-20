@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "description": "A separate, extensible library of argument-consistency patterns. Entries describe the relationship between claims, premises and conclusions; they are not judgements about the writer's motives or the ultimate truth of a conclusion.",
+  "patterns": [
+    {
+      "id": "contradictory_claims",
+      "title": "Contradictory claims",
+      "category": "Inconsistency",
+      "summary": "Two claims about the same subject, time and conditions cannot both be true.",
+      "definition": "An argument is internally inconsistent when it asserts incompatible things under the same relevant conditions. Before identifying a contradiction, check that the claims concern the same subject and period and are made by the same source, rather than merely reporting that different people disagree.",
+      "observable_features": [
+        "The passage asserts that something both does and does not happen under the same conditions.",
+        "A quantity, property or event is affirmed in one claim and denied in another without a relevant change in time or circumstances.",
+        "The claims are presented as assertions by the same source; accurately reporting opposing views is not itself an internal contradiction."
+      ],
+      "example": "The gallery charges an admission fee on Sundays. The gallery never charges admission on Sundays.",
+      "reader_effect": "Makes it unclear which claim to accept; the conflict should be resolved by checking dates, sources and conditions.",
+      "tags": [
+        "contradiction",
+        "incompatible claims",
+        "same context",
+        "source attribution"
+      ],
+      "status": "starter",
+      "detection": "experimental"
+    },
+    {
+      "id": "unsupported_conclusion",
+      "title": "Insufficient evidence for a conclusion",
+      "category": "Inconsistency",
+      "summary": "A conclusion goes beyond what the stated premises and evidence actually establish.",
+      "definition": "A conclusion can be plausible or even true without being sufficiently supported by the evidence provided in the passage. The issue is the gap in the argument, not proof that the conclusion is false. The reader should be able to identify the premises and ask whether they justify the conclusion at the strength claimed.",
+      "observable_features": [
+        "The conclusion asserts a different property from the one measured in the evidence, without an established connection.",
+        "A few observations are treated as proof of a broad or universal conclusion.",
+        "A tentative finding is presented as certain, or an assumption needed for the inference is left unsupported.",
+        "The presented evidence is insufficient to support this conclusion; additional relevant evidence may exist elsewhere."
+      ],
+      "example": "Customer satisfaction increased and more people bought the app. Therefore, the app has been proven secure.",
+      "reader_effect": "Can make an inference seem established when the supplied information leaves essential questions unanswered.",
+      "tags": [
+        "unsupported inference",
+        "insufficient evidence",
+        "non sequitur",
+        "overgeneralisation",
+        "premise",
+        "conclusion"
+      ],
+      "status": "starter",
+      "detection": "planned"
+    },
+    {
+      "id": "supported_conclusion",
+      "title": "Conclusion supported by the premises",
+      "category": "Consistent reasoning",
+      "summary": "The stated evidence and premises justify the conclusion at the level of certainty expressed.",
+      "definition": "The reasoning is consistent when its conclusion follows from the premises, or when the available evidence reasonably supports a qualified conclusion. This is a positive assessment of the argument's structure, not a guarantee that the premises are true or that no relevant evidence is missing.",
+      "observable_features": [
+        "The conclusion addresses the same subject and scope as the supporting evidence.",
+        "Any limitations, uncertainty and conditions in the premises carry through to the conclusion.",
+        "The conclusion does not assert more certainty or generality than the evidence allows."
+      ],
+      "example": "All 120 devices tested met the stated safety criterion under laboratory conditions. Therefore, those 120 devices met that criterion in those tests.",
+      "reader_effect": "Helps readers see what the evidence can establish and where the argument's limits lie.",
+      "tags": [
+        "supported inference",
+        "premise",
+        "conclusion",
+        "sound reasoning",
+        "qualified finding"
+      ],
+      "status": "starter",
+      "detection": "planned"
+    }
+  ]
+}

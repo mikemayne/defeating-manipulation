@@ -82,3 +82,26 @@ The project uses CC0 1.0 for original written catalogue content and the MIT Lice
 ## Current status
 
 The repository contains an initial catalogue and supporting project scaffolding. Definitions, examples and references are a starting point for collaborative development, not a completed or definitive taxonomy.
+
+
+## Argument consistency patterns
+
+The website has three searchable, colour-coded catalogue areas: manipulation
+techniques (blue), positive communication (green), and argument consistency
+patterns (red). The red library is defined entirely in
+`inconsistency-patterns.json`, with generated detail pages at
+`inconsistency-patterns/<id>.html`.
+
+To extend it, add a new object to that JSON file using a unique `id`, a
+`title`, `category`, `summary`, `definition`, `observable_features`,
+`tags` and an illustrative `example`. The shared homepage renderer
+automatically displays every entry and supports searching it; the site
+generator automatically publishes its individual red page and sitemap URL.
+Run `node scripts/test-build.mjs` to validate the catalogue.
+
+The initial patterns are contradictory claims, a conclusion insufficiently
+supported by the evidence **provided**, and a conclusion appropriately
+supported by its premises. The supported-conclusion entry is a reference
+pattern, not an error simply because it is displayed in the red library.
+The current local second-stage model detects potential contradictions;
+paragraph-level conclusion support remains a planned classifier enhancement.

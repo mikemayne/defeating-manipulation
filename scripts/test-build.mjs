@@ -6,6 +6,8 @@ execFileSync(process.execPath, ['scripts/build-site.mjs'], {stdio:'inherit'});
 const read = name => fs.readFileSync('_site/'+name,'utf8');
 const catalogue = JSON.parse(read('techniques.json'));
 const positive = JSON.parse(read('positive-patterns.json'));
+const inconsistency = JSON.parse(read('inconsistency-patterns.json'));
+
 const schema = JSON.parse(fs.readFileSync('analysis-schema.json','utf8'));
 const homepage = read('index.html');
 assert.ok(catalogue.techniques.length >= 10, 'Catalogue has an initial set of techniques');
@@ -15,6 +17,30 @@ assert.ok(homepage.includes('positive-section') && homepage.includes('background
 assert.ok(homepage.includes('id="positive-search"') && homepage.includes('id="positive-catalogue"'), 'Positive library is independently searchable');
 assert.ok(positive.patterns.length >= 10, 'Positive pattern library has an initial set of patterns');
 assert.ok(homepage.includes('id="search"') && homepage.includes('id="catalogue"'), 'Homepage provides searchable catalogue');
+assert.ok(homepage.includes('class="inconsistency-section"') &&
+ homepage.includes('background:#991b1b'), 'Inconsistency section has a red background');
+assert.ok(homepage.includes('id="inconsistency-search"') &&
+ homepage.includes('id="inconsistency-catalogue"'), 'Inconsistency library is independently searchable');
+assert.ok(homepage.includes("mountLibrary({url:'inconsistency-patterns.json'"),
+ 'The red library uses the shared data-driven catalogue renderer');
+assert.ok(inconsistency.patterns.length >= 1, 'Inconsistency library has patterns');
+for (const item of inconsistency.patterns) {
+ const page = 'inconsistency-patterns/'+item.id+'.html';
+ assert.ok(fs.existsSync('_site/'+page), 'Generated red page exists for '+item.id);
+ assert.ok(read(page).includes('background:#991b1b'), 'Individual red pattern page uses a red background: '+item.id);
+ assert.ok(read(page).includes('<h2>Recognising the pattern</h2>'), 'Red pattern has observable features: '+item.id);
+ assert.ok(read('sitemap.xml').includes(page), 'Sitemap includes red pattern: '+item.id);
+}
+assert.ok(read('sitemap.xml').includes('inconsistency-patterns.json'),
+ 'Sitemap includes the red catalogue JSON');
+assert.ok(inconsistency.patterns.some(item =>
+ item.id === 'unsupported_conclusion' &&
+ /insufficient to support (?:this|the) conclusion/i.test(
+  [item.definition,...item.observable_features].join(' '))),
+ 'Unsupported-conclusion pattern explains the limits of the evidence supplied');
+assert.ok(inconsistency.patterns.some(item => item.id === 'supported_conclusion'),
+ 'A supported conclusion is represented without being called a contradiction');
+
 assert.ok(!homepage.includes('Recognise. Report. Disengage.') && !homepage.includes('A shared knowledge base'), 'Homepage contains no former project pitch or principles');
 assert.ok(read('questionnaire.html').includes('Report. Disengage.'), 'Questionnaire gives the agreed next steps');
 assert.ok(schema.finding.reader_effect, 'Analysis schema describes reader-facing effects');
@@ -432,10 +458,6 @@ assert.equal(consistency.attributedSource('The manager later said the station cl
  'manager', 'A reporting adverb is not part of the speaker identity');
 assert.equal(consistency.attributedSource('The manager said the station is open.'),
  'manager', 'Stable attribution of reporting source');
-const inconsistencyArticle = catalogue.techniques.find(item => item.id === 'argument_inconsistency');
-assert.ok(inconsistencyArticle &&
- /insufficient to support the conclusion/i.test(inconsistencyArticle.definition),
- 'Inconsistency section explains conclusions unsupported by the provided evidence');
-assert.ok(fs.existsSync('_site/techniques/argument_inconsistency.html'),
- 'New inconsistency article is built into the website');
+assert.ok(!catalogue.techniques.some(item => item.id === 'argument_inconsistency'),
+ 'Inconsistency patterns belong to the dedicated red library, not the blue one');
 console.log('Attribution-aware contradiction and insufficient-evidence catalogue checks passed.');
