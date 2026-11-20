@@ -17,7 +17,8 @@ function setError(text) {
 function updateSource() {
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
- const argumentMode = mode.value === "argument_support";
+ const argumentMode = mode.value === "argument_support" || mode.value === "argument_reasoning";
+ const argumentReasoning = mode.value === "argument_reasoning";
  const positive = mode.value.startsWith("positive_");
  const concealed = mode.value.startsWith("concealed_");
  $("count-control").hidden = upload;
