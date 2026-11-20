@@ -203,13 +203,16 @@ function failureReport(data) {
     lines.push("  " + a.label + " | Score: " + a.score +
      " | Premises: " + a.premise + " | Conclusion: " + a.conclusion +
      (a.decisivePremise ? " | Decisive evidence: " + a.decisivePremise : "") +
-     (a.basis ? " | Basis: " + a.basis : ""));
+     (a.basis ? " | Basis: " + a.basis : "") +
+     (a.reason ? " | Decision: " + a.reason : ""));
   }
   if (item.argumentDiagnostics?.length) {
    const fmt = n => typeof n === "number" && Number.isFinite(n) ? n.toFixed(3) : "-";
    lines.push("NLI evidence diagnostics (C=contradiction, N=neutral, E=entailment):");
    for (const a of item.argumentDiagnostics) {
-    lines.push("  Conclusion: " + a.conclusion + " | Verdict: " + (a.verdict || "(abstained)"));
+    lines.push("  Conclusion: " + a.conclusion +
+     " | Verdict: " + (a.verdict || "(abstained)") +
+     (a.reason ? " | Decision: " + a.reason : ""));
     for (const x of a.comparisons) {
      const f = x.forward || {}, r = x.reverse || {};
      lines.push("    " + x.kind + (x.repeated ? " [exact repetition]" : "") +
