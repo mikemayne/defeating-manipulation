@@ -1,3 +1,4 @@
+import { attributedSource } from './consistency.mjs';
 // Deterministic, narrow relation checks for ordinary one-paragraph arguments.
 // No external model or guesses about author intent/factual truth. These checks
 // describe only an explicit relationship between the supplied propositions.
@@ -53,6 +54,10 @@ function differentScope(a,b) {
 }
 function sharedScope(a,b) {
  if(typeof a!=='string'||typeof b!=='string'||distinctTime(a,b)||incompatibleGroups(a,b)||differentScope(a,b))return null;
+ // Opposing statements attributed to *different* speakers are reported
+ // disagreement, not necessarily contradictory claims by the same author.
+ const speakerA=attributedSource(a),speakerB=attributedSource(b);
+ if(speakerA&&speakerB&&speakerA!==speakerB)return null;
  return common(a,b);
 }
 function oneSide(a,b,x,y) {
