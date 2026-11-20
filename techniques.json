@@ -1091,25 +1091,30 @@
         "correction bait",
         "false informality",
         "engagement hook",
-        "engagement bait"
+        "engagement bait",
+        "group defensiveness",
+        "identity-based interpretation",
+        "insult spillover"
       ],
       "status": "research-informed-starter",
-      "definition": "Introducing a conspicuous spelling mistake or other apparent error can interrupt ordinary reading and draw extra attention to the affected word or sentence. A particularly important mechanism is correction bait: the reader feels prompted to point out the mistake, creating engagement with a message they might otherwise ignore. The exchange can divert attention from the original argument and, on some social platforms, may help distribute the post further. Mistakes can also make a prepared message appear spontaneous. These are possible effects, not proof that the error was intentional.",
+      "definition": "Introducing a conspicuous spelling mistake or other apparent error can interrupt ordinary reading and draw extra attention to the affected word or sentence. A particularly important mechanism is correction bait: the reader feels prompted to point out the mistake, creating engagement with a message they might otherwise ignore. The exchange can divert attention from the original argument and, on some social platforms, may help distribute the post further. Mistakes can also make a prepared message appear spontaneous. These are possible effects, not proof that the error was intentional. A further possible effect follows when a correction becomes a personal insult: readers who identify with the speaker's position may experience the insult as directed at people like themselves. This can shift the discussion from the claim's merits to defending the speaker or group.",
       "observable_features": [
         "An obvious misspelling appears in an otherwise carefully written passage, especially in a prominent or emotionally loaded word.",
         "The error sits in a headline, slogan, call to action or disputed claim where extra attention would matter.",
         "Correction bait: the error is obvious and easy to correct, inviting a public reply that engages with the post rather than its underlying argument.",
         "A message mixes polished persuasive content with conspicuous informality or mistakes that change its perceived tone.",
-        "The surrounding claim relies on emotional wording or weak evidence, while the unusual spelling may pull attention toward its phrasing rather than its support."
+        "The surrounding claim relies on emotional wording or weak evidence, while the unusual spelling may pull attention toward its phrasing rather than its support.",
+        "Replies mock the author's intelligence rather than addressing the argument, and other participants treat the mockery as contempt for people who share the author's position."
       ],
       "example": "The government's latest decision is an absoloute disaster for ordinary families.",
       "examples": [
         "The government's latest decision is an absoloute disaster for ordinary families.",
         "Only an idoit would disagree with this.",
         "This is a terrrible idea. Share it before anyone can stop us.",
-        "The council has waisted millions again. Can anyone spot the mistake?"
+        "The council has waisted millions again. Can anyone spot the mistake?",
+        "Post: 'This policy is a disgace.' Reply: 'Only an idiot would spell it like that.' Another reader: 'So everyone who opposes the policy is an idiot now?'"
       ],
-      "reader_effect": "Can slow the reader at a particular word, make it more noticeable, or provoke a correction. Correction bait turns a reader's impulse to fix an error into engagement with the message; on platforms that reward certain interactions, such replies may also help visibility. Distinctive items can sometimes be better remembered, but a spelling mistake does not reliably make a claim more persuasive. Most spelling mistakes are ordinary errors and do not establish an author's intent.",
+      "reader_effect": "Can slow the reader at a particular word, make it more noticeable, or provoke a correction. Correction bait turns a reader's impulse to fix an error into engagement with the message; on platforms that reward certain interactions, such replies may also help visibility. Distinctive items can sometimes be better remembered, but a spelling mistake does not reliably make a claim more persuasive. Most spelling mistakes are ordinary errors and do not establish an author's intent. When corrections turn into personal mockery, some supporters may experience the insult as an attack on their own group, prompting defensiveness or polarisation instead of examination of the claim. This reaction is possible, not inevitable, and a typo alone does not show it was engineered.",
       "references": [
         "stites2016",
         "strukelj2018",
