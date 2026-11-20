@@ -1,0 +1,438 @@
+{
+  "version": 1,
+  "description": "Manually authored reasoning-relationship contrasts, not NLI training examples, and not a representative real-world performance benchmark. Labels refer only to observable conflict or evidence gap, not truth or malicious intent.",
+  "cases": [
+    {
+      "id": "c01",
+      "expected_signal": "conflict",
+      "premise": "The library opens on Sundays.",
+      "conclusion": "The library never opens on Sundays.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c02",
+      "expected_signal": "conflict",
+      "premise": "The museum provides guided tours each Saturday.",
+      "conclusion": "The museum provides no guided tours on Saturdays.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c03",
+      "expected_signal": "conflict",
+      "premise": "The clinic offers eye tests on Tuesdays.",
+      "conclusion": "The clinic does not offer eye tests on Tuesdays.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c04",
+      "expected_signal": "conflict",
+      "premise": "The ferry runs between the islands each morning.",
+      "conclusion": "The ferry never runs between the islands in the mornings.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c05",
+      "expected_signal": "conflict",
+      "premise": "The bookshop holds readings on Thursdays.",
+      "conclusion": "The bookshop holds no readings on Thursdays.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c06",
+      "expected_signal": "conflict",
+      "premise": "The company accepts cash payments.",
+      "conclusion": "The company does not accept cash payments.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c07",
+      "expected_signal": "conflict",
+      "premise": "The laboratory published a report in April.",
+      "conclusion": "The laboratory did not publish a report in April.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c08",
+      "expected_signal": "conflict",
+      "premise": "One device in the batch is broken.",
+      "conclusion": "Every device in the batch is working.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c09",
+      "expected_signal": "conflict",
+      "premise": "The north bridge is closed.",
+      "conclusion": "All bridges are open.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c10",
+      "expected_signal": "conflict",
+      "premise": "The centre has step-free access to its entrance.",
+      "conclusion": "The centre has no step-free access to its entrance.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c11",
+      "expected_signal": "conflict",
+      "premise": "The venue is open to visitors on Monday.",
+      "conclusion": "The venue is closed to visitors on Monday.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c12",
+      "expected_signal": "conflict",
+      "premise": "The operator says the east service is available.",
+      "conclusion": "The operator says the east service is unavailable.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c13",
+      "expected_signal": "conflict",
+      "premise": "The council offers recycling collections on Tuesdays.",
+      "conclusion": "The council never offers recycling collections on Tuesdays.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "c14",
+      "expected_signal": "conflict",
+      "premise": "The pool allows children to attend swimming lessons.",
+      "conclusion": "The pool bans children from attending swimming lessons.",
+      "rationale": "Explicit, same-subject incompatible proposition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s01",
+      "expected_signal": "scope_gap",
+      "premise": "One bus on the route has a wheelchair ramp.",
+      "conclusion": "Every bus on the route has a wheelchair ramp.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s02",
+      "expected_signal": "scope_gap",
+      "premise": "Platform two has step-free access.",
+      "conclusion": "Every platform has step-free access.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s03",
+      "expected_signal": "scope_gap",
+      "premise": "Two classrooms in the school have projectors.",
+      "conclusion": "Every classroom in the school has a projector.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s04",
+      "expected_signal": "scope_gap",
+      "premise": "A bridge in the district passed the inspection.",
+      "conclusion": "Every bridge in the district passed the inspection.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s05",
+      "expected_signal": "scope_gap",
+      "premise": "One server in the data centre is operational.",
+      "conclusion": "All servers in the data centre are operational.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s06",
+      "expected_signal": "scope_gap",
+      "premise": "Some doors in the building are secure.",
+      "conclusion": "Every door in the building is secure.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s07",
+      "expected_signal": "scope_gap",
+      "premise": "Three shops on the high street are open.",
+      "conclusion": "All shops on the high street are open.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s08",
+      "expected_signal": "scope_gap",
+      "premise": "One chair in the meeting room is adjustable.",
+      "conclusion": "Every chair in the meeting room is adjustable.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s09",
+      "expected_signal": "scope_gap",
+      "premise": "Several taps in the school were checked.",
+      "conclusion": "Every tap in the school was checked.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s10",
+      "expected_signal": "scope_gap",
+      "premise": "One sample in the batch was tested.",
+      "conclusion": "Each sample in the batch was tested.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s11",
+      "expected_signal": "scope_gap",
+      "premise": "Some cars have a charger fitted.",
+      "conclusion": "All cars have a charger fitted.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "s12",
+      "expected_signal": "scope_gap",
+      "premise": "A camera in the hall is working.",
+      "conclusion": "Every camera in the hall is working.",
+      "rationale": "Observed subset does not by itself establish an assertion about the entire category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a01",
+      "expected_signal": "abstain",
+      "premise": "We won a majority in 2024.",
+      "conclusion": "1945, 1997 and 2024 were the three most successful elections.",
+      "rationale": "pilot_false_red",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a02",
+      "expected_signal": "abstain",
+      "premise": "Physics explains the most basic ways in which our universe works.",
+      "conclusion": "Physics is necessary to understand all other sciences.",
+      "rationale": "pilot_false_red",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a03",
+      "expected_signal": "abstain",
+      "premise": "The boulder has more mass.",
+      "conclusion": "It is more difficult to change the motion of the boulder.",
+      "rationale": "scientific_support",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a04",
+      "expected_signal": "abstain",
+      "premise": "The science team observed no transmissions.",
+      "conclusion": "Transmission in nature is unlikely.",
+      "rationale": "qualified_science",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a05",
+      "expected_signal": "abstain",
+      "premise": "The regulator found the quoted price was substantially above usual sales.",
+      "conclusion": "The RRP was not representative.",
+      "rationale": "regulatory_support",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a06",
+      "expected_signal": "abstain",
+      "premise": "The council published its spending report online.",
+      "conclusion": "The council has eliminated all financial waste.",
+      "rationale": "unrelated_overclaim",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a07",
+      "expected_signal": "abstain",
+      "premise": "The university offers courses in physics.",
+      "conclusion": "All other sciences are based on physics.",
+      "rationale": "uncertain_science",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a08",
+      "expected_signal": "abstain",
+      "premise": "The charity ran one successful appeal last year.",
+      "conclusion": "The charity is guaranteed to succeed forever.",
+      "rationale": "unsupported_but_not_specific_gap",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a09",
+      "expected_signal": "abstain",
+      "premise": "The service collected samples in June.",
+      "conclusion": "The service is the most effective in the world.",
+      "rationale": "unrelated_overclaim",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a10",
+      "expected_signal": "abstain",
+      "premise": "One group of doctors reported a change in one hospital.",
+      "conclusion": "All hospitals should change their protocols.",
+      "rationale": "normative_conclusion",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a11",
+      "expected_signal": "abstain",
+      "premise": "The shop was open in 2024.",
+      "conclusion": "The shop was closed in 2025.",
+      "rationale": "different_periods",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a12",
+      "expected_signal": "abstain",
+      "premise": "The team offered online support last week.",
+      "conclusion": "The team did not offer online support this week.",
+      "rationale": "different_periods",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a13",
+      "expected_signal": "abstain",
+      "premise": "The report says the museum was open last year.",
+      "conclusion": "The report says the museum was closed this year.",
+      "rationale": "different_periods",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a14",
+      "expected_signal": "abstain",
+      "premise": "The inspector said the gate was open.",
+      "conclusion": "The manager said the gate was closed.",
+      "rationale": "attributed_disagreement",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a15",
+      "expected_signal": "abstain",
+      "premise": "The river can be high in winter.",
+      "conclusion": "The river may be low in summer.",
+      "rationale": "different_conditions",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a16",
+      "expected_signal": "abstain",
+      "premise": "The bridge was inspected this month.",
+      "conclusion": "Every bridge in the country is safe.",
+      "rationale": "no_shared_scope_category",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a17",
+      "expected_signal": "abstain",
+      "premise": "A library has added a study room.",
+      "conclusion": "The library may attract more students.",
+      "rationale": "qualified_prediction",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a18",
+      "expected_signal": "abstain",
+      "premise": "The bank has some new offices.",
+      "conclusion": "Every bank customer is now wealthier.",
+      "rationale": "unrelated_universal",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a19",
+      "expected_signal": "abstain",
+      "premise": "The museum provides tours on Saturday.",
+      "conclusion": "The museum provides tours on Saturday.",
+      "rationale": "identical_supported_claim",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a20",
+      "expected_signal": "abstain",
+      "premise": "Every platform in the station has step-free access.",
+      "conclusion": "Every platform in the station has step-free access.",
+      "rationale": "supported_universal",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a21",
+      "expected_signal": "abstain",
+      "premise": "The service operates throughout the town.",
+      "conclusion": "The service is available in the town.",
+      "rationale": "supported_paraphrase",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a22",
+      "expected_signal": "abstain",
+      "premise": "The report found no evidence of illness.",
+      "conclusion": "The report may suggest the treatment was safe.",
+      "rationale": "cautious_inference",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a23",
+      "expected_signal": "abstain",
+      "premise": "The article was published in 2025.",
+      "conclusion": "The article was published in 2025.",
+      "rationale": "supported_repetition",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a24",
+      "expected_signal": "abstain",
+      "premise": "The technician measured the temperature.",
+      "conclusion": "The temperature is now guaranteed to remain stable.",
+      "rationale": "unrelated_guarantee",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a25",
+      "expected_signal": "abstain",
+      "premise": "All trains in the fleet have seat belts.",
+      "conclusion": "All trains in the fleet have seat belts.",
+      "rationale": "supported_universal",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a26",
+      "expected_signal": "abstain",
+      "premise": "The service is unavailable in the region.",
+      "conclusion": "The service is not available in the region.",
+      "rationale": "semantic_equivalence",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a27",
+      "expected_signal": "abstain",
+      "premise": "The museum is open on Monday.",
+      "conclusion": "The museum was not open on Friday.",
+      "rationale": "different_day",
+      "track": "fictional_control"
+    },
+    {
+      "id": "a28",
+      "expected_signal": "scope_gap",
+      "premise": "The library has three bookshelves.",
+      "conclusion": "Every library in the region has three bookshelves.",
+      "rationale": "A single library cannot establish a rule about every library in the region",
+      "track": "fictional_control"
+    }
+  ]
+}
