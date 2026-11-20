@@ -16,14 +16,23 @@ export function normaliseParagraphInputs(paragraphs) {
  });
 }
 
-// Paraphrase rather than summarise aggressively: the second analyser needs
-// both claims and their relationships, not just a topic label.
+// Preserve the communicated point, not merely the factual subject. In
+// particular, a neutralised summary ("the author discusses X") destroys the
+// persuasive implication that the *same analyser* must inspect in pass two.
 export function paraphrasePrompt(paragraph) {
- return "Paraphrase this paragraph in clear, neutral English. Preserve every distinct " +
-  "claim, negation, qualification, attribution, stated reason and conclusion. " +
-  "Preserve numbers and logical or causal relationships. Do not add facts, " +
-  "interpretations or judgements. Output only the paraphrase.\n\n" +
-  "Paragraph: " + paragraph + "\n\nParaphrase:";
+ return "Rewrite the paragraph in clearer, simpler language without changing " +
+  "what it communicates to the reader. MOST IMPORTANT: preserve the exact " +
+  "point being pushed, including implied accusations, suggested causal links, " +
+  "social pressure, implied consequences, insinuations and conclusions. " +
+  "Make the communicated implication explicit when the wording strongly " +
+  "supports it, while distinguishing it from a stated fact (e.g. 'suggests " +
+  "that' rather than 'proves that'). Preserve every separate claim, " +
+  "qualification, negation, attribution, number and stated reason. " +
+  "Do NOT neutralise persuasive content into a vague topic summary; do NOT " +
+  "add a new accusation or inference that is not supported by the text. " +
+  "Do NOT label any manipulation pattern or judge whether the point is true. " +
+  "Output only the rewritten paragraph.\\n\\n" +
+  "Paragraph: " + paragraph + "\\n\\nParaphrase:";
 }
 
 function numericTokens(text) {
