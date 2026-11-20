@@ -262,6 +262,8 @@ function failureReport(data) {
    for (const a of item.argumentDiagnostics) {
     lines.push("  Conclusion: " + a.conclusion +
      (a.modelConclusion ? " | Model hypothesis: " + a.modelConclusion : "") +
+     (a.entityNormalization ? " | Normalised entity: " + a.entityNormalization.name +
+      " = " + a.entityNormalization.canonical : "") +
      (a.inferenceMarker ? " | Marker: " + a.inferenceMarker : "") +
      (a.inline ? " [inline]" : "") +
      " | Verdict: " + (a.verdict ||
@@ -275,7 +277,8 @@ function failureReport(data) {
       " | C " + fmt(f.contradiction) + " / N " + fmt(f.neutral) +
       " / E " + fmt(f.entailment) +
       (x.reverse ? " | Reverse C " + fmt(r.contradiction) : "") +
-      " | Evidence: " + x.premise);
+      " | Evidence: " + x.premise +
+      (x.modelPremise ? " | Model evidence: " + x.modelPremise : ""));
     }
    }
   }
