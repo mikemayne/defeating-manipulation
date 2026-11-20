@@ -305,3 +305,31 @@ assert.deepEqual(recognitionErrors, [],
  'Recognise fresh rhetorical structures without flagging neutral near misses');
 
 console.log('Build, matching-core, benchmark, semantic precision and broad-coverage checks passed.');
+
+
+// Two-pass selected-text analyser: contradiction pairs, offsets and abstention.
+const consistency = await import('../extension/src/consistency.mjs');
+const contradictory = 'The company never collects email addresses. The company collects email addresses from every customer.';
+const claims = consistency.extractClaims(contradictory);
+assert.equal(claims.length, 2, 'Both claims are extracted');
+assert.ok(consistency.candidatePairs(claims).length, 'Related claims are paired');
+const contradictionScore = async () => ({ contradiction: 0.96, neutral: 0.02, entailment: 0.02 });
+const inconsistencies = await consistency.findInconsistencies(contradictory, contradictionScore);
+assert.equal(inconsistencies.length, 2, 'Both conflicting claims are marked');
+assert.ok(inconsistencies.every(m => contradictory.slice(m.start, m.end) ===
+ claims.find(c => c.start === m.start).text), 'Red highlights retain source offsets');
+assert.deepEqual(await consistency.findInconsistencies(contradictory,
+ async () => ({ contradiction: 0.1, neutral: 0.8, entailment: 0.1 })), [],
+ 'Neutral claims do not receive red underlines');
+assert.deepEqual(await consistency.findInconsistencies('The service is available on Monday.', contradictionScore), [],
+ 'A single claim cannot contradict another claim');
+const blue = { start: 0, end: 30, technique: { category: 'Negative' }, score: 1 };
+const combined = consistency.visibleHighlights([blue, ...inconsistencies], contradictory.length);
+assert.ok(combined.some(m => m.kind === 'inconsistency'), 'Red contradiction survives overlapping blue matches');
+assert.ok(combined.every(m => m.start >= 0 && m.end <= contradictory.length),
+ 'Merged two-pass highlights remain in bounds');
+const extensionWorker = fs.readFileSync('extension/src/matcher-worker.js', 'utf8');
+assert.ok(extensionWorker.includes('findInconsistencies(data.text, scorePair)'),
+ 'Firefox worker runs the second local pass');
+assert.ok(selectionScript.includes('const BLUE =') && selectionScript.includes('RED = "#dc2626"'),
+ 'Firefox highlighter retains the existing colours and adds red');
