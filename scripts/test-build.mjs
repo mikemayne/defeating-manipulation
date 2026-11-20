@@ -237,4 +237,46 @@ assert.ok(lab.includes('id="progress-count"'), 'Web lab has a progress counter')
 assert.ok(lab.includes('id="copy"'), 'Web lab has a copy failure details button');
 assert.ok(lab.includes('id="stats"'), 'Web lab shows aggregate statistics');
 
-console.log('Build, matching-core and local benchmark checks passed.');
+// Real-world matcher mistakes: the AI was treating neutral survey figures as
+// a bandwagon appeal and ordinary article descriptions as narrative reframing.
+const { hasSemanticEvidence } = await import('../extension/src/semantic-evidence.mjs');
+const semanticContrasts = JSON.parse(fs.readFileSync('evaluation/semantic-hard-negatives.json', 'utf8')).cases;
+const contrastsById = new Map(semanticContrasts.map(item => [item.id, item]));
+for (const item of semanticContrasts.filter(item => item.expected.length === 0)) {
+ assert.equal(hasSemanticEvidence('bandwagon', item.text), false,
+  'Neutral statements do not establish bandwagon persuasion: ' + item.id);
+ assert.equal(hasSemanticEvidence('narrative_reframing', item.text), false,
+  'Neutral statements do not establish narrative reframing: ' + item.id);
+}
+for (const item of semanticContrasts.filter(item => item.expected.includes('bandwagon'))) {
+ assert.equal(hasSemanticEvidence('bandwagon', item.text), true,
+  'A popularity-based conclusion remains eligible: ' + item.id);
+}
+assert.equal(hasSemanticEvidence('narrative_reframing',
+ contrastsById.get('positive-narrative-reframing').text), true,
+ 'Narrative reframing with an omitted earlier decision remains eligible');
+
+// Force the semantic model to return a high-similarity category to exercise
+// the actual shared match pipeline, including gating and overlap suppression.
+const techniqueIndex = id => extensionCatalogue.techniques.findIndex(item => item.id === id);
+async function forcedSemanticMatches(text, category) {
+ const prototypes = [
+  { techniqueIndex: techniqueIndex(category), vector: [1, 0] },
+  { techniqueIndex: techniqueIndex('false_equivalence'), vector: [0, 1] }
+ ];
+ return matchingCore.matchText(text, {
+  techniques: extensionCatalogue.techniques,
+  rules: compiled, prototypes,
+  embed: async texts => texts.map(() => [1, 0])
+ });
+}
+for (const item of semanticContrasts) {
+ for (const category of ['bandwagon', 'narrative_reframing']) {
+  const found = await forcedSemanticMatches(item.text, category);
+  const detected = new Set(found.map(match => match.technique.id));
+  assert.equal(detected.has(category), item.expected.includes(category),
+   'Semantic ' + category + ' evidence gate: ' + item.id);
+ }
+}
+
+console.log('Build, matching-core, benchmark and semantic-precision checks passed.');
