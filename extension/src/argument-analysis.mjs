@@ -273,6 +273,8 @@ export async function analyseArguments(source, scorePair,
   const result = combineArgumentEvidence(scored, argument.conclusion.text);
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
+   inferenceMarker: argument.conclusion.marker,
+   inline: argument.conclusion.inline || false,
    comparisons: scored.map(({ kind, text, repeated, forward, reverse }) =>
     ({ kind, premise: text, repeated, forward, reverse })),
    verdict: result?.label || null,
