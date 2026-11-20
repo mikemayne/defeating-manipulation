@@ -243,9 +243,9 @@ export function classifyArgumentScore(forward, reverse = null) {
     score: Math.min(contradiction, reverse.contradiction) };
   // The local NLI model sometimes scores an unrelated conclusion as
   // contradiction in one direction but emphatically *not* in reverse.
-  // That does not prove a genuine contradiction. For a very strong,
-  // highly asymmetric result, treat the proposed inference as lacking
-  // support from these premises instead of silently omitting it.
+  // That does not prove a genuine contradiction. Treat a very strong,
+  // highly asymmetric score only as a *candidate* unsupported inference.
+  // The separate evidential gate can still ABSTAIN with no red underline.
   if (contradiction >= 0.95 && scoresValid(reverse) &&
       reverse.contradiction <= 0.15)
    return { label: "unsupported_conclusion",
@@ -362,7 +362,11 @@ export async function analyseArguments(source, scorePair,
 }
 
 export function argumentFindings(assessments) {
- return assessments.filter(item => item.label !== "supported_conclusion").map(item => ({
+ // Only affirmative error findings receive red underlines. An abstention,
+ // including "insufficient evidence to judge", is never a finding.
+ return assessments.filter(item =>
+  item.label === "contradictory_claims" ||
+  item.label === "unsupported_conclusion").map(item => ({
   kind: "argument_support",
   start: item.conclusion.start, end: item.conclusion.end,
   method: "inference", strength: "Check context", score: item.score,
