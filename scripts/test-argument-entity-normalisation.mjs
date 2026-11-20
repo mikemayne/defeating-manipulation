@@ -80,8 +80,10 @@ assert.ok(inputs[0].premise.includes('Nora is a field technician'),
 assert.equal(diagnostics[0].entityNormalization.canonical,'the field technician');
 assert.equal(diagnostics[0].comparisons[0].premise,parsed[0].premise,
  'Diagnostics preserve literal original premise');
-assert.ok(diagnostics[0].comparisons[0].modelPremise,
- 'The changed model premise is available for inspection');
+assert.equal(diagnostics[0].comparisons[0].modelPremise,null,
+ 'The explicit identity premise remains intact; only the hypothesis needs changing');
+assert.equal(diagnostics[0].modelConclusion,'the field technician was invited to the workshop.',
+ 'The normalised model hypothesis is visible alongside the literal evidence');
 assert.deepEqual(argumentFindings(assessed),[],
  'NLI neutral alone remains insufficient for a red claim');
 for(const premise of parsed[0].premises)
