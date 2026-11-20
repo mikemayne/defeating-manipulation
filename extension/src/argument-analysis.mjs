@@ -8,6 +8,7 @@ import { observableOverreach } from "./argument-overreach.mjs";
 import { structurePropositions } from "./argument-propositions.mjs";
 import { inferReasoningBridge } from "./argument-bridges.mjs";
 import { inspectArgumentProof } from "./argument-proof-graph.mjs";
+import { validatedNliScores } from "./argument-safety.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -229,11 +230,11 @@ export async function analyseArguments(source, scorePair,
    // all other comparisons use the actual local NLI model.
    const forward = repeated
     ? { contradiction: 0, neutral: 0, entailment: 1 }
-    : await scorePair(modelPremise, hypothesis);
+    : validatedNliScores(await scorePair(modelPremise, hypothesis));
    let reverse = null;
    if (scoresValid(forward) && forward.contradiction >= 0.84 &&
        forward.contradiction > forward.neutral)
-    reverse = await scorePair(hypothesis, modelPremise);
+    reverse = validatedNliScores(await scorePair(hypothesis, modelPremise));
    scored.push({ ...item, modelPremise, repeated, forward, reverse });
   }
   // Explicit-logic checks continue to use the original statements and
