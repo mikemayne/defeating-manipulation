@@ -119,7 +119,8 @@
         "\\bno one has disproved .{1,80}\\bso .{1,50}\\bmust be (?:true|real)\\b",
         "\\bthere is no evidence that it is false,? so it is true\\b",
         "\\b(?:no one|nobody)\\s+(?:has|can)\\s+(?:proved?|shown|demonstrated)\\b[^.!?]{4,100}\\b(?:unsafe|harmful|dangerous)\\b[^.!?]{0,65}\\b(?:so|therefore)\\b[^.!?]{0,65}\\b(?:safe|harmless|fine)\\b",
-        "\\b(?:not|never) (?:been )?(?:proven|proved|shown|demonstrated)\\b[^.!?]{0,80}\\b(?:so|therefore)\\b[^.!?]{0,60}\\b(?:must|certainly|definitely)\\b"
+        "\\b(?:not|never) (?:been )?(?:proven|proved|shown|demonstrated)\\b[^.!?]{0,80}\\b(?:so|therefore)\\b[^.!?]{0,60}\\b(?:must|certainly|definitely)\\b",
+        "\\b(?:has|have|is)\\s+not (?:been )?(?:proved?|proven|disproved|shown|demonstrated)\\b[^.!?]{0,80}\\b(?:so|therefore|thus)\\b[^.!?]{0,65}\\b(?:must|certainly|definitely)\\s+be\\s+(?:true|false|safe|real|correct)\\b"
       ]
     },
     {
@@ -172,14 +173,15 @@
     {
       "id": "whataboutism",
       "expressions": [
-        "\\bwhy (?:question|criticise|criticize|discuss|worry about)\\b[^.!?]{8,115}\\bwhen\\b[^.!?]{5,105}\\b(?:other|another|someone else|competitor)\\b"
+        "\\bwhy (?:question|criticise|criticize|discuss|worry about)\\b[^.!?]{8,115}\\bwhen\\b[^.!?]{0,105}\\b(?:other|another|someone else|competitor)\\b"
       ]
     },
     {
       "id": "double_standards",
       "expressions": [
         "\\b(?:forgive|forgiven|excuse|excused)\\b[^.!?]{0,120}\\bbut\\b[^.!?]{0,105}\\b(?:punish|punishment|fired|dismiss|sanction)\\b[^.!?]{0,110}\\b(?:same|identical)\\b",
-        "\\b(?:same|identical)\\s+(?:mistake|error|conduct|behaviour|behavior)\\b[^.!?]{0,110}\\b(?:but|while)\\b[^.!?]{0,90}\\b(?:punish|forgive|excuse)\\b"
+        "\\b(?:same|identical)\\s+(?:mistake|error|conduct|behaviour|behavior)\\b[^.!?]{0,110}\\b(?:but|while)\\b[^.!?]{0,90}\\b(?:punish|forgive|excuse)\\b",
+        "\\b(?:forgive|forgiven|excuse|excused)\\b[^.!?]{0,110}\\b(?:same|identical)\\b[^.!?]{0,65}\\bbut\\b[^.!?]{0,110}\\b(?:punish|punished|punishment|sanction|dismiss)\\b"
       ]
     },
     {
