@@ -1197,3 +1197,6 @@ assert.ok(benchmarkWorker.includes('status: item.status || null') &&
  extensionWorker.includes('argumentFindings(assessed)'),
  'Experimental uncertainty stays in lab diagnostics; Firefox only underlines true findings');
 console.log('Conservative evidence assessment: 5 original real NLI traces and 9 contrasts, with explicit no-underline abstention.');
+
+// Standalone clause parser regression tests (no model download).
+await import('./test-argument-clauses.mjs');

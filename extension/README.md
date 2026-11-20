@@ -402,3 +402,34 @@ arguments are supported. It deliberately avoids a misleading red flag
 when the model is unable to assess the relevant background knowledge.
 It runs on the original fast local NLI model and lexical scope checks,
 without any browser-based text-generation model or extra API calls.
+
+
+### Clause-level argument structure extraction
+
+The argument analyser now imports the independent, deterministic
+`src/argument-clauses.mjs` module. It separates **premise clauses** from the
+**conclusion**, in whichever order they appear, while keeping original source
+offsets so red highlighting applies only to the actual conclusion. Recognised
+forms include `because`, `since`, `therefore`, `which means`,
+`indicates that`, `we concluded`, and a following `This is because` sentence.
+It avoids splitting domain names and decimals into fake sentences.
+
+This **only finds candidate arguments**. It neither proves support nor labels
+manipulative intent. The existing local NLI evidence scoring, conservative
+abstention (no red underline when uncertain), and maximum candidate/premise
+limits remain. The parser intentionally ignores some ambiguous or context-only
+constructions rather than inventing a premise.
+
+The 101-case web-sourced exploratory pilot exposed 16 missed self-contained
+arguments. With the new parser, local extraction tests found **16/16** labelled
+inference candidates and **0/85** of its no-inference passages. This is
+**extraction coverage**, not model accuracy; no new browser MNLI accuracy is
+claimed. The separate synthetic regression suite uses 16 positive and 20
+negative independent examples and checks exact source offsets. Run it with
+`node scripts/test-argument-clauses.mjs` from the repository root; it is
+also part of `node scripts/test-build.mjs` validation.
+
+Rerun **Arguments — premise and conclusion (local NLI)** on the unchanged
+101-case JSON and inspect the NLI diagnostics, actual red false positives,
+recall, and runtime. Changes to extraction can expose new NLI limitations;
+keep the pilot's labels unchanged until independent review.
