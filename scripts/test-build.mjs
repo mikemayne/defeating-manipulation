@@ -461,3 +461,63 @@ assert.equal(consistency.attributedSource('The manager said the station is open.
 assert.ok(!catalogue.techniques.some(item => item.id === 'argument_inconsistency'),
  'Inconsistency patterns belong to the dedicated red library, not the blue one');
 console.log('Attribution-aware contradiction and insufficient-evidence catalogue checks passed.');
+
+
+
+// Green positive-pattern recognition is deliberately independent of blue
+// manipulation classification and red contradiction detection.
+const { positiveTechniques, positiveRules, matchPositiveText } =
+ await import('../extension/src/positive-matching.mjs');
+const positiveCases = JSON.parse(fs.readFileSync(
+ 'evaluation/positive-matcher-examples.json', 'utf8')).cases;
+assert.equal(positiveTechniques.length, positive.patterns.length,
+ 'Every published positive pattern has a local matching technique');
+assert.equal(positiveCases.length, 72, 'Positive benchmark includes 72 labelled cases');
+assert.equal(positiveCases.filter(item => item.expected.length).length, 36,
+ 'Positive benchmark includes 36 positive cases');
+assert.equal(positiveCases.filter(item => !item.expected.length).length, 36,
+ 'Positive benchmark includes 36 negative near misses');
+assert.ok(positiveRules.length >= positiveTechniques.length,
+ 'Each constructive pattern has matching rules');
+assert.deepEqual(positiveTechniques.map(t => t.id).sort(),
+ positive.patterns.map(t => t.id).sort(), 'Green matcher follows the website JSON catalogue');
+const positiveErrors = [];
+for (const item of positiveCases) {
+ const found = await matchPositiveText(item.text);
+ const predicted = [...new Set(found.map(match => match.technique.id))].sort();
+ const expected = [...new Set(item.expected)].sort();
+ if (JSON.stringify(predicted) !== JSON.stringify(expected))
+  positiveErrors.push({ id: item.id, predicted, expected });
+ for (const match of found) {
+  assert.equal(match.technique.category, 'Positive',
+   'Positive findings are coloured green by the Firefox highlighter');
+  assert.ok(match.start >= 0 && match.end > match.start && match.end <= item.text.length,
+   'Positive matches underline actual source characters');
+ }
+}
+assert.deepEqual(positiveErrors, [], 'Constructive phrases match without false positives on 36 near misses');
+
+const mixedPositiveNegative =
+ 'Everyone believes it, so it must be true. No need to answer now.';
+const mixedNegativeMatches = await matchingCore.matchText(mixedPositiveNegative, {
+ techniques: extensionCatalogue.techniques, rules: compiled
+});
+const mixedPositiveMatches = await matchPositiveText(mixedPositiveNegative);
+assert.ok(mixedNegativeMatches.some(match => match.technique.id === 'bandwagon'),
+ 'Negative pattern remains detectable alongside positive wording');
+assert.ok(mixedPositiveMatches.some(match => match.technique.id === 'respecting_attention'),
+ 'Green pattern is independently detected alongside negative wording');
+assert.ok(selectionScript.includes('match.technique.category === "Positive" ? 1 : 2'),
+ 'Blue highlights take priority over overlapping green spans');
+assert.ok(selectionScript.includes('technique.category === "Positive" ? "positive-patterns"'),
+ 'Green tooltip links to green pattern page rather than blue manipulation page');
+assert.ok(extensionWorker.includes('matchPositiveText(data.text'),
+ 'Firefox worker runs positive matching without replacing blue or red passes');
+assert.ok(benchmarkPage.includes('value="positive_rules"') &&
+ benchmarkPage.includes('value="positive_ai"') &&
+ benchmarkUI.includes('positive-matcher-examples.json') &&
+ benchmarkWorker.includes('mode === "positive_ai"'),
+ 'The local test lab supports positive-only rules and AI benchmarks');
+assert.ok(localServer.includes('/evaluation/positive-matcher-examples.json'),
+ 'The local test server exposes the positive fixture');
+console.log('Green pattern matcher: 72 labelled cases, mixed colours, source offsets and lab wiring passed.');
