@@ -304,4 +304,19 @@ for (const item of recognitionCases) {
 assert.deepEqual(recognitionErrors, [],
  'Recognise fresh rhetorical structures without flagging neutral near misses');
 
+// Independent fictional contrast cases for the four remaining recall gaps.
+// The private news-based holdout set is deliberately never committed.
+const gapCases = JSON.parse(fs.readFileSync('evaluation/four-gap-contrasts.json', 'utf8')).cases;
+const gapErrors = [];
+for (const item of gapCases) {
+ const found = await matchingCore.matchText(item.text, {
+  techniques: extensionCatalogue.techniques, rules: compiled
+ });
+ const predicted = [...new Set(found.map(x => x.technique.id))].sort();
+ const expected = [...new Set(item.expected)].sort();
+ if (JSON.stringify(predicted) !== JSON.stringify(expected))
+  gapErrors.push({ id: item.id, expected, predicted });
+}
+assert.deepEqual(gapErrors, [], 'Four-gap cases avoid new false positives and missed labels');
+
 console.log('Build, matching-core, benchmark, semantic precision and broad-coverage checks passed.');
