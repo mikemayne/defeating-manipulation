@@ -1,0 +1,1407 @@
+{
+  "version": 1,
+  "description": "200 fictional manually reviewed logical-pair fixtures generated from 50 topics and a few controlled wording patterns. A preliminary smoke/regression dataset, not an independent estimate of real-world NLI accuracy.",
+  "label": "argument_inconsistency",
+  "cases": [
+    {
+      "id": "direct-1",
+      "group": "direct_contradiction",
+      "text": "The library is open to the public on Sundays. The library is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-1",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the library on Sundays. The library does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-1",
+      "group": "consistent_statements",
+      "text": "The library is open to the public on Sundays. Sunday visitors can enter the library.",
+      "expected": []
+    },
+    {
+      "id": "context-1",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the library was open on Sundays. In 2025, the library was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-1",
+      "group": "hypothetical",
+      "text": "If the library were open on Sundays, visitors could enter it. The library is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-2",
+      "group": "direct_contradiction",
+      "text": "The library charges an admission fee to visitors. The library does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-2",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the library. No payment is required to enter the library.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-2",
+      "group": "consistent_statements",
+      "text": "The library charges an admission fee. Visitors pay for admission to the library.",
+      "expected": []
+    },
+    {
+      "id": "context-2",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the library charged admission. The spokesperson said the library offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-2",
+      "group": "hypothetical",
+      "text": "If the library had free admission, nobody would have to pay. The library currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-3",
+      "group": "direct_contradiction",
+      "text": "The museum is open to the public on Sundays. The museum is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-3",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the museum on Sundays. The museum does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-3",
+      "group": "consistent_statements",
+      "text": "The museum is open to the public on Sundays. Sunday visitors can enter the museum.",
+      "expected": []
+    },
+    {
+      "id": "context-3",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the museum was open on Sundays. In 2025, the museum was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-3",
+      "group": "hypothetical",
+      "text": "If the museum were open on Sundays, visitors could enter it. The museum is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-4",
+      "group": "direct_contradiction",
+      "text": "The museum charges an admission fee to visitors. The museum does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-4",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the museum. No payment is required to enter the museum.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-4",
+      "group": "consistent_statements",
+      "text": "The museum charges an admission fee. Visitors pay for admission to the museum.",
+      "expected": []
+    },
+    {
+      "id": "context-4",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the museum charged admission. The spokesperson said the museum offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-4",
+      "group": "hypothetical",
+      "text": "If the museum had free admission, nobody would have to pay. The museum currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-5",
+      "group": "direct_contradiction",
+      "text": "The clinic is open to the public on Sundays. The clinic is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-5",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the clinic on Sundays. The clinic does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-5",
+      "group": "consistent_statements",
+      "text": "The clinic is open to the public on Sundays. Sunday visitors can enter the clinic.",
+      "expected": []
+    },
+    {
+      "id": "context-5",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the clinic was open on Sundays. In 2025, the clinic was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-5",
+      "group": "hypothetical",
+      "text": "If the clinic were open on Sundays, visitors could enter it. The clinic is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-6",
+      "group": "direct_contradiction",
+      "text": "The clinic charges an admission fee to visitors. The clinic does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-6",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the clinic. No payment is required to enter the clinic.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-6",
+      "group": "consistent_statements",
+      "text": "The clinic charges an admission fee. Visitors pay for admission to the clinic.",
+      "expected": []
+    },
+    {
+      "id": "context-6",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the clinic charged admission. The spokesperson said the clinic offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-6",
+      "group": "hypothetical",
+      "text": "If the clinic had free admission, nobody would have to pay. The clinic currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-7",
+      "group": "direct_contradiction",
+      "text": "The bakery is open to the public on Sundays. The bakery is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-7",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the bakery on Sundays. The bakery does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-7",
+      "group": "consistent_statements",
+      "text": "The bakery is open to the public on Sundays. Sunday visitors can enter the bakery.",
+      "expected": []
+    },
+    {
+      "id": "context-7",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the bakery was open on Sundays. In 2025, the bakery was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-7",
+      "group": "hypothetical",
+      "text": "If the bakery were open on Sundays, visitors could enter it. The bakery is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-8",
+      "group": "direct_contradiction",
+      "text": "The bakery charges an admission fee to visitors. The bakery does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-8",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the bakery. No payment is required to enter the bakery.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-8",
+      "group": "consistent_statements",
+      "text": "The bakery charges an admission fee. Visitors pay for admission to the bakery.",
+      "expected": []
+    },
+    {
+      "id": "context-8",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the bakery charged admission. The spokesperson said the bakery offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-8",
+      "group": "hypothetical",
+      "text": "If the bakery had free admission, nobody would have to pay. The bakery currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-9",
+      "group": "direct_contradiction",
+      "text": "The theatre is open to the public on Sundays. The theatre is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-9",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the theatre on Sundays. The theatre does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-9",
+      "group": "consistent_statements",
+      "text": "The theatre is open to the public on Sundays. Sunday visitors can enter the theatre.",
+      "expected": []
+    },
+    {
+      "id": "context-9",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the theatre was open on Sundays. In 2025, the theatre was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-9",
+      "group": "hypothetical",
+      "text": "If the theatre were open on Sundays, visitors could enter it. The theatre is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-10",
+      "group": "direct_contradiction",
+      "text": "The theatre charges an admission fee to visitors. The theatre does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-10",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the theatre. No payment is required to enter the theatre.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-10",
+      "group": "consistent_statements",
+      "text": "The theatre charges an admission fee. Visitors pay for admission to the theatre.",
+      "expected": []
+    },
+    {
+      "id": "context-10",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the theatre charged admission. The spokesperson said the theatre offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-10",
+      "group": "hypothetical",
+      "text": "If the theatre had free admission, nobody would have to pay. The theatre currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-11",
+      "group": "direct_contradiction",
+      "text": "The gallery is open to the public on Sundays. The gallery is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-11",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the gallery on Sundays. The gallery does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-11",
+      "group": "consistent_statements",
+      "text": "The gallery is open to the public on Sundays. Sunday visitors can enter the gallery.",
+      "expected": []
+    },
+    {
+      "id": "context-11",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the gallery was open on Sundays. In 2025, the gallery was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-11",
+      "group": "hypothetical",
+      "text": "If the gallery were open on Sundays, visitors could enter it. The gallery is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-12",
+      "group": "direct_contradiction",
+      "text": "The gallery charges an admission fee to visitors. The gallery does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-12",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the gallery. No payment is required to enter the gallery.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-12",
+      "group": "consistent_statements",
+      "text": "The gallery charges an admission fee. Visitors pay for admission to the gallery.",
+      "expected": []
+    },
+    {
+      "id": "context-12",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the gallery charged admission. The spokesperson said the gallery offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-12",
+      "group": "hypothetical",
+      "text": "If the gallery had free admission, nobody would have to pay. The gallery currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-13",
+      "group": "direct_contradiction",
+      "text": "The workshop is open to the public on Sundays. The workshop is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-13",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the workshop on Sundays. The workshop does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-13",
+      "group": "consistent_statements",
+      "text": "The workshop is open to the public on Sundays. Sunday visitors can enter the workshop.",
+      "expected": []
+    },
+    {
+      "id": "context-13",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the workshop was open on Sundays. In 2025, the workshop was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-13",
+      "group": "hypothetical",
+      "text": "If the workshop were open on Sundays, visitors could enter it. The workshop is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-14",
+      "group": "direct_contradiction",
+      "text": "The workshop charges an admission fee to visitors. The workshop does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-14",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the workshop. No payment is required to enter the workshop.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-14",
+      "group": "consistent_statements",
+      "text": "The workshop charges an admission fee. Visitors pay for admission to the workshop.",
+      "expected": []
+    },
+    {
+      "id": "context-14",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the workshop charged admission. The spokesperson said the workshop offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-14",
+      "group": "hypothetical",
+      "text": "If the workshop had free admission, nobody would have to pay. The workshop currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-15",
+      "group": "direct_contradiction",
+      "text": "The park is open to the public on Sundays. The park is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-15",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the park on Sundays. The park does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-15",
+      "group": "consistent_statements",
+      "text": "The park is open to the public on Sundays. Sunday visitors can enter the park.",
+      "expected": []
+    },
+    {
+      "id": "context-15",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the park was open on Sundays. In 2025, the park was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-15",
+      "group": "hypothetical",
+      "text": "If the park were open on Sundays, visitors could enter it. The park is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-16",
+      "group": "direct_contradiction",
+      "text": "The park charges an admission fee to visitors. The park does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-16",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the park. No payment is required to enter the park.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-16",
+      "group": "consistent_statements",
+      "text": "The park charges an admission fee. Visitors pay for admission to the park.",
+      "expected": []
+    },
+    {
+      "id": "context-16",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the park charged admission. The spokesperson said the park offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-16",
+      "group": "hypothetical",
+      "text": "If the park had free admission, nobody would have to pay. The park currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-17",
+      "group": "direct_contradiction",
+      "text": "The pharmacy is open to the public on Sundays. The pharmacy is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-17",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the pharmacy on Sundays. The pharmacy does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-17",
+      "group": "consistent_statements",
+      "text": "The pharmacy is open to the public on Sundays. Sunday visitors can enter the pharmacy.",
+      "expected": []
+    },
+    {
+      "id": "context-17",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the pharmacy was open on Sundays. In 2025, the pharmacy was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-17",
+      "group": "hypothetical",
+      "text": "If the pharmacy were open on Sundays, visitors could enter it. The pharmacy is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-18",
+      "group": "direct_contradiction",
+      "text": "The pharmacy charges an admission fee to visitors. The pharmacy does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-18",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the pharmacy. No payment is required to enter the pharmacy.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-18",
+      "group": "consistent_statements",
+      "text": "The pharmacy charges an admission fee. Visitors pay for admission to the pharmacy.",
+      "expected": []
+    },
+    {
+      "id": "context-18",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the pharmacy charged admission. The spokesperson said the pharmacy offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-18",
+      "group": "hypothetical",
+      "text": "If the pharmacy had free admission, nobody would have to pay. The pharmacy currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-19",
+      "group": "direct_contradiction",
+      "text": "The cinema is open to the public on Sundays. The cinema is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-19",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the cinema on Sundays. The cinema does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-19",
+      "group": "consistent_statements",
+      "text": "The cinema is open to the public on Sundays. Sunday visitors can enter the cinema.",
+      "expected": []
+    },
+    {
+      "id": "context-19",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the cinema was open on Sundays. In 2025, the cinema was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-19",
+      "group": "hypothetical",
+      "text": "If the cinema were open on Sundays, visitors could enter it. The cinema is closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-20",
+      "group": "direct_contradiction",
+      "text": "The cinema charges an admission fee to visitors. The cinema does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-20",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the cinema. No payment is required to enter the cinema.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-20",
+      "group": "consistent_statements",
+      "text": "The cinema charges an admission fee. Visitors pay for admission to the cinema.",
+      "expected": []
+    },
+    {
+      "id": "context-20",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the cinema charged admission. The spokesperson said the cinema offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "hypothetical-20",
+      "group": "hypothetical",
+      "text": "If the cinema had free admission, nobody would have to pay. The cinema currently charges an admission fee.",
+      "expected": []
+    },
+    {
+      "id": "direct-21",
+      "group": "direct_contradiction",
+      "text": "The factory is open to the public on Sundays. The factory is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-21",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the factory on Sundays. The factory does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-21",
+      "group": "consistent_statements",
+      "text": "The factory is open to the public on Sundays. Sunday visitors can enter the factory.",
+      "expected": []
+    },
+    {
+      "id": "context-21",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the factory was open on Sundays. In 2025, the factory was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-22",
+      "group": "direct_contradiction",
+      "text": "The factory charges an admission fee to visitors. The factory does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-22",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the factory. No payment is required to enter the factory.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-22",
+      "group": "consistent_statements",
+      "text": "The factory charges an admission fee. Visitors pay for admission to the factory.",
+      "expected": []
+    },
+    {
+      "id": "context-22",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the factory charged admission. The spokesperson said the factory offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-23",
+      "group": "direct_contradiction",
+      "text": "The warehouse is open to the public on Sundays. The warehouse is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-23",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the warehouse on Sundays. The warehouse does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-23",
+      "group": "consistent_statements",
+      "text": "The warehouse is open to the public on Sundays. Sunday visitors can enter the warehouse.",
+      "expected": []
+    },
+    {
+      "id": "context-23",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the warehouse was open on Sundays. In 2025, the warehouse was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-24",
+      "group": "direct_contradiction",
+      "text": "The warehouse charges an admission fee to visitors. The warehouse does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-24",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the warehouse. No payment is required to enter the warehouse.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-24",
+      "group": "consistent_statements",
+      "text": "The warehouse charges an admission fee. Visitors pay for admission to the warehouse.",
+      "expected": []
+    },
+    {
+      "id": "context-24",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the warehouse charged admission. The spokesperson said the warehouse offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-25",
+      "group": "direct_contradiction",
+      "text": "The council office is open to the public on Sundays. The council office is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-25",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the council office on Sundays. The council office does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-25",
+      "group": "consistent_statements",
+      "text": "The council office is open to the public on Sundays. Sunday visitors can enter the council office.",
+      "expected": []
+    },
+    {
+      "id": "context-25",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the council office was open on Sundays. In 2025, the council office was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-26",
+      "group": "direct_contradiction",
+      "text": "The council office charges an admission fee to visitors. The council office does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-26",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the council office. No payment is required to enter the council office.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-26",
+      "group": "consistent_statements",
+      "text": "The council office charges an admission fee. Visitors pay for admission to the council office.",
+      "expected": []
+    },
+    {
+      "id": "context-26",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the council office charged admission. The spokesperson said the council office offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-27",
+      "group": "direct_contradiction",
+      "text": "The recycling centre is open to the public on Sundays. The recycling centre is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-27",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the recycling centre on Sundays. The recycling centre does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-27",
+      "group": "consistent_statements",
+      "text": "The recycling centre is open to the public on Sundays. Sunday visitors can enter the recycling centre.",
+      "expected": []
+    },
+    {
+      "id": "context-27",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the recycling centre was open on Sundays. In 2025, the recycling centre was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-28",
+      "group": "direct_contradiction",
+      "text": "The recycling centre charges an admission fee to visitors. The recycling centre does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-28",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the recycling centre. No payment is required to enter the recycling centre.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-28",
+      "group": "consistent_statements",
+      "text": "The recycling centre charges an admission fee. Visitors pay for admission to the recycling centre.",
+      "expected": []
+    },
+    {
+      "id": "context-28",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the recycling centre charged admission. The spokesperson said the recycling centre offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-29",
+      "group": "direct_contradiction",
+      "text": "The swimming pool is open to the public on Sundays. The swimming pool is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-29",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the swimming pool on Sundays. The swimming pool does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-29",
+      "group": "consistent_statements",
+      "text": "The swimming pool is open to the public on Sundays. Sunday visitors can enter the swimming pool.",
+      "expected": []
+    },
+    {
+      "id": "context-29",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the swimming pool was open on Sundays. In 2025, the swimming pool was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-30",
+      "group": "direct_contradiction",
+      "text": "The swimming pool charges an admission fee to visitors. The swimming pool does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-30",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the swimming pool. No payment is required to enter the swimming pool.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-30",
+      "group": "consistent_statements",
+      "text": "The swimming pool charges an admission fee. Visitors pay for admission to the swimming pool.",
+      "expected": []
+    },
+    {
+      "id": "context-30",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the swimming pool charged admission. The spokesperson said the swimming pool offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-31",
+      "group": "direct_contradiction",
+      "text": "The laboratory is open to the public on Sundays. The laboratory is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-31",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the laboratory on Sundays. The laboratory does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-31",
+      "group": "consistent_statements",
+      "text": "The laboratory is open to the public on Sundays. Sunday visitors can enter the laboratory.",
+      "expected": []
+    },
+    {
+      "id": "context-31",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the laboratory was open on Sundays. In 2025, the laboratory was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-32",
+      "group": "direct_contradiction",
+      "text": "The laboratory charges an admission fee to visitors. The laboratory does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-32",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the laboratory. No payment is required to enter the laboratory.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-32",
+      "group": "consistent_statements",
+      "text": "The laboratory charges an admission fee. Visitors pay for admission to the laboratory.",
+      "expected": []
+    },
+    {
+      "id": "context-32",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the laboratory charged admission. The spokesperson said the laboratory offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-33",
+      "group": "direct_contradiction",
+      "text": "The sports centre is open to the public on Sundays. The sports centre is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-33",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the sports centre on Sundays. The sports centre does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-33",
+      "group": "consistent_statements",
+      "text": "The sports centre is open to the public on Sundays. Sunday visitors can enter the sports centre.",
+      "expected": []
+    },
+    {
+      "id": "context-33",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the sports centre was open on Sundays. In 2025, the sports centre was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-34",
+      "group": "direct_contradiction",
+      "text": "The sports centre charges an admission fee to visitors. The sports centre does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-34",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the sports centre. No payment is required to enter the sports centre.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-34",
+      "group": "consistent_statements",
+      "text": "The sports centre charges an admission fee. Visitors pay for admission to the sports centre.",
+      "expected": []
+    },
+    {
+      "id": "context-34",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the sports centre charged admission. The spokesperson said the sports centre offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-35",
+      "group": "direct_contradiction",
+      "text": "The hotel is open to the public on Sundays. The hotel is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-35",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the hotel on Sundays. The hotel does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-35",
+      "group": "consistent_statements",
+      "text": "The hotel is open to the public on Sundays. Sunday visitors can enter the hotel.",
+      "expected": []
+    },
+    {
+      "id": "context-35",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the hotel was open on Sundays. In 2025, the hotel was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-36",
+      "group": "direct_contradiction",
+      "text": "The hotel charges an admission fee to visitors. The hotel does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-36",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the hotel. No payment is required to enter the hotel.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-36",
+      "group": "consistent_statements",
+      "text": "The hotel charges an admission fee. Visitors pay for admission to the hotel.",
+      "expected": []
+    },
+    {
+      "id": "context-36",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the hotel charged admission. The spokesperson said the hotel offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-37",
+      "group": "direct_contradiction",
+      "text": "The visitor centre is open to the public on Sundays. The visitor centre is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-37",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the visitor centre on Sundays. The visitor centre does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-37",
+      "group": "consistent_statements",
+      "text": "The visitor centre is open to the public on Sundays. Sunday visitors can enter the visitor centre.",
+      "expected": []
+    },
+    {
+      "id": "context-37",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the visitor centre was open on Sundays. In 2025, the visitor centre was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-38",
+      "group": "direct_contradiction",
+      "text": "The visitor centre charges an admission fee to visitors. The visitor centre does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-38",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the visitor centre. No payment is required to enter the visitor centre.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-38",
+      "group": "consistent_statements",
+      "text": "The visitor centre charges an admission fee. Visitors pay for admission to the visitor centre.",
+      "expected": []
+    },
+    {
+      "id": "context-38",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the visitor centre charged admission. The spokesperson said the visitor centre offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-39",
+      "group": "direct_contradiction",
+      "text": "The community centre is open to the public on Sundays. The community centre is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-39",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the community centre on Sundays. The community centre does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-39",
+      "group": "consistent_statements",
+      "text": "The community centre is open to the public on Sundays. Sunday visitors can enter the community centre.",
+      "expected": []
+    },
+    {
+      "id": "context-39",
+      "group": "different_period_or_speaker",
+      "text": "In 2024, the community centre was open on Sundays. In 2025, the community centre was closed on Sundays.",
+      "expected": []
+    },
+    {
+      "id": "direct-40",
+      "group": "direct_contradiction",
+      "text": "The community centre charges an admission fee to visitors. The community centre does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-40",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the community centre. No payment is required to enter the community centre.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "consistent-40",
+      "group": "consistent_statements",
+      "text": "The community centre charges an admission fee. Visitors pay for admission to the community centre.",
+      "expected": []
+    },
+    {
+      "id": "context-40",
+      "group": "different_period_or_speaker",
+      "text": "The manager said the community centre charged admission. The spokesperson said the community centre offered free admission.",
+      "expected": []
+    },
+    {
+      "id": "direct-41",
+      "group": "direct_contradiction",
+      "text": "The bookshop is open to the public on Sundays. The bookshop is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-41",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the bookshop on Sundays. The bookshop does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-42",
+      "group": "direct_contradiction",
+      "text": "The bookshop charges an admission fee to visitors. The bookshop does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-42",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the bookshop. No payment is required to enter the bookshop.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-43",
+      "group": "direct_contradiction",
+      "text": "The train station is open to the public on Sundays. The train station is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-43",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the train station on Sundays. The train station does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-44",
+      "group": "direct_contradiction",
+      "text": "The train station charges an admission fee to visitors. The train station does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-44",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the train station. No payment is required to enter the train station.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-45",
+      "group": "direct_contradiction",
+      "text": "The post office is open to the public on Sundays. The post office is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-45",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the post office on Sundays. The post office does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-46",
+      "group": "direct_contradiction",
+      "text": "The post office charges an admission fee to visitors. The post office does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-46",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the post office. No payment is required to enter the post office.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-47",
+      "group": "direct_contradiction",
+      "text": "The restaurant is open to the public on Sundays. The restaurant is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-47",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the restaurant on Sundays. The restaurant does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-48",
+      "group": "direct_contradiction",
+      "text": "The restaurant charges an admission fee to visitors. The restaurant does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-48",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the restaurant. No payment is required to enter the restaurant.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-49",
+      "group": "direct_contradiction",
+      "text": "The sports stadium is open to the public on Sundays. The sports stadium is closed to the public on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-49",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors can enter the sports stadium on Sundays. The sports stadium does not open to visitors on Sundays.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "direct-50",
+      "group": "direct_contradiction",
+      "text": "The sports stadium charges an admission fee to visitors. The sports stadium does not charge any admission fee to visitors.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    },
+    {
+      "id": "paraphrase-50",
+      "group": "paraphrased_contradiction",
+      "text": "Visitors must pay money to enter the sports stadium. No payment is required to enter the sports stadium.",
+      "expected": [
+        "argument_inconsistency"
+      ]
+    }
+  ]
+}

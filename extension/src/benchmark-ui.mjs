@@ -16,13 +16,22 @@ function setError(text) {
 }
 function updateSource() {
  const upload = source.value === "uploaded";
+ const consistency = mode.value === "consistency";
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
+ count.max = consistency ? 10000 : 1000000;
+ if (!count.dataset.edited) count.value = consistency ? 200 : 25000;
  $("dataset-note").textContent = upload
-  ? "Upload .json (an array or {cases: [...]}) or .jsonl (one {id, text, expected} object per line). Labels must match technique IDs. Your file stays in this browser."
-  : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
+  ? consistency
+   ? 'Upload JSON/JSONL containing {id, text, expected}, where expected is [] or ["argument_inconsistency"]. All analysis stays in this browser.'
+   : "Upload JSON/JSONL containing {id, text, expected} using technique IDs. All analysis stays in this browser."
+  : consistency
+   ? "200 labelled fictional cases: direct contradictions, paraphrases, consistent claims, different speakers/dates and hypotheticals. Generated variations test robustness, not independent accuracy."
+   : "Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.";
 }
+count.addEventListener("input", () => { count.dataset.edited = "true"; });
+mode.addEventListener("change", updateSource);
 source.addEventListener("change", updateSource);
 updateSource();
 
@@ -117,7 +126,9 @@ function renderResults(data) {
  );
  $("summary-note").textContent =
   "Evaluated " + number(data.total) + " cases, including " + number(data.negativeCount) +
-  " cases with no expected technique. Results describe this test dataset, not accuracy on unseen writing.";
+  (lastMode === "consistency" ? " cases with no expected inconsistency." :
+   " cases with no expected technique.") +
+  " Results describe this test dataset, not accuracy on unseen writing.";
  tableRows($("confusion"), data.confusion.slice(0, 20)
   .map(item => [item.pair, number(item.count)]), "No classification errors.");
  tableRows($("per-technique"), data.perTechnique
@@ -156,6 +167,11 @@ function failureReport(data) {
    "Missing: " + (item.missing.join(", ") || "(none)"),
    "Extra: " + (item.extra.join(", ") || "(none)"),
    "Text:\n" + item.text);
+  if (item.detectedPairs?.length) {
+   lines.push("Model-flagged passages:");
+   for (const pair of item.detectedPairs)
+    lines.push("  " + pair.score + " | " + pair.text + " <> " + pair.otherText);
+  }
  }
  return lines.join("\n");
 }
@@ -189,14 +205,19 @@ function catalogues() {
   fetch(new URL("../../evaluation/matcher-examples.json", import.meta.url)).then(response => {
    if (!response.ok) throw Error("Cannot load the labelled examples");
    return response.json();
+  }),
+  fetch(new URL("../../evaluation/inconsistency-examples.json", import.meta.url)).then(response => {
+   if (!response.ok) throw Error("Cannot load the inconsistency examples");
+   return response.json();
   })
  ]);
 }
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
- if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > 1000000)) {
-  setError("Choose a test count between 1 and 1,000,000.");
+ const maximum = mode.value === "consistency" ? 10000 : 1000000;
+ if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
+  setError("Choose a test count between 1 and " + number(maximum) + ".");
   return;
  }
  if (source.value === "uploaded" && !file.files?.length) {
@@ -217,7 +238,8 @@ runButton.addEventListener("click", async () => {
  results.hidden = true;
  setError("");
  try {
-  const [catalogue, patterns, fixture] = await catalogues();
+  const [catalogue, patterns, manipulationFixture, consistencyFixture] = await catalogues();
+  const fixture = mode.value === "consistency" ? consistencyFixture : manipulationFixture;
   runId++;
   setupWorker().postMessage({
    type: "start", runId, mode: mode.value, source: source.value,

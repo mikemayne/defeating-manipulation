@@ -2,6 +2,7 @@ import { pipeline, env } from "@huggingface/transformers";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
 import { findInconsistencies } from "./consistency.mjs";
+import { createNliScorer } from "./nli-inference.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -9,25 +10,17 @@ env.useBrowserCache = true;
 env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
 
 const MODEL = "Xenova/all-MiniLM-L6-v2";
-const NLI_MODEL = "Xenova/distilbert-base-uncased-mnli";
-let inferenceModel, inferenceAttempted = false;
+let inferenceModelPromise;
 
 async function scorePair(premise, hypothesis) {
- if (!inferenceAttempted) {
-  inferenceAttempted = true;
-  try { inferenceModel = await pipeline("text-classification", NLI_MODEL, { dtype: "q8" }); }
-  catch (error) { console.warn("Local consistency model unavailable:", error); }
- }
- if (!inferenceModel) return null;
- const result = await inferenceModel({ text: premise, text_pair: hypothesis }, { top_k: null });
- const scores = {};
- for (const item of (Array.isArray(result[0]) ? result[0] : result)) {
-  const label = String(item.label).toLowerCase();
-  if (label.includes("contradiction") || label === "label_0") scores.contradiction = item.score;
-  if (label.includes("neutral") || label === "label_1") scores.neutral = item.score;
-  if (label.includes("entailment") || label === "label_2") scores.entailment = item.score;
- }
- return scores.contradiction === undefined || scores.neutral === undefined ? null : scores;
+ // The same tokenised premise/hypothesis scoring is used in the test lab.
+ if (!inferenceModelPromise) inferenceModelPromise = createNliScorer()
+  .catch(error => {
+   console.warn("Local consistency model unavailable:", error);
+   return null;
+  });
+ const score = await inferenceModelPromise;
+ return score ? score(premise, hypothesis) : null;
 }
 let extractor, techniques = [], rules = [], prototypes = [], initialising;
 

@@ -127,3 +127,34 @@ and recall to the previous 185-case AI benchmark (10% recall, zero false
 positives). Do not claim an AI improvement until the actual offline model has
 run on the new source. A model may lose precision when more prototype examples
 are introduced; this is why we keep separate held-out cases.
+
+
+## Experimental second-pass inconsistency benchmark
+
+The local page's new **Inconsistencies — local NLI** mode uses the same
+`extension/src/consistency.mjs` claim pairing and bidirectional thresholds
+as the Firefox extension. The same `extension/src/nli-inference.mjs` module
+loads and runs the quantised local DistilBERT MNLI model, properly tokenising
+the two statements as an input pair.
+
+The initial `evaluation/inconsistency-examples.json` contains 200 fictional
+cases (100 labelled with `argument_inconsistency` and 100 labelled as ordinary
+or context-dependent noncontradictions). These share topics and templates.
+They exercise the plumbing and common error cases; they are not 200 independent
+real-world observations. The default run is 200 cases; a larger count repeats
+the seed set with deterministic variants.
+
+For a more meaningful benchmark, upload a new labelled JSON or JSONL file:
+    
+    {"id":"contradiction-1","text":"The service never charges fees. The service always charges fees.","expected":["argument_inconsistency"]}
+    {"id":"different-dates-1","text":"In 2024, the service charged fees. In 2025, the service was free.","expected":[]}
+
+Do not mix manipulation technique labels with `argument_inconsistency` labels
+in one run; each mode has a separate scoring interpretation. Use unrelated
+topics and genuine counterexamples in a private held-out file for testing.
+The lab does not upload selected text or datasets, and it does not include
+these tests in the public website deployment.
+
+The GitHub checks use synthetic NLI scores, plus module and fixture validation.
+They do **not** run the full neural model in a Firefox browser; a real local
+NLI-mode smoke test is required to validate model download and inference.

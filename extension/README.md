@@ -32,3 +32,30 @@ The page imports the same matching core as the browser extension, generates
 a reproducible large test set, displays only progress and aggregate statistics,
 and provides a button to copy failure details. It also accepts local labelled
 JSON/JSONL datasets. See `evaluation/README.txt` for the test data format.
+
+
+## Second-pass inconsistency benchmark
+
+Open the same local Matcher Test Lab and choose **Inconsistencies — local NLI**.
+The extension and test lab share the exact same `findInconsistencies` algorithm,
+with bidirectional contradiction checks. Both now use the same tokenizer and
+quantised `Xenova/distilbert-base-uncased-mnli` model to encode a **pair of
+statements**, rather than analysing each statement separately.
+
+The model downloads on first use from Hugging Face, then runs on your own
+computer with browser model caching. Firefox does not upload the selected
+passage. First-run model loading can take noticeably longer than the normal
+MiniLM matching step; allow it to finish before interpreting the results.
+
+The generated default is **200 cases**, drawn from 50 fictional topics with
+controlled wording variants: 50 direct contradictions, 50 paraphrases,
+40 consistent statements, 40 different-speaker/date comparisons and 20
+hypotheticals. These are preliminary, synthetic smoke tests and should not be
+treated as independent evidence of accuracy on real news articles.
+
+For imported JSON or JSONL files use the existing case format, but specify
+`"expected": ["argument_inconsistency"]` for a text containing a contradiction
+within the same relevant context, or `"expected": []` if it should not be
+highlighted. The lab reports case-level precision/recall and copies failure
+details including any red-highlighted pairs. A model download or inference
+error is reported as an error, not as a successful negative classification.
