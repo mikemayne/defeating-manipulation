@@ -159,6 +159,17 @@ $("export").addEventListener("click", () => {
   notice("Exported " + data.cases.length + " scored cases. Upload this file in the Matcher Test Lab.");
  } catch (error) { notice(error.message, true); }
 });
+$("backup").addEventListener("click", () => {
+ try {
+  if (!annotations.length) throw Error("No annotations to back up");
+  download("real-argument-annotations-backup.json", {
+   version: 1,
+   description: "All locally annotated real passages, including uncertain cases.",
+   annotations
+  });
+  notice("Saved a backup of all " + annotations.length + " annotations.");
+ } catch (error) { notice(error.message, true); }
+});
 $("import").addEventListener("click", () => $("import-file").click());
 $("import-file").addEventListener("change", async event => {
  const file = event.target.files?.[0];
