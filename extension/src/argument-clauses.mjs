@@ -3,6 +3,7 @@
 // whether a conclusion is supported. Keep that decision in the NLI layer.
 import { attributedSource } from './consistency.mjs';
 import { inferImplicitArguments } from './implicit-arguments.mjs';
+import { recoverDiscourseArguments } from './implicit-discourse-passes.mjs';
 
 const MAX_STATEMENTS = 80;
 const MAX_ARGUMENTS = 8;
@@ -256,7 +257,10 @@ export function extractArguments(source, {includeImplicit=false}={}) {
  }
  if (includeImplicit && results.length<MAX_ARGUMENTS) {
   const explicitConclusions=new Set(results.map(a=>a.conclusion.start+":"+a.conclusion.end));
-  const implicit=inferImplicitArguments(source,statements,{limit:Math.min(3,MAX_ARGUMENTS-results.length)});
+  const implicit=[
+   ...inferImplicitArguments(source,statements,{limit:Math.min(3,MAX_ARGUMENTS-results.length)}),
+   ...recoverDiscourseArguments(source,statements,{limit:Math.min(3,MAX_ARGUMENTS-results.length)})
+  ];
   for(const candidate of implicit){
    // Feed the temporary reconstructed sentence through the existing parser.
    // Keep its syntactic relationship but NEVER reuse its synthetic offsets.
@@ -265,7 +269,7 @@ export function extractArguments(source, {includeImplicit=false}={}) {
    if(!parsedReconstruction.some(a=>a.conclusion.marker===candidate.inferredConnector))
     continue;
    const key=candidate.conclusion.start+":"+candidate.conclusion.end;
-   if(!explicitConclusions.has(key)) {
+   if(!explicitConclusions.has(key) && results.length<MAX_ARGUMENTS) {
     results.push(candidate);
     explicitConclusions.add(key);
    }
