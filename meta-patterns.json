@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "description": "A separate library of meta-patterns: general mechanisms that can underpin multiple individual manipulation techniques. Entries describe causal structures and what evidence would distinguish them from coincidence, not conclusions about any specific person or event.",
+  "patterns": [
+    {
+      "id": "false_attribution_of_causality",
+      "title": "False attribution of causality",
+      "category": "Meta-patterns",
+      "summary": "Creating an effect while arranging circumstances so that another person believes their own action, thought or feeling caused it.",
+      "definition": "The actual cause of an effect lies outside the person experiencing it, but the circumstances make that person interpret their own action, thought or feeling as the cause. The person may form this belief without anyone explicitly telling them to. This is a general mechanism that can underpin several more specific techniques, rather than a particular phrase or script.",
+      "actual_causality": "External action → observed effect",
+      "perceived_causality": "Person's action, thought or feeling → observed effect",
+      "mechanism": [
+        "An external source produces an observable effect.",
+        "The effect appears to follow or coincide with something the person does, thinks or feels.",
+        "The apparent connection encourages the person to infer that their own behaviour caused the effect.",
+        "That mistaken attribution may shape later behaviour even without an explicit instruction."
+      ],
+      "observable_features": [
+        "An effect is connected to the person's own action, thought or feeling by timing or presentation.",
+        "The connection is treated as causal rather than merely coincidental.",
+        "There is independent evidence that a different mechanism produced the effect. Timing alone cannot establish either cause."
+      ],
+      "example": "In a staged demonstration, a participant is asked to think about switching on a lamp. A demonstrator activates a concealed switch at that moment. The participant may conclude that their thought switched on the lamp, when the demonstrator actually controlled it.",
+      "reader_effect": "Can create a mistaken sense of control, responsibility, unusual ability or influence over events. The perceived cause may feel self-evident because the person arrived at the conclusion themselves.",
+      "relation_to_techniques": "This is a meta-pattern: it explains a principle that can be used to design different individual techniques. It is not a claim that every apparent coincidence is engineered. Assessing an instance requires evidence about the actual mechanism, not a statement match alone.",
+      "tags": [
+        "causal attribution",
+        "perceived control",
+        "misattributed cause",
+        "cause and effect",
+        "meta-pattern",
+        "apparent correlation"
+      ],
+      "status": "starter"
+    }
+  ]
+}

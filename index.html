@@ -21,6 +21,17 @@
 .inconsistency-section .toolbar input{background:#7f1d1d;border-color:#dc5555;color:#fff7f7}
 @media(prefers-color-scheme:dark){.inconsistency-section{color:#ffe7ec}.inconsistency-section::before{background:#450a0a}.inconsistency-section .intro,.inconsistency-section .tech p,.inconsistency-section .count{color:#f2b5c2}.inconsistency-section .tech{background:#7f1d1d;border-color:#b91c1c}.inconsistency-section .category{color:#fecaca}.inconsistency-section .tech h2 a{color:#ffe7ec}.inconsistency-section .toolbar input{background:#7f1d1d;color:#fff7f7;border-color:#b91c1c}}
 .install{margin:0 0 36px;padding:22px 26px;border:1px solid var(--line);border-left:5px solid #168f9b;border-radius:5px;background:var(--surface)}.install h2{margin:0 0 8px;font:600 1.35rem/1.3 var(--sans)}.install p{margin:8px 0}.install ol{margin:12px 0;padding-left:24px}.install li{padding:3px 0}.install code{padding:2px 5px;border-radius:3px;background:var(--paper);overflow-wrap:anywhere}.install-note{color:var(--muted);font-size:.9rem}
+
+.meta-section{position:relative;isolation:isolate;margin-top:54px;padding:30px 30px 34px;border-radius:8px;color:#102b46}
+.meta-section::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:#bcd9fb}
+.meta-section h2{font:normal clamp(1.8rem,4vw,2.5rem)/1.15 var(--serif);margin:0 0 8px}
+.meta-section .intro{color:#264b70;max-width:760px}
+.meta-section .tech{background:#e1efff;border-color:#8eb6df}
+.meta-section .category{color:#185c9b}
+.meta-section .tech h2 a{color:#102b46}
+.meta-section .tech p,.meta-section .count{color:#264b70}
+.meta-section .toolbar input{background:#f1f7ff;border-color:#8eb6df;color:#102b46}
+@media(prefers-color-scheme:dark){.meta-section{color:#eaf4ff}.meta-section::before{background:#173f69}.meta-section .intro,.meta-section .tech p,.meta-section .count{color:#c1def8}.meta-section .tech{background:#214d78;border-color:#427dad}.meta-section .tech h2 a{color:#eaf4ff}.meta-section .category{color:#add4fc}.meta-section .toolbar input{background:#173c61;border-color:#427dad;color:#eaf4ff}}
 </style>
 </head>
 <body>
@@ -41,6 +52,12 @@
 <h1>Manipulation techniques</h1>
 <div class="toolbar"><input id="search" type="search" placeholder="Search techniques…" aria-label="Search techniques"><span class="count" id="count" aria-live="polite"></span></div>
 <div id="catalogue" class="grid"><p class="empty">Loading library…</p></div>
+<section class="meta-section" aria-labelledby="meta-title">
+<h2 id="meta-title">Meta-patterns</h2>
+<p class="intro">Underlying mechanisms that can shape several individual manipulation techniques. These patterns describe possible causal structures, not conclusions about particular events.</p>
+<div class="toolbar"><input id="meta-search" type="search" placeholder="Search meta-patterns…" aria-label="Search meta-patterns"><span class="count" id="meta-count" aria-live="polite"></span></div>
+<div id="meta-catalogue" class="grid"><p class="empty">Loading meta-patterns…</p></div>
+</section>
 <section class="positive-section" aria-labelledby="positive-title"><h2 id="positive-title">Positive communication patterns</h2><p class="intro">A separate library of constructive behaviours that support autonomy, clarity, informed choice and independent thought. Green identifies positive patterns; it does not certify an entire conversation as healthy.</p><div class="toolbar"><input id="positive-search" type="search" placeholder="Search positive patterns…" aria-label="Search positive patterns"><span class="count" id="positive-count" aria-live="polite"></span></div><div id="positive-catalogue" class="grid"><p class="empty">Loading positive library…</p></div></section>
 <section class="inconsistency-section" aria-labelledby="inconsistency-title">
 <h2 id="inconsistency-title">Argument inconsistency patterns</h2>
@@ -50,7 +67,7 @@
 </section>
 </main>
 <script>
-// All three searchable sections use the same data-driven catalogue renderer.
+// All four searchable sections use the same data-driven catalogue renderer.
 // Adding a new pattern only requires a new entry in its JSON library.
 function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function mountLibrary({url,key,rootId,searchId,countId,pagePath,emptyLabel}){
@@ -74,6 +91,7 @@ function mountLibrary({url,key,rootId,searchId,countId,pagePath,emptyLabel}){
  }).catch(()=>{root.innerHTML='<p class="empty">This library could not be loaded.</p>';});
 }
 mountLibrary({url:'techniques.json',key:'techniques',rootId:'catalogue',searchId:'search',countId:'count',pagePath:'techniques',emptyLabel:'No matching techniques.'});
+mountLibrary({url:'meta-patterns.json',key:'patterns',rootId:'meta-catalogue',searchId:'meta-search',countId:'meta-count',pagePath:'meta-patterns',emptyLabel:'No matching meta-patterns.'});
 mountLibrary({url:'positive-patterns.json',key:'patterns',rootId:'positive-catalogue',searchId:'positive-search',countId:'positive-count',pagePath:'positive-patterns',emptyLabel:'No matching positive patterns.'});
 mountLibrary({url:'inconsistency-patterns.json',key:'patterns',rootId:'inconsistency-catalogue',searchId:'inconsistency-search',countId:'inconsistency-count',pagePath:'inconsistency-patterns',emptyLabel:'No matching consistency patterns.'});
 </script>

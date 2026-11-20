@@ -7,6 +7,7 @@ const read = name => fs.readFileSync('_site/'+name,'utf8');
 const catalogue = JSON.parse(read('techniques.json'));
 const positive = JSON.parse(read('positive-patterns.json'));
 const inconsistency = JSON.parse(read('inconsistency-patterns.json'));
+const meta = JSON.parse(read('meta-patterns.json'));
 
 const schema = JSON.parse(fs.readFileSync('analysis-schema.json','utf8'));
 const homepage = read('index.html');
@@ -16,6 +17,19 @@ assert.ok(homepage.includes('<h1>Manipulation techniques</h1>'), 'Homepage has t
 assert.ok(homepage.includes('positive-section') && homepage.includes('background:#e4f6e7'), 'Homepage has a separate green positive-pattern section');
 assert.ok(homepage.includes('id="positive-search"') && homepage.includes('id="positive-catalogue"'), 'Positive library is independently searchable');
 assert.ok(positive.patterns.length >= 10, 'Positive pattern library has an initial set of patterns');
+assert.ok(homepage.includes('class="meta-section"') && homepage.includes('id="meta-search"') &&
+ homepage.includes('id="meta-catalogue"'), 'Meta-patterns have their own searchable section');
+assert.ok(homepage.includes("mountLibrary({url:'meta-patterns.json'"), 'Meta-patterns use the shared catalogue renderer');
+assert.ok(meta.patterns.length >= 1, 'Meta-pattern library has at least one entry');
+assert.ok(meta.patterns.some(p=>p.id==='false_attribution_of_causality' &&
+ p.actual_causality && p.perceived_causality), 'First meta-pattern defines both causal models');
+for (const item of meta.patterns) {
+ const page = 'meta-patterns/'+item.id+'.html';
+ assert.ok(fs.existsSync('_site/'+page), 'Generated meta-pattern page exists for '+item.id);
+ assert.ok(read(page).includes('<h2>How it works</h2>'), 'Meta-pattern chapter explains its mechanism');
+ assert.ok(read('sitemap.xml').includes(page), 'Sitemap includes meta-pattern: '+item.id);
+}
+assert.ok(read('sitemap.xml').includes('meta-patterns.json'), 'Sitemap includes meta-pattern catalogue');
 assert.ok(homepage.includes('id="search"') && homepage.includes('id="catalogue"'), 'Homepage provides searchable catalogue');
 assert.ok(homepage.includes('class="inconsistency-section"') &&
  homepage.includes('background:#991b1b'), 'Inconsistency section has a red background');

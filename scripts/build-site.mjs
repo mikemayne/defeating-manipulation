@@ -14,7 +14,7 @@ if (!owner || !repo) throw new Error('Repository must be owner/name');
 const base = config.siteUrl ? config.siteUrl.replace(/\/$/, '') + '/' : `https://${owner}.github.io/${repo}/`;
 fs.rmSync(out, {recursive:true, force:true});
 fs.mkdirSync(path.join(out, 'techniques'), {recursive:true});
-for (const name of ['index.html','questionnaire.html','techniques.json','positive-patterns.json','inconsistency-patterns.json','references.json','site-config.json','README.md','CONTRIBUTING.txt','CONTENT-LICENSE.txt','LICENSE']) {
+for (const name of ['index.html','questionnaire.html','techniques.json','positive-patterns.json','inconsistency-patterns.json','meta-patterns.json','references.json','site-config.json','README.md','CONTRIBUTING.txt','CONTENT-LICENSE.txt','LICENSE']) {
   if (fs.existsSync(path.join(root,name))) fs.copyFileSync(path.join(root,name),path.join(out,name));
 }
 const index = read('index.html')
@@ -30,6 +30,52 @@ for (const t of catalogue.techniques) {
   const featureList = (t.observable_features || []).map(x => '<li>'+esc(x)+'</li>').join('');
   const refs = (t.references || []).map(id => refsData.references.find(r => r.id === id)).filter(Boolean).map(r => '<li><a href="'+esc(r.url)+'">'+esc(r.title)+'</a> ('+esc(r.year)+')</li>').join('');
   const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${esc(t.summary)}"><title>${esc(t.title)} — Defeating Manipulation</title><style>body{max-width:780px;margin:50px auto;padding:0 22px;font:17px/1.7 system-ui;background:#e7f0ff;color:#18345c}a{color:#245da8}h1{font:normal clamp(2.5rem,7vw,4rem)/1.1 Georgia}.tag{color:#245da8;text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.12em}.note{padding:18px;border-left:4px solid #3974c6;background:#f2f7ff}footer{margin-top:50px;border-top:1px solid #b7cbe8;padding-top:20px;color:#405b7e;font-size:.9rem}</style></head><body><p><a href="../">← Defeating Manipulation</a></p><p class="tag">${esc(t.category)}</p><h1>${esc(t.title)}</h1><p>${esc(t.summary)}</p><h2>What it is</h2><p>${esc(t.definition || t.summary)}</p><h2>Recognising the pattern</h2><ul>${featureList || '<li>Review the surrounding passage and the wider article before deciding whether the description fits.</li>'}</ul>${t.example ? '<h2>Example</h2><blockquote>'+esc(t.example)+'</blockquote>' : ''}${t.reader_effect ? '<h2>Effect on the reader</h2><p>'+esc(t.reader_effect)+'</p>' : ''}<div class="note"><strong>Scope:</strong> this entry describes a textual pattern. It does not establish why the author used it or whether the article's claims are true.</div><h2>Related terms</h2><p>${(t.tags || []).map(esc).join(' · ')}</p><h2>References</h2><ul>${refs || '<li>References for this entry are being developed.</li>'}</ul><footer>Open project · <a href="https://github.com/${esc(repository)}/blob/main/techniques.json">View catalogue source</a></footer></body></html>`;
+  fs.writeFileSync(path.join(out,file),page);
+}
+
+
+// Meta-patterns form an independent blue library of general mechanisms.
+// Each entry has a searchable card, standalone chapter and sitemap URL.
+const metaCatalogue = JSON.parse(read('meta-patterns.json'));
+if (!Array.isArray(metaCatalogue.patterns) || !metaCatalogue.patterns.length)
+  throw new Error('Meta-pattern library must not be empty');
+fs.mkdirSync(path.join(out, 'meta-patterns'), {recursive:true});
+const metaLinks = [], metaIds = new Set();
+for (const p of metaCatalogue.patterns) {
+  if (!/^[a-z0-9_-]+$/.test(p.id)) throw new Error('Unsafe meta-pattern id: '+p.id);
+  if (metaIds.has(p.id)) throw new Error('Duplicate meta-pattern id: '+p.id);
+  metaIds.add(p.id);
+  if (!p.title || !p.summary || !p.definition || p.category !== 'Meta-patterns' ||
+      !Array.isArray(p.mechanism) || !p.mechanism.length ||
+      !Array.isArray(p.observable_features) || !p.observable_features.length ||
+      !Array.isArray(p.tags)) throw new Error('Incomplete meta-pattern: '+p.id);
+  const file = 'meta-patterns/'+p.id+'.html';
+  metaLinks.push(base+file);
+  const list = values => values.map(v=>'<li>'+esc(v)+'</li>').join('');
+  const page = [
+    '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
+    '<meta name="description" content="'+esc(p.summary)+'">',
+    '<title>'+esc(p.title)+' — Meta-patterns</title>',
+    '<style>body{max-width:780px;margin:50px auto;padding:0 22px;font:17px/1.7 system-ui;background:#dbeafe;color:#102b46}',
+    'a{color:#185c9b}h1{font:normal clamp(2.5rem,7vw,4rem)/1.1 Georgia}',
+    '.tag{color:#185c9b;text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.12em}',
+    '.note{padding:18px;border-left:4px solid #3974c6;background:#eef6ff}',
+    'footer{margin-top:50px;border-top:1px solid #94bae0;padding-top:20px;color:#264b70;font-size:.9rem}',
+    '@media(prefers-color-scheme:dark){body{background:#173f69;color:#eaf4ff}a,.tag{color:#add4fc}.note{background:#214d78;border-color:#6eaeef}footer{border-color:#427dad;color:#c1def8}}</style>',
+    '</head><body><p><a href="../">← All pattern libraries</a></p>',
+    '<p class="tag">'+esc(p.category)+'</p><h1>'+esc(p.title)+'</h1>',
+    '<p>'+esc(p.summary)+'</p><h2>What it is</h2><p>'+esc(p.definition)+'</p>',
+    '<h2>How it works</h2><ol>'+list(p.mechanism)+'</ol>',
+    p.actual_causality && p.perceived_causality ?
+      '<h2>Actual and perceived cause</h2><p><strong>Actual:</strong> '+esc(p.actual_causality)+'</p><p><strong>Perceived:</strong> '+esc(p.perceived_causality)+'</p>' : '',
+    '<h2>Recognising the pattern</h2><ul>'+list(p.observable_features)+'</ul>',
+    p.example ? '<h2>Illustrative example</h2><blockquote>'+esc(p.example)+'</blockquote>' : '',
+    p.reader_effect ? '<h2>Possible effects</h2><p>'+esc(p.reader_effect)+'</p>' : '',
+    p.relation_to_techniques ? '<h2>Relationship to individual techniques</h2><p>'+esc(p.relation_to_techniques)+'</p>' : '',
+    '<div class="note">A perceived connection does not by itself establish what caused an event. Distinguishing causes requires evidence beyond the timing of an effect.</div>',
+    '<h2>Related terms</h2><p>'+p.tags.map(esc).join(' · ')+'</p>',
+    '<footer>Meta-patterns · <a href="https://github.com/'+esc(repository)+'/blob/main/meta-patterns.json">View library source</a></footer></body></html>'
+  ].join('');
   fs.writeFileSync(path.join(out,file),page);
 }
 
@@ -98,10 +144,10 @@ for (const p of inconsistencyCatalogue.patterns) {
  fs.writeFileSync(path.join(out, file), body);
 }
 
-const sitemap = [base,base+'questionnaire.html',base+'techniques.json',base+'positive-patterns.json',base+'inconsistency-patterns.json',...links,...positiveLinks,...inconsistencyLinks].map(u=>'<url><loc>'+esc(u)+'</loc></url>').join('');
+const sitemap = [base,base+'questionnaire.html',base+'techniques.json',base+'positive-patterns.json',base+'inconsistency-patterns.json',base+'meta-patterns.json',...links,...metaLinks,...positiveLinks,...inconsistencyLinks].map(u=>'<url><loc>'+esc(u)+'</loc></url>').join('');
 fs.writeFileSync(path.join(out,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${sitemap}</urlset>`);
 fs.writeFileSync(path.join(out,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${base}sitemap.xml\n`);
-fs.writeFileSync(path.join(out,'llms.txt'),`# ${config.title}\n\n${config.description}\n\n- Catalogue: ${base}techniques.json\n- Inconsistency patterns: ${base}inconsistency-patterns.json\n- Questionnaire: ${base}questionnaire.html\n- Source: https://github.com/${repository}\n`);
+fs.writeFileSync(path.join(out,'llms.txt'),`# ${config.title}\n\n${config.description}\n\n- Catalogue: ${base}techniques.json\n- Inconsistency patterns: ${base}inconsistency-patterns.json\n- Meta-patterns: ${base}meta-patterns.json\n- Questionnaire: ${base}questionnaire.html\n- Source: https://github.com/${repository}\n`);
 if (catalogue.techniques.length < 1) throw new Error('Catalogue must not be empty');
 const ids = new Set();
 for (const t of catalogue.techniques) {

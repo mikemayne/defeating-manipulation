@@ -38,7 +38,8 @@ A planned browser extension will perform analysis locally in the reader's browse
 ## Repository structure
 
 - `index.html` — short public explanation of the project.
-- `techniques.json` — machine-readable collection of patterns.
+- `techniques.json` — machine-readable collection of manipulation techniques.
+- `meta-patterns.json` — general causal mechanisms that may underpin several individual techniques.
 - `techniques/` — generated explanations for individual techniques.
 - `references.json` — bibliography and source metadata.
 - `docs/` — design and implementation notes.
@@ -105,3 +106,9 @@ supported by its premises. The supported-conclusion entry is a reference
 pattern, not an error simply because it is displayed in the red library.
 The current local second-stage model detects potential contradictions;
 paragraph-level conclusion support remains a planned classifier enhancement.
+
+## Meta-patterns
+
+The searchable Meta-patterns category describes general mechanisms behind individual techniques, starting with **False attribution of causality**. Each entry is stored in `meta-patterns.json` and is published as a standalone chapter at `meta-patterns/<id>.html`.
+
+Unlike a phrase-level technique, a meta-pattern often depends on the real sequence of events and evidence about causation. A text match alone cannot determine that a meta-pattern took place. The browser extension continues to analyse individual statements rather than infer unseen causes.
