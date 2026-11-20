@@ -348,3 +348,62 @@ assert.ok(extensionWorker.includes('findInconsistencies(data.text, scorePair)'),
  'Firefox worker runs the second local pass');
 assert.ok(selectionScript.includes('const BLUE =') && selectionScript.includes('RED = "#dc2626"'),
  'Firefox highlighter retains the existing colours and adds red');
+
+ 
+// The local inconsistency classifier has its own labelled fixture set.
+// Test validation, deterministic expansion and candidate-pair extraction without
+// downloading the real NLI weights inside CI.
+const { validateConsistencyCases, generatedConsistencyCase } =
+ await import('../evaluation/inconsistency-generator.mjs');
+const inconsistencySeeds = JSON.parse(
+ fs.readFileSync('evaluation/inconsistency-examples.json', 'utf8')).cases;
+validateConsistencyCases(inconsistencySeeds);
+assert.equal(inconsistencySeeds.length, 200, 'Inconsistency lab has 200 initial cases');
+const inconsistencyGroups = new Map();
+for (const item of inconsistencySeeds)
+ inconsistencyGroups.set(item.group, (inconsistencyGroups.get(item.group) || 0) + 1);
+assert.deepEqual(Object.fromEntries(inconsistencyGroups), {
+ direct_contradiction: 50, paraphrased_contradiction: 50,
+ consistent_statements: 40, different_period_or_speaker: 40, hypothetical: 20
+}, 'Inconsistency dataset covers direct and paraphrased contradictions and noncontradictions');
+for (let i = 0; i < 400; i++) {
+ const item = generatedConsistencyCase(inconsistencySeeds, i, 2026);
+ assert.equal(item.expected.join(','), inconsistencySeeds[i % inconsistencySeeds.length].expected.join(','),
+  'Generated NLI variants preserve the correct label');
+ const claims = consistency.extractClaims(item.text);
+ assert.ok(claims.length >= 1, 'NLI case includes an analysable claim');
+ if (item.expected.length) {
+  assert.ok(consistency.candidatePairs(claims).length > 0,
+   'Expected contradiction retains an eligible pair: ' + item.id);
+ }
+}
+assert.throws(() => validateConsistencyCases([{id:'bad',text:'A. B.',expected:['bandwagon']}]),
+ /Invalid inconsistency/, 'NLI fixture labels must be inconsistency-only');
+const { softmaxScores } = await import('../extension/src/nli-scores.mjs');
+const labels = {0:'CONTRADICTION',1:'NEUTRAL',2:'ENTAILMENT'};
+const calculated = softmaxScores([5, 1, 0], labels);
+assert.ok(calculated.contradiction > 0.97 && calculated.neutral < 0.03,
+ 'Softmax maps paired NLI logits into contradiction evidence');
+assert.ok(Math.abs(Object.values(calculated).reduce((sum, value) => sum + value, 0) - 1) < 1e-10,
+ 'NLI class scores sum to one');
+assert.throws(() => softmaxScores([1, 2]), /Unexpected NLI logits/,
+ 'An invalid or unpaired model response does not silently pass');
+
+const benchmarkPage = fs.readFileSync('extension/benchmark.html', 'utf8');
+const benchmarkUI = fs.readFileSync('extension/src/benchmark-ui.mjs', 'utf8');
+const benchmarkWorker = fs.readFileSync('extension/src/benchmark-worker.js', 'utf8');
+const localServer = fs.readFileSync('scripts/serve-benchmark.mjs', 'utf8');
+const nliSource = fs.readFileSync('extension/src/nli-inference.mjs', 'utf8');
+assert.ok(benchmarkPage.includes('value="consistency"'),
+ 'The lab exposes a third independent inconsistency mode');
+assert.ok(benchmarkUI.includes('inconsistency-examples.json') &&
+ benchmarkWorker.includes('findInconsistencies(item.text, nliScorer)'),
+ 'The browser lab uses the same inference path as the extension');
+assert.ok(localServer.includes('/evaluation/inconsistency-examples.json'),
+ 'The local server allows only the explicit inconsistency fixture');
+assert.ok(nliSource.includes('text_pair: hypothesis') &&
+ extensionWorker.includes('createNliScorer()'),
+ 'Firefox and lab use correctly tokenised NLI text pairs from one scoring module');
+assert.ok(benchmarkWorker.includes('await initialiseConsistencyModel()'),
+ 'NLI benchmark model failures abort rather than report false negative passes');
+console.log('Inconsistency lab wiring, seed data, scoring and offsets validated.');
