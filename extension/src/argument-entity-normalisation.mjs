@@ -8,11 +8,11 @@ const NON_NAMES = new Set((
  'She So Some That The Their Then There These They This Those To We When Where While Who Why ' +
  'You Your Therefore Thus Consequently Accordingly However Since Because Given Meanwhile ' +
  'Monday Tuesday Wednesday Thursday Friday Saturday Sunday January February March April May ' +
- 'June July August September October November December'
+ 'June July August September October November December Mondays Tuesdays Wednesdays Thursdays Fridays Saturdays Sundays'
 ).split(/\s+/));
 const ESC = /[.*+?^${}()|[\]\\]/g;
 const VERB = /^(?:is|was|were|has|had|will|would|can|could|did|does|do|became|remains?|joined|applied|entered|passed|completed|attended|received|spoke|said|told|asked|met|called|helped|finished|won|voted|studied|worked|accepted|shortlisted|submitted|returned|visited|wrote|reported|explained|presented|served|volunteered)\b/i;
-const ROLE_BREAK = /\b(?:who|whom|whose|which|that|because|although|but|and|or|for|on|in|at|from|with|to|of|by|under|over|after|before|during|when|while|where|until|since|has|have|had|is|are|was|were|will|would|can|could|may|might|must|should|does|did|do|said|says|asked|told|joined|worked|spoke|submitted|applied|completed|finished)\b/i;
+const ROLE_BREAK = /\b(?:opens?|sells?|closes?|arrives?|leaves?|visits?|reads?|writes?|turns?|drives?|walks?|starts?|stops?|who|whom|whose|which|that|because|although|but|and|or|for|on|in|at|from|with|to|of|by|under|over|after|before|during|when|while|where|until|since|has|have|had|is|are|was|were|will|would|can|could|may|might|must|should|does|did|do|said|says|asked|told|joined|worked|spoke|submitted|applied|completed|finished)\b/i;
 const PRONOUN = /\b(?:he|she)\b/i;
 
 const escape = text => text.replace(ESC, '\\$&');
@@ -21,6 +21,9 @@ function namesIn(text) {
  const pattern=/\b([A-Z][a-z]{1,24})(?:[ \t]+([A-Z][a-z]{1,24}))?\b/g;
  for(const m of text.matchAll(pattern)) {
   if(NON_NAMES.has(m[1])) continue;
+  // Calendar dates and places following a preposition are not assumed to
+  // be named actors. 'The bookshop opens on Tuesdays' must not rewrite.
+  if(/\b(?:on|in|at|of|from|by|with|after|before|during|into|near)\s+$/i.test(text.slice(Math.max(0,m.index-20),m.index)))continue;
   const second=m[2] && !NON_NAMES.has(m[2]) ? m[2] : null;
   names.add(second ? m[1]+' '+second : m[1]);
  }
@@ -63,7 +66,12 @@ function labelsFor(text,name) {
  for(const m of text.matchAll(app))add(m[1]);
  // The <free-text description> Person ... (single NP, no title vocabulary).
  const pre=new RegExp('\\b(?:an?|the)\\s+([a-z][a-z-]*(?:\\s+[a-z][a-z-]*){0,3})\\s+'+escaped+'\\b','gi');
- for(const m of text.matchAll(pre))add(m[1]);
+ for(const m of text.matchAll(pre)) {
+  // A grammatical preposition or predicate between 'the' and the name
+  // makes this a location/time phrase, not 'the <description> Person'.
+  if(/\b(?:on|in|at|from|to|by|with|for|after|before|during|into|opens?|sells?|closes?|arrives?|leaves?)\b/i.test(m[1]))continue;
+  add(m[1]);
+ }
  // Person served/works/volunteers as a <free-text description>.
  const as=new RegExp('\\b'+escaped+'\\s+(?:served|works?|volunteered|acts?|worked)\\s+as\\s+(?:an?|the)\\s+([^,;.!?\\n]{3,70})','gi');
  for(const m of text.matchAll(as))add(m[1]);
