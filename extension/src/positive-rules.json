@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "description": "Conservative observable cues for constructive language. Matched wording is a candidate positive pattern, not a verdict on the surrounding interaction. Pairing with negative patterns is a separate future task.",
+  "patterns": [
+    {
+      "id": "restoring_agency",
+      "expressions": [
+        "\\b(?:take the time you need|the (?:choice|decision) is yours|it's (?:entirely )?up to you (?:whether|to)|you (?:can|may) (?:make|reach) (?:your own|the) (?:choice|decision))\\b",
+        "\\b(?:make the choice that (?:is|feels) right for you|you (?:don't|do not) have to decide (?:right )?now)\\b"
+      ]
+    },
+    {
+      "id": "welcoming_disagreement",
+      "expressions": [
+        "\\b(?:i (?:see it differently|disagree),? but i'd (?:like|love) to (?:understand|hear)|i(?:'d| would) (?:like|love) to (?:understand|hear) (?:why|your) (?:you disagree|perspective|reason))",
+        "\\b(?:please|feel free to) (?:disagree|challenge|correct) (?:me|this|my (?:view|argument))\\b",
+        "\\b(?:it's|it is) (?:fine|okay|ok) (?:to )?disagree(?: with me)?\\b"
+      ]
+    },
+    {
+      "id": "separating_observation_from_interpretation",
+      "expressions": [
+        "\\bi (?:saw|noticed|observed|heard)\\b[^.!?]{5,120}[.!?]\\s*i (?:don't|do not|can't|cannot) know\\b[^.!?]{0,120}",
+        "\\b(?:what (?:i|we) observed|what (?:i|we) (?:saw|heard))\\b[^.!?]{0,110}\\b(?:but|however)\\b[^.!?]{0,100}\\b(?:don't|do not|cannot|can't) (?:know|tell|say)\\b"
+      ]
+    },
+    {
+      "id": "acknowledging_uncertainty",
+      "expressions": [
+        "\\b(?:i (?:don't|do not) have enough (?:information|evidence) to be (?:certain|sure)|i (?:could|may|might) be wrong|that's my best (?:reading|guess|assessment),? but)\\b",
+        "\\b(?:i'm|i am) not (?:certain|sure) (?:about|whether|that|yet)\\b",
+        "\\b(?:we|i) (?:can't|cannot) (?:be sure|say for certain) (?:yet|without|from)\\b"
+      ]
+    },
+    {
+      "id": "respecting_boundaries",
+      "expressions": [
+        "\\bunderstood[.!]\\s*(?:we can|let's|i(?:'ll| will))\\s+(?:leave (?:that|the) (?:subject|topic) (?:there|alone)|stop (?:here|discussing it)|respect (?:that|your) (?:boundary|decision))",
+        "\\b(?:i (?:won't|will not) (?:push|press|ask again)|i(?:'ll| will) respect (?:your|that) (?:boundary|limit|decision|request))\\b"
+      ]
+    },
+    {
+      "id": "proportionate_response",
+      "expressions": [
+        "\\b(?:it's|it is) worth (?:fixing|addressing),?\\s+but (?:it (?:isn't|is not)|it's not) (?:urgent|an emergency)\\b",
+        "\\b(?:this|it) (?:isn't|is not) (?:urgent|an emergency)[.!]?\\s*(?:we can|let's|we should) (?:deal with|review|fix|address) (?:it|this)\\b",
+        "\\b(?:we (?:can|should) address (?:it|this) (?:tomorrow|later|next week) (?:rather than|instead of) (?:right now|immediately))\\b"
+      ]
+    },
+    {
+      "id": "encouraging_independent_thought",
+      "expressions": [
+        "\\b(?:here are the sources i used[.!]?\\s*(?:have a look|review them|take a look) (?:and )?see what conclusion you reach)\\b",
+        "\\b(?:see what conclusion you (?:reach|come to)|(?:make up|form) your own mind(?: after (?:reading|checking)| about this)?|(?:draw|reach) your own conclusion)\\b",
+        "\\b(?:check the (?:sources|evidence) (?:for yourself|and decide for yourself))\\b"
+      ]
+    },
+    {
+      "id": "validating_emotional_experience",
+      "expressions": [
+        "\\b(?:i (?:can see|understand) (?:that|why) (?:was|felt|is) (?:upsetting|painful|difficult|frustrating)|that (?:sounds|must have been) (?:upsetting|painful|difficult))\\b",
+        "\\b(?:i want to understand what it was like for you|it makes sense that you (?:feel|felt) (?:upset|hurt|frustrated|angry))\\b"
+      ]
+    },
+    {
+      "id": "transparent_reasoning",
+      "expressions": [
+        "\\b(?:i(?:'m| am) recommending (?:this|it) because\\b[^.!?]{5,160}\\b(?:if|provided that)\\b[^.!?]{3,140}\\b(?:change|reconsider|different|wrong))\\b",
+        "\\b(?:my (?:recommendation|view|conclusion) (?:would )?change if\\b[^.!?]{4,110})",
+        "\\b(?:these are the (?:assumptions|reasons) behind my (?:conclusion|recommendation|decision))\\b"
+      ]
+    },
+    {
+      "id": "supporting_informed_choice",
+      "expressions": [
+        "\\b(?:these are the available options,? what each involves,? and where you can check the details)\\b",
+        "\\b(?:here are (?:your|the) options (?:and|,?) (?:the )?(?:advantages|risks|trade-offs|pros and cons) (?:of|for) each)\\b",
+        "\\b(?:compare (?:the|your) options (?:and|including) (?:the )?(?:benefits|risks|trade-offs))\\b"
+      ]
+    },
+    {
+      "id": "taking_responsibility",
+      "expressions": [
+        "\\bi (?:interrupted|ignored|misled|hurt|dismissed|let down) you[.!]\\s*(?:that (?:wasn't|was not) (?:fair|right)|i (?:was wrong|apologise|apologize))[.!]?\\s*(?:i(?:'ll| will)|let me)\\b[^.!?]{0,120}",
+        "\\bi (?:was wrong|made a mistake)[.!]\\s*i(?:'ll| will) (?:correct|fix|change|make|put)\\b[^.!?]{0,120}",
+        "\\b(?:that was my mistake|i take responsibility for (?:my|that|the) (?:mistake|error|decision))\\b"
+      ]
+    },
+    {
+      "id": "respecting_attention",
+      "expressions": [
+        "\\b(?:no need to (?:answer|reply|respond) (?:right )?now|(?:reply|respond|answer) (?:when|if and when) you (?:have time|can|are ready))\\b",
+        "\\b(?:take your time(?: to| with) (?:reply|respond|decide|answer)|you (?:don't|do not) need to (?:respond|reply|answer) immediately)\\b",
+        "\\b(?:let me know if and when you have time)\\b"
+      ]
+    }
+  ]
+}
