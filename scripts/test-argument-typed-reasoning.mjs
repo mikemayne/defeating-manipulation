@@ -19,6 +19,40 @@ for(const [p,c] of quantPositive){
  assert.equal(v?.label,'contradictory_claims',`quantifier failed: ${p} => ${c}`);
  assert.equal(v.chain.at(-1).operation,'universal_existential_conflict');
 }
+const directQuantifierPositives=[
+ ['The final attendance sheet shows nobody from the design team attended the briefing.',
+  'One design-team member was present at that briefing.'],
+ ['The official board record shows the recorded vote was unanimously against the amendment.',
+  'One board member voted for the amendment in that recorded vote.'],
+ ['The published minutes record zero votes to abstain.',
+  'Several members abstained from the recorded vote.']
+];
+for(const [p,c] of directQuantifierPositives)
+ assert.equal(inferQuantifierRelation(p,c)?.label,'contradictory_claims',
+  'Direct source-grounded quantifier conflict: '+p+' / '+c);
+const directQuantifierNegatives=[
+ ['The final attendance sheet shows nobody from the design team attended the morning briefing.',
+  'One design-team member was present at the afternoon briefing.'],
+ ['The final attendance sheet shows nobody from the design team attended the briefing.',
+  'One marketing-team member was present at that briefing.'],
+ ['The final attendance sheet shows nobody from the design team attended the briefing.',
+  'A design-team member might have been present at that briefing.'],
+ ['The minutes show a recorded vote was unanimously against the first amendment.',
+  'One board member voted for the second amendment.'],
+ ['The official record shows the vote was unanimously against the amendment.',
+  'One board member voted against the amendment.'],
+ ['The published minutes record zero votes to abstain.',
+  'Several members abstained from a different vote.'],
+ ['The provisional minutes record zero votes to abstain.',
+  'Several members abstained from the recorded vote.'],
+ ['The published minutes record zero votes to abstain.',
+  'Several members might have abstained from the recorded vote.'],
+ ['The published minutes record zero votes to abstain, except one corrected page.',
+  'Several members abstained from the recorded vote.']
+];
+for(const [p,c] of directQuantifierNegatives)
+ assert.equal(inferQuantifierRelation(p,c),null,
+  'Direct quantifier scope mismatch must abstain: '+p+' / '+c);
 const quantNegatives=[
  ['Every valve in section P was locked during the drill.','One valve in section Q was unlocked during the drill.'],
  ['Every wheel was secured on Monday.','One wheel was not secured on Tuesday.'],
