@@ -201,7 +201,24 @@ function failureReport(data) {
    lines.push("Premise-to-conclusion assessments:");
    for (const a of item.argumentAssessments)
     lines.push("  " + a.label + " | Score: " + a.score +
-     " | Premises: " + a.premise + " | Conclusion: " + a.conclusion);
+     " | Premises: " + a.premise + " | Conclusion: " + a.conclusion +
+     (a.decisivePremise ? " | Decisive evidence: " + a.decisivePremise : "") +
+     (a.basis ? " | Basis: " + a.basis : ""));
+  }
+  if (item.argumentDiagnostics?.length) {
+   const fmt = n => typeof n === "number" && Number.isFinite(n) ? n.toFixed(3) : "-";
+   lines.push("NLI evidence diagnostics (C=contradiction, N=neutral, E=entailment):");
+   for (const a of item.argumentDiagnostics) {
+    lines.push("  Conclusion: " + a.conclusion + " | Verdict: " + (a.verdict || "(abstained)"));
+    for (const x of a.comparisons) {
+     const f = x.forward || {}, r = x.reverse || {};
+     lines.push("    " + x.kind + (x.repeated ? " [exact repetition]" : "") +
+      " | C " + fmt(f.contradiction) + " / N " + fmt(f.neutral) +
+      " / E " + fmt(f.entailment) +
+      (x.reverse ? " | Reverse C " + fmt(r.contradiction) : "") +
+      " | Evidence: " + x.premise);
+    }
+   }
   }
  }
  return lines.join("\n");
