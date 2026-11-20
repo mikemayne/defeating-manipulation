@@ -2,6 +2,8 @@
 // JS owns all calculations. Unresolved object, time or unit alignment abstains.
 // This module never accesses web content, changes source offsets, or guesses quantities.
 
+import { escapeRegexLiteral } from "./argument-safety.mjs";
+
 const WORDS = Object.freeze({zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90,hundred:100,thousand:1000});
 const DIGIT = String.raw`(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)`;
 const WRITTEN = String.raw`(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand)(?:[ -](?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand))*`;
@@ -146,8 +148,8 @@ function pairedValues(p,c){
  if(!ua||!ub||ua!==ub)return null;
  const x=alternativeName(a),y=alternativeName(b);
  if(!x||!y||x===y)return null;
- const qa=x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
- const qb=y.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+ const qa=escapeRegexLiteral(x),qb=escapeRegexLiteral(y);
+ if(qa===null||qb===null)return null;
  if(!new RegExp('\\b'+qa+'\\b','i').test(c)||!new RegExp('\\b'+qb+'\\b','i').test(c))return null;
  const greater=/\b(?:more|higher|greater|larger|longer|exceeded|exceeds|above)\b/i;
  const fewer=/\b(?:fewer|lower|less|shorter|below)\b/i;
