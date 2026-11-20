@@ -289,7 +289,8 @@ export function combineArgumentEvidence(scored, conclusionText = "") {
   const matches = classified.filter(item => item.verdict?.label === type);
   if (matches.length) {
    const winner = matches.sort((a, b) => b.verdict.score - a.verdict.score)[0];
-   return { ...winner.verdict, evidenceText: winner.text, basis: winner.kind };
+   return { ...winner.verdict, evidenceText: winner.text, basis: winner.kind,
+    status: winner.evidenceStatus || "model_verdict" };
   }
  }
  // Preserve a separate reason when the conclusion is unassessed.
