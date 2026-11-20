@@ -12,7 +12,12 @@
         "word choice"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "This disgraceful, outrageous proposal is a shameful betrayal of ordinary citizens.",
+        "Only an utterly reckless fool would defend such a grotesque waste of public money.",
+        "The scandalous scheme is an appalling insult to every decent resident."
+      ]
     },
     {
       "id": "ad_hominem",
@@ -73,7 +78,10 @@
         "Someone says, 'We should reduce the amount of homework students get.' The reply is, 'So you think students should never have to do any homework and should just play around all day?'",
         "'I think the policy needs some changes.' 'So you want to scrap the whole thing?'",
         "'We should be more careful about spending.' 'So you want to stop funding everything?'",
-        "'The evidence does not prove that conclusion.' 'So you're saying the evidence is completely worthless?'"
+        "'The evidence does not prove that conclusion.' 'So you're saying the evidence is completely worthless?'",
+        "You asked for a smaller budget, so obviously you want to abolish every public service.",
+        "You want safer cycling routes, so you must think nobody should be allowed to drive.",
+        "You suggest reviewing one policy, which means you want to discard all existing rules."
       ],
       "reader_effect": "Can make a position appear unreasonable by substituting an exaggerated version for what was actually said, then directing criticism at the substitute."
     },
@@ -88,7 +96,12 @@
         "urgency"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "Unless you sign up tonight, your loved ones could face terrible consequences and you will regret it forever.",
+        "Vote for our plan now or your whole neighbourhood will be in grave danger.",
+        "If you do not switch suppliers immediately, your family will face a frightening disaster."
+      ]
     },
     {
       "id": "bandwagon",
@@ -117,7 +130,12 @@
         "omission"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "These five successful trials prove the programme works; there is no need to mention the other twelve that failed.",
+        "Our report highlights the profitable stores but leaves out the branches that are losing money.",
+        "Look only at the months when the project improved; the remaining results do not matter."
+      ]
     },
     {
       "id": "out_of_context_quote",
@@ -129,7 +147,12 @@
         "context"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "She said the scheme was 'a success', so that settles it, even though she actually said 'a success only on paper'.",
+        "Print the official's words 'the bridge is safe' but leave off 'only while the road is closed'.",
+        "The scientist said 'there is no risk'—omit the rest of the sentence, 'under the conditions tested'."
+      ]
     },
     {
       "id": "whataboutism",
@@ -141,7 +164,12 @@
         "tu quoque"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "You ask why our council missed its targets, but what about the failures in the neighbouring town?",
+        "Instead of explaining this company's safety record, let's talk about the mistakes made by its competitors.",
+        "Why criticise our rising fees when the previous management wasted money as well?"
+      ]
     },
     {
       "id": "false_authority",
@@ -153,7 +181,12 @@
         "credentials"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "A famous television presenter says this engine is safe, so the engineering concerns must be nonsense.",
+        "The star athlete recommends the medicine, which proves the clinical experts are wrong.",
+        "A popular singer has endorsed the bridge design, so you can trust the structural calculations."
+      ]
     },
     {
       "id": "conspiracy_framing",
@@ -165,7 +198,12 @@
         "unfalsifiability"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "Every delay is further proof that an unnamed secret committee is controlling the entire process behind the scenes.",
+        "The absence of any documents shows how thoroughly the shadow network has hidden its plan.",
+        "Those ordinary scheduling changes were surely arranged by invisible organisers; their silence proves the cover-up."
+      ]
     },
     {
       "id": "repetition",
@@ -177,7 +215,12 @@
         "familiarity"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "The plan is a disaster. A disaster. Everyone must remember that this plan is a disaster.",
+        "Trust this claim, trust this claim, trust this claim; hearing it again should make you believe it.",
+        "They are unreliable, they are unreliable, they are unreliable: keep repeating it until people accept it."
+      ]
     },
     {
       "id": "priming",
@@ -189,7 +232,12 @@
         "context"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "Before you read the proposal, remember the images of corruption and waste; now consider who deserves your trust.",
+        "Think of chaos, failure and danger first, and then judge the new management's announcement.",
+        "Picture a frightening accident before deciding whether this ordinary equipment upgrade is acceptable."
+      ]
     },
     {
       "id": "presupposition",
@@ -201,7 +249,12 @@
         "question framing"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "When did the committee finally decide to stop hiding its failures?",
+        "Why does your department continue ignoring the residents it has clearly betrayed?",
+        "How long has the director been quietly deceiving everyone about the accounts?"
+      ]
     },
     {
       "id": "false_balance",
@@ -213,7 +266,12 @@
         "evidence"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "Give the unsupported rumour and the independently replicated findings exactly equal weight, as though the evidence were comparable.",
+        "We must present a single unverified accusation as just as credible as the results of dozens of controlled studies.",
+        "The report treats the unsupported speculation as equally established alongside the audited figures."
+      ]
     },
     {
       "id": "anecdotal_evidence",
@@ -225,7 +283,12 @@
         "generalisation"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "My neighbour's shop did well after the change, so the entire country's shops must be thriving.",
+        "One person I know disliked the programme; therefore everyone must feel the same way.",
+        "A friend bought the product and got lucky, which shows it always works for customers."
+      ]
     },
     {
       "id": "slippery_slope",
@@ -237,7 +300,12 @@
         "prediction"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "If we approve a single exception today, every restriction will disappear and the entire programme will collapse.",
+        "One change to the schedule will cause every deadline to be missed, and soon the project will fail.",
+        "Allow one flexible day and before long nobody will attend, the staff will leave and the centre will close."
+      ]
     },
     {
       "id": "scapegoating",
@@ -249,7 +317,12 @@
         "group framing"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "All the problems with the town's budget are the fault of those newcomers; no other explanation matters.",
+        "Blame every delay in the service on the temporary workers, not any of the management decisions.",
+        "This single group is responsible for the whole housing crisis, and nobody else shares any responsibility."
+      ]
     },
     {
       "id": "motte_bailey",
@@ -261,7 +334,12 @@
         "equivocation"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "I said we should ban every competing view. When challenged, I only meant that we should encourage respectful debate.",
+        "The technology will solve every problem. If you object, my point is merely that it might help with one task.",
+        "They should close every local branch. When challenged about access, they say they only proposed a review of opening hours."
+      ]
     },
     {
       "id": "gish_gallop",
@@ -273,7 +351,12 @@
         "debate"
       ],
       "status": "starter",
-      "references": []
+      "references": [],
+      "examples": [
+        "Explain these twenty allegations at once: the budget, the road, the clock, the invoice, the email, the permits, the survey, and a dozen more.",
+        "Here are thirty unrelated objections in a row; until you disprove every one, my claim must be right.",
+        "Answer all of these forty accusations immediately, and do not ask for time to check their sources."
+      ]
     },
     {
       "id": "allegation_laundering",
@@ -399,6 +482,11 @@
       "references": [
         "da2020",
         "da2019"
+      ],
+      "examples": [
+        "Everyone in the district supports the scheme, of course, even though no representative survey has been conducted.",
+        "The public is unanimously behind this project; we have no figures but there can be no doubt.",
+        "The whole community agrees with us, and anyone asking for polling is simply avoiding the truth."
       ]
     },
     {
@@ -424,6 +512,11 @@
       "references": [
         "da2020",
         "da2019"
+      ],
+      "examples": [
+        "If you truly cared about your neighbours, you would sign this petition without questioning it.",
+        "Refusing the request would prove you do not love your family enough to help them.",
+        "Only a heartless colleague would ask for details before giving us their money."
       ]
     },
     {
@@ -498,6 +591,11 @@
       "reader_effect": "Can make a claim appear impossible to establish or allow a preferred conclusion to survive contrary evidence.",
       "references": [
         "da2019"
+      ],
+      "examples": [
+        "First I demanded two independent reports; now you have provided them, I require ten before I will accept your conclusion.",
+        "I said the product had to pass the first test, but since it passed, I now insist on six additional tests.",
+        "You met the original target, but I have decided the target no longer counts and you must exceed it twice over."
       ]
     },
     {
@@ -523,6 +621,11 @@
       "references": [
         "tohidi2025",
         "da2019"
+      ],
+      "examples": [
+        "When our candidate makes this mistake it is understandable, but when theirs makes exactly the same mistake it is unforgivable.",
+        "The same conduct deserves praise for my friends and punishment for our opponents.",
+        "Our reports need no independent review, while the other team's identical figures must be audited three times."
       ]
     },
     {
@@ -548,6 +651,11 @@
       "references": [
         "da2019",
         "da2020"
+      ],
+      "examples": [
+        "Before hearing the scientist's findings, remember that people like her are dishonest and cannot be trusted.",
+        "Whatever the witness tells you, keep in mind that he is a troublemaker.",
+        "Do not even listen to that engineer's calculations; people from that company always lie."
       ]
     },
     {
@@ -845,7 +953,12 @@
       ],
       "example": "Illustrative example: An interviewee says that photographs of a deceased person appear to show features that warrant investigation. The interviewer replies that the interviewee cannot know what happened because they did not personally see the body, without addressing what the photographs show.",
       "reader_effect": "Can divert attention from the content and limits of the evidence, making a relevant observation appear inadmissible simply because the speaker was not an eyewitness.",
-      "references": []
+      "references": [],
+      "examples": [
+        "Unless you saw the incident with your own eyes, you cannot draw any conclusion from the recorded footage.",
+        "You have not personally examined the damaged structure, therefore the inspection photographs cannot tell you anything.",
+        "If you were not there in person, no amount of independent documentation allows you to form an opinion."
+      ]
     },
     {
       "id": "invoking_an_imagined_audience",
@@ -873,7 +986,10 @@
       "examples": [
         "The jury are going to hate that.",
         "The press will laugh at your argument.",
-        "Your colleagues will be furious when they hear what you said."
+        "Your colleagues will be furious when they hear what you said.",
+        "The editors will be furious with that suggestion, so you should keep it to yourself.",
+        "The board would laugh at your proposal, so there is no point raising it.",
+        "The entire committee is going to hate your decision, whether or not anyone has asked them."
       ]
     },
     {
@@ -929,7 +1045,12 @@
         "The authority's fame or position is treated as sufficient evidence.",
         "No relevant expertise or independent evidence is provided."
       ],
-      "example": "This product must work because a famous actor recommends it."
+      "example": "This product must work because a famous actor recommends it.",
+      "examples": [
+        "A renowned comedian backs the engineering scheme, so it must be technically sound.",
+        "The famous actor endorsed the treatment, therefore the medical evidence is settled.",
+        "It has to be scientifically correct because a popular influencer recommends it."
+      ]
     },
     {
       "id": "post_hoc",
@@ -947,7 +1068,12 @@
         "A result is attributed to something that happened beforehand without evidence of a causal link.",
         "A coincidence or temporal sequence is treated as proof of cause."
       ],
-      "example": "I wore my lucky socks and we won, so my socks caused the victory."
+      "example": "I wore my lucky socks and we won, so my socks caused the victory.",
+      "examples": [
+        "Sales rose after our new logo appeared, so changing the logo must have caused the increase.",
+        "The meeting was followed by a sunny weekend; therefore the meeting caused the weather to improve.",
+        "The school changed its uniforms just before test scores rose, so the uniforms must be the reason."
+      ]
     },
     {
       "id": "red_herring",
@@ -965,7 +1091,12 @@
         "A response changes the subject instead of addressing the question.",
         "An unrelated problem is raised as a reason not to discuss the original issue."
       ],
-      "example": "Why worry about pollution when there are people who don't have jobs?"
+      "example": "Why worry about pollution when there are people who don't have jobs?",
+      "examples": [
+        "You asked about the hospital's accounts; why not talk instead about the terrible state of the train station?",
+        "Why discuss whether the data is correct when the roads in the city are full of potholes?",
+        "We should stop questioning the product's defects and focus on how rude the journalists have been."
+      ]
     },
     {
       "id": "appeal_to_emotion",
@@ -1001,7 +1132,12 @@
         "A criticism is dismissed with 'you do it too'.",
         "The critic's conduct is substituted for an answer to the substance of the criticism."
       ],
-      "example": "You can't tell me to stop smoking when you smoke yourself."
+      "example": "You can't tell me to stop smoking when you smoke yourself.",
+      "examples": [
+        "You say we should save energy, but you drove here today, so your advice is invalid.",
+        "How can you criticise our spending when you bought an expensive car?",
+        "You made the same mistake last year, therefore your complaint today does not count."
+      ]
     },
     {
       "id": "appeal_to_ignorance",
@@ -1018,7 +1154,12 @@
         "A claim is said to be true because nobody has disproved it.",
         "A claim is said to be false solely because nobody has proved it."
       ],
-      "example": "Nobody has proved that ghosts don't exist, so they must be real."
+      "example": "Nobody has proved that ghosts don't exist, so they must be real.",
+      "examples": [
+        "Nobody has demonstrated that the device is dangerous, so it must be perfectly safe.",
+        "The claim has not been disproved, therefore it is unquestionably true.",
+        "No one can prove the rumour is false, which means it must be a fact."
+      ]
     },
     {
       "id": "false_equivalence",
@@ -1054,7 +1195,12 @@
         "Only supporting examples are presented despite relevant contrary evidence.",
         "A conclusion is based on a small selected set of cases without explaining how they were chosen."
       ],
-      "example": "This diet works because I found three people online who lost weight using it."
+      "example": "This diet works because I found three people online who lost weight using it.",
+      "examples": [
+        "The three favourable surveys prove the campaign is working; ignore the twenty that disagree.",
+        "These two positive results settle the issue, even though all the remaining measurements are negative.",
+        "Only show the studies supporting the product and leave the contrary studies out of the report."
+      ]
     }
   ]
 }

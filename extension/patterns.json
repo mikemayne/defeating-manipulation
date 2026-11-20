@@ -6,7 +6,8 @@
         "\\b(?:your )?(?:argument|claim|point|reasoning) (?:is|must be) (?:wrong|false|invalid) because (?:you are|you're) (?:an? )?(?:idiot|moron|stupid|ignorant)\\b",
         "\\b(?:you're|you are) (?:an? )?(?:idiot|moron|fool), so (?:your|that) (?:argument|claim|point)\\b",
         "\\byour (?:opinion|argument|claim|view) (?:about .{1,80} )?(?:doesn't matter|does not matter|is worthless|doesn't count|does not count) because you (?:didn't|did not|never|don't|do not|haven't|have not|aren't|are not)\\b",
-        "\\b(?:don't|do not) listen to (?:him|her|them|his|her|their) (?:argument|opinion|point|claim)\\b.{0,80}\\b(?:uneducated|ignorant|stupid|idiot)\\b"
+        "\\b(?:don't|do not) listen to (?:him|her|them|his|her|their) (?:argument|opinion|point|claim)\\b.{0,80}\\b(?:uneducated|ignorant|stupid|idiot)\\b",
+        "\\b(?:he|she|they|you)\\s+(?:is|are|'s|'re)\\s+(?:an?\\s+)?(?:idiot|moron|fool)\\b[^.!?]{0,75}\\b(?:so|therefore)\\b[^.!?]{0,90}\\b(?:argument|claim|opinion|view)\\b[^.!?]{0,50}\\b(?:worthless|invalid|wrong|false|nonsense)\\b"
       ]
     },
     {
@@ -14,7 +15,8 @@
       "expressions": [
         "\\byou want .{1,100}, so you (?:clearly|obviously) (?:don't|do not) care about [^.!?]{1,80}\\b",
         "\\byou (?:want|think|believe|are saying) .{0,100}\\bso you (?:obviously|clearly) (?:want|think|believe) .{0,100}\\b(?:no freedom|nothing|never|always|everything)\\b",
-        "\\bso you (?:think|want|believe|are saying) .{0,120}\\b(?:never|nothing|all|every|everything|completely|at all)\\b"
+        "\\bso you (?:think|want|believe|are saying) .{0,120}\\b(?:never|nothing|all|every|everything|completely|at all)\\b",
+        "\\byou (?:want|support|propose|recommend|suggest|asked for)\\b[^.!?]{5,110}\\bso (?:you )?(?:clearly|obviously)\\b[^.!?]{0,90}\\b(?:all|every|never|nothing|none|no|entire|completely)\\b"
       ]
     },
     {
@@ -26,14 +28,18 @@
         "\\b(?:everyone else|the majority|most people) (?:agrees?|supports?|believes?|thinks?)\\b.{0,90}\\b(?:so|therefore|which proves)\\b",
         "\\b(?:everyone|everybody|most people|the majority|everyone else) (?:is|are) (?:doing|using|buying|supporting) .{1,100}\\bso (?:you|we) (?:should|must|have to)\\b",
         "\\b(?:most people|the majority|millions of people) (?:believe|agree|support|say|think) .{1,100}\\b(?:therefore|so|which (?:means|proves))\\b.{0,100}\\b(?:true|correct|right|must|should|best|better)\\b",
-        "\\b(?:it's|it is) (?:popular|widely believed|what everyone believes),? so (?:it|that) (?:must|has to) be (?:true|right|correct|good)\\b"
+        "\\b(?:it's|it is) (?:popular|widely believed|what everyone believes),? so (?:it|that) (?:must|has to) be (?:true|right|correct|good)\\b",
+        "\\b(?:nearly|almost)\\s+everyone\\b[^.!?]{0,140}\\b(?:so|therefore|thus)\\b[^.!?]{0,110}\\b(?:must|should|reliable|right|correct|true)\\b",
+        "\\bmillions of (?:customers|users|people|voters|residents)\\b[^.!?]{0,130}\\b(?:so|therefore|thus)\\b[^.!?]{0,100}\\b(?:must|should)\\b",
+        "\\bthe majority of [^.!?]{4,100}\\b(?:prefer|agree|support|believe|use|buy)\\b[^.!?]{0,110}\\b(?:so|therefore|thus)\\b[^.!?]{0,100}\\b(?:should|must|right|correct|true)\\b"
       ]
     },
     {
       "id": "slippery_slope",
       "expressions": [
         "\\bif we (?:allow|let|permit|start) .{0,100}\\b(?:soon|eventually|before long) .{0,120}\\b(?:collapse|fail|disaster|nobody|everyone|completely)\\b",
-        "\\bone (?:small )?step will inevitably lead to .{0,100}\\b(?:disaster|collapse|chaos)\\b"
+        "\\bone (?:small )?step will inevitably lead to .{0,100}\\b(?:disaster|collapse|chaos)\\b",
+        "\\bif\\b[^.!?]{5,130}\\b(?:one|a single)\\b[^.!?]{0,90}\\b(?:every|all)\\b[^.!?]{0,105}\\b(?:collapse|fail|vanish|chaos|disaster|ruin|disappear)\\b"
       ]
     },
     {
@@ -45,7 +51,8 @@
         "\\b(?:we can|you can|we must|you must) either .{1,110}\\bor\\b.{1,110}\\b(?:collapse|disaster|fail|ruin|destroyed)\\b",
         "\\b(?:either you|you either|either we|we either) .{1,120}\\bor .{1,120}\\b(?:no other choice|no other option|no alternative|no middle ground)\\b",
         "\\b(?:there (?:are|is)|you have|we have) (?:only|just) two (?:choices|options|possibilities)\\b",
-        "\\b(?:accept|support|agree with) .{1,90}\\bor (?:watch|face|suffer|risk) .{1,90}\\b(?:collapse|ruin|disaster|failure)\\b"
+        "\\b(?:accept|support|agree with) .{1,90}\\bor (?:watch|face|suffer|risk) .{1,90}\\b(?:collapse|ruin|disaster|failure)\\b",
+        "\\beither\\b[^.!?]{8,150}\\bor\\b[^.!?]{5,100}\\b(?:entire|whole|all|everything)\\b[^.!?]{0,70}\\b(?:fail|collapse|ruin|disaster|destroyed|fall apart)\\b"
       ]
     },
     {
@@ -67,7 +74,8 @@
       "id": "appeal_to_authority",
       "expressions": [
         "\\bthis (?:product|treatment|claim|idea) must work because .{0,60}\\b(?:famous actor|celebrity|influencer) (?:recommends?|endorses?) it\\b",
-        "\\b(?:it must be true|the claim must be true) because (?:a )?(?:famous|well-known) (?:actor|celebrity|influencer) says so\\b"
+        "\\b(?:it must be true|the claim must be true) because (?:a )?(?:famous|well-known) (?:actor|celebrity|influencer) says so\\b",
+        "\\b(?:famous|popular|well-known)\\b[^.!?]{0,35}\\b(?:film star|actor|celebrity|singer|influencer|athlete)\\b[^.!?]{0,110}\\b(?:so|therefore|thus)\\b[^.!?]{0,95}\\b(?:must be|proves?|definitely|scientifically)\\b"
       ]
     },
     {
@@ -75,7 +83,9 @@
       "expressions": [
         "\\bi wore .{0,50}\\band we won,? so .{0,50}\\b(?:caused|made) (?:the )?victory\\b",
         "\\bafter .{1,80}\\btherefore .{1,80}\\b(?:caused|because of)\\b",
-        "\\bthis happened after that,? so that must have caused it\\b"
+        "\\bthis happened after that,? so that must have caused it\\b",
+        "\\b(?:rose|grew|fell|improved|declined|increased|decreased|changed)\\b[^.!?]{0,30}\\bafter\\b[^.!?]{4,125}\\b(?:so|therefore|thus)\\b[^.!?]{0,90}\\b(?:caused|responsible|because of)\\b",
+        "\\b(?:after)\\b[^.!?]{5,100}\\b(?:so|therefore)\\b[^.!?]{0,120}\\b(?:must have|certainly)\\s+caused\\b"
       ]
     },
     {
@@ -89,7 +99,8 @@
       "id": "appeal_to_emotion",
       "expressions": [
         "\\byou should (?:give|grant|award) me .{0,80}\\bbecause i'?ve had .{0,60}\\b(?:difficult|terrible|hard) week\\b",
-        "\\byou must agree because .{0,50}\\b(?:i'?m begging|i'?m suffering|i had a terrible|you'?ll break my heart)\\b"
+        "\\byou must agree because .{0,50}\\b(?:i'?m begging|i'?m suffering|i had a terrible|you'?ll break my heart)\\b",
+        "\\byou (?:must|should)\\b[^.!?]{4,100}\\bbecause\\b[^.!?]{0,120}\\b(?:break [^.!?]{0,35}heart|make [^.!?]{0,35}cry|break [^.!?]{0,35}family)\\b"
       ]
     },
     {
@@ -97,7 +108,8 @@
       "expressions": [
         "\\byou (?:can't|cannot) tell me to .{0,80}\\bwhen you .{0,50}\\b(?:yourself|too)\\b",
         "\\bwhy should i listen to you when you (?:do|did) the same thing\\b",
-        "\\byou do it too\\b"
+        "\\byou do it too\\b",
+        "\\byou (?:criticise|criticize|condemn|accuse|blame)\\b[^.!?]{5,110}\\bbut you\\b[^.!?]{4,110}\\b(?:so|therefore)\\b[^.!?]{0,85}\\b(?:criticism|argument|point|complaint)\\b[^.!?]{0,60}\\b(?:invalid|worthless|wrong|doesn't count|does not count)\\b"
       ]
     },
     {
@@ -105,7 +117,10 @@
       "expressions": [
         "\\bnobody has proved (?:that )?.{1,100}\\bso (?:it|they) must be (?:true|real)\\b",
         "\\bno one has disproved .{1,80}\\bso .{1,50}\\bmust be (?:true|real)\\b",
-        "\\bthere is no evidence that it is false,? so it is true\\b"
+        "\\bthere is no evidence that it is false,? so it is true\\b",
+        "\\b(?:no one|nobody)\\s+(?:has|can)\\s+(?:proved?|shown|demonstrated)\\b[^.!?]{4,100}\\b(?:unsafe|harmful|dangerous)\\b[^.!?]{0,65}\\b(?:so|therefore)\\b[^.!?]{0,65}\\b(?:safe|harmless|fine)\\b",
+        "\\b(?:not|never) (?:been )?(?:proven|proved|shown|demonstrated)\\b[^.!?]{0,80}\\b(?:so|therefore)\\b[^.!?]{0,60}\\b(?:must|certainly|definitely)\\b",
+        "\\b(?:has|have|is)\\s+not (?:been )?(?:proved?|proven|disproved|shown|demonstrated)\\b[^.!?]{0,80}\\b(?:so|therefore|thus)\\b[^.!?]{0,65}\\b(?:must|certainly|definitely)\\s+be\\s+(?:true|false|safe|real|correct)\\b"
       ]
     },
     {
@@ -119,7 +134,72 @@
       "id": "cherry_picking",
       "expressions": [
         "\\bthis (?:diet|method|product|treatment) works because i found .{1,50}\\b(?:people|reviews|examples) .{0,60}\\b(?:online|on the internet)\\b",
-        "\\bhere are (?:three|four|five) examples proving .{1,80}\\b(?:ignore|excluding|despite) (?:the )?(?:other|contrary) evidence\\b"
+        "\\bhere are (?:three|four|five) examples proving .{1,80}\\b(?:ignore|excluding|despite) (?:the )?(?:other|contrary) evidence\\b",
+        "\\b(?:proves?|shows?|confirms?|demonstrates?)\\b[^.!?]{0,110}[,;]\\s*(?:just\\s+)?(?:ignore|discount|exclude|leave out)\\b[^.!?]{0,70}\\b(?:other|remaining|contrary|conflicting|negative|opposing)\\b",
+        "\\b(?:ignore|discount|exclude|leave out)\\b[^.!?]{0,55}\\b(?:other|remaining|contrary|conflicting|negative|opposing)\\b[^.!?]{0,120}\\b(?:proves?|shows?|confirms?)\\b"
+      ]
+    },
+    {
+      "id": "presupposition",
+      "expressions": [
+        "\\b(?:when|why|how long)\\s+(?:will|did|have|does|has)\\b[^?!]{0,120}\\b(?:finally|still|continue|stop)\\b[^?!]{0,100}\\b(?:admit|conceal|hide|lie|deceive|cover up)\\b"
+      ]
+    },
+    {
+      "id": "firsthand_evidence_requirement",
+      "expressions": [
+        "\\bunless you (?:personally|actually|yourself)\\b[^.!?]{5,140}\\byou (?:cannot|can't|could not|couldn't)\\b[^.!?]{0,100}\\b(?:conclusion|judge|determine|know|believe)\\b"
+      ]
+    },
+    {
+      "id": "manufactured_consensus",
+      "expressions": [
+        "\\b(?:entire|whole)\\s+(?:country|district|community|nation|population|town)\\b[^.!?]{0,65}\\b(?:agrees?|supports?|believes?|backs?)\\b[^.!?]{0,115}\\b(?:no|without)\\b[^.!?]{0,75}\\b(?:survey|poll|polling|evidence|figures)\\b"
+      ]
+    },
+    {
+      "id": "invoking_an_imagined_audience",
+      "expressions": [
+        "\\b(?:the|your|our)\\s+(?:regulators|board|press|committee|editors|jury|judges|public|audience|voters|experts)\\b[^.!?]{0,30}\\b(?:are going to|will|would)\\b[^.!?]{0,40}\\b(?:hate|laugh at|condemn|mock|reject)\\b[^.!?]{0,90}\\b(?:so|therefore)\\b[^.!?]{0,60}\\b(?:should|must|keep quiet|stop)\\b"
+      ]
+    },
+    {
+      "id": "poisoning_the_well",
+      "expressions": [
+        "\\bbefore (?:you|anyone|we)\\s+(?:listen to|hear|believe|trust)\\b[^.!?]{5,130}\\b(?:cannot|can't|never)\\s+be\\s+trusted\\b",
+        "\\bbefore (?:you|anyone|we)\\s+(?:listen to|hear|believe|trust)\\b[^.!?]{5,130}\\b(?:dishonest|liars?|unreliable)\\b"
+      ]
+    },
+    {
+      "id": "whataboutism",
+      "expressions": [
+        "\\bwhy (?:question|criticise|criticize|discuss|worry about)\\b[^.!?]{8,115}\\bwhen\\b[^.!?]{0,105}\\b(?:other|another|someone else|competitor)\\b"
+      ]
+    },
+    {
+      "id": "double_standards",
+      "expressions": [
+        "\\b(?:forgive|forgiven|excuse|excused)\\b[^.!?]{0,120}\\bbut\\b[^.!?]{0,105}\\b(?:punish|punishment|fired|dismiss|sanction)\\b[^.!?]{0,110}\\b(?:same|identical)\\b",
+        "\\b(?:same|identical)\\s+(?:mistake|error|conduct|behaviour|behavior)\\b[^.!?]{0,110}\\b(?:but|while)\\b[^.!?]{0,90}\\b(?:punish|forgive|excuse)\\b",
+        "\\b(?:forgive|forgiven|excuse|excused)\\b[^.!?]{0,110}\\b(?:same|identical)\\b[^.!?]{0,65}\\bbut\\b[^.!?]{0,110}\\b(?:punish|punished|punishment|sanction|dismiss)\\b"
+      ]
+    },
+    {
+      "id": "moving_goalposts",
+      "expressions": [
+        "\\b(?:i|we)\\s+(?:said|asked|demanded|required)\\b[^.!?]{5,135}\\b(?:now|but now|since)\\b[^.!?]{0,135}\\b(?:demand|require|need|insist)\\b[^.!?]{5,95}\\b(?:more|additional|another|hundred|ten)\\b"
+      ]
+    },
+    {
+      "id": "guilt_appeal",
+      "expressions": [
+        "\\bif you (?:really|truly|genuinely)\\s+(?:cared? about|loved?)\\b[^.!?]{6,90}\\byou (?:would|should|must)\\b[^.!?]{8,120}\\b(?:without|no questions|immediately|right now|stop questioning|agree|approve|support)\\b"
+      ]
+    },
+    {
+      "id": "scapegoating",
+      "expressions": [
+        "\\b(?:every|all)\\b[^.!?]{0,100}\\b(?:problem|difficulty|crisis|failure)\\b[^.!?]{0,105}\\b(?:caused by|blame|fault of)\\b[^.!?]{0,90}\\b(?:one|only|single)\\b[^.!?]{0,60}\\b(?:group|people|visitors|community|newcomers|workers)\\b"
       ]
     }
   ]
