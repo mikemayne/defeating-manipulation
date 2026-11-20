@@ -11,7 +11,8 @@ const MAX_CONCLUSION_CHARS = 280;
 const MAX_PARAGRAPH_BREAKS = 1;
 const WORD = /\b[\w'-]+\b/g;
 const NORMATIVE = /\b(?:should|ought|recommend|consider|prefer|hope|wish)\b|\b(?:we|you)\s+(?:(?:may|might|could|can)\s+)?(?:need to|want to|plan to|intend to)\b/i;
-const LEADING_CONCLUSION = /^(?:(?:and|but)\s+)?(therefore|thus|hence|consequently|accordingly|as a result|it follows that|we can conclude that|this (?:shows|proves|demonstrates|confirms|means)(?: that)?|these (?:results|findings) (?:show|prove|demonstrate)(?: that)?|the evidence (?:shows|proves)(?: that)?|so)\s*[,;:\s]\s*/i;
+const LEADING_CONCLUSION = /^(?:(?:and|but)\s+)?(therefore|thus|hence|consequently|accordingly|as a result|it follows that|we can conclude that|(?:this|that) (?:shows|proves|demonstrates|confirms|means|guarantees)(?: that)?|these (?:results|findings) (?:show|prove|demonstrate)(?: that)?|the evidence (?:shows|proves)(?: that)?|so)\s*[,;:\s]\s*/i;
+const INLINE_SO = /,\s*so\s+(?!that\b)/gi;
 const RESULT_MARKER = /\b(?:therefore|thus|hence|consequently|accordingly|as a result)\b\s*[,;:]?\s*/gi;
 const INLINE_INFERENCE = /,\s*(?:which|and this)\s+(?:means|suggests|implies)(?:\s+that)?\s+|\b(?:indicates|suggests|implies|demonstrates|shows|indicating|suggesting|implying|showing)\s+that\s+/gi;
 const POST_REASON = /\bbecause\s+/gi;
@@ -103,7 +104,8 @@ function inside(source, s) {
  m=LEADING_REASON.exec(t);
  if (m) {
   const comma=t.indexOf(',',m[0].length);
-  if (comma > 0 && words(t.slice(m[0].length,comma)) >= 4) {
+  if (comma > 0 && words(t.slice(m[0].length,comma)) >= 4 &&
+      !/^because\s+of\b/i.test(t)) {
    const prem=span(source,start+m[0].length,start+comma);
    let endStart=start+comma+1;
    const tail=t.slice(comma+1);
@@ -150,6 +152,17 @@ function inside(source, s) {
   if (words(prem.text) < 3 ||
       /\b(?:is|are|was|were|be|been|being|has|have|had|can|could|may|might|will|would|must|shall|should)\s*$/i.test(prem.text)) continue;
   const a=argument(source,prem,cons,m[0].trim());
+  if(a) return a;
+ }
+ // Ordinary media sentences often apply a rule with "X, so Y".
+ // Require two declarative clauses, not "so that" (purpose) or asides.
+ INLINE_SO.lastIndex=0;
+ while ((m=INLINE_SO.exec(t))) {
+  if (insideOpenQuote(t.slice(0,m.index)) || insideOpenParenthesis(t.slice(0,m.index))) continue;
+  const prem=span(source,start,start+m.index);
+  const cons=span(source,start+INLINE_SO.lastIndex,s.end);
+  if (words(prem.text)<3 || words(cons.text)<3) continue;
+  const a=argument(source,prem,cons,'so');
   if(a) return a;
  }
  // "... indicates that ..." and "..., which means ...".
@@ -205,9 +218,23 @@ export function extractArguments(source) {
    continue;
   }
   const inline=inside(source,s);
-  if (inline) {results.push(inline);continue;}
-  if (attributedSource(s.text)) continue;
+  if (inline) {
+   // In "Rule. This person meets the condition, so consequence", the
+   // preceding rule is also a premise; the local NLI model needs both.
+   if (i>0 && /^(?:so|because|since|given that|as)$/.test(inline.conclusion.marker)) {
+    const prior=precedingPremises(source,statements,i);
+    if (prior.length) {
+     inline.premises=[...prior,...inline.premises].slice(-MAX_PREMISES);
+     inline.premise=inline.premises.map(p=>p.text).join(' ');
+     inline.start=inline.premises[0].start;
+    }
+   }
+   results.push(inline);continue;
+  }
   const marker=LEADING_CONCLUSION.exec(s.text);
+  // The text "So more customers said yes" can describe an outcome;
+  // attribution detection applied before stripping "So" misread it
+  // as a speaker called "So more customers".
   if (!marker) continue;
   const prior=precedingPremises(source,statements,i);
   if (!prior.length) continue;
