@@ -123,16 +123,17 @@ assert.ok(windows('Heading\nA short note\nThis is another line.').some(part =>
  part.text === 'Heading A short note This is another line.'),
  'Multi-line context is available in addition to individual lines');
 
-// Verify the async selection workflow exposes the busy cursor and always restores it.
+// The slower whole-argument pass must not seize the mouse pointer.
 const selectionScript = fs.readFileSync('extension/content.js', 'utf8');
-assert.ok(selectionScript.includes('cursor: wait !important;'),
- 'Selected-text analysis displays Firefox\'s busy cursor');
+assert.ok(selectionScript.includes('dm-pattern-status') &&
+ !selectionScript.includes('cursor: wait !important;'),
+ 'Selected-text analysis uses a nonblocking status badge rather than a busy cursor');
 assert.match(selectionScript, /setBusy\(true\);\s*try\s*\{/,
- 'Busy cursor is enabled before matching begins');
+ 'Progress indicator is enabled before matching begins');
 assert.match(selectionScript, /finally\s*\{\s*setBusy\(false\);\s*\}/,
- 'Busy cursor is always restored on success or failure');
+ 'Progress indicator is always removed on success or failure');
 assert.ok(selectionScript.includes('activeAnalyses'),
- 'Concurrent matching requests retain the busy cursor until finished');
+ 'Concurrent matching requests retain the status badge until finished');
 
 // Regression cases for semantic false positives and missing prototypes.
 const policy = await import('../extension/src/semantic-policy.mjs');
