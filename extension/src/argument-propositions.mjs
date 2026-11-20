@@ -3,6 +3,8 @@
 // small, observable logical relations; unknown syntax yields no verdict.
 // It never treats a neutral NLI score as proof that a claim is unsupported.
 
+import { escapeRegexLiteral } from "./argument-safety.mjs";
+
 const NUMBER_WORDS = Object.freeze({zero:0,one:1,two:2,three:3,four:4,five:5,
  six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,
  fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,
@@ -115,10 +117,10 @@ function inferMembership(facts,claim,text,premise){
  const person=[...names][0];
  const possible=[...(premise+' '+text).matchAll(/\b[A-Z][a-z]{1,22}\b/g)].map(x=>x[0]).filter(x=>!NOT_NAME.has(x));
  if(possible.some(x=>x!==person))return null;
- if(!new RegExp('\\b(?:'+person+'|he|she)\\b','i').test(text))return null;
+ if(!new RegExp('\\b(?:'+escapeRegexLiteral(person)+'|he|she)\\b','i').test(text))return null;
  for(const rule of rules)for(const item of members){
   if(rule.group!==item.group)continue;
-  const actual=norm(text).replace(new RegExp('^(?:'+person+'|she|he)\\s+','i'),'')
+  const actual=norm(text).replace(new RegExp('^(?:'+escapeRegexLiteral(person)+'|she|he)\\s+','i'),'')
    .replace(/^(?:is|was|were|are|will be|can|must)\s+/, '');
   if(predicate(actual)!==rule.predicate)continue;
   return {reason:'quantified_rule_applied_to_explicit_member',rule,item};
@@ -137,7 +139,7 @@ function inferRequirement(facts,claim,premise){
 }
 function inferMaterial(facts,claim,original){
  if(claim.kind!=='free_of'||EXCEPTION.test(original)||EXCEPTION.test(claim.clause)||HEDGE.test(claim.clause))return null;
- const present=facts.filter(x=>x.kind==='contains'&&x.material===claim.material&&new RegExp('\\b'+x.subject+'\\b','i').test(claim.clause));
+ const present=facts.filter(x=>x.kind==='contains'&&x.material===claim.material&&new RegExp('\\b'+escapeRegexLiteral(x.subject)+'\\b','i').test(claim.clause));
  if(present.length!==1)return null;
  return {reason:'listed_component_incompatible_with_free_of_component',item:present[0]};
 }

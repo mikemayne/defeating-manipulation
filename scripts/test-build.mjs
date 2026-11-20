@@ -1259,3 +1259,6 @@ await import('./validate-frozen-argument-corpus.mjs');
 
 // General JS arithmetic and source-grounded graph proof + adversarial abstention.
 await import('./test-argument-proof-graph.mjs');
+
+// Untrusted text is literal data; reject malformed NLI scores and regex injection.
+await import('./test-argument-safety.mjs');

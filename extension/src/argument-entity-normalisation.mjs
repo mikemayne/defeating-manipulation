@@ -3,6 +3,8 @@
 // Do not alter source text, highlighting offsets or deterministic evidence checks.
 // Do not infer that a person belongs to a group merely by being on a list.
 
+import { escapeRegexLiteral } from "./argument-safety.mjs";
+
 const NON_NAMES = new Set((
  'A An All Any Both But By Each Every For From He Her His I If In It Its My No None Not Our ' +
  'She So Some That The Their Then There These They This Those To We When Where While Who Why ' +
@@ -10,12 +12,11 @@ const NON_NAMES = new Set((
  'Monday Tuesday Wednesday Thursday Friday Saturday Sunday January February March April May ' +
  'June July August September October November December Mondays Tuesdays Wednesdays Thursdays Fridays Saturdays Sundays'
 ).split(/\s+/));
-const ESC = /[.*+?^${}()|[\]\\]/g;
 const VERB = /^(?:is|was|were|has|had|will|would|can|could|did|does|do|became|remains?|joined|applied|entered|passed|completed|attended|received|spoke|said|told|asked|met|called|helped|finished|won|voted|studied|worked|accepted|shortlisted|submitted|returned|visited|wrote|reported|explained|presented|served|volunteered)\b/i;
 const ROLE_BREAK = /\b(?:opens?|sells?|closes?|arrives?|leaves?|visits?|reads?|writes?|turns?|drives?|walks?|starts?|stops?|who|whom|whose|which|that|because|although|but|and|or|for|on|in|at|from|with|to|of|by|under|over|after|before|during|when|while|where|until|since|has|have|had|is|are|was|were|will|would|can|could|may|might|must|should|does|did|do|said|says|asked|told|joined|worked|spoke|submitted|applied|completed|finished)\b/i;
 const PRONOUN = /\b(?:he|she)\b/i;
 
-const escape = text => text.replace(ESC, '\\$&');
+const escape = escapeRegexLiteral;
 function namesIn(text) {
  const names=new Set();
  const pattern=/\b([A-Z][a-z]{1,24})(?:[ \t]+([A-Z][a-z]{1,24}))?\b/g;

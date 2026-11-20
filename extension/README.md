@@ -814,3 +814,38 @@ Run `node scripts/test-argument-proof-graph.mjs` for independently authored
 positive and adversarial controls, or `node scripts/test-build.mjs` for the
 full repository suite. **Do not tune this implementation to the frozen
 200-case synthetic benchmark**; use new blind tests to evaluate generalisation.
+
+
+### Security boundary: selected text and local model scores
+
+All text selected from webpages and all model output are **untrusted data**,
+not instructions. The local contradiction model returns exactly three
+numeric probabilities; it does not generate JavaScript or executable
+proposition code. Before a result enters the argument evidence combiner,
+`validatedNliScores` now constructs a new, frozen, null-prototype object
+with only `contradiction`, `neutral` and `entailment` properties, all
+finite probabilities whose sum is approximately one. Strings, extra
+properties, custom prototypes, accessor properties and malformed values
+fail closed to an abstention.
+
+Any dynamically constructed regular expression must interpolate source
+text **as a literal**, using `escapeRegexLiteral`. The helper rejects
+non-string or oversized fragments, preventing a selected phrase from
+controlling regexp syntax. The reasoning graph still operates on strictly
+bounded source lengths, step counts and node counts. No dynamic
+`eval`, `Function`, HTML injection, or web-content-controlled script
+generation is used in the argument reasoning path. The benchmark renders
+diagnostics through `textContent`, not `innerHTML`.
+
+This does not establish that every dependency, browser, or extension
+surface is invulnerable. In particular, escaping is not a substitute for
+validating entity references and source offsets, safe UI sinks, content
+security policy, resource limits or dependency review. If a future
+generative model proposes structured propositions, it must pass an
+explicit, allowlisted schema and source-grounded checks rather than
+being inserted into JS source or a regexp.
+
+Run `node scripts/test-argument-safety.mjs` to exercise literal regex
+escaping, script-like input, malformed model payloads, getter rejection,
+prototype-pollution payloads and safe UI rendering. This change does not
+alter model size, inference calls or analytical thresholds.
