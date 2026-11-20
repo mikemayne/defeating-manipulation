@@ -1078,6 +1078,40 @@
       ],
       "reader_effect": "Can make a small payment or disclosure feel harmless beside the promised gain, encouraging someone to act before checking whether the reward or sender is genuine.",
       "references": []
+    },
+    {
+      "id": "deliberate_errors",
+      "title": "Deliberate errors",
+      "category": "Attention and memory",
+      "summary": "An unusual spelling mistake or conspicuous error can draw attention to a word, invite corrections or distract from the argument around it.",
+      "tags": [
+        "spelling mistakes",
+        "attention capture",
+        "distinctiveness",
+        "correction bait",
+        "false informality"
+      ],
+      "status": "research-informed-starter",
+      "definition": "Introducing a conspicuous spelling mistake or other apparent error into a message can interrupt ordinary reading and draw extra attention to the affected word or sentence. It may also invite a correction, shift attention away from the claim itself, or make a prepared message feel more spontaneous. The pattern describes a possible effect of presentation, not proof that the mistake was intentional.",
+      "observable_features": [
+        "An obvious misspelling appears in an otherwise carefully written passage, especially in a prominent or emotionally loaded word.",
+        "The error sits in a headline, slogan, call to action or disputed claim where extra attention would matter.",
+        "A conspicuous mistake offers an easy correction that may draw a response away from the substance of the argument.",
+        "A message mixes polished persuasive content with conspicuous informality or mistakes that change its perceived tone.",
+        "The surrounding claim relies on emotional wording or weak evidence, while the unusual spelling may pull attention toward its phrasing rather than its support."
+      ],
+      "example": "The government's latest decision is an absoloute disaster for ordinary families.",
+      "examples": [
+        "The government's latest decision is an absoloute disaster for ordinary families.",
+        "Only an idoit would disagree with this.",
+        "This is a terrrible idea. Share it before anyone can stop us."
+      ],
+      "reader_effect": "Can slow the reader at a particular word, make it more noticeable, or invite a corrective response. Distinctive items can sometimes be better remembered, but a spelling mistake does not reliably make a claim more persuasive. Most spelling mistakes are ordinary errors and do not establish an author's intent.",
+      "references": [
+        "stites2016",
+        "strukelj2018",
+        "apa_distinctiveness_effect"
+      ]
     }
   ]
 }
