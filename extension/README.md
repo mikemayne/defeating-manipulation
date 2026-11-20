@@ -562,3 +562,28 @@ API, so this check uses the open-source `nspell` engine and a bundled dictionary
 Build with `npm run build` before running the unpacked extension. The generated
 `spell-en-gb.aff` and `spell-en-gb.dic` files remain local to the extension.
 The en-GB dictionary and affix data are licensed (MIT AND BSD), and nspell is MIT.
+
+### Bounded logic before trusting NLI probabilities
+
+Single-paragraph argument analysis now checks a small set of *fully specified*
+relations that a sentence-pair NLI model often misjudges: reported numerical
+comparisons, unanimous vote quantifiers, explicit policy exclusions,
+offer/departure cutoffs and monetary or width thresholds. These deterministic
+checks can restore an omitted `supported_conclusion` or prevent a clearly
+opposing proposition from being treated as supported. Rule outcomes have their
+own `verified_bounded_relation` provenance; they are **not** calibrated
+probability scores or independent proof that the stated premise is true.
+
+The checks do **not** generalise from an unrelated observation, infer a writer's
+intent, or flag a conclusion merely because its support is unclear. Time,
+subject, item and scope mismatches are handled conservatively. Ambiguous
+cases still abstain without red underlines. The local NLI model and its
+quantisation, tokenizer and weight files are unchanged.
+
+The motivation was an unchanged user-run 100-paragraph dataset, initially
+55/100 correct reasoning classifications after full structural extraction.
+That downloaded dataset remains **outside GitHub**. The independent fictional
+tests in `scripts/test-argument-bounded-logic.mjs` validate both supported
+and contradictory outcomes, model-score conflicts and hard negatives.
+A fresh, independently labelled paragraph sample is required to estimate
+accuracy outside the development cases.
