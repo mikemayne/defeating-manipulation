@@ -274,6 +274,7 @@ async function startRun(message) {
       conclusion: item.conclusion, verdict: item.verdict,
       inferenceMarker: item.inferenceMarker, inline: item.inline,
       reason: item.reason || null,
+      status: item.status || null,
       comparisons: item.comparisons.map(pair => ({
        kind: pair.kind, premise: pair.premise, repeated: pair.repeated,
        forward: pair.forward, reverse: pair.reverse

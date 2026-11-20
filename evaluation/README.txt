@@ -401,3 +401,33 @@ premise provides no reasonable inductive or probabilistic support.
 Future evaluation should use genuine, blindly labelled examples from
 multiple domains, with appropriate abstention, without reusing this
 failed browser generator or gaming scores on the same five passages.
+
+
+## Conservative no-underline abstention for neutral NLI results
+
+After a 94.4-second unusable single-case local instruction-model test,
+we returned to the existing fast local MNLI classifier. Its neutral
+output must not mean "the premises provide insufficient evidence":
+that is a different, more demanding judgement than NLI entailment.
+
+When a neutral or highly asymmetric score is the only basis for
+calling a factual conclusion unsupported, the analyser now performs
+a cheap second **scope and certainty** check. Clearly overstated
+universals, guarantees and superlatives may be marked unsupported.
+Otherwise it **abstains and does not underline**. Qualified scientific
+inferences in particular are not treated as errors merely because the
+NLI model could not deduce their conclusion. A successfully verified
+contradiction or supported fact retains its original outcome.
+
+Benchmark diagnostics explicitly distinguish "insufficient evidence
+to judge — no underline" from the positive finding "insufficient
+evidence provided to support this conclusion". In deterministic CI,
+the five authentic score traces from the 23-case pilot all abstain
+without red marking; 96 generated argument cases retain their expected
+verdicts with controlled scores, and independent contrast cases check
+true overclaims, genuine contradictions, entailments and abstentions.
+
+Accuracy on a new, balanced real-world corpus is **not measured** by
+those controlled-score tests. Abstention may reduce both false alarms
+and recall; report coverage and the proportion of uncertain cases
+alongside exact accuracy on future live benchmarks.

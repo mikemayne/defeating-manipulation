@@ -238,7 +238,10 @@ function failureReport(data) {
     lines.push("  Conclusion: " + a.conclusion +
      (a.inferenceMarker ? " | Marker: " + a.inferenceMarker : "") +
      (a.inline ? " [inline]" : "") +
-     " | Verdict: " + (a.verdict || "(abstained)") +
+     " | Verdict: " + (a.verdict ||
+      (a.status === "evidential_support_uncertain"
+       ? "(abstained — insufficient evidence to judge; no underline)"
+       : "(abstained)")) +
      (a.reason ? " | Decision: " + a.reason : ""));
     for (const x of a.comparisons) {
      const f = x.forward || {}, r = x.reverse || {};
