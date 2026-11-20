@@ -5,9 +5,8 @@ import { generatedCase, validateSeeds } from "../../evaluation/benchmark-generat
 import { validateConsistencyCases, generatedConsistencyCase } from "../../evaluation/inconsistency-generator.mjs";
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
-import { analyseArguments, ARGUMENT_LABELS } from "./argument-analysis.mjs";
-import { validateArgumentCases, generatedArgumentCase } from "../../evaluation/argument-generator.mjs";
-import { validateArgumentStructureCases, inspectArgumentStructure } from "../../evaluation/argument-structure-evaluator.mjs";
+import { analyseArguments } from "./argument-analysis.mjs";
+import { validateArgumentParagraphCases, inspectArgumentStructure } from "../../evaluation/argument-structure-evaluator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
 import { generatedConcealedCase } from "../../evaluation/concealed-generator.mjs";
@@ -124,7 +123,8 @@ function buildSummary(data, elapsedMs, cancelled) {
    precision: percentage(metrics.tp, metrics.tp + metrics.fp),
    recall: percentage(metrics.tp, metrics.tp + metrics.fn)
   })),
-  failureSamples: data.failures, capturedFailures: data.failures.length
+  failureSamples: data.failures, capturedFailures: data.failures.length,
+  paragraphStages: data.paragraphStages
  };
 }
 async function startRun(message) {
@@ -135,29 +135,31 @@ async function startRun(message) {
  try {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
   const consistency = mode === "consistency";
-  const argumentMode = mode === "argument_support";
-  const structureMode = mode === "argument_structure";
+  const argumentMode = mode === "argument_paragraph";
   const positive = mode === "positive_rules" || mode === "positive_ai";
   const concealed = mode === "concealed_rules" || mode === "concealed_ai";
-  if (!["rules", "ai", "consistency", "argument_support", "argument_structure", "positive_rules", "positive_ai",
+  if (!["rules", "ai", "consistency", "argument_paragraph", "positive_rules", "positive_ai",
    "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
-  if (structureMode && source !== "uploaded")
-   throw Error("Argument structure tests require a local JSON/JSONL upload");
+  if (argumentMode && source !== "uploaded")
+   throw Error("Single-paragraph argument tests require a local JSON/JSONL upload");
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
   const ids = concealed ? concealedPatterns.map(pattern => pattern.id) :
    techniques.map(t => t.id);
-  const seeds = structureMode ? validateArgumentStructureCases(rawSeeds) :
-   argumentMode ? validateArgumentCases(rawSeeds) :
+  const seeds = argumentMode ? validateArgumentParagraphCases(rawSeeds) :
    consistency ? validateConsistencyCases(rawSeeds) : validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
-  const limit = consistency || argumentMode || structureMode || concealed ? 10000 : 1000000;
+  const limit = consistency || argumentMode || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
-  const rules = consistency || argumentMode || structureMode || positive ? [] : compilePatternRules(catalogue, patterns);
-  if (consistency || argumentMode) await initialiseConsistencyModel();
-  else if (structureMode) self.postMessage({ type:"stage", message:"Checking extracted arguments locally (no AI download)…" });
+  const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
+  // Structural-only files do not load the NLI model. A labelled 'expected'
+  // field, including [], explicitly opts that row into reasoning evaluation.
+  const needsNli = argumentMode && seeds.some(item => Object.hasOwn(item, "expected"));
+  if (consistency || needsNli) await initialiseConsistencyModel();
+  else if (argumentMode) self.postMessage({type:"stage",
+   message:"Checking argument structure locally (no AI download)…"});
   else if (mode === "concealed_ai") await initialiseConcealedModel(techniques);
   else if (mode === "ai" || mode === "positive_ai") await initialiseModel(techniques);
   else self.postMessage({ type: "stage",
@@ -166,31 +168,33 @@ async function startRun(message) {
 
   const data = { tested: 0, requested: total, exact: 0, tp: 0, fp: 0, fn: 0,
    negativeCount: 0, falsePositiveNegatives: 0, confusion: {}, perTechnique: {},
-   realTracks: {}, failures: [] };
+   realTracks: {}, failures: [],
+   paragraphStages: argumentMode ? { structure:{total:0,exact:0},
+    reasoning:{total:0,exact:0} } : null };
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
    const item = source === "uploaded" ? seeds[i] :
     consistency ? generatedConsistencyCase(seeds, i, Number(seed) || 2026) :
-    argumentMode ? generatedArgumentCase(seeds, i, Number(seed) || 2026) :
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
    let matches, argumentAssessments = [], argumentDiagnostics = [], structureCheck = null;
-   if (structureMode) {
+   if (argumentMode) {
     structureCheck = inspectArgumentStructure(item);
     matches = structureCheck.predicted.map(label => ({
      start:0, end:item.text.length, technique:{id:label}, kind:"structure_check"
     }));
-   } else if (argumentMode) {
-    argumentAssessments = await analyseArguments(item.text, nliScorer, {
-     onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
-    });
-    // Supported conclusions appear only in this benchmark's classification,
-    // not as red highlights in the Firefox extension.
-    matches = argumentAssessments.map(assessment => ({
-     start: assessment.conclusion.start, end: assessment.conclusion.end,
-     technique: { id: assessment.label }, kind: "argument_assessment"
-    }));
+    if (Object.hasOwn(item, "expected")) {
+     argumentAssessments = await analyseArguments(item.text, nliScorer, {
+      onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
+     });
+     // This is only a benchmark classification; supported conclusions are
+     // never converted to a red underline in the actual Firefox extension.
+     matches.push(...argumentAssessments.map(assessment => ({
+      start: assessment.conclusion.start, end: assessment.conclusion.end,
+      technique: { id: assessment.label }, kind: "argument_assessment"
+     })));
+    }
    } else if (consistency) {
     matches = await findInconsistencies(item.text, nliScorer);
    } else if (concealed) {
@@ -221,10 +225,24 @@ async function startRun(message) {
     if (match.start < 0 || match.end > item.text.length || match.start >= match.end)
      throw Error("Invalid match offsets in " + item.id);
    }
-   const expected = [...new Set(structureMode ? structureCheck.expected : item.expected)].sort();
+   const expected = [...new Set(argumentMode
+    ? [...structureCheck.expected, ...(item.expected ?? [])] : item.expected)].sort();
    const predicted = [...new Set(matches.map(match => match.technique.id))].sort();
    const expectedSet = new Set(expected), predictedSet = new Set(predicted);
    const missing = expected.filter(value => !predictedSet.has(value));
+   if (argumentMode) {
+    const equals = (a,b) => a.length===b.length &&
+     a.every(label=>b.includes(label));
+    const stages = data.paragraphStages;
+    stages.structure.total++;
+    if (equals(structureCheck.expected, structureCheck.predicted))
+     stages.structure.exact++;
+    if (Object.hasOwn(item, "expected")) {
+     stages.reasoning.total++;
+     const modelLabels = [...new Set(argumentAssessments.map(a=>a.label))];
+     if (equals(item.expected,modelLabels)) stages.reasoning.exact++;
+    }
+   }
    const extra = predicted.filter(value => !expectedSet.has(value));
    data.tested++;
    data.tp += expected.length - missing.length;
@@ -281,7 +299,7 @@ async function startRun(message) {
       decisivePremise: assessment.evidenceText, basis: assessment.basis,
       reason: assessment.reason || null
      })) : [],
-     structureCheck: structureMode ? structureCheck : null,
+     structureCheck: argumentMode ? structureCheck : null,
      argumentDiagnostics: argumentMode ? argumentDiagnostics.map(item => ({
       conclusion: item.conclusion, modelConclusion: item.modelConclusion, verdict: item.verdict,
       inferenceMarker: item.inferenceMarker, inline: item.inline,
