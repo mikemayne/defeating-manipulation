@@ -105,13 +105,12 @@ async function initialiseArgumentReasoner() {
 }
 async function generateReasoning(messages) {
  const generator = await initialiseArgumentReasoner();
- const result = await generator(messages, {
-  max_new_tokens: 125, do_sample: false, return_full_text: false
+ // Short, predictable output: reduce unnecessary CPU generation. Preserve
+ // the raw Transformers.js return shape so the shared decoder can distinguish
+ // assistant content from echoed user messages and provide real diagnostics.
+ return generator(messages, {
+  max_new_tokens: 64, do_sample: false, return_full_text: false
  });
- const generated = result?.[0]?.generated_text;
- if (typeof generated === "string") return generated;
- if (Array.isArray(generated)) return String(generated.at(-1)?.content || "");
- return String(generated?.content || "");
 }
 async function parseUpload(file) {
  if (!file) throw Error("Choose a JSON or JSONL test file");
@@ -152,6 +151,7 @@ function buildSummary(data, elapsedMs, cancelled) {
    precision: percentage(metrics.tp, metrics.tp + metrics.fp),
    recall: percentage(metrics.tp, metrics.tp + metrics.fn)
   })),
+  reasonerOutputs: data.reasonerOutputs,
   failureSamples: data.failures, capturedFailures: data.failures.length
  };
 }
@@ -191,7 +191,7 @@ async function startRun(message) {
 
   const data = { tested: 0, requested: total, exact: 0, tp: 0, fp: 0, fn: 0,
    negativeCount: 0, falsePositiveNegatives: 0, confusion: {}, perTechnique: {},
-   realTracks: {}, failures: [] };
+   realTracks: {}, reasonerOutputs: {}, failures: [] };
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
@@ -209,6 +209,10 @@ async function startRun(message) {
         " (" + (i + 1) + "/" + total + " passages)" });
      }
     });
+    for (const assessment of reasonerAssessments) {
+     const status = assessment.parseStatus || "unknown";
+     data.reasonerOutputs[status] = (data.reasonerOutputs[status] || 0) + 1;
+    }
     matches = reasonerAssessments.filter(assessment => assessment.label).map(assessment => ({
      start: assessment.conclusion.start, end: assessment.conclusion.end,
      technique: { id:assessment.label }, kind:"argument_assessment"
@@ -308,7 +312,8 @@ async function startRun(message) {
      reasoningResults: argumentReasoning ? reasonerAssessments.map(assessment => ({
       label: assessment.rawLabel, reason: assessment.reason,
       premise: assessment.premise, conclusion: assessment.conclusion.text,
-      marker: assessment.conclusion.marker
+      marker: assessment.conclusion.marker,
+      parseStatus: assessment.parseStatus, rawOutput: assessment.rawOutput
      })) : [],
      argumentAssessments: argumentMode && !argumentReasoning ? argumentAssessments.map(assessment => ({
       label: assessment.label, premise: assessment.premise,

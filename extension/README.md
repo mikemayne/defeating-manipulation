@@ -389,3 +389,33 @@ The GitHub tests validate argument extraction, model invocation,
 structured response handling and safety of abstention. **CI cannot
 confirm a model's real reasoning quality in Firefox**, and running
 on an unfamiliar browser or machine may require significant memory.
+
+
+### Fix for Qwen model output format (first experimental browser run)
+
+The first 23-case browser run in experimental `argument_reasoning` mode took
+507.4 seconds and scored 18/23. The five real arguments returned **invalid
+structured assessments**, not meaningful judgements of support. That
+cannot be interpreted as evidence that the local reasoning model rejected
+all five arguments. A format or generation issue must be fixed first.
+
+The model is now asked for a short `LABEL:` verdict and optional `WHY:`
+explanation, instead of a long JSON object. The local decoder can read
+the Transformers.js chat-output structure, including the final assistant
+message, as well as plain strings and valid JSON. It rejects ambiguous or
+missing verdicts and never uses echoed user messages as a model response.
+Generation is capped at 64 new tokens to reduce unnecessary local CPU
+work. The underlying reasoning model and its experimental nature are
+otherwise unchanged; the original NLI checker is untouched.
+
+The result report now counts `valid_label`, `valid_json`,
+`explicit_uncertain` and `invalid_output` separately. Copied failure
+details include at most 700 characters of the **actual decoded model
+output**. This is especially important when the model returns invalid
+output again: we can diagnose the real response rather than guessing.
+
+**Retest efficiently:** first upload a single authentic labelled case
+into the experimental reasoning mode and inspect the result. When the
+output is parseable, run the full unchanged 23-case dataset. A successful
+format fix does **not** establish argument-level accuracy; that requires
+real labels and additional held-out examples.

@@ -411,3 +411,25 @@ actually improves generalisation.
 
 CI only checks the integration and parsing using simulated outputs.
 No real-model accuracy claim is made until its inference is measured.
+
+
+## Local argument model format failure and corrected diagnostics
+
+In the first experimental `argument_reasoning` test, all five labelled
+arguments in the authentic 23-case file returned **unparseable output**.
+The 18 passages without arguments remained unchanged. 18/23 correct in
+this run measures lack of output, not reasoning accuracy; the run took
+507.4 seconds.
+
+The experimental output channel now accepts a short, unambiguous
+`LABEL: SUPPORTED|UNSUPPORTED|CONTRADICTED|UNCERTAIN` response with a
+`WHY:` line (as well as valid structured JSON). It decodes
+Transformers.js assistant chat messages directly, isolates assistant
+content from echoed prompts, bounds copied raw model output to 700
+characters, and distinguishes malformed output from a deliberate
+`UNCERTAIN` verdict. The generation limit is 64 new tokens.
+
+Retest a single unchanged real case before spending another long run
+on the complete dataset. If it fails, paste the new **Actual model
+output** diagnostic. Only once the model produces valid judgements is
+comparing its reasoning to the independent labels meaningful.
