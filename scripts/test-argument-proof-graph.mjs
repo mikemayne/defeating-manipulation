@@ -133,3 +133,27 @@ const graphContradiction=inspectArgumentProof(
 assert.equal(graphContradiction.verified?.label,'contradictory_claims',
  'Verified conditional consequence can contradict its exact negation');
 console.log(`Numerical JS + proposition graph: ${numericSupported.length} supported, ${numericContradicted.length} contradicted, ${numericHardNegatives.length} numeric hard negatives, ${conditionalPositive.length} graph proofs, ${graphMissing.length} missing-bridge diagnostics and ${graphHardNegatives.length} graph hard negatives passed.`);
+
+// Integration: numeric proof must veto a confidently wrong NLI entailment,
+// while a missing link cannot trigger a red warning from a neutral score.
+const {combineArgumentEvidence,analyseArguments,argumentFindings} =
+ await import('../extension/src/argument-analysis.mjs');
+const incorrectNeuralSupport={contradiction:0.001,neutral:0.001,entailment:0.998};
+const p='The receipt shows a final charge of £27 for the delivery.';
+const c='The final charge for the delivery was £72.';
+const corrected=combineArgumentEvidence([{
+ kind:'combined',text:p,forward:incorrectNeuralSupport
+}],c);
+assert.equal(corrected?.label,'contradictory_claims',
+ 'JavaScript proof corrects the numerical claim even when NLI insists on support');
+assert.equal(corrected?.status,'verified_javascript_proof');
+const results=[];
+const uncertain=await analyseArguments(
+ 'The florist changed its window display. Therefore the florist doubled its revenue.',
+ async()=>({contradiction:0.001,neutral:0.998,entailment:0.001}),
+ {onDiagnostic:x=>results.push(x)});
+assert.equal(results.length,1);
+assert.equal(results[0].proofGraph.status,'undetermined');
+assert.ok(results[0].proofGraph.missingLinks.length);
+assert.deepEqual(argumentFindings(uncertain),[],
+ 'Missing logical chain stays diagnostic; no unsupported red underline is inferred');
