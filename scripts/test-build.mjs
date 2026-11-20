@@ -371,7 +371,7 @@ assert.ok(combined.some(m => m.kind === 'inconsistency'), 'Red contradiction sur
 assert.ok(combined.every(m => m.start >= 0 && m.end <= contradictory.length),
  'Merged two-pass highlights remain in bounds');
 const extensionWorker = fs.readFileSync('extension/src/matcher-worker.js', 'utf8');
-assert.ok(extensionWorker.includes('findInconsistencies(data.text, scorePair)'),
+assert.ok(extensionWorker.includes('findInconsistencies(data.text, memoScore)'),
  'Firefox worker runs the second local pass');
 assert.ok(selectionScript.includes('const BLUE =') && selectionScript.includes('RED = "#dc2626"'),
  'Firefox highlighter retains the existing colours and adds red');
