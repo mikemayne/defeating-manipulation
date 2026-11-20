@@ -139,6 +139,24 @@ function renderResults(data) {
   metric("Speed, cases/sec", number(Math.round(data.casesPerSecond))),
   metric("Elapsed time, seconds", oneDecimal(data.elapsedSeconds))
  );
+ $("real-breakdown").hidden = !data.realTracks?.length;
+ if (data.realTracks?.length) {
+  const body = $("real-track-results");
+  body.replaceChildren();
+  for (const item of data.realTracks) {
+   const tr = document.createElement("tr");
+   for (const text of [
+    item.track === "natural" ? "Natural sampling" : "Challenge sampling",
+    number(item.total), percent(item.exactRate),
+    percent(item.precision), percent(item.recall)
+   ]) {
+    const cell = document.createElement("td");
+    cell.textContent = text;
+    tr.append(cell);
+   }
+   body.append(tr);
+  }
+ }
  $("summary-note").textContent =
   "Evaluated " + number(data.total) + " cases, including " + number(data.negativeCount) +
   (lastMode === "consistency" ? " cases with no expected inconsistency." :
@@ -185,6 +203,12 @@ function failureReport(data) {
    "Missing: " + (item.missing.join(", ") || "(none)"),
    "Extra: " + (item.extra.join(", ") || "(none)"),
    "Text:\n" + item.text);
+  if (item.sourceUrl) {
+   lines.push("Source: " + (item.sourceTitle || "(untitled)") +
+    " | URL: " + item.sourceUrl +
+    (item.sampleTrack ? " | Sampling: " + item.sampleTrack : ""));
+   if (item.humanRationale) lines.push("Human rationale (assigned before testing): " + item.humanRationale);
+  }
   if (item.detectedPairs?.length) {
    lines.push("Model-flagged passages:");
    for (const pair of item.detectedPairs)
