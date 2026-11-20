@@ -431,3 +431,24 @@ Accuracy on a new, balanced real-world corpus is **not measured** by
 those controlled-score tests. Abstention may reduce both false alarms
 and recall; report coverage and the proportion of uncertain cases
 alongside exact accuracy on future live benchmarks.
+
+## Frozen 200-case synthetic argument holdout (v1)
+
+New reproducible, **fully synthetic** benchmark:
+
+- Cases: `evaluation/argument-paragraph-holdout-200-v1.json`
+- Method and frozen SHA-256: `evaluation/README-argument-paragraph-holdout-200-v1.md`
+- Integrity-only CI: `node scripts/validate-frozen-argument-corpus.mjs`
+
+There are 200 original fictional paragraphs: 50 supported, 50 unsupported,
+50 contradictory, 25 inconclusive/hedged arguments (expected abstention)
+and 25 nonarguments. Each case has an author-provided label rationale.
+The corpus was authored and labelled before any model predictions.
+These reference labels are **not independently human-adjudicated**.
+
+Upload the JSON in the Matcher Test Lab under **Arguments — single paragraph
+(structure + optional NLI)**, record the first run against an unchanged
+analyser, and do not subsequently tune the engine on this version of
+the holdout. The integrity check never executes parser or model inference
+against these paragraphs. For a credible generalisation claim, also test
+a separate, independently annotated real-world set.
