@@ -585,6 +585,9 @@ assert.equal(explicitReversal.slice(turquoise[0].start, turquoise[0].end),
 assert.ok(selectionScript.includes('match.kind === "concealed"') &&
  selectionScript.includes('Relationship: positive wording followed by pressure'),
  'Firefox tooltip exposes the linked positive opening and pressure');
+assert.ok(selectionScript.includes('TURQUOISE = "#12B6CF"') &&
+ selectionScript.includes('border-left:3px solid ${TURQUOISE}'),
+ 'Turquoise underlines and tooltip accents both use Reform UK colour #12B6CF');
 assert.ok(extensionWorker.includes('findConcealedPatterns(data.text') &&
  extensionWorker.includes('...concealedMatches'),
  'Firefox worker performs the relationship pass with the other three colours');
