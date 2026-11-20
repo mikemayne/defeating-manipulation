@@ -43,7 +43,9 @@ export function validateArgumentParagraphCases(cases) {
 }
 
 export function inspectArgumentStructure(item) {
- const candidates = extractArguments(item.text, {includeImplicit:true});
+ const candidates = extractArguments(item.text, {
+  includeImplicit:!Object.hasOwn(item,"expected_argument")
+ });
  const hypotheses = candidates.map(candidate => ({
   sourceConclusion: candidate.conclusion.text,
   modelConclusion: normaliseClaimForNli(candidate).text,
