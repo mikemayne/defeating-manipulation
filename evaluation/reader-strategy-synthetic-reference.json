@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "54 fictional cases with 108 manually authored expected boundary choices. These are model-author reference choices, not independently surveyed human reader interpretations; do not report as real-world accuracy.",
+    "description": "54 fictional cases with 102 developer-authored expected boundary choices. Title abbreviation dots are deterministically ignored; this is not an independently surveyed human-reader benchmark.",
     "schema": "cases: [{id,text,expected_boundaries:[{offset,choice}]}]",
     "no_real_world_corpus": true
   },
@@ -730,10 +730,6 @@
       "text": "Mr. Bell filed the report. The board reviewed the findings.",
       "expected_boundaries": [
         {
-          "offset": 2,
-          "choice": "nothing"
-        },
-        {
           "offset": 25,
           "choice": "and"
         }
@@ -744,10 +740,6 @@
       "id": "synthetic-title-002",
       "text": "Mrs. Lewis opened the meeting. The committee discussed the agenda.",
       "expected_boundaries": [
-        {
-          "offset": 3,
-          "choice": "nothing"
-        },
         {
           "offset": 29,
           "choice": "and"
@@ -760,10 +752,6 @@
       "text": "Dr. Patel examined the records. The team updated its report.",
       "expected_boundaries": [
         {
-          "offset": 2,
-          "choice": "nothing"
-        },
-        {
           "offset": 30,
           "choice": "and"
         }
@@ -774,10 +762,6 @@
       "id": "synthetic-title-004",
       "text": "Prof. Green delivered the lecture. The students asked several questions.",
       "expected_boundaries": [
-        {
-          "offset": 4,
-          "choice": "nothing"
-        },
         {
           "offset": 33,
           "choice": "and"
@@ -790,10 +774,6 @@
       "text": "Ms. Carter drafted the letter. The office sent it yesterday.",
       "expected_boundaries": [
         {
-          "offset": 2,
-          "choice": "nothing"
-        },
-        {
           "offset": 29,
           "choice": "and"
         }
@@ -804,10 +784,6 @@
       "id": "synthetic-title-006",
       "text": "Sen. Baker addressed the chamber. The members debated the amendment.",
       "expected_boundaries": [
-        {
-          "offset": 3,
-          "choice": "nothing"
-        },
         {
           "offset": 32,
           "choice": "and"
