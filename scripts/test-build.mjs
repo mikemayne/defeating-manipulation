@@ -434,7 +434,7 @@ assert.equal(consistency.attributedSource('The manager said the station is open.
  'manager', 'Stable attribution of reporting source');
 const inconsistencyArticle = catalogue.techniques.find(item => item.id === 'argument_inconsistency');
 assert.ok(inconsistencyArticle &&
- /insufficient to support the conclusion/i.test(inconsistencyArticle.observable_features.join(' ')),
+ /insufficient to support the conclusion/i.test(inconsistencyArticle.definition),
  'Inconsistency section explains conclusions unsupported by the provided evidence');
 assert.ok(fs.existsSync('_site/techniques/argument_inconsistency.html'),
  'New inconsistency article is built into the website');
