@@ -6,6 +6,7 @@ import { validateConsistencyCases, generatedConsistencyCase } from "../../evalua
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { analyseArguments } from "./argument-analysis.mjs";
+import { scoreReaderInterpretations, validateReaderCases } from "./reader-interpretation.mjs";
 import { validateArgumentParagraphCases, inspectArgumentStructure } from "../../evaluation/argument-structure-evaluator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
@@ -126,8 +127,11 @@ function buildSummary(data, elapsedMs, cancelled) {
   failureSamples: data.failures, capturedFailures: data.failures.length,
   paragraphStages: data.paragraphStages,
   unlabelledScan: data.unlabelledScan,
-  predictions: data.unlabelledScan ? data.predictions : null,
-  predictionCounts: data.unlabelledScan ? data.predictionCounts : null
+  predictions: data.unlabelledScan || data.readerMode ? data.predictions : null,
+  predictionCounts: data.unlabelledScan ? data.predictionCounts : null,
+  readerMode: data.readerMode, readerCounts: data.readerMode ? data.readerCounts : null,
+  readerPairs: data.readerMode ? data.readerPairs : null,
+  readerCasesWithPairs: data.readerMode ? data.readerCasesWithPairs : null
  };
 }
 async function startRun(message) {
@@ -139,23 +143,25 @@ async function startRun(message) {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
   const consistency = mode === "consistency";
   const argumentMode = mode === "argument_paragraph";
+  const readerMode = mode === "reader_inference";
   const positive = mode === "positive_rules" || mode === "positive_ai";
   const concealed = mode === "concealed_rules" || mode === "concealed_ai";
-  if (!["rules", "ai", "consistency", "argument_paragraph", "positive_rules", "positive_ai",
+  if (!["rules", "ai", "consistency", "argument_paragraph", "reader_inference", "positive_rules", "positive_ai",
    "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
-  if (argumentMode && source !== "uploaded")
-   throw Error("Single-paragraph argument tests require a local JSON/JSONL upload");
+  if ((argumentMode || readerMode) && source !== "uploaded")
+   throw Error("Argument and reader-interpretation tests require a local JSON/JSONL upload");
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
   const ids = concealed ? concealedPatterns.map(pattern => pattern.id) :
    techniques.map(t => t.id);
-  const seeds = argumentMode ? validateArgumentParagraphCases(rawSeeds) :
+  const seeds = readerMode ? validateReaderCases(rawSeeds) :
+   argumentMode ? validateArgumentParagraphCases(rawSeeds) :
    consistency ? validateConsistencyCases(rawSeeds) : validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
   const unlabelledScan = argumentMode &&
    seeds.every(item => !Object.hasOwn(item,"expected_argument"));
-  const limit = consistency || argumentMode || concealed ? 10000 : 1000000;
+  const limit = consistency || argumentMode || readerMode || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
   const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
@@ -163,7 +169,7 @@ async function startRun(message) {
   // field, including [], explicitly opts that row into reasoning evaluation.
   const needsNli = argumentMode &&
    seeds.some(item => Object.hasOwn(item, "expected") || item.analyse_reasoning === true);
-  if (consistency || needsNli) await initialiseConsistencyModel();
+  if (consistency || needsNli || readerMode) await initialiseConsistencyModel();
   else if (argumentMode) self.postMessage({type:"stage",
    message:"Checking argument structure locally (no AI download)…"});
   else if (mode === "concealed_ai") await initialiseConcealedModel(techniques);
@@ -177,7 +183,8 @@ async function startRun(message) {
    realTracks: {}, failures: [],
    paragraphStages: argumentMode && !unlabelledScan ? { structure:{total:0,exact:0},
     reasoning:{total:0,exact:0} } : null,
-   unlabelledScan, predictions: [], predictionCounts: {} };
+   unlabelledScan, readerMode, predictions: [], predictionCounts: {},
+   readerCounts:{}, readerPairs:0, readerCasesWithPairs:0 };
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
@@ -186,6 +193,30 @@ async function startRun(message) {
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
    let matches, argumentAssessments = [], argumentDiagnostics = [], structureCheck = null;
+   if (readerMode) {
+    // Reader interpretation is independent of argument truth and red findings.
+    // Every test case is stored with exact original spans and uncalibrated
+    // scores. The corpus itself is never committed or sent to a server.
+    const interpreted=await scoreReaderInterpretations(item.text,nliScorer);
+    data.readerPairs+=interpreted.length;
+    if(interpreted.length)data.readerCasesWithPairs++;
+    for(const relation of interpreted)
+     data.readerCounts[relation.interpretation]=(data.readerCounts[relation.interpretation]||0)+1;
+    data.predictions.push({
+     id:item.id,text:item.text,
+     source_url:item.source_url||null,
+     source_annotation:item.source_annotation||null,
+     interpretations:interpreted
+    });
+    data.tested++;
+    const now=performance.now();
+    if(now-lastUpdate>220 || i===total-1){
+     self.postMessage({type:"progress",runId:id,completed:data.tested,total});
+     lastUpdate=now;
+     await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    continue;
+   }
    if (argumentMode) {
     structureCheck = inspectArgumentStructure(item);
     matches = structureCheck.predicted.map(label => ({
