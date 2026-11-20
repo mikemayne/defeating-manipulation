@@ -76,3 +76,34 @@ explains that a conclusion may be unsupported *by the premises actually given*,
 without being disproved. The current local NLI pass is primarily a claim
 contradiction detector; recognising unsupported paragraph-level conclusions
 is a separate, later enhancement and is not yet claimed as a tested ability.
+
+
+## Green positive-pattern matching
+
+The Firefox selected-text analyser now recognises the 12 positive communication
+patterns from the published `positive-patterns.json` using a separate
+conservative rule matcher and the same local MiniLM model. Green matches link
+to the public `positive-patterns/<id>.html` detail pages. The existing
+negative matcher, its strict thresholds, and red inconsistency pass remain
+independent. Blue takes priority if blue and green matches overlap.
+
+The local Matcher Test Lab also offers **Positive patterns — rules only** and
+**Positive patterns — rules + local AI**. Both test only green labels; the AI
+mode runs the same shared positive-matching module as Firefox, using the same
+MiniLM embeddings with extra observable-evidence gates and higher similarity
+thresholds. The initial default dataset contains 72 fictional cases:
+36 constructive statements across 12 patterns and 36 neutral or negative
+near misses. A new private dataset can be uploaded as JSON/JSONL with
+`{"id":"...","text":"...","expected":["restoring_agency"]}`, or
+`"expected":[]` for a non-example.
+
+Adding a new positive pattern to the public JSON makes it automatically
+available for embedding-based classification; add high-precision cues to
+`extension/src/positive-rules.json` and `positive-evidence.mjs` to enable
+reliable detection of new wording. Rebuild the extension with
+`npm run build` after changing these files.
+
+A constructive phrase may be quoted, sarcastic, or followed by a manipulative
+demand. A green match identifies the local phrase only: it does **not** certify
+that the passage as a whole is constructive. Detecting a negative pattern
+**concealed behind** a positive one is a separate later relationship classifier.
