@@ -1074,3 +1074,126 @@ assert.ok(benchmarkPage.includes('value="consistency"') &&
  benchmarkPage.includes('value="concealed_ai"'),
  'Other matching and consistency modes remain available');
 console.log('Resource-intensive Qwen mode retired; fast NLI and other detectors preserved.');
+
+
+// A neutral NLI score is NOT proof that a conclusion lacks reasonable
+// inductive or scientific support. Treat "insufficient evidence to judge"
+// as ABSTENTION: never draw an underline, even when NLI returns 1.000 neutral.
+// These five exact real-browser scores come from the first authentic pilot.
+const realSupportNeutralScores = [
+ {
+  id:'selection-bias',
+  text:'Specification of case-patients and controls was reasonable and participation was good; therefore, selection bias is an unlikely explanation.',
+  values:[0.064,0.933,0.002]
+ },
+ {
+  id:'irreversible-process',
+  text:'The process is clearly stated as an irreversible process; therefore, we cannot simply calculate the entropy change from the actual process.',
+  values:[0.001,0.999,0.000]
+ },
+ {
+  id:'transmission-cycles',
+  text:'However, transmission to contact animals was not detected. Thus, bank voles are unlikely to establish effective transmission cycles in nature.',
+  values:[0.000,0.999,0.000]
+ },
+ {
+  id:'longitudinal-study',
+  text:'The COVID-19 Infection Survey is a longitudinal study, which means participants can test positive more than once.',
+  values:[0.000,1.000,0.000]
+ },
+ {
+  id:'outbreak-kitchen',
+  text:'Illness in persons who had eaten food prepared in only one kitchen indicates that the contamination might have occurred in that kitchen.',
+  values:[0.001,0.970,0.030]
+ }
+];
+for (const item of realSupportNeutralScores) {
+ const diagnostics = [];
+ const [contradiction,neutral,entailment] = item.values;
+ const assessments = await argumentEngine.analyseArguments(item.text,
+  async () => ({ contradiction,neutral,entailment }),
+  {onDiagnostic:diagnostic=>diagnostics.push(diagnostic)});
+ assert.equal(argumentEngine.extractArguments(item.text).length,1,
+  'A real source premise/conclusion is still recognised: '+item.id);
+ assert.deepEqual(assessments,[],
+  'No red unsupported judgement from neutral scientific evidence: '+item.id);
+ assert.equal(diagnostics[0]?.status,'evidential_support_uncertain',
+  'Neutral means insufficient evidence to judge, not proven lack of support: '+item.id);
+ assert.equal(diagnostics[0]?.verdict,null,
+  'Evidential uncertainty must not be reported as a positive finding: '+item.id);
+ assert.equal(argumentEngine.argumentFindings(assessments).length,0,
+  'Insufficient evidence to judge never produces a red underline: '+item.id);
+}
+assert.deepEqual(argumentEngine.argumentFindings([
+ {label:null,conclusion:{start:0,end:10},premise:'unknown'},
+ {label:'supported_conclusion',conclusion:{start:0,end:10},premise:'known'}
+]),[],'Even accidentally supplied abstentions must not be underlined');
+const neutralEvidence = {contradiction:0.01,neutral:0.98,entailment:0.01};
+const supportedEvidence = {contradiction:0.01,neutral:0.01,entailment:0.98};
+const contradictedEvidence = {contradiction:0.98,neutral:0.01,entailment:0.01};
+const conservativeScenarios = [
+ {
+  id:'explicit-overclaim-universal',
+  text:'The inspectors examined two classrooms. Therefore, every classroom in the country is safe.',
+  score:()=>neutralEvidence, expected:'unsupported_conclusion'
+ },
+ {
+  id:'explicit-overclaim-guarantee',
+  text:'The council released a report. Therefore, the city has eliminated all financial waste.',
+  score:()=>neutralEvidence, expected:'unsupported_conclusion'
+ },
+ {
+  id:'explicit-overclaim-superlative',
+  text:'The gallery has a new exhibition. Therefore, the gallery is the most prestigious in Europe.',
+  score:()=>neutralEvidence, expected:'unsupported_conclusion'
+ },
+ {
+  id:'neutral-no-overclaim',
+  text:'The council published a consultation report. Therefore, the new policy will improve local services.',
+  score:()=>neutralEvidence, expected:null
+ },
+ {
+  id:'qualified-no-certain-support',
+  text:'The clinic collected survey responses. Therefore, the treatment might reduce recovery times.',
+  score:()=>neutralEvidence, expected:null
+ },
+ {
+  id:'qualified-even-with-universal-phrase',
+  text:'Inspectors saw the oldest bridge. Therefore, every bridge might require repair.',
+  score:()=>neutralEvidence, expected:null
+ },
+ {
+  id:'contradictory-direct-negation',
+  text:'The library opens every Sunday. Therefore, the library never opens on Sundays.',
+  score:()=>contradictedEvidence, expected:'contradictory_claims'
+ },
+ {
+  id:'supported-repeated-fact',
+  text:'The school runs a lunch service on Fridays. Therefore, the school runs a lunch service on Fridays.',
+  score:()=>neutralEvidence, expected:'supported_conclusion'
+ },
+ {
+  id:'supported-model-entailment',
+  text:'The school offers vegetarian meals. Therefore, the school offers meals.',
+  score:()=>supportedEvidence, expected:'supported_conclusion'
+ }
+];
+for (const item of conservativeScenarios) {
+ const diagnostics = [];
+ const assessments = await argumentEngine.analyseArguments(item.text,
+  async()=>item.score(),{onDiagnostic:d=>diagnostics.push(d)});
+ const actual = assessments[0]?.label ?? null;
+ assert.equal(actual,item.expected,
+  'An ambiguous evidential claim must abstain while clear errors remain: '+item.id);
+ const underlines = argumentEngine.argumentFindings(assessments);
+ assert.equal(underlines.length,
+  ['unsupported_conclusion','contradictory_claims'].includes(item.expected) ? 1 : 0,
+  'Only affirmative red inconsistency findings are underlined: '+item.id);
+ if (item.expected === null) assert.equal(diagnostics[0]?.status,
+  'evidential_support_uncertain','Neutral non-overclaim must explicitly abstain');
+}
+assert.ok(benchmarkWorker.includes('status: item.status || null') &&
+ benchmarkUI.includes('insufficient evidence to judge; no underline') &&
+ extensionWorker.includes('argumentFindings(assessed)'),
+ 'Experimental uncertainty stays in lab diagnostics; Firefox only underlines true findings');
+console.log('Conservative evidence assessment: 5 original real NLI traces and 9 contrasts, with explicit no-underline abstention.');
