@@ -6,6 +6,8 @@ import { validateConsistencyCases, generatedConsistencyCase } from "../../evalua
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
+import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
+import { generatedConcealedCase } from "../../evaluation/concealed-generator.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -16,7 +18,7 @@ const MAX_FAILURE_SAMPLES = 500;
 const MAX_EMBED_CACHE = 4000;
 const MODEL = "Xenova/all-MiniLM-L6-v2";
 let running = false, stopRequested = false;
-let extractor, cachedCatalogueKey, prototypes = [], cache = new Map();
+let extractor, cachedCatalogueKey, prototypes = [], positivePrototypes = [], cache = new Map();
 let nliScorer;
 
 async function embed(texts) {
@@ -59,6 +61,16 @@ async function initialiseModel(techniques) {
  const vectors = await embed(entries.map(entry => entry.text));
  prototypes = entries.map((entry, i) => ({ ...entry, vector: vectors[i] }));
  cachedCatalogueKey = key;
+}
+
+async function initialiseConcealedModel(negativeTechniques) {
+ await initialiseModel(negativeTechniques);
+ self.postMessage({ type: "stage", message: "Loading positive-pattern examples for relation analysis…" });
+ const entries = prototypeEntries(positiveTechniques);
+ const vectors = await embed(entries.map(entry => entry.text));
+ positivePrototypes = entries.map((entry, index) => ({
+  ...entry, vector: vectors[index]
+ }));
 }
 
 async function initialiseConsistencyModel() {
@@ -115,20 +127,27 @@ async function startRun(message) {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
   const consistency = mode === "consistency";
   const positive = mode === "positive_rules" || mode === "positive_ai";
-  if (!["rules", "ai", "consistency", "positive_rules", "positive_ai"].includes(mode))
+  const concealed = mode === "concealed_rules" || mode === "concealed_ai";
+  if (!["rules", "ai", "consistency", "positive_rules", "positive_ai",
+   "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
+  const ids = concealed ? concealedPatterns.map(pattern => pattern.id) :
+   techniques.map(t => t.id);
   const seeds = consistency ? validateConsistencyCases(rawSeeds) :
-   validateSeeds(rawSeeds, techniques.map(t => t.id));
+   validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
-  const limit = consistency ? 10000 : 1000000;
+  const limit = consistency || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
-  const rules = consistency ? [] : positive ? null : compilePatternRules(catalogue, patterns);
+  const rules = consistency || positive ? [] : compilePatternRules(catalogue, patterns);
   if (consistency) await initialiseConsistencyModel();
+  else if (mode === "concealed_ai") await initialiseConcealedModel(techniques);
   else if (mode === "ai" || mode === "positive_ai") await initialiseModel(techniques);
-  else self.postMessage({ type: "stage", message: "Running deterministic pattern tests…" });
+  else self.postMessage({ type: "stage",
+   message: concealed ? "Running local relationship-rule tests…" :
+    "Running deterministic pattern tests…" });
 
   const data = { tested: 0, requested: total, exact: 0, tp: 0, fp: 0, fn: 0,
    negativeCount: 0, falsePositiveNegatives: 0, confusion: {}, perTechnique: {}, failures: [] };
@@ -137,17 +156,35 @@ async function startRun(message) {
    if (stopRequested) break;
    const item = source === "uploaded" ? seeds[i] :
     consistency ? generatedConsistencyCase(seeds, i, Number(seed) || 2026) :
+    concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
-   const matches = consistency ?
-    await findInconsistencies(item.text, nliScorer) :
-    positive ? await matchPositiveText(item.text, {
+   let matches;
+   if (consistency) {
+    matches = await findInconsistencies(item.text, nliScorer);
+   } else if (concealed) {
+    const useAi = mode === "concealed_ai";
+    const negatives = await matchText(item.text, {
+     techniques, rules, prototypes: useAi ? prototypes : [],
+     embed: useAi ? embed : null
+    });
+    const positives = await matchPositiveText(item.text, {
+     prototypes: useAi ? positivePrototypes : [],
+     embed: useAi ? embed : null
+    });
+    matches = findConcealedPatterns(item.text, {
+     positiveMatches: positives, negativeMatches: negatives
+    });
+   } else if (positive) {
+    matches = await matchPositiveText(item.text, {
      prototypes: mode === "positive_ai" ? prototypes : [],
      embed: mode === "positive_ai" ? embed : null
-    }) :
-    await matchText(item.text, {
+    });
+   } else {
+    matches = await matchText(item.text, {
      techniques, rules, prototypes: mode === "ai" ? prototypes : [],
      embed: mode === "ai" ? embed : null
     });
+   }
    for (const match of matches) {
     if (match.start < 0 || match.end > item.text.length || match.start >= match.end)
      throw Error("Invalid match offsets in " + item.id);
@@ -185,7 +222,12 @@ async function startRun(message) {
       .map(match => ({
        text: item.text.slice(match.start, match.end),
        otherText: match.otherText, score: Number(match.score.toFixed(3))
-      })) : []
+      })) : [],
+     concealedLinks: concealed ? matches.map(match => ({
+      pattern: match.technique.id, positive: match.positiveText,
+      pressure: item.text.slice(match.start, match.end),
+      relatedNegative: match.negativePattern
+     })) : []
     });
    }
    const now = performance.now();
