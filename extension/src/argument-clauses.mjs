@@ -21,6 +21,10 @@ const PARTICIPLE = /,\s*(?:(?:thereby|thus)\s+)?(?:making|meaning|putting|result
 const FOLLOWING_REASON = /^(?:this|that)\s+is\s+because\s+/i;
 
 function words(text) { return (text.match(WORD) || []).length; }
+function insideOpenQuote(text) {
+ // A connective inside a quoted example is not the document's own inference.
+ return ((text.match(/['\"“”‘’]/g) || []).length % 2) !== 0;
+}
 function paragraphBreaks(between) { return Math.floor((between.match(/\n/g) || []).length / 2); }
 
 // Unlike /[^.!?]+/ this retains decimal points and ordinary domain names
@@ -116,6 +120,7 @@ function inside(source, s) {
  while ((m=RESULT_MARKER.exec(t))) {
   if (m.index === 0) continue;
   let before=t.slice(0,m.index);
+  if (insideOpenQuote(before)) continue;
   // "and therefore" makes the conjunction part of the bridge.
   const tail=/\s+and\s*$/i.exec(before);
   const beforeEnd=m.index-(tail?.[0].length||0);
@@ -189,7 +194,8 @@ export function extractArguments(source) {
   if (!prior.length) continue;
   const conclusion=span(source,s.start+marker[0].length,s.end);
   if (words(conclusion.text)<3 || conclusion.text.length<12 ||
-      conclusion.text.length>MAX_CONCLUSION_CHARS || NORMATIVE.test(conclusion.text)) continue;
+      conclusion.text.length>MAX_CONCLUSION_CHARS || /[?!]\s*$/.test(conclusion.text) ||
+      NORMATIVE.test(conclusion.text)) continue;
   const combined=prior.map(x=>x.text).join(' ');
   results.push({premise:combined, premises:prior,
    conclusion:{...conclusion,marker:marker[1].toLowerCase()},
