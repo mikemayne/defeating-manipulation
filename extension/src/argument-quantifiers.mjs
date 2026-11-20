@@ -100,6 +100,40 @@ function quantified(text){
  }
  return out;
 }
+// A few frequently used quantifiers have alternate grammatical forms:
+// "nobody from team X attended", "unanimously against", and "zero abstentions".
+// These require an exact common group/event. We do not equate unrelated
+// groups, times, or motions, or turn uncertain statements into conflicts.
+function explicitZeroAndUnanimity(p,c){
+ const text=p+' '+c;
+ if(/[“”"]/.test(text)||HEDGE.test(text)||EXCEPTION.test(text)||
+   /\b(?:different|another|separate|rather than|previously|subsequently)\b/i.test(text))return null;
+ const result=reason=>({label:'contradictory_claims',reason,verified:true,
+   chain:[{type:'premise',text:p},{type:'conclusion',text:c},{type:'rule',operation:'exclusive_quantifier_conflict'}]});
+ // 'Nobody from the blue team attended the briefing' excludes a named
+ // member of precisely that team being present at precisely that briefing.
+ const absent=/\bnobody from (?:the )?([a-z][a-z-]*(?:\s+[a-z][a-z-]*){0,3}) attended (?:the|that|this) ([a-z][a-z-]*)\b/i.exec(p);
+ const attendee=/\b(?:one|a|at least one)\s+([a-z][a-z-]*(?:\s+[a-z][a-z-]*){0,3})\s+(?:member\s+)?was present at (?:that|the|this) ([a-z][a-z-]*)\b/i.exec(c);
+ if(absent&&attendee&&absent[2].toLowerCase()===attendee[2].toLowerCase()){
+  const group=absent[1].toLowerCase().replace(/\s+team$/,'');
+  const member=attendee[1].toLowerCase().replace(/\s+member$/,'').replace(/-team$/,'');
+  if((member===group||member===group+' team')&&
+    /\b(?:final|complete|confirmed|verified)\b/i.test(p))return result('none_attended_vs_same_group_present');
+ }
+ // A recorded unanimous vote against one motion excludes a vote in favour
+ // of that SAME motion. A statement about another motion cannot conflict.
+ const unanimous=/\b(?:recorded\s+vote\s+was\s+)?unanimously\s+(against|for)\s+(?:the|this|that)\s+([a-z-]+)\b/i.exec(p);
+ const single=/\b(?:one|a|at least one)\s+(?:board\s+)?member\s+voted\s+(for|against)\s+(?:the|this|that)\s+([a-z-]+)\b/i.exec(c);
+ if(unanimous&&single&&unanimous[2].toLowerCase()===single[2].toLowerCase()&&
+   unanimous[1].toLowerCase()!==single[1].toLowerCase()&&
+   /\b(?:recorded|official|final|unanimous)\b/i.test(p))return result('unanimous_recorded_vote_excludes_opposite');
+ // A completed count recording zero abstentions contradicts a claim that
+ // one or more members abstained in that same recorded vote.
+ const zero=/\b(?:record|records|recorded|shows|showed)\s+(?:zero|0|no)\s+votes?\s+to\s+abstain\b/i.exec(p);
+ const positive=/\b(?:one|several|some|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+members?\s+abstained\s+from\s+(?:the|that|this)\s+recorded vote\b/i.exec(c);
+ if(zero&&positive&&/\b(?:published|official|final|complete|certified)\b/i.test(p))return result('zero_abstentions_vs_positive_recorded_vote');
+ return null;
+}
 export function extractQuantifiedPropositions(text){
  if(typeof text!=='string'||text.length>MAX_TEXT)return [];
  return quantified(text);
@@ -108,6 +142,8 @@ export function inferQuantifierRelation(premise,conclusion){
  if(typeof premise!=='string'||typeof conclusion!=='string'||premise.length>MAX_TEXT||conclusion.length>400||
   QUOTED.test(premise)||QUOTED.test(conclusion)||HEDGE.test(conclusion)||
   CONDITIONAL.test(premise)||CONDITIONAL.test(conclusion)||EXCEPTION.test(premise))return null;
+ const explicit=explicitZeroAndUnanimity(premise,conclusion);
+ if(explicit)return explicit;
  const claims=quantified(conclusion),facts=quantified(premise);
  if(claims.length!==1||facts.length===0)return null;
  for(const a of facts)for(const b of claims){
