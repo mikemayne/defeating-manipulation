@@ -72,6 +72,38 @@ for(const [id,p,c,marker] of positives) {
 for(const [id,p,c,marker] of negatives)
  assert.equal(observableOverreach(p,c,{inferenceMarker:marker||""}),null,
   id+" should abstain rather than accuse");
+
+// Isolated interventions must not be treated as evidence of guaranteed
+// global outcomes. These are new fictional controls, not frozen benchmark rows.
+const interventionOverclaims=[
+ ['sign-to-health','The clinic installed a welcome sign at the entrance.',
+  'Therefore every visitor will recover immediately.'],
+ ['paint-to-reliability','The operator repainted a waiting room.',
+  'All future trains will arrive on time.'],
+ ['new-device-to-zero-risk','A company purchased a new router.',
+  'Consequently the network will never suffer an outage.'],
+ ['new-project-to-permanence','The town planted a row of trees.',
+  'The town has permanently eliminated noise pollution.']
+];
+for(const [id,p,c] of interventionOverclaims){
+ assert.equal(observableOverreach(p,c)?.reason,
+  'local_intervention_to_universal_outcome',id);
+}
+const interventionHardNegatives=[
+ ['qualified-outcome','The clinic installed a welcome sign.',
+  'Visitors might feel more welcome.'],
+ ['explicit-policy','If the clinic installs a welcome sign, every visitor receives a leaflet. The clinic installed a welcome sign.',
+  'Every visitor receives a leaflet.'],
+ ['already-universal','The clinic installed signs at every entrance.',
+  'Every entrance now has a sign.'],
+ ['bounded-result','The clinic installed a sign at reception.',
+  'A sign is now present at reception.'],
+ ['conditional-claim','The clinic installed a sign.',
+  'If nobody moves it, the sign will remain there.']
+];
+for(const [id,p,c] of interventionHardNegatives){
+ assert.equal(observableOverreach(p,c),null,id+' must abstain');
+}
 const ordinary={contradiction:.001,neutral:.997,entailment:.002};
 const example=positives.find(item=>item[0]==='usage-to-safety');
 const finding=combineArgumentEvidence([{kind:"combined",text:example[1],forward:ordinary}],example[2]);
