@@ -14,6 +14,11 @@ const PROXY=/\b(?:shares?|followers?|likes?|views?|downloads?|five.star|star rat
 const CERTAINTY=/\b(?:most popular|safest|best in|certain to win|sure to win|guaranteed to win|definitely win|will inevitably win|no (?:privacy|security|health|safety)(?:\s+or\s+(?:privacy|security|health|safety))?\s+risks?|cannot possibly|guaranteed|nothing can|every|all)\b/i;
 const FORECAST=/\b(?:published|posted|announced|released|unveiled|launched|introduced|adopted)\b.{0,70}\b(?:plan|strategy|proposal|policy|forecast|announcement)\b/i;
 const COMPLETED=/\b(?:all|every|zero|entire|whole|permanently|eliminated|eradicated|ended|solved|prevented|cannot possibly|guaranteed|never)\b/i;
+// A bounded completed intervention cannot, by itself, establish a
+// universal or permanent outcome. This deliberately excludes rules,
+// exhaustive premises and contingent conclusions via the main gates below.
+const LOCAL_INTERVENTION=/\\b(?:added|installed|replaced|redesigned|repainted|changed|introduced|purchased|bought|launched|started|began|opened|published|released|announced|held|attended|commissioned|planted|removed|offered|hired|updated|repaired|upgraded)\\b/i;
+const STRONG_UNIVERSAL=/\\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|entirely|guaranteed|without exception)\\b/i;
 const QUOTED_LABEL=/\b(?:used the words|used the phrase|wrote the words|claimed in (?:an?|the) (?:advert|advertisement|marketing)|labelled itself)\b/i;
 function isHedged(text){
  // "in May" is a calendar month, not the epistemic modal "may".
@@ -53,6 +58,13 @@ export function observableOverreach(premise, conclusion, {inferenceMarker=""}={}
  // Advertising wording is not itself proof of a universal physical property.
  if(QUOTED_LABEL.test(p)&&(UNIVERSAL_RESULT.test(c)||GLOBAL_ZERO.test(c)))
   return {label:"unsupported_conclusion",reason:"quoted_label_to_universal_property"};
+ // The scale of a one-off intervention does not logically determine an
+ // unrestricted, permanent or universal outcome. Record a specific scope
+ // overclaim rather than equating a neutral NLI score with unsupportedness.
+ if(LOCAL_INTERVENTION.test(p)&&STRONG_UNIVERSAL.test(c)&&
+    !/\\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|guaranteed)\\b/i.test(p)&&
+    !/\\b(?:if|provided|only|necessarily|entails|logically)\\b/i.test(p))
+  return {label:"unsupported_conclusion",reason:"local_intervention_to_universal_outcome"};
  // First wins do not *guarantee* the rest of a season.
  if(/\b(?:first|opening|initial)\s+(?:game|match|contest|trial)\b/i.test(p)&&
     /\b(?:won|success|succeeded|passed)\b/i.test(p)&&
