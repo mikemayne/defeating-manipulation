@@ -25,6 +25,11 @@
  const colour = technique => technique.category === "Inconsistency" ? RED :
    technique.category === "Positive" ? GREEN :
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
+ // A positive phrase must never visually cover an overlapping negative
+ // finding; this is not yet a concealed-manipulation judgement.
+ const priority = match => match.kind === "inconsistency" ? 4 :
+   match.technique.category === "Concealed manipulation" ? 3 :
+   match.technique.category === "Positive" ? 1 : 2;
  const eligible = node => node.parentElement &&
    !node.parentElement.closest("script,style,noscript,textarea,input,select,option,button,code,pre,svg,mark,[contenteditable],#dm-pattern-tooltip");
  function show(mark, match) {
@@ -49,7 +54,7 @@
    strength.title = "Match strength is an experimental estimate, not the probability that the text is manipulative.";
    const link = document.createElement("a");
    link.textContent = "Read the full explanation";
-   link.href = `https://mikemayne.github.io/defeating-manipulation/techniques/${encodeURIComponent(technique.id)}.html`;
+   link.href = `https://mikemayne.github.io/defeating-manipulation/${technique.category === "Positive" ? "positive-patterns" : "techniques"}/${encodeURIComponent(technique.id)}.html`;
    link.target = "_blank";
    link.rel = "noopener noreferrer";
    link.style.color = "#7ee4e7";
@@ -120,7 +125,7 @@
    for (let i = 0; i + 1 < edges.length; i++) {
      const start = edges[i], end = edges[i + 1];
      const candidates = valid.filter(m => m.start <= start && m.end >= end)
-       .sort((a, b) => Number(b.kind === "inconsistency") - Number(a.kind === "inconsistency") ||
+       .sort((a, b) => priority(b) - priority(a) ||
          (b.score || 0) - (a.score || 0));
      if (candidates.length) spans.push({ ...candidates[0], start, end });
    }
