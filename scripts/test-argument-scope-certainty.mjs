@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {inferScopeCertaintyGap as gap} from '../extension/src/argument-scope-certainty.mjs';
 import {combineArgumentEvidence,analyseArguments,argumentFindings}
  from '../extension/src/argument-analysis.mjs';
+import {inspectArgumentProof} from '../extension/src/argument-proof-graph.mjs';
 
 // Independently authored fictional controls, not copied from the frozen
 // 1000-row development corpus. No imported gold labels or benchmark scores.
@@ -194,6 +195,20 @@ const negatives=[
 for(const [id,p,c,whichMarker] of negatives)
  assert.equal(gap(p,c,{inferenceMarker:whichMarker===undefined?marker:whichMarker}),null,
   'must abstain: '+id+' -> '+JSON.stringify(gap(p,c,{inferenceMarker:marker})));
+// A count attached to one past occasion must never be interpreted as the
+// exact count of a different FUTURE series, even when event nouns match.
+for(const [p,c] of [
+ ['Every ticket was sold for one chamber concert last year.',
+  'The next 10 chamber concerts are certain to sell out completely.'],
+ ['All reservations were filled for one theatre show last month.',
+  'The next 8 theatre shows are certain to fill completely.'],
+ ['The local group recorded three presentations last week.',
+  'The next 12 presentations are certain to occur.']
+]){
+ const proof=inspectArgumentProof(p,c);
+ assert.notEqual(proof.verified?.reason,'exact_same_scope_quantity',
+  'Numeric claim is not the same temporal cohort: '+c);
+}
 const neutral={contradiction:0.001,neutral:0.998,entailment:0.001};
 for(const i of [0,3,6,8,10,13]){
  const [id,p,c]=positives[i];
