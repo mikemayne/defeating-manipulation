@@ -1237,3 +1237,6 @@ await import('./test-four-patterns.mjs');
 
 // Typos are potential attention hooks, never proof of author intent.
 await import('./test-spelling-bait.mjs');
+
+// Independent fictional bounded-arithmetic and quantifier logic controls.
+await import('./test-argument-bounded-logic.mjs');

@@ -2,6 +2,7 @@ import { extractArguments } from "./argument-clauses.mjs";
 import { normaliseClaimForNli } from "./argument-claim-normalisation.mjs";
 import { explicitConflict, specificEvidenceGap } from "./argument-evidence-checks.mjs";
 import { observableContradiction, observableSamplingLeap } from "./argument-claim-relations.mjs";
+import { boundedArgumentLogic } from "./argument-bounded-logic.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -71,6 +72,11 @@ export function classifyArgumentScore(forward, reverse = null) {
 // A contradictory premise wins over a supporting one: the supplied set of
 // premises is then internally inconsistent. Uncertain scores abstain.
 export function combineArgumentEvidence(scored, conclusionText = "") {
+ // Structured arithmetic, explicit exclusions and a limited set of
+ // quantified conditions are more reliable than MNLI guesses. Keep them
+ // separate from neural probabilities and ensure contradictory evidence wins.
+ const complete = scored.find(item => item.kind === "combined")?.text || scored[0]?.text || "";
+ const bounded = boundedArgumentLogic(complete, conclusionText);
  const classified = scored.map(item => {
   let verdict = item.repeated
    ? { label: "supported_conclusion", score: 1 }
@@ -113,6 +119,11 @@ export function combineArgumentEvidence(scored, conclusionText = "") {
    evidence = assessNeutralArgumentEvidence(item.text, conclusionText, verdict);
   return { ...item, verdict:evidence.verdict, evidenceStatus:evidence.status,
    evidenceReason:evidence.reason || null };
+ });
+ if (bounded) classified.push({
+  kind:"bounded_relation", text:complete,
+  verdict:{label:bounded.label, score:1, reason:bounded.reason},
+  evidenceStatus:"verified_bounded_relation", evidenceReason:bounded.reason
  });
  for (const type of ["contradictory_claims", "supported_conclusion", "unsupported_conclusion"]) {
   const matches = classified.filter(item => item.verdict?.label === type);
