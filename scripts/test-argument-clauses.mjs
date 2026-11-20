@@ -63,3 +63,37 @@ assert.equal(extractArgumentStatements(decimalAndDomain).length,2,
 const capped=Array.from({length:20},(_,i)=>`A sample of ${i+30} units was collected because the available supply was limited.`).join(' ');
 assert.ok(extractArguments(capped).length<=8,'Candidate count stays bounded');
 console.log('Clause parser: 16 independent positive and 20 negative controls; original offsets and bounds passed.');
+
+// Independent fictional one-paragraph constructions. No media corpus or
+// original benchmark paragraphs are included in the repository.
+const mediaParagraphs = [
+ { id:'comma-so', text:'The notice gives a discount to registered members. Nia joined last week, so the discount applies to her.', marker:'so', premises:2 },
+ { id:'that-means', text:'The count recorded twelve votes in favour and eight against. That means more voters supported the measure.', marker:'that means', premises:1 },
+ { id:'that-proves', text:'The delivery was delayed this week. That proves every future delivery will be late.', marker:'that proves', premises:1 },
+ { id:'that-guarantees', text:'A company received its first order. That guarantees every later customer will place an order.', marker:'that guarantees', premises:1 },
+ { id:'standalone-so', text:'The tally records nineteen yes votes and seven no votes. So more people said yes than no.', marker:'so', premises:1 },
+ { id:'since-context', text:'The safety policy excludes bottled liquids. Since this drink is in a bottle, it is subject to the rule.', marker:'since', premises:2 },
+ { id:'three-premises', text:'Entry is free for students. The charity accepts student ID cards. Anna presented her student ID, so she qualifies for free entry.', marker:'so', premises:3 }
+];
+for(const item of mediaParagraphs) {
+ const found=extractArguments(item.text);
+ assert.equal(found.length,1,'One assessable paragraph inference: '+item.id);
+ assert.equal(found[0].conclusion.marker,item.marker,'Connector: '+item.id);
+ assert.equal(found[0].premises.length,item.premises,'Retain the relevant premises: '+item.id);
+ assert.equal(item.text.slice(found[0].conclusion.start,found[0].conclusion.end),
+  found[0].conclusion.text,'Unmodified source offset: '+item.id);
+ for(const premise of found[0].premises)
+  assert.equal(item.text.slice(premise.start,premise.end),premise.text,
+   'Original premise offset: '+item.id);
+}
+const mediaNegatives = [
+ 'Because of a sudden power cut, the exhibition closed early.',
+ 'Since last summer, visitor numbers have increased steadily.',
+ 'The editors discussed prices so that the article would be clearer.',
+ 'The campaign quoted the slogan “we won, so everybody agrees”.',
+ 'The park has opened a new entrance. The older entrance is still open.',
+ 'It would not be correct therefore to suggest the decision has been reversed.'
+];
+for(const text of mediaNegatives)
+ assert.deepEqual(extractArguments(text),[],'Do not fabricate a conclusion from: '+text);
+console.log('Single-paragraph connectors: new synthetic positive/negative cases and exact premise offsets passed.');
