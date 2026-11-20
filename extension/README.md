@@ -587,3 +587,25 @@ tests in `scripts/test-argument-bounded-logic.mjs` validate both supported
 and contradictory outcomes, model-score conflicts and hard negatives.
 A fresh, independently labelled paragraph sample is required to estimate
 accuracy outside the development cases.
+
+
+### Explicit scope overreach checks (conservative)
+
+The optional local argument pass now recognises a narrow class of **unsupported
+conclusion**: a small observation presented as a universal, an engagement
+metric presented as a guarantee or safety ranking, a strategy/forecast presented
+as an already certain outcome, and advertising words presented as a universal
+physical property. This is **about what follows from the evidence supplied**,
+not whether the conclusion is objectively true or whether its author intended
+to mislead.
+
+The rule requires a stated inference, checks for hedging, full-population
+premises, exhaustive finite sets and explicit conditions, and still abstains
+when the relationship is ambiguous. An NLI-neutral result alone is **never**
+enough for a red underline. Rule strength is a textual check, not a calibrated
+model probability.
+
+The model is unchanged. New synthetic tests exercise these principles against
+independent fictional positive cases and difficult counterexamples. The
+previous 100-paragraph development dataset is not committed; rerun it, then
+test new independently annotated paragraphs before claiming general accuracy.
