@@ -1018,6 +1018,33 @@
         "A conclusion is based on a small selected set of cases without explaining how they were chosen."
       ],
       "example": "This diet works because I found three people online who lost weight using it."
+    },
+    {
+      "id": "preference_as_moral_obligation",
+      "title": "Preference as moral obligation",
+      "category": "Social influence",
+      "summary": "Presenting a personal preference as an obligation for everyone else, then treating noncompliance as evidence of moral wrongdoing without establishing why the obligation applies.",
+      "tags": [
+        "moralisation",
+        "social pressure",
+        "entitlement framing",
+        "coercive framing"
+      ],
+      "status": "starter",
+      "definition": "A speaker moves from 'I prefer this' to 'you must do this', then portrays disagreement or noncompliance as proof of disrespect or bad character. The personal preference is used as its own justification for a moral duty, without addressing context, proportionality or any independent reason for the demand.",
+      "observable_features": [
+        "An individual's preference is presented as an unconditional requirement for others.",
+        "Declining the request is described as proof of selfishness, disrespect or moral failure.",
+        "The argument offers no separate justification, such as an agreement, relevant harm or a shared obligation."
+      ],
+      "example": "'I prefer emails to begin with Dear. Anyone who starts with Hi is disrespectful and should be ashamed.'",
+      "examples": [
+        "I prefer emails to begin with Dear. Anyone who starts with Hi is disrespectful and should be ashamed.",
+        "I like everyone to use my preferred meeting format. Anyone who suggests another format is a bad colleague.",
+        "I prefer people to say good morning before starting work. If they don't, that proves they're selfish."
+      ],
+      "reader_effect": "Can make conformity to a personal preference feel like a test of someone's morality, discouraging reasonable disagreement or alternative choices.",
+      "references": []
     }
   ]
 }
