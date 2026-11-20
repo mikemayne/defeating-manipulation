@@ -795,3 +795,81 @@ assert.ok(benchmarkWorker.includes('onDiagnostic: diagnostic => argumentDiagnost
  benchmarkUI.includes('Reverse C'),
  'Every failed real-model argument exposes all combined and individual NLI scores');
 console.log('Argument evidence fusion: combined vs individual, contradiction priority, exact repetition and diagnostics passed.');
+
+
+// The three remaining real-model failures are about the difference between
+// disproving a proposition and failing to establish it. Replay the exact NLI
+// scores from the browser's diagnostic report, plus fresh contrasting cases.
+const evidenceReplay = JSON.parse(fs.readFileSync(
+ 'evaluation/argument-evidence-contrasts.json', 'utf8')).cases;
+assert.ok(evidenceReplay.length >= 9, 'Real NLI traces and independent controls are retained');
+const replayFailures = [];
+for (const sample of evidenceReplay) {
+ const argumentsFound = argumentEngine.extractArguments(sample.text);
+ assert.equal(argumentsFound.length, 1, 'One explicit argument in replay: ' + sample.id);
+ const argument = argumentsFound[0];
+ const sources = [
+  ['combined', argument.premise],
+  ...argument.premises.map((p, i) => ['premise_' + (i + 1), p.text])
+ ];
+ const scores = new Map();
+ const nli = values => values ? {
+  contradiction:values[0], neutral:values[1], entailment:values[2]
+ } : undefined;
+ for (const [kind, premise] of sources) {
+  const row = sample.scores[kind];
+  if (!row) continue;
+  if (row.forward)
+   scores.set(JSON.stringify([premise, argument.conclusion.text]), nli(row.forward));
+  if (row.reverse)
+   scores.set(JSON.stringify([argument.conclusion.text, premise]), nli(row.reverse));
+ }
+ const diagnostics = [];
+ const assessments = await argumentEngine.analyseArguments(sample.text,
+  async (premise, hypothesis) => {
+   const key = JSON.stringify([premise, hypothesis]);
+   if (!scores.has(key)) throw Error('Unexpected NLI scoring request for '+sample.id+': '+key);
+   return scores.get(key);
+  }, { onDiagnostic: item => diagnostics.push(item) });
+ const found = assessments[0]?.label || null;
+ if (found !== sample.expected)
+  replayFailures.push({id:sample.id,expected:sample.expected,actual:found,
+   verdicts:diagnostics.map(x=>x.verdict)});
+ assert.equal(diagnostics.length, 1, 'Replay produces one complete trace for '+sample.id);
+ assert.ok(diagnostics[0].comparisons.length === 3,
+  'Replay compares both premises and their combined evidence: '+sample.id);
+ if (sample.expected === 'supported_conclusion' || sample.expected === null)
+  assert.equal(argumentEngine.argumentFindings(assessments).length, 0,
+   'Supported or uncertain arguments do not receive a red underline: '+sample.id);
+}
+assert.deepEqual(replayFailures, [],
+ 'All three recorded model failures and generalisation controls now classify correctly');
+const asymmetricHigh = { contradiction:0.994, neutral:0.004, entailment:0.002 };
+const reverseLow = { contradiction:0.004, neutral:0.989, entailment:0.007 };
+assert.equal(argumentEngine.classifyArgumentScore(asymmetricHigh, reverseLow)?.label,
+ 'unsupported_conclusion','One-way model contradiction indicates missing support, not proven logical conflict');
+assert.equal(argumentEngine.classifyArgumentScore(
+ { contradiction:0.89, neutral:0.10, entailment:0.01 }, reverseLow), null,
+ 'A weak one-way contradiction still abstains instead of manufacturing an error');
+assert.equal(argumentEngine.classifyArgumentScore(asymmetricHigh,
+ { contradiction:0.95, neutral:0.04, entailment:0.01 })?.label,'contradictory_claims',
+ 'Strong bidirectional contradictions remain classified as contradictions');
+const wider = argumentEngine.combineArgumentEvidence([{
+ kind:'premise_1', text:'Platform two is accessible',
+ forward:asymmetricHigh, reverse:{contradiction:0.82, neutral:0.17, entailment:0.01}
+}], 'Every platform is accessible');
+assert.equal(wider?.label,'unsupported_conclusion',
+ 'A single positive example cannot establish every instance, even with noisy reverse NLI');
+const explicitOpposition = argumentEngine.combineArgumentEvidence([{
+ kind:'premise_1', text:'One platform is inaccessible',
+ forward:asymmetricHigh, reverse:{contradiction:0.95, neutral:0.04, entailment:0.01}
+}], 'Every platform is accessible');
+assert.equal(explicitOpposition?.label,'contradictory_claims',
+ 'A real counterexample contradicts a universal claim');
+const explicitOnly = argumentEngine.combineArgumentEvidence([{
+ kind:'premise_1', text:'Only platform two is accessible',
+ forward:asymmetricHigh, reverse:{contradiction:0.95, neutral:0.04, entailment:0.01}
+}], 'Every platform is accessible');
+assert.equal(explicitOnly?.label,'contradictory_claims',
+ 'An explicit only restriction still contradicts broader access');
+console.log('Argument scope and NLI asymmetry: 9 replay/contrast cases and direct controls passed.');
