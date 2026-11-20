@@ -5,6 +5,7 @@ import { explicitConflict, specificEvidenceGap } from "./argument-evidence-check
 import { observableContradiction, observableSamplingLeap } from "./argument-claim-relations.mjs";
 import { boundedArgumentLogic } from "./argument-bounded-logic.mjs";
 import { observableOverreach } from "./argument-overreach.mjs";
+import { structurePropositions } from "./argument-propositions.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -73,11 +74,12 @@ export function classifyArgumentScore(forward, reverse = null) {
 // verdict caused by adding irrelevant premises to the same NLI input.
 // A contradictory premise wins over a supporting one: the supplied set of
 // premises is then internally inconsistent. Uncertain scores abstain.
-export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker=""} = {}) {
+export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker="",structured=null} = {}) {
  // Structured arithmetic, explicit exclusions and a limited set of
  // quantified conditions are more reliable than MNLI guesses. Keep them
  // separate from neural probabilities and ensure contradictory evidence wins.
  const complete = scored.find(item => item.kind === "combined")?.text || scored[0]?.text || "";
+ const propositionModel = structured || structurePropositions(complete, conclusionText);
  const bounded = boundedArgumentLogic(complete, conclusionText);
  // An overclaim needs an observable *scope leap*, not merely an NLI-neutral
  // score. Explicit contradictions and bounded entailments take precedence.
@@ -128,6 +130,13 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
   return { ...item, verdict:evidence.verdict, evidenceStatus:evidence.status,
    evidenceReason:evidence.reason || null };
  });
+ if (propositionModel.relation) classified.push({
+  kind:"proposition_relation", text:complete,
+  verdict:{label:propositionModel.relation.label,score:1,
+   reason:propositionModel.relation.reason},
+  evidenceStatus:"verified_proposition_relation",
+  evidenceReason:propositionModel.relation.reason
+ });
  if (bounded) classified.push({
   kind:"bounded_relation", text:complete,
   verdict:{label:bounded.label, score:1, reason:bounded.reason},
@@ -173,6 +182,10 @@ export async function analyseArguments(source, scorePair,
   // a shared referent for NLI only. The claim-completion pass is separate.
   const entities = normaliseEntitiesForNli(argument, normalised.text);
   const hypothesis = entities.hypothesis;
+  // Build the typed logical facts BEFORE neural inference. The model still
+  // receives the same number of premise/hypothesis scoring comparisons.
+  // Source assertions, not NLI rewrites, determine any verified relation.
+  const propositions = structurePropositions(argument.premise, normalised.text);
   onProgress?.({ completed: i, total: candidates.length });
 
   const texts = [
@@ -201,11 +214,15 @@ export async function analyseArguments(source, scorePair,
   }
   // Explicit-logic checks continue to use the original statements and
   // completed *source* conclusion, not canonicalised NLI text.
-  const result = combineArgumentEvidence(scored, normalised.text, {inferenceMarker:argument.conclusion.marker});
+  const result = combineArgumentEvidence(scored, normalised.text,
+   {inferenceMarker:argument.conclusion.marker,structured:propositions});
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
    modelConclusion: normalised.expanded || entities.changed ? hypothesis : null,
    entityNormalization: entities.changed ? {name:entities.name,canonical:entities.canonical} : null,
+   propositionNormalization:{facts:propositions.premises.length,
+    claimKind:propositions.conclusion.kind,
+    relation:propositions.relation?.reason || null},
    inferenceMarker: argument.conclusion.marker,
    inline: argument.conclusion.inline || false,
    comparisons: scored.map(({ kind, text, modelPremise, repeated, forward, reverse }) =>
