@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {inferQuantifierRelation,extractQuantifiedPropositions} from '../extension/src/argument-quantifiers.mjs';
 import {inferTypedNumericRelation,extractTypedNumericalFacts} from '../extension/src/argument-numeric-relations.mjs';
+import {inferNumericTemporalConstraint} from '../extension/src/argument-numeric-temporal.mjs';
 
 // Fresh, independent controls, distinct from the labelled 200-paragraph
 // corpus. The same rules must resist changed groups, scopes and modalities.
@@ -146,6 +147,63 @@ const numberNegatives=[
  ['The map shows two routes in June and five routes in July.','All routes in July were built.'],
 ];
 for(const [p,c] of numberNegatives)assert.equal(inferTypedNumericRelation(p,c),null,`false numeric proof: ${p} => ${c}`);
+// Fresh fictional cases, not the frozen 200-item development benchmark.
+const temporalPositive=[
+ ['exclusive-platform','The station information board lists platform 6 as the sole departure platform for service T92.',
+  'Service T92 departs from platform 8 according to that board.','contradictory_claims'],
+ ['matching-platform','The station information board lists platform 6 as the sole departure platform for service T92.',
+  'Service T92 departs from platform 6 according to that board.','supported_conclusion'],
+ ['exclusive-levels','The building plan confirms the north lift stops at levels 1, 3 and 5 only.',
+  'The lift stops at level 9 according to that plan.','contradictory_claims'],
+ ['in-listed-levels','The building plan confirms the north lift stops at levels 1, 3 and 5 only.',
+  'The lift stops at level 3 according to that plan.','supported_conclusion'],
+ ['universal-bound','All six bags were weighed and each was less than four kilograms.',
+  'One of those bags weighed more than nine kilograms.','contradictory_claims'],
+ ['staff-cutoff','The staff schedule assigns nobody to the security desk after 17:30 on Tuesday.',
+  'Two security staff are assigned there at 19:00 on that Tuesday.','contradictory_claims'],
+ ['dated-end','The exhibition ends on 22 March, and today is 23 March.',
+  'The exhibition has already ended.','supported_conclusion']
+];
+for(const [id,p,c,label] of temporalPositive){
+ const got=inferNumericTemporalConstraint(p,c);
+ assert.equal(got?.label,label,'numeric/temporal '+id+': '+JSON.stringify(got));
+}
+const temporalNegative=[
+ ['other-service','The station information board lists platform 6 as the sole departure platform for service T92.',
+  'Service T93 departs from platform 8 according to that board.'],
+ ['nonexclusive-platform','The station information board lists platform 6 as a departure platform for service T92.',
+  'Service T92 departs from platform 8 according to that board.'],
+ ['different-source','The station information board lists platform 6 as the sole departure platform for service T92.',
+  'Service T92 departs from platform 8 according to a different board.'],
+ ['other-lift','The building plan shows the north lift stops at levels 1, 3 and 5 only. A second lift serves another wing.',
+  'The lift stops at level 9 according to that plan.'],
+ ['lift-not-closed','The building plan shows the lift stops at levels 1, 3 and 5.',
+  'The lift stops at level 9 according to that plan.'],
+ ['overlapping-weight','All six bags were weighed and each was less than four kilograms.',
+  'One of those bags weighed more than two kilograms.'],
+ ['different-weight-units','All six bags were weighed and each was less than four kilograms.',
+  'One of those bags weighed more than nine grams.'],
+ ['partial-weight','Some six bags were weighed and each was less than four kilograms.',
+  'One of those bags weighed more than nine kilograms.'],
+ ['staff-before-cutoff','The staff schedule assigns nobody to the security desk after 17:30 on Tuesday.',
+  'Two security staff are assigned there at 16:00 on that Tuesday.'],
+ ['staff-other-desk','The staff schedule assigns nobody to the security desk after 17:30 on Tuesday.',
+  'Two reception staff are assigned there at 19:00 on that Tuesday.'],
+ ['staff-other-day','The staff schedule assigns nobody to the security desk after 17:30 on Tuesday.',
+  'Two security staff are assigned there at 19:00 on that Wednesday.'],
+ ['before-end','The exhibition ends on 22 March, and today is 21 March.',
+  'The exhibition has already ended.'],
+ ['different-event','The exhibition ends on 22 March, and today is 23 March.',
+  'The carnival has already ended.'],
+ ['cross-year-date','The exhibition ends on 22 December, and today is 2 January.',
+  'The exhibition has already ended.'],
+ ['quotation','The board reads "platform 6 as the sole departure platform for service T92".',
+  'Service T92 departs from platform 8 according to that board.'],
+ ['uncertain','The exhibition might end on 22 March, and today is 23 March.',
+  'The exhibition has already ended.']
+];
+for(const [id,p,c] of temporalNegative)
+ assert.equal(inferNumericTemporalConstraint(p,c),null,'numeric/temporal abstention '+id);
 assert.ok(extractQuantifiedPropositions('All seven lockers were sealed.').length>0);
 assert.ok(extractTypedNumericalFacts('We recorded 20 widgets in April and 24 widgets in May.').length===2);
 console.log(`Typed reasoning tests: ${quantPositive.length} quantifier positives, ${quantNegatives.length} quantifier abstentions, ${numberPositive.length} numeric positives, ${numberNegatives.length} numeric abstentions passed.`);
@@ -164,6 +222,20 @@ assert.equal(tent[0].conclusion.text,tentativeSource.slice(tent[0].conclusion.st
  'Tentative conclusion offsets must match the original source');
 assert.equal(extractArguments('The station changed its menu. This suggests a different recipe.').length,0,
  'A bare suggestion is not necessarily a premise-conclusion argument');
+// The new facts also enter the existing graph and override mistaken NLI
+// verdicts without modifying model probabilities or displaying red support.
+const temporalGraph=inspectArgumentProof(
+ temporalPositive[0][1],temporalPositive[0][2]);
+assert.equal(temporalGraph.verified?.label,'contradictory_claims');
+assert.equal(temporalGraph.verified?.basis,'numeric');
+const temporalSupported=inspectArgumentProof(
+ temporalPositive[6][1],temporalPositive[6][2]);
+assert.equal(temporalSupported.verified?.label,'supported_conclusion');
+const temporalCombined=combineArgumentEvidence([
+ {kind:'combined',text:temporalPositive[6][1],
+  forward:{contradiction:0.995,neutral:0.004,entailment:0.001}}
+],temporalPositive[6][2]);
+assert.equal(temporalCombined?.label,'supported_conclusion');
 const quantifiedProof=inspectArgumentProof(
  'Every storage crate was sealed yesterday.',
  'One storage crate was not sealed yesterday.');
