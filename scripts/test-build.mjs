@@ -939,6 +939,7 @@ assert.throws(() => realCorpus.validateRealEntry({
 }), /human label/, 'Collector rejects undefined classifier labels');
 const realPage = fs.readFileSync('extension/real-data.html','utf8');
 const realClient = fs.readFileSync('extension/src/real-data-ui.mjs','utf8');
+execFileSync(process.execPath, ['--check','extension/src/real-data-ui.mjs'], {stdio:'inherit'});
 assert.ok(realPage.includes('source-url') && realPage.includes('rationale') &&
  realPage.includes('value="uncertain"') &&
  realPage.includes('value="natural"') &&
@@ -946,6 +947,8 @@ assert.ok(realPage.includes('source-url') && realPage.includes('rationale') &&
  'Real-world annotation page preserves sources, manual labels and uncertain cases');
 assert.ok(realClient.includes('localStorage') &&
  realClient.includes('toRealBenchmark(annotations)') &&
+ realClient.includes('real-argument-annotations-backup.json') &&
+ realPage.includes('id="backup"') &&
  realClient.includes('source-list') &&
  realClient.includes('textContent ='),
  'Local collector exports import-ready JSON and avoids unsafe HTML rendering');
