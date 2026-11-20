@@ -245,10 +245,12 @@ async function startRun(message) {
      argumentAssessments: argumentMode ? argumentAssessments.map(assessment => ({
       label: assessment.label, premise: assessment.premise,
       conclusion: assessment.conclusion.text, score: Number(assessment.score.toFixed(3)),
-      decisivePremise: assessment.evidenceText, basis: assessment.basis
+      decisivePremise: assessment.evidenceText, basis: assessment.basis,
+      reason: assessment.reason || null
      })) : [],
      argumentDiagnostics: argumentMode ? argumentDiagnostics.map(item => ({
       conclusion: item.conclusion, verdict: item.verdict,
+      reason: item.reason || null,
       comparisons: item.comparisons.map(pair => ({
        kind: pair.kind, premise: pair.premise, repeated: pair.repeated,
        forward: pair.forward, reverse: pair.reverse
