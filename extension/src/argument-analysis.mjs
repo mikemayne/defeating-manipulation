@@ -3,6 +3,7 @@ import { normaliseClaimForNli } from "./argument-claim-normalisation.mjs";
 import { explicitConflict, specificEvidenceGap } from "./argument-evidence-checks.mjs";
 import { observableContradiction, observableSamplingLeap } from "./argument-claim-relations.mjs";
 import { boundedArgumentLogic } from "./argument-bounded-logic.mjs";
+import { observableOverreach } from "./argument-overreach.mjs";
 export { extractArguments, extractArgumentStatements } from "./argument-clauses.mjs";
 
 // Parsing is isolated in argument-clauses.mjs. The NLI scoring and
@@ -71,12 +72,18 @@ export function classifyArgumentScore(forward, reverse = null) {
 // verdict caused by adding irrelevant premises to the same NLI input.
 // A contradictory premise wins over a supporting one: the supplied set of
 // premises is then internally inconsistent. Uncertain scores abstain.
-export function combineArgumentEvidence(scored, conclusionText = "") {
+export function combineArgumentEvidence(scored, conclusionText = "", {inferenceMarker=""} = {}) {
  // Structured arithmetic, explicit exclusions and a limited set of
  // quantified conditions are more reliable than MNLI guesses. Keep them
  // separate from neural probabilities and ensure contradictory evidence wins.
  const complete = scored.find(item => item.kind === "combined")?.text || scored[0]?.text || "";
  const bounded = boundedArgumentLogic(complete, conclusionText);
+ // An overclaim needs an observable *scope leap*, not merely an NLI-neutral
+ // score. Explicit contradictions and bounded entailments take precedence.
+ const overreach = !bounded &&
+   !observableContradiction(complete, conclusionText).verified &&
+   !explicitConflict(complete, conclusionText).verified
+   ? observableOverreach(complete, conclusionText, {inferenceMarker}) : null;
  const classified = scored.map(item => {
   let verdict = item.repeated
    ? { label: "supported_conclusion", score: 1 }
@@ -124,6 +131,11 @@ export function combineArgumentEvidence(scored, conclusionText = "") {
   kind:"bounded_relation", text:complete,
   verdict:{label:bounded.label, score:1, reason:bounded.reason},
   evidenceStatus:"verified_bounded_relation", evidenceReason:bounded.reason
+ });
+ if (overreach) classified.push({
+  kind:"overreach_relation", text:complete,
+  verdict:{label:"unsupported_conclusion",score:1,reason:overreach.reason},
+  evidenceStatus:"verified_scope_overreach",evidenceReason:overreach.reason
  });
  for (const type of ["contradictory_claims", "supported_conclusion", "unsupported_conclusion"]) {
   const matches = classified.filter(item => item.verdict?.label === type);
@@ -182,7 +194,7 @@ export async function analyseArguments(source, scorePair,
     reverse = await scorePair(hypothesis, item.text);
    scored.push({ ...item, repeated, forward, reverse });
   }
-  const result = combineArgumentEvidence(scored, hypothesis);
+  const result = combineArgumentEvidence(scored, hypothesis, {inferenceMarker:argument.conclusion.marker});
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
    modelConclusion: normalised.expanded ? hypothesis : null,
