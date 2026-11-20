@@ -13,7 +13,7 @@ const positives=[
  ["small-sample-total","Inspectors sampled five lunches and found no contamination.","Every lunch in the district is safe."],
  ["one-route-all","The city upgraded one bus route.","All public transport in the county is accessible."],
  ["usage-to-safety","The app received two hundred downloads.","The app has no security risks."],
- ["usage-to-compound-risk","The messaging app has been downloaded by a hundred people.","The messaging app has no privacy or security risks."],
+ ["usage-to-compound-risk","The messaging app recorded a hundred downloads.","The messaging app has no privacy or security risks."],
  ["shares-to-ranking","The restaurant video has millions of shares.","It is the most popular business in the country."],
  ["votes-to-certain-victory","The candidate gained several thousand new followers.","The candidate is certain to win the election."],
  ["reviews-to-safety","The equipment received five-star customer reviews.","It is the safest equipment in the world."],
