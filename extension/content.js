@@ -4,19 +4,36 @@
    return;
  }
  const MARK = "data-dm-pattern-highlight";
- const BUSY_CURSOR_STYLE_ID = "dm-pattern-busy-cursor";
- let activeAnalyses = 0;
+ let activeAnalyses = 0, progressBadge, progressMessage;
+ function setProgress(message) {
+   if (activeAnalyses && progressMessage) progressMessage.textContent = message;
+ }
  function setBusy(busy) {
    activeAnalyses = Math.max(0, activeAnalyses + (busy ? 1 : -1));
    if (busy && activeAnalyses === 1) {
-     const style = document.createElement("style");
-     style.id = BUSY_CURSOR_STYLE_ID;
-     style.textContent = "html[data-dm-analysing], html[data-dm-analysing] * { cursor: wait !important; }";
-     document.documentElement.append(style);
-     document.documentElement.setAttribute("data-dm-analysing", "");
+     // A non-blocking progress badge, not a fake percentage or busy pointer.
+     progressBadge = document.createElement("div");
+     progressBadge.id = "dm-pattern-status";
+     progressBadge.setAttribute("role", "status");
+     progressBadge.setAttribute("aria-live", "polite");
+     Object.assign(progressBadge.style, {
+       position: "fixed", bottom: "16px", right: "16px", zIndex: "2147483646",
+       padding: "10px 14px", borderRadius: "7px", background: "#102b46",
+       color: "#f4fbff", boxShadow: "0 3px 18px #0005",
+       font: "13px/1.45 system-ui,sans-serif", pointerEvents: "none",
+       minWidth: "185px", maxWidth: "275px"
+     });
+     progressMessage = document.createElement("div");
+     progressMessage.textContent = "Analysing selected text…";
+     const bar = document.createElement("progress");
+     bar.max = 100; // Missing value makes this indeterminate, not 0%.
+     Object.assign(bar.style, { width: "100%", height: "7px",
+       marginTop: "5px", accentColor: "#dc2626" });
+     progressBadge.append(progressMessage, bar);
+     document.documentElement.append(progressBadge);
    } else if (!busy && activeAnalyses === 0) {
-     document.documentElement.removeAttribute("data-dm-analysing");
-     document.getElementById(BUSY_CURSOR_STYLE_ID)?.remove();
+     progressBadge?.remove();
+     progressBadge = progressMessage = null;
    }
  }
 
@@ -27,11 +44,12 @@
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
  // A positive phrase must never visually cover an overlapping negative
  // finding; this is not yet a concealed-manipulation judgement.
- const priority = match => match.kind === "inconsistency" ? 4 :
+ const priority = match => match.kind === "argument_support" ? 5 :
+   match.kind === "inconsistency" ? 4 :
    match.technique.category === "Concealed manipulation" ? 3 :
    match.technique.category === "Positive" ? 1 : 2;
  const eligible = node => node.parentElement &&
-   !node.parentElement.closest("script,style,noscript,textarea,input,select,option,button,code,pre,svg,mark,[contenteditable],#dm-pattern-tooltip");
+   !node.parentElement.closest("script,style,noscript,textarea,input,select,option,button,code,pre,svg,mark,[contenteditable],#dm-pattern-tooltip,#dm-pattern-status");
  function show(mark, match) {
    const technique = match.technique;
    tooltip.replaceChildren();
@@ -44,6 +62,11 @@
      other.textContent = "Conflicting passage: “" + match.otherText + "”";
      other.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
      summary.append(other);
+   } else if (match.kind === "argument_support") {
+     const evidence = document.createElement("div");
+     evidence.textContent = "Premises provided: “" + match.otherText + "”";
+     evidence.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
+     summary.append(evidence);
    } else if (match.kind === "concealed") {
      const opening = document.createElement("div");
      opening.textContent = "Positive opening: “" + match.positiveText + "”";
@@ -60,13 +83,14 @@
    const strength = document.createElement("div");
    strength.textContent = match.kind === "inconsistency" ? "Inference: possible contradiction" :
      match.kind === "concealed" ? "Relationship: positive wording followed by pressure (check context)" :
+     match.kind === "argument_support" ? "Inference: premise-to-conclusion support (check context)" :
      match.method === "pattern" ? "Match: Rule" :
      "Match strength: " + (match.strength || "Low");
    strength.style.cssText = "margin:0 0 8px;font-size:12px;color:#b5d0e5;";
    strength.title = "Match strength is an experimental estimate, not the probability that the text is manipulative.";
    const link = document.createElement("a");
    link.textContent = "Read the full explanation";
-   link.href = `https://mikemayne.github.io/defeating-manipulation/${technique.category === "Positive" ? "positive-patterns" : "techniques"}/${encodeURIComponent(technique.id)}.html`;
+   link.href = `https://mikemayne.github.io/defeating-manipulation/${technique.category === "Positive" ? "positive-patterns" : technique.category === "Inconsistency" ? "inconsistency-patterns" : "techniques"}/${encodeURIComponent(technique.id)}.html`;
    link.target = "_blank";
    link.rel = "noopener noreferrer";
    link.style.color = "#7ee4e7";
@@ -181,7 +205,7 @@
  tooltip = document.createElement("div");
  tooltip.id = "dm-pattern-tooltip";
  Object.assign(tooltip.style, { position: "fixed", zIndex: "2147483647", display: "none",
-   maxWidth: "340px", padding: "12px 14px", borderRadius: "8px", background: "#102b46",
+   maxWidth: "340px", maxHeight: "60vh", overflowY: "auto", padding: "12px 14px", borderRadius: "8px", background: "#102b46",
    color: "#f4fbff", boxShadow: "0 5px 24px #0005", font: "14px/1.45 system-ui,sans-serif",
    pointerEvents: "auto" });
  document.documentElement.append(tooltip);
@@ -189,6 +213,10 @@
    if (!event.target.closest?.("mark[" + MARK + "]") && !tooltip.contains(event.target))
      tooltip.style.display = "none";
  }, true);
+ browser.runtime.onMessage.addListener(message => {
+   if (message?.type === "DM_PROGRESS" && typeof message.message === "string")
+     setProgress(message.message);
+ });
  document.addEventListener("keydown", event => {
    if (event.key === "Escape") tooltip.style.display = "none";
  });
