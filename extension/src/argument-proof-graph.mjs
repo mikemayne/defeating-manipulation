@@ -5,6 +5,7 @@ import {inferNumericRelation,extractNumericalPropositions} from './argument-nume
 import {inferTypedNumericRelation,extractTypedNumericalFacts} from './argument-numeric-relations.mjs';
 import {inferQuantifierRelation,extractQuantifiedPropositions} from './argument-quantifiers.mjs';
 import {inferNumericTemporalConstraint} from './argument-numeric-temporal.mjs';
+import {inferSupportedDerivation} from './argument-supported-derivations.mjs';
 
 const MAX_NODES=40,MAX_DEPTH=3;
 const QUOTE=/["“”]/;
@@ -74,9 +75,10 @@ export function inspectArgumentProof(premise,conclusion){
  const typed=inferTypedNumericRelation(p,goal);
  const quantified=inferQuantifierRelation(p,goal);
  const temporal=inferNumericTemporalConstraint(p,goal);
+ const derived=inferSupportedDerivation(p,goal);
  // A disagreement between independent deterministic interpreters means a
  // malformed/ambiguous proposition or scope: do not pick a winner.
- const verifiedRelations=[numeric,typed,quantified,temporal].filter(Boolean);
+ const verifiedRelations=[numeric,typed,quantified,temporal,derived].filter(Boolean);
  if(new Set(verifiedRelations.map(x=>x.label)).size>1){
   graph.missingLinks.push({type:'conflicting_proof_interpreters',
    statement:goal,neededFor:goal,certainty:'unverified'});
