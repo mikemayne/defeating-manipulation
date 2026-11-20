@@ -335,3 +335,45 @@ same default 96 cases to measure the real-model improvement. The
 failure-copy report now also includes the decision reason
 (`scope_expansion` or `asymmetric_nli`) where applicable. The
 quantifier check is deliberately limited, not a general proof engine.
+
+
+## Authentic held-out real-world corpus protocol
+
+Run `cd extension && npm run benchmark:dev`, then open
+`http://127.0.0.1:4173/extension/real-data.html`. The local collector
+links to real statistical, parliamentary, technical and public-report
+sources, but deliberately **does not invent or pre-label authentic
+excerpts**. Select continuous original paragraphs; don't add an inference
+marker or modify conclusions. Record the original source title/URL, a
+short rationale, and a **human label before model testing**.
+
+Use two separate strategies:
+- `natural`: consecutive, unscreened passages (to measure real prevalence,
+  false alarms and missed implicit conclusions).
+- `challenge`: naturally occurring cases selected for an argument,
+  regardless of whether the inference is supported.
+
+If a passage's correct label is disputed, use `uncertain`, which is
+saved locally but excluded from the exported JSON. For scored text with
+no meaningful assessable argument, use `none`, exported as `expected:[]`.
+A conclusion unsupported by *provided* premises is not necessarily false.
+Use authentic contradiction only when statements cannot both hold under
+the same circumstances; disagreement between quoted people is not itself
+a contradiction by the article's author.
+
+Export `real-argument-benchmark.json`, then select **Arguments —
+premise and conclusion (local NLI)** and **Upload labelled JSON / JSONL**
+in `extension/benchmark.html`. The test lab accepts the same existing
+`{id,text,expected}` shape with additional `source_url`,
+`source_title`, `track` and `rationale` fields. It reports natural
+and challenge metrics separately; copied failures include source
+provenance and the manual annotation rationale. The code neither
+fetches outside articles nor uploads excerpts: all labels and full
+text remain on the local machine.
+
+A perfect generated-test score is not a population accuracy estimate.
+Blind sampling and independent human labels are essential. Only publish
+real-world accuracy with the size, selection procedure, class mix,
+inter-rater disagreement, exclusions and failure examples. Verify
+rights before sharing excerpts; OGL and Open Parliament material has
+its own attribution conditions.
