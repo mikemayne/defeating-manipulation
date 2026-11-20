@@ -6,6 +6,7 @@ import { combineArgumentEvidence, analyseArguments, argumentFindings }
 // New, fictional, individually authored contrasts. No old benchmark text.
 const positives=[
  ["limited-sample","Two streetlights on the promenade were repaired.","Every streetlight in the city is working."],
+ ["vague-same-population","Several visitors praised the new exhibit.","Every visitor praised the new exhibit."],
  ["limited-events","A single resident complained about noise.","Every house on the street is unbearable."],
  ["day-to-never","My coach arrived on time on Tuesday.","This operator never runs late."],
  ["snapshot-to-permanence","The camera showed no parked cars at 5 a.m.","The borough has permanently eliminated traffic."],
@@ -26,6 +27,8 @@ const positives=[
 ];
 const negatives=[
  ["universal-premise","Every resident in this area passed inspection.","Every resident passed inspection."],
+ ["incidental-options","The testing team evaluated the device. It considered several options.","The design is safe for all uses."],
+ ["vague-unrelated","Some staff visited the building.","All public transport in the region is accessible."],
  ["all-records","All of the reported company complaints were resolved.","All reported company complaints have been resolved."],
  ["just-two-only-two","Only two printers exist in this office. Both passed inspection.","Every printer in this office was inspected successfully."],
  ["only-gateway","The sole gateway serving the office is down.","All office requests will fail."],
