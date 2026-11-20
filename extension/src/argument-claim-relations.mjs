@@ -111,11 +111,11 @@ export function observableContradiction(premise,conclusion) {
  // conflicts if the claim explicitly says tickets are available FROM venue.
  if(shared.includes('venue')&&SOLD_OUT.test(p)&&
    /\bno extra\b.{0,40}\bseats?\b/i.test(p)&&AVAILABLE.test(c)&&
-   /\bfrom (?:the )?venue\b/i.test(c))
+   /\bfrom (?:the )?(?:[a-z-]+\s+){0,2}venue\b/i.test(c))
   return {verified:true,reason:'all_seats_sold_no_new_venue_tickets'};
  if(shared.includes('venue')&&SOLD_OUT.test(c)&&
    /\bno extra\b.{0,40}\bseats?\b/i.test(c)&&AVAILABLE.test(p)&&
-   /\bfrom (?:the )?venue\b/i.test(p))
+   /\bfrom (?:the )?(?:[a-z-]+\s+){0,2}venue\b/i.test(p))
   return {verified:true,reason:'all_seats_sold_no_new_venue_tickets'};
  if(shared.length>=1&&/\bonline only\b/i.test(p)&&
    /\bno (?:in.person|hall) (?:meeting|session|event)\b/i.test(p)&&
