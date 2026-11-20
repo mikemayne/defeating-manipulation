@@ -119,8 +119,9 @@ async function startRun(message) {
   const seeds = consistency ? validateConsistencyCases(rawSeeds) :
    validateSeeds(rawSeeds, techniques.map(t => t.id));
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
-  if (!Number.isSafeInteger(total) || total < 1 || total > 1000000)
-   throw Error("Choose between 1 and 1,000,000 tests");
+  const limit = consistency ? 10000 : 1000000;
+  if (!Number.isSafeInteger(total) || total < 1 || total > limit)
+   throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
   const rules = consistency ? [] : compilePatternRules(catalogue, patterns);
   if (consistency) await initialiseConsistencyModel();
   else if (mode === "ai") await initialiseModel(techniques);
