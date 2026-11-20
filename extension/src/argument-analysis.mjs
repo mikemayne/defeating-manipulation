@@ -97,8 +97,8 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
  // Claim-strength checks require an observable finite-versus-absolute
  // evidence mismatch; they do not infer unsoundness from proof absence alone.
  const proposedObligation = claimObligation === undefined
-  ? (inferExplicitProofObligationGap(complete, conclusionText, {inferenceMarker}) ||
-     inferScopeCertaintyGap(complete, conclusionText, {inferenceMarker}))
+  ? (inferScopeCertaintyGap(complete, conclusionText, {inferenceMarker}) ||
+     inferExplicitProofObligationGap(complete, conclusionText, {inferenceMarker}))
   : claimObligation;
  const explicitOpposition=observableContradiction(complete, conclusionText).verified ||
   explicitConflict(complete, conclusionText).verified;
@@ -230,10 +230,10 @@ export async function analyseArguments(source, scorePair,
   const propositions = structurePropositions(argument.premise, normalised.text);
   const bridge = inferReasoningBridge(argument.premise, normalised.text);
   const proof = inspectArgumentProof(argument.premise, normalised.text);
-  const claimObligation=inferExplicitProofObligationGap(
+  const claimObligation=inferScopeCertaintyGap(
    argument.premise,normalised.text,
    {inferenceMarker:argument.conclusion.marker}) ||
-   inferScopeCertaintyGap(argument.premise,normalised.text,
+   inferExplicitProofObligationGap(argument.premise,normalised.text,
     {inferenceMarker:argument.conclusion.marker});
   onProgress?.({ completed: i, total: candidates.length });
 
