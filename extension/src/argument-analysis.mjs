@@ -18,7 +18,7 @@ const NORMATIVE = /\b(?:should|ought|recommend|consider|prefer|hope|wish)\b|\b(?
 // A limited set of directly expressed within-sentence conclusions. The
 // pre-marker clause supplies a premise; the post-marker clause is the claim.
 // This only locates the inference; it is never evidence that it is valid.
-const INLINE_MARKER = /,\s*(?:which|and this)\s+(?:means|suggests|implies)(?:\s+that)?\s+|\b(?:indicates|suggests|implies|demonstrates|shows)\s+that\s+/gi;
+const INLINE_MARKER = /,\s*(?:which|and this)\s+(?:means|suggests|implies)(?:\s+that)?\s+|\b(?:indicates|suggests|implies|demonstrates|shows|indicating|suggesting|implying|showing)\s+that\s+/gi;
 
 
 export function extractArgumentStatements(source) {
