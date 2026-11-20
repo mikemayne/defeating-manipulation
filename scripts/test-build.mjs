@@ -1262,3 +1262,6 @@ await import('./test-argument-proof-graph.mjs');
 
 // Untrusted text is literal data; reject malformed NLI scores and regex injection.
 await import('./test-argument-safety.mjs');
+
+// Explicit claim-strength versus available-evidence obligations and hard negatives.
+await import('./test-argument-proof-obligations.mjs');
