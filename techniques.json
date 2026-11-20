@@ -1045,6 +1045,38 @@
       ],
       "reader_effect": "Can make conformity to a personal preference feel like a test of someone's morality, discouraging reasonable disagreement or alternative choices.",
       "references": []
+    },
+    {
+      "id": "too_good_to_be_true",
+      "title": "Too good to be true",
+      "category": "Deceptive offers",
+      "summary": "Promising an unusually large or effortless reward in exchange for a small payment, simple action or personal information, while providing little credible basis for the promised reward.",
+      "tags": [
+        "implausible reward",
+        "advance-fee scam",
+        "prize fraud",
+        "bait",
+        "unverified promise",
+        "financial inducement"
+      ],
+      "status": "starter",
+      "definition": "An offer presents an exceptional financial gain, prize, inheritance or other benefit as readily available, then asks the recipient to pay a relatively small fee, follow a link, share sensitive information or take another apparently minor step to obtain it. The disproportionate reward can draw attention away from whether the offer is genuine. The pattern concerns the structure of the offer, not the literal phrase 'too good to be true'.",
+      "observable_features": [
+        "A large sum, exceptional return, guaranteed prize or effortless opportunity is presented with little verifiable evidence.",
+        "A small upfront payment, processing fee, verification step, link or request for personal details is described as the only thing standing between the recipient and the reward.",
+        "The cost or action is made to look trivial by comparison with the promised benefit.",
+        "The supposed reward is difficult to verify independently, or the message relies on an unsupported claim of entitlement, exclusivity or guaranteed success.",
+        "Artificial urgency or reassurance discourages independent checks before the recipient acts."
+      ],
+      "example": "'You have inherited £1 million. Just transfer £100 to cover the release fee and we will send the inheritance to you within a week.'",
+      "examples": [
+        "You have inherited £1 million. Just transfer £100 to cover the release fee and we will send the inheritance to you within a week.",
+        "Congratulations! You have won £50,000. Pay the £25 administration charge today to claim your prize.",
+        "Earn £2,000 every day working from home, guaranteed. No experience needed — just pay the £49 registration fee.",
+        "Invest £100 today and receive £10,000 next week, guaranteed. Click here to get started."
+      ],
+      "reader_effect": "Can make a small payment or disclosure feel harmless beside the promised gain, encouraging someone to act before checking whether the reward or sender is genuine.",
+      "references": []
     }
   ]
 }
