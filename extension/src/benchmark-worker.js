@@ -7,6 +7,8 @@ import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { analyseArguments } from "./argument-analysis.mjs";
 import { scoreReaderInterpretations, validateReaderCases } from "./reader-interpretation.mjs";
+import { rankBoundaryChoices } from "./reader-boundary-scorer.mjs";
+import { createBoundaryLanguageScorer } from "./reader-language-model.mjs";
 import { validateArgumentParagraphCases, inspectArgumentStructure } from "../../evaluation/argument-structure-evaluator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { concealedPatterns, findConcealedPatterns } from "./concealed-matching.mjs";
@@ -23,6 +25,7 @@ const MODEL = "Xenova/all-MiniLM-L6-v2";
 let running = false, stopRequested = false;
 let extractor, cachedCatalogueKey, prototypes = [], positivePrototypes = [], cache = new Map();
 let nliScorer;
+let boundaryLanguageScorer;
 
 async function embed(texts) {
  if (!texts.length) return [];
@@ -127,12 +130,16 @@ function buildSummary(data, elapsedMs, cancelled) {
   failureSamples: data.failures, capturedFailures: data.failures.length,
   paragraphStages: data.paragraphStages,
   unlabelledScan: data.unlabelledScan,
-  predictions: data.unlabelledScan || data.readerMode ? data.predictions : null,
+  predictions: data.unlabelledScan || data.readerMode || data.boundaryMode ? data.predictions : null,
   predictionCounts: data.unlabelledScan ? data.predictionCounts : null,
   readerMode: data.readerMode, readerCounts: data.readerMode ? data.readerCounts : null,
   readerPairs: data.readerMode ? data.readerPairs : null,
   readerCasesWithPairs: data.readerMode ? data.readerCasesWithPairs : null,
-  readerExistingParserCases: data.readerMode ? data.readerExistingParserCases : null
+  readerExistingParserCases: data.readerMode ? data.readerExistingParserCases : null,
+  boundaryMode:data.boundaryMode,
+  boundaryCounts:data.boundaryMode?data.boundaryCounts:null,
+  boundaryPairs:data.boundaryMode?data.boundaryPairs:null,
+  boundaryCasesWithPairs:data.boundaryMode?data.boundaryCasesWithPairs:null
  };
 }
 async function startRun(message) {
@@ -145,24 +152,25 @@ async function startRun(message) {
   const consistency = mode === "consistency";
   const argumentMode = mode === "argument_paragraph";
   const readerMode = mode === "reader_inference";
+  const boundaryMode = mode === "reader_boundary";
   const positive = mode === "positive_rules" || mode === "positive_ai";
   const concealed = mode === "concealed_rules" || mode === "concealed_ai";
-  if (!["rules", "ai", "consistency", "argument_paragraph", "reader_inference", "positive_rules", "positive_ai",
+  if (!["rules", "ai", "consistency", "argument_paragraph", "reader_inference", "reader_boundary", "positive_rules", "positive_ai",
    "concealed_rules", "concealed_ai"].includes(mode))
    throw Error("Unknown matcher mode");
   const techniques = positive ? positiveTechniques : (catalogue.techniques || []);
-  if ((argumentMode || readerMode) && source !== "uploaded")
+  if ((argumentMode || readerMode || boundaryMode) && source !== "uploaded")
    throw Error("Argument and reader-interpretation tests require a local JSON/JSONL upload");
   const rawSeeds = source === "uploaded" ? await parseUpload(message.file) : fixture.cases;
   const ids = concealed ? concealedPatterns.map(pattern => pattern.id) :
    techniques.map(t => t.id);
-  const seeds = readerMode ? validateReaderCases(rawSeeds) :
+  const seeds = (readerMode || boundaryMode) ? validateReaderCases(rawSeeds) :
    argumentMode ? validateArgumentParagraphCases(rawSeeds) :
    consistency ? validateConsistencyCases(rawSeeds) : validateSeeds(rawSeeds, ids);
   const total = source === "uploaded" ? seeds.length : Math.floor(Number(amount));
   const unlabelledScan = argumentMode &&
    seeds.every(item => !Object.hasOwn(item,"expected_argument"));
-  const limit = consistency || argumentMode || readerMode || concealed ? 10000 : 1000000;
+  const limit = consistency || argumentMode || readerMode || boundaryMode || concealed ? 10000 : 1000000;
   if (!Number.isSafeInteger(total) || total < 1 || total > limit)
    throw Error("Choose between 1 and " + limit.toLocaleString("en-GB") + " tests");
   const rules = consistency || argumentMode || positive ? [] : compilePatternRules(catalogue, patterns);
@@ -170,7 +178,13 @@ async function startRun(message) {
   // field, including [], explicitly opts that row into reasoning evaluation.
   const needsNli = argumentMode &&
    seeds.some(item => Object.hasOwn(item, "expected") || item.analyse_reasoning === true);
-  if (consistency || needsNli || readerMode) await initialiseConsistencyModel();
+  if (boundaryMode){
+   if(!boundaryLanguageScorer)
+    boundaryLanguageScorer=await createBoundaryLanguageScorer({
+     onStatus:message=>self.postMessage({type:"stage",message})
+    });
+  }
+  else if (consistency || needsNli || readerMode) await initialiseConsistencyModel();
   else if (argumentMode) self.postMessage({type:"stage",
    message:"Checking argument structure locally (no AI download)…"});
   else if (mode === "concealed_ai") await initialiseConcealedModel(techniques);
@@ -184,9 +198,10 @@ async function startRun(message) {
    realTracks: {}, failures: [],
    paragraphStages: argumentMode && !unlabelledScan ? { structure:{total:0,exact:0},
     reasoning:{total:0,exact:0} } : null,
-   unlabelledScan, readerMode, predictions: [], predictionCounts: {},
+   unlabelledScan, readerMode, boundaryMode, predictions: [], predictionCounts: {},
    readerCounts:{}, readerPairs:0, readerCasesWithPairs:0,
-   readerExistingParserCases:0 };
+   readerExistingParserCases:0,
+   boundaryCounts:{}, boundaryPairs:0, boundaryCasesWithPairs:0 };
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
@@ -195,6 +210,28 @@ async function startRun(message) {
     concealed ? generatedConcealedCase(seeds, i, Number(seed) || 2026) :
     generatedCase(seeds, i, Number(seed) || 2026);
    let matches, argumentAssessments = [], argumentDiagnostics = [], structureCheck = null;
+   if(boundaryMode){
+    const boundaries=await rankBoundaryChoices(item.text,boundaryLanguageScorer);
+    data.boundaryPairs+=boundaries.length;
+    if(boundaries.length)data.boundaryCasesWithPairs++;
+    for(const b of boundaries)
+     data.boundaryCounts[b.uncertain?"uncertain (kept original)":b.choice]=
+      (data.boundaryCounts[b.uncertain?"uncertain (kept original)":b.choice]||0)+1;
+    data.predictions.push({
+     id:item.id,text:item.text,
+     source_url:item.source_url||null,
+     source_annotation:item.source_annotation||null,
+     boundaries
+    });
+    data.tested++;
+    const now=performance.now();
+    if(now-lastUpdate>220||i===total-1){
+     self.postMessage({type:"progress",runId:id,completed:data.tested,total});
+     lastUpdate=now;
+     await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    continue;
+   }
    if (readerMode) {
     // Reader interpretation is independent of argument truth and red findings.
     // Every test case is stored with exact original spans and uncalibrated
