@@ -213,13 +213,17 @@ export function combineArgumentEvidence(scored, conclusionText = "", {inferenceM
 export async function analyseArguments(source, scorePair,
  { onProgress, onDiagnostic } = {}) {
  if (typeof scorePair !== "function") return [];
- const candidates = extractArguments(source);
+ const candidates = extractArguments(source, {includeImplicit:true});
  const assessments = [];
  for (let i = 0; i < candidates.length; i++) {
   const argument = candidates[i];
   // A public post may elide a shared subject: use the completed proposition
   // only for inference, never replace the source text or underline offsets.
   const normalised = normaliseClaimForNli(argument);
+  // The inferred conjunction is an analysis-only structural hypothesis.
+  // It must not be used as the NLI premise: that would put the conclusion
+  // inside its own evidence and manufacture an entailment.
+  // The actual scorer always sees the original unaltered premise and claim.
   // First bring uniquely identified names, roles and subject pronouns to
   // a shared referent for NLI only. The claim-completion pass is separate.
   const entities = normaliseEntitiesForNli(argument, normalised.text);
@@ -287,6 +291,9 @@ export async function analyseArguments(source, scorePair,
    },
    inferenceMarker: argument.conclusion.marker,
    inline: argument.conclusion.inline || false,
+   inferred: argument.inferred || false,
+   inferredConnector: argument.inferredConnector || null,
+   analysisText: argument.inferred ? argument.analysisText : null,
    comparisons: scored.map(({ kind, text, modelPremise, repeated, forward, reverse }) =>
     ({ kind, premise: text, modelPremise: modelPremise!==text?modelPremise:null,
      repeated, forward, reverse })),
@@ -295,6 +302,16 @@ export async function analyseArguments(source, scorePair,
    reason: result?.reason || null
   });
   if (!result?.label) continue;
+  // Implicit joins are weaker evidence of author intent. Explicitly require
+  // independently checked source propositions for a red finding; NLI scores,
+  // missing-proof heuristics, or an inserted conjunction are insufficient.
+  if (argument.inferred && result.label !== "supported_conclusion" &&
+      result.basis !== "checked_proposition_graph" &&
+      result.basis !== "reasoning_bridge" &&
+      result.basis !== "proposition_relation" &&
+      result.basis !== "bounded_relation" &&
+      result.basis !== "overreach_relation" &&
+      result.basis !== "proof_obligation_gap") continue;
   assessments.push({ ...argument, ...result,
    explanation: result.label === "supported_conclusion"
     ? "The supplied premises appear to support this conclusion at the stated level."
