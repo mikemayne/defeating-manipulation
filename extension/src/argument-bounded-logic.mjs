@@ -1,3 +1,4 @@
+import {inferSupportedQuantities} from './argument-supported-quantities.mjs';
 // Conservative logic on a single paragraph's stated premises and conclusion.
 // Exact, mechanically checkable relations only; neither world truth nor intent.
 // All checks use local text and leave source offsets untouched.
@@ -180,5 +181,6 @@ function boundedThreshold(p,c) {
 export function boundedArgumentLogic(premise,conclusion) {
  if(typeof premise!=='string'||typeof conclusion!=='string')return null;
  return compareCounts(premise,conclusion)||voteQuantifier(premise,conclusion)||
-  exclusion(premise,conclusion)||boundedSchedule(premise,conclusion)||boundedThreshold(premise,conclusion);
+  exclusion(premise,conclusion)||boundedSchedule(premise,conclusion)||boundedThreshold(premise,conclusion)||
+  inferSupportedQuantities(premise,conclusion);
 }

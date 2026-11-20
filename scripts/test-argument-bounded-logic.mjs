@@ -31,6 +31,50 @@ for(const [id,p,c,expected] of controls){
  assert.equal(got?.label??null,expected,`${id}: got ${JSON.stringify(got)}`);
 }
 console.log('Bounded arithmetic / quantifier / exclusion checks passed:',controls.length);
+const supportedQuantityPositives=[
+ ['equal-vote','At the end of counting, 37 ballots favoured the proposal and 37 opposed it.',
+  'Neither side won a numerical majority of the votes counted.'],
+ ['majority','The committee has seven voting members. Five voted in favour and two against.',
+  'More than half of its voting members supported the motion.'],
+ ['temperature','The temperature log recorded 15°C at 08:30 and 19°C at 09:30.',
+  'The recorded temperature increased by four degrees over that hour.'],
+ ['delivery','The shop offered free delivery on every order above £60. This basket costs £72.',
+  'This basket qualifies for free delivery under that offer.']
+];
+for(const [id,p,c] of supportedQuantityPositives){
+ const v=boundedArgumentLogic(p,c);
+ assert.equal(v?.label,'supported_conclusion',id+': '+JSON.stringify(v));
+}
+const supportedQuantityNegatives=[
+ ['equal-not-majority','The final count was 38 ballots favoured the proposal and 37 opposed it.',
+  'Neither side won a numerical majority of the votes counted.'],
+ ['different-vote-group','The committee has seven voting members. Five voted in favour and two against.',
+  'More than half of its voting members supported a different motion.'],
+ ['unaccounted-votes','The committee has nine voting members. Five voted in favour and two against.',
+  'More than half of its voting members supported the motion.'],
+ ['different-duration','The temperature log recorded 15°C at 08:30 and 19°C at 10:30.',
+  'The recorded temperature increased by four degrees over that hour.'],
+ ['wrong-change','The temperature log recorded 15°C at 08:30 and 19°C at 09:30.',
+  'The recorded temperature increased by five degrees over that hour.'],
+ ['delivery-boundary','The shop offered free delivery on every order above £60. This basket costs £60.',
+  'This basket qualifies for free delivery under that offer.'],
+ ['delivery-different-basket','The shop offered free delivery on every order above £60. Another basket costs £72.',
+  'This basket qualifies for free delivery under that offer.'],
+ ['delivery-estimated','The shop offered free delivery on every order above £60. This basket may cost £72.',
+  'This basket qualifies for free delivery under that offer.'],
+ ['quoted-rule','The shop advertised "free delivery on every order above £60." This basket costs £72.',
+  'This basket qualifies for free delivery under that offer.']
+];
+for(const [id,p,c] of supportedQuantityNegatives)
+ assert.equal(boundedArgumentLogic(p,c),null,id+' must abstain');
+// The local inference must override a bad NLI result without a red underline.
+const recovered=combineArgumentEvidence([{kind:'combined',text:supportedQuantityPositives[0][1],
+ forward:{contradiction:.997,neutral:.002,entailment:.001},
+ reverse:{contradiction:.001,neutral:.998,entailment:.001}}],
+ supportedQuantityPositives[0][2]);
+assert.equal(recovered?.label,'supported_conclusion','Exact tally rescues NLI error');
+assert.equal(argumentFindings([{...recovered,conclusion:{start:0,end:12}}]).length,0,
+ 'Supported conclusions must not be underlined');
 const adversarial=[
  ['candidate-not-same-person','The count lists Candidate A 49% and Candidate B 51%.','Candidate A received a larger share than Candidate C.'],
  ['candidate-not-comparable','Candidate A got 51 votes in 2025 and Candidate B received 48 votes in 2024.','Candidate A received a larger share than Candidate B.'],
