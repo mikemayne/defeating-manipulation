@@ -21,7 +21,7 @@
  }
 
  let tooltip;
- const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#0d9488", RED = "#dc2626";
+ const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", RED = "#dc2626";
  const colour = technique => technique.category === "Inconsistency" ? RED :
    technique.category === "Positive" ? GREEN :
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
@@ -47,7 +47,7 @@
    } else if (match.kind === "concealed") {
      const opening = document.createElement("div");
      opening.textContent = "Positive opening: “" + match.positiveText + "”";
-     opening.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #2dd4bf;";
+     opening.style.cssText = `margin-top:8px;padding:7px;border-left:3px solid ${TURQUOISE};`;
      summary.append(opening);
      if (match.negativePattern) {
        const relation = document.createElement("div");
