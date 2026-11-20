@@ -1249,3 +1249,6 @@ await import('./test-argument-entity-normalisation.mjs');
 
 // Typed, locally verified relations must preserve conservative abstention.
 await import('./test-argument-propositions.mjs');
+
+// Temporal, equivalence and multi-step proof chains must resist ambiguous cases.
+await import('./test-argument-bridges.mjs');
