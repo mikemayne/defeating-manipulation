@@ -1265,3 +1265,6 @@ await import('./test-argument-proof-graph.mjs');
 // Explicit claim-strength versus available-evidence obligations and hard negatives.
 await import('./test-argument-proof-obligations.mjs');
 await import('./test-argument-safety.mjs');
+
+// Source-grounded quantified propositions, numeric categories and safe abstentions.
+await import('./test-argument-typed-reasoning.mjs');

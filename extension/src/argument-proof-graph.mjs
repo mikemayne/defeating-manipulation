@@ -2,6 +2,8 @@
 // The graph reports absent links as DIAGNOSTICS, never an automatic accusation.
 // Each verified edge is a stated rule or a JS-calculated numeric relation.
 import {inferNumericRelation,extractNumericalPropositions} from './argument-numeric.mjs';
+import {inferTypedNumericRelation,extractTypedNumericalFacts} from './argument-numeric-relations.mjs';
+import {inferQuantifierRelation,extractQuantifiedPropositions} from './argument-quantifiers.mjs';
 
 const MAX_NODES=40,MAX_DEPTH=3;
 const QUOTE=/["“”]/;
@@ -62,14 +64,30 @@ export function inspectArgumentProof(premise,conclusion){
  const goalId='goal';graph.nodes.push(node(goalId,'goal',goal));
  // Numeric relations have priority over NLI confidence only when their exact
  // units, entity descriptions and temporal scopes have already matched.
- graph.numericFacts=extractNumericalPropositions(p);
+ graph.numericFacts=[
+  ...extractNumericalPropositions(p),
+  ...extractTypedNumericalFacts(p),
+  ...extractQuantifiedPropositions(p)
+ ].slice(0,20);
  const numeric=inferNumericRelation(p,goal);
- if(numeric){
-  const id='d_numeric';graph.nodes.push(node(id,'derived',numeric.reason,{label:numeric.label}));
+ const typed=inferTypedNumericRelation(p,goal);
+ const quantified=inferQuantifierRelation(p,goal);
+ // A disagreement between independent deterministic interpreters means a
+ // malformed/ambiguous proposition or scope: do not pick a winner.
+ const verifiedRelations=[numeric,typed,quantified].filter(Boolean);
+ if(new Set(verifiedRelations.map(x=>x.label)).size>1){
+  graph.missingLinks.push({type:'conflicting_proof_interpreters',
+   statement:goal,neededFor:goal,certainty:'unverified'});
+  return graph;
+ }
+ const verified=verifiedRelations[0]||null;
+ if(verified){
+  const id='d_verified';graph.nodes.push(node(id,'derived',verified.reason,{label:verified.label}));
   for(const n of graph.nodes.filter(x=>x.kind==='premise'))graph.edges.push(edge(n.id,id,'source_quantity'));
-  graph.edges.push(edge(id,goalId,'javascript_arithmetic'));
-  graph.verified={...numeric,basis:'numeric',graphNode:id};
-  graph.status=numeric.label==='supported_conclusion'?'proved':'contradicted';
+  graph.edges.push(edge(id,goalId,quantified&&!numeric&&!typed?
+   'quantifier_rule':'javascript_checked_relation'));
+  graph.verified={...verified,basis:quantified&&!numeric&&!typed?'quantifier':'numeric',graphNode:id};
+  graph.status=verified.label==='supported_conclusion'?'proved':'contradicted';
   return graph;
  }
  // Generic conditional application. It relies on literal shared propositions,

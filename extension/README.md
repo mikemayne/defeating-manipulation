@@ -879,3 +879,40 @@ Run `node scripts/test-argument-safety.mjs` to exercise literal regex
 escaping, script-like input, malformed model payloads, getter rejection,
 prototype-pollution payloads and safe UI rendering. This change does not
 alter model size, inference calls or analytical thresholds.
+
+
+### Typed quantified and numeric propositions
+
+The second-pass argument graph gains two **source-only, bounded** extractors:
+
+- `argument-quantifiers.mjs` recognises quantified class/predicate assertions
+  such as `all X have P`, `no X have P`, and `at least one X lacks P`.
+  JavaScript proves only explicit universal/existential contradictions for
+  the same normalised group, predicate, and compatible time/location scope.
+  Hedging, exceptions, explicit different times/groups, quoted assertions,
+  and conditional antecedents abstain. Merely universal wording does not
+  automatically trigger an unsupported-conclusion finding.
+- `argument-numeric-relations.mjs` extracts exact totals, labelled counts by
+  period, monetary category amounts, and explicit observed-value intervals.
+  JavaScript compares original typed amounts and reported ranges; unlike the
+  old single-value checks, this can handle some **multi-value evidence**.
+  It requires the same metric, full numeric evidence and compatible scope;
+  mixed currencies, different metrics, exceptions and estimates abstain.
+
+Both checks contribute proof nodes to `argument-proof-graph.mjs`, visible
+in the existing benchmark diagnostics. If deterministic interpreters disagree
+on a proof, the graph **abstains**. The independent sentence-level analyser,
+NLI model, number of model calls, original source offsets and marking colours
+are unchanged.
+
+The argument extractor separately recognises explicitly tentative
+`This suggests ...` style inference markers. Such passages remain eligible
+for assessment as arguments, but an unproved or hedged conclusion **does not
+get a red underline**.
+
+Run `node scripts/test-argument-typed-reasoning.mjs` (new fictional
+positive, negative and end-to-end controls) or the full `test-build` script.
+**This PR does not modify or use the exposed 200-case benchmark for tuning.**
+Improvements to that now-seen benchmark will be development-set results,
+not a generalisation claim: evaluate with another independently labelled
+unseen corpus.

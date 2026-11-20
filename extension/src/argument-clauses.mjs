@@ -11,7 +11,7 @@ const MAX_CONCLUSION_CHARS = 280;
 const MAX_PARAGRAPH_BREAKS = 1;
 const WORD = /\b[\w'-]+\b/g;
 const NORMATIVE = /\b(?:should|ought|recommend|consider|prefer|hope|wish)\b|\b(?:we|you)\s+(?:(?:may|might|could|can)\s+)?(?:need to|want to|plan to|intend to)\b/i;
-const LEADING_CONCLUSION = /^(?:(?:and|but)\s+)?(therefore|thus|hence|consequently|accordingly|as a result|it follows that|we can conclude that|(?:this|that) (?:shows|proves|demonstrates|confirms|means|guarantees)(?: that)?|these (?:results|findings) (?:show|prove|demonstrate)(?: that)?|the evidence (?:shows|proves)(?: that)?|so)\s*[,;:\s]\s*/i;
+const LEADING_CONCLUSION = /^(?:(?:and|but)\s+)?(therefore|thus|hence|consequently|accordingly|as a result|it follows that|we can conclude that|(?:this|that) (?:shows|proves|demonstrates|confirms|means|guarantees|suggests|indicates|implies)(?: that)?|these (?:results|findings) (?:show|prove|demonstrate)(?: that)?|the evidence (?:shows|proves)(?: that)?|so)\s*[,;:\s]\s*/i;
 const INLINE_SO = /,\s*so\s+(?!that\b)/gi;
 const RESULT_MARKER = /\b(?:therefore|thus|hence|consequently|accordingly|as a result)\b\s*[,;:]?\s*/gi;
 const INLINE_INFERENCE = /,\s*(?:which|and this)\s+(?:means|suggests|implies)(?:\s+that)?\s+|\b(?:indicates|suggests|implies|demonstrates|shows|indicating|suggesting|implying|showing)\s+that\s+/gi;
@@ -239,6 +239,10 @@ export function extractArguments(source) {
   const prior=precedingPremises(source,statements,i);
   if (!prior.length) continue;
   const conclusion=span(source,s.start+marker[0].length,s.end);
+  // A tentative marker still introduces an argument, but it should not
+  // misparse a bare suggestion or recommendation as a factual conclusion.
+  const tentative=/\b(?:suggests|indicates|implies)\b/i.test(marker[1]);
+  if(tentative && !/\b(?:may|might|could|would|will|is|are|was|were|has|have|can)\b/i.test(conclusion.text))continue;
   if (words(conclusion.text)<3 || conclusion.text.length<12 ||
       conclusion.text.length>MAX_CONCLUSION_CHARS || /[?!]\s*$/.test(conclusion.text) ||
       NORMATIVE.test(conclusion.text)) continue;
