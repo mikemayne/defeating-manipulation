@@ -1,14 +1,15 @@
-// Structure-only evaluation for local, privately uploaded short paragraphs.
-// Never infer an evidential or political truth label from argument presence.
+// Single-paragraph structure checks plus optional NLI reference labels.
+// Structural presence never implies an argument is sound or manipulative.
 import { extractArguments } from "../extension/src/argument-clauses.mjs";
+import { ARGUMENT_LABELS } from "../extension/src/argument-analysis.mjs";
 import { normaliseClaimForNli } from "../extension/src/argument-claim-normalisation.mjs";
 
 export const STRUCTURE_LABELS = ["argument_present", "model_conclusion_match"];
 
-export function validateArgumentStructureCases(cases) {
+export function validateArgumentParagraphCases(cases) {
  if (!Array.isArray(cases) || !cases.length)
-  throw Error("No argument-structure cases. Upload a JSON/JSONL file with a cases array.");
- if (cases.length > 10000) throw Error("Argument-structure uploads are capped at 10,000 cases");
+  throw Error("No single-paragraph argument cases. Upload JSON/JSONL with a cases array.");
+ if (cases.length > 10000) throw Error("Single-paragraph uploads are capped at 10,000 cases");
  const seen = new Set();
  for (const [i,item] of cases.entries()) {
   if (!item || typeof item.id !== "string" || !item.id.trim() ||
@@ -17,11 +18,15 @@ export function validateArgumentStructureCases(cases) {
       (item.expected_model_conclusion != null &&
        (item.expected_argument !== true ||
         typeof item.expected_model_conclusion !== "string" ||
-        !item.expected_model_conclusion.trim())))
-   throw Error("Invalid argument-structure row " + (i+1) +
-    ': expected {id, text, expected_argument: boolean, expected_model_conclusion?: string}. ' +
-    'This is a structure-only file, not a supported/unsupported NLI-labelled file.');
-  if (seen.has(item.id)) throw Error("Duplicate argument-structure example ID: " + item.id);
+        !item.expected_model_conclusion.trim())) ||
+      (Object.hasOwn(item,"expected") &&
+       (!Array.isArray(item.expected) || item.expected.length > 1 ||
+        item.expected.some(label => !ARGUMENT_LABELS.includes(label)) ||
+        (item.expected.length > 0 && !item.expected_argument))))
+   throw Error("Invalid single-paragraph row " + (i+1) +
+    ': expected {id, text, expected_argument: boolean, expected_model_conclusion?: string, expected?: [] or [NLI label]}. ' +
+    'The expected field is optional and requests NLI evaluation.');
+  if (seen.has(item.id)) throw Error("Duplicate single-paragraph example ID: " + item.id);
   seen.add(item.id);
  }
  return cases;
