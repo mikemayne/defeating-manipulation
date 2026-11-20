@@ -1262,3 +1262,6 @@ await import('./test-argument-proof-graph.mjs');
 
 // Untrusted text is literal data; reject malformed NLI scores and regex injection.
 await import('./test-argument-safety.mjs');
+
+// Source-grounded quantified propositions, numeric categories and safe abstentions.
+await import('./test-argument-typed-reasoning.mjs');
