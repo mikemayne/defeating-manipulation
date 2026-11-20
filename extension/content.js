@@ -27,34 +27,43 @@
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
  const eligible = node => node.parentElement &&
    !node.parentElement.closest("script,style,noscript,textarea,input,select,option,button,code,pre,svg,mark,[contenteditable],#dm-pattern-tooltip");
- function show(mark, match) {
-   const technique = match.technique;
+ function show(mark, matches) {
    tooltip.replaceChildren();
-   const title = document.createElement("strong");
-   title.textContent = technique.title;
-   const summary = document.createElement("div");
-   summary.textContent = technique.summary || "";
-   if (match.kind === "inconsistency") {
-     const other = document.createElement("div");
-     other.textContent = "Conflicting passage: “" + match.otherText + "”";
-     other.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
-     summary.append(other);
+   const heading = document.createElement("strong");
+   heading.textContent = matches.length === 1 ? matches[0].technique.title : matches.length + " findings";
+   tooltip.append(heading);
+   for (const match of matches) {
+     const technique = match.technique;
+     const section = document.createElement("section");
+     section.style.cssText = "margin-top:9px;padding-top:8px;border-top:1px solid #53708a;";
+     const title = document.createElement("strong");
+     title.textContent = technique.title;
+     title.style.color = colour(technique);
+     const summary = document.createElement("div");
+     summary.textContent = technique.summary || "";
+     if (match.kind === "inconsistency") {
+       const other = document.createElement("div");
+       other.textContent = "Conflicting passage: “" + match.otherText + "”";
+       other.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
+       summary.append(other);
+     }
+     summary.style.margin = "6px 0 8px";
+     const strength = document.createElement("div");
+     strength.textContent = match.kind === "inconsistency" ? "Inference: possible contradiction" :
+       match.method === "pattern" ? "Match: Rule" : "Match strength: " + (match.strength || "Low");
+     strength.style.cssText = "margin:0 0 8px;font-size:12px;color:#b5d0e5;";
+     section.append(title, summary, strength);
+     if (match.kind !== "inconsistency") {
+       const link = document.createElement("a");
+       link.textContent = "Read the full explanation";
+       link.href = `https://mikemayne.github.io/defeating-manipulation/techniques/${encodeURIComponent(technique.id)}.html`;
+       link.target = "_blank";
+       link.rel = "noopener noreferrer";
+       link.style.color = "#7ee4e7";
+       section.append(link);
+     }
+     tooltip.append(section);
    }
-   summary.style.margin = "6px 0 8px";
-   const strength = document.createElement("div");
-   strength.textContent = match.kind === "inconsistency" ? "Inference: possible contradiction" : match.method === "pattern"
-     ? "Match: Rule"
-     : "Match strength: " + (match.strength || "Low");
-   strength.style.cssText = "margin:0 0 8px;font-size:12px;color:#b5d0e5;";
-   strength.title = "Match strength is an experimental estimate, not the probability that the text is manipulative.";
-   const link = document.createElement("a");
-   link.textContent = "Read the full explanation";
-   link.href = `https://mikemayne.github.io/defeating-manipulation/techniques/${encodeURIComponent(technique.id)}.html`;
-   link.target = "_blank";
-   link.rel = "noopener noreferrer";
-   link.style.color = "#7ee4e7";
-   tooltip.append(title, summary, strength);
-   if (match.kind !== "inconsistency") tooltip.append(link);
    const r = mark.getBoundingClientRect();
    tooltip.style.display = "block";
    tooltip.style.left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - 350)) + "px";
@@ -113,34 +122,35 @@
    return text.trim() ? { text, nodes } : null;
  }
  function underline(snapshot, matches) {
-   // Resolve overlaps before wrapping DOM ranges; red has priority.
    const valid = matches.filter(m => m.start >= 0 && m.end > m.start && m.end <= snapshot.text.length);
    const edges = [...new Set(valid.flatMap(m => [m.start, m.end]))].sort((a, b) => a - b);
    const spans = [];
    for (let i = 0; i + 1 < edges.length; i++) {
      const start = edges[i], end = edges[i + 1];
-     const candidates = valid.filter(m => m.start <= start && m.end >= end)
-       .sort((a, b) => Number(b.kind === "inconsistency") - Number(a.kind === "inconsistency") ||
-         (b.score || 0) - (a.score || 0));
-     if (candidates.length) spans.push({ ...candidates[0], start, end });
+     const covering = valid.filter(m => m.start <= start && m.end >= end);
+     if (covering.length) spans.push({ start, end, matches: covering });
    }
-   // Work backwards so earlier text offsets remain valid.
+   // Each text fragment is wrapped once, even when multiple findings overlap.
+   // CSS backgrounds draw parallel coloured lines below the baseline.
    for (const entry of snapshot.nodes.slice().reverse()) {
      if (!entry.node.isConnected) continue;
      const intersections = spans.filter(m => m.start < entry.textEnd && m.end > entry.textStart)
        .sort((a, b) => b.start - a.start);
-     for (const match of intersections) {
-       const start = entry.start + Math.max(0, match.start - entry.textStart);
-       const end = entry.start + Math.min(entry.textEnd - entry.textStart, match.end - entry.textStart);
+     for (const span of intersections) {
+       const start = entry.start + Math.max(0, span.start - entry.textStart);
+       const end = entry.start + Math.min(entry.textEnd - entry.textStart, span.end - entry.textStart);
        if (end <= start) continue;
        const range = document.createRange();
        range.setStart(entry.node, start);
        range.setEnd(entry.node, end);
        const mark = document.createElement("mark");
-       mark.setAttribute(MARK, match.technique.id);
-       mark.style.cssText = `background:transparent;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-color:${colour(match.technique)};text-decoration-thickness:3px;text-underline-offset:3px;cursor:help;`;
-       mark.addEventListener("mouseenter", () => show(mark, match));
-       mark.addEventListener("focus", () => show(mark, match));
+       mark.setAttribute(MARK, span.matches.map(m => m.technique.id).join(" "));
+       const colours = [...new Set(span.matches.map(m => colour(m.technique)))];
+       const layers = colours.map((color, index) =>
+         `linear-gradient(${color},${color}) 0 calc(100% - ${index * 4}px) / 100% 3px no-repeat`);
+       mark.style.cssText = `background:${layers.join(",")};color:inherit;text-decoration:none;cursor:help;box-decoration-break:clone;-webkit-box-decoration-break:clone;`;
+       mark.addEventListener("mouseenter", () => show(mark, span.matches));
+       mark.addEventListener("focus", () => show(mark, span.matches));
        mark.tabIndex = 0;
        range.surroundContents(mark);
      }
