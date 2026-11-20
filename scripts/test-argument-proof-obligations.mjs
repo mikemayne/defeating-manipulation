@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {inferExplicitProofObligationGap as gap} from './argument-proof-obligations.mjs';
+import {inferExplicitProofObligationGap as gap} from '../extension/src/argument-proof-obligations.mjs';
 // Cases were created independently of the exposed 200-case diagnostic set.
 const positives=[
  ['A theatre bought a new curtain.','Therefore all future performances are guaranteed to sell out.'],
