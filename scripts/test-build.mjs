@@ -599,3 +599,100 @@ assert.ok(benchmarkPage.includes('value="concealed_rules"') &&
 assert.ok(localServer.includes('/evaluation/concealed-pattern-examples.json'),
  'The local test server makes the labelled relationship benchmark available');
 console.log('Concealed relationship classifier: 480 generated cases and all four-color integration checks passed.');
+
+
+// Whole-argument NLI assessment: extract conclusion and preceding premises
+// from paragraphs, distinguish contradiction / missing support / support,
+// and abstain when there is no explicit or sufficiently clear inference.
+const argumentEngine = await import('../extension/src/argument-analysis.mjs');
+const { validateArgumentCases, generatedArgumentCase } =
+ await import('../evaluation/argument-generator.mjs');
+const argumentSeeds = JSON.parse(fs.readFileSync(
+ 'evaluation/argument-support-examples.json', 'utf8')).cases;
+validateArgumentCases(argumentSeeds);
+assert.equal(argumentSeeds.length, 96, 'Argument lab has 96 independently labelled cases');
+assert.deepEqual(Object.fromEntries(
+ ['supported_conclusion','unsupported_conclusion','contradictory_claims','no_argument']
+ .map(label => [label, argumentSeeds.filter(x => x.group === label).length])),
+ { supported_conclusion:24, unsupported_conclusion:24, contradictory_claims:24, no_argument:24 },
+ 'Argument examples cover supported, unsupported, contradicted and absent inferences');
+assert.deepEqual(argumentEngine.ARGUMENT_LABELS, [
+ 'contradictory_claims','unsupported_conclusion','supported_conclusion'
+], 'Three argument labels share the public red pattern library');
+for (const label of argumentEngine.ARGUMENT_LABELS)
+ assert.ok(inconsistency.patterns.some(p => p.id === label),
+  'The public red library describes each argument outcome: '+label);
+const mockArgumentScores = {
+ supported_conclusion: { contradiction: 0.01, neutral: 0.01, entailment: 0.98 },
+ unsupported_conclusion: { contradiction: 0.01, neutral: 0.98, entailment: 0.01 },
+ contradictory_claims: { contradiction: 0.98, neutral: 0.01, entailment: 0.01 }
+};
+const argumentErrors = [];
+for (let i = 0; i < argumentSeeds.length * 5; i++) {
+ const item = generatedArgumentCase(argumentSeeds, i, 2026);
+ const label = item.expected[0] || 'unsupported_conclusion';
+ const scorer = async () => mockArgumentScores[label];
+ const statements = argumentEngine.extractArguments(item.text);
+ const assessments = await argumentEngine.analyseArguments(item.text, scorer);
+ const predicted = [...new Set(assessments.map(x => x.label))].sort();
+ if (JSON.stringify(predicted) !== JSON.stringify(item.expected.slice().sort()))
+  argumentErrors.push({ id: item.id, expected: item.expected, predicted,
+   statements: statements.map(s => s.conclusion.text) });
+ const findings = argumentEngine.argumentFindings(assessments);
+ for (const assessment of assessments) {
+  assert.equal(item.text.slice(assessment.conclusion.start, assessment.conclusion.end),
+   assessment.conclusion.text, 'Conclusion offsets preserve source text: '+item.id);
+  assert.ok(assessment.premise.trim(), 'Every assessment retains actual evidence: '+item.id);
+ }
+ for (const finding of findings) {
+  assert.ok(item.text.slice(finding.start, finding.end).trim(), 'Red conclusion underline in bounds');
+  assert.equal(finding.technique.category, 'Inconsistency', 'Flagged argument uses red');
+  assert.ok(finding.otherText, 'Hover explanation identifies the supplied premises');
+ }
+ if (item.expected[0] === 'supported_conclusion')
+  assert.equal(findings.length, 0, 'Supported inferences are NOT underlined red');
+ if (!item.expected.length)
+  assert.equal(findings.length, 0, 'No qualifying conclusion means no red underline');
+}
+assert.deepEqual(argumentErrors, [], 'All 480 bounded argument-parser variants retain correct structure');
+assert.deepEqual(argumentEngine.classifyArgumentScore(
+ { contradiction: 0.28, neutral: 0.42, entailment: 0.30 }), null,
+ 'Uncertain NLI scores abstain instead of manufacturing an unsupported conclusion');
+const genuineLeap = 'Sales increased. Customer satisfaction improved. Therefore, the app is completely secure.';
+const leapAssessments = await argumentEngine.analyseArguments(genuineLeap,
+ async () => mockArgumentScores.unsupported_conclusion);
+assert.equal(leapAssessments[0].label, 'unsupported_conclusion');
+assert.match(leapAssessments[0].explanation, /Insufficient evidence provided to support/i);
+const twoParagraphs = 'The library is open on weekends.\n\nIt has free admission.\nTherefore, the library is safe from all fires.';
+assert.equal(argumentEngine.extractArguments(twoParagraphs).length, 1,
+ 'An argument may draw premises from adjacent paragraphs');
+const unrelatedSections = 'The report was published.\n\n\n\nTherefore, the service is secure.';
+assert.equal(argumentEngine.extractArguments(unrelatedSections).length, 0,
+ 'Premises may not be drawn from unrelated sections divided by multiple blank lines');
+const headingsAndNoInference = [
+ 'The manager said the gates were open. The spokesperson denied it.',
+ 'Therefore, the product is completely safe.',
+ 'The results are uncertain. Therefore, we should collect more data.'
+];
+for (const text of headingsAndNoInference)
+ assert.deepEqual(argumentEngine.extractArguments(text), [],
+  'Reports, missing premises, and advice do not become factual conclusions');
+assert.ok(benchmarkPage.includes('value="argument_support"') &&
+ benchmarkWorker.includes('analyseArguments(item.text, nliScorer)') &&
+ benchmarkUI.includes('argument-support-examples.json') &&
+ localServer.includes('/evaluation/argument-support-examples.json'),
+ 'Argument NLI lab uses actual local NLI model and dedicated dataset');
+assert.ok(extensionWorker.includes('analyseArguments(data.text, memoScore') &&
+ extensionWorker.includes('argumentFindings(assessed)') &&
+ extensionWorker.includes('...argumentIssues'),
+ 'Firefox worker performs argument analysis with the existing NLI scorer');
+const backgroundSource = fs.readFileSync('extension/background.js', 'utf8');
+assert.ok(backgroundSource.includes('DM_PROGRESS') &&
+ selectionScript.includes('dm-pattern-status') &&
+ !selectionScript.includes('cursor: wait !important'),
+ 'Slower red pass uses a nonblocking progress badge instead of forcing a wait cursor');
+assert.ok(selectionScript.includes('match.kind === "argument_support"') &&
+ selectionScript.includes('Premises provided:') &&
+ selectionScript.includes('"inconsistency-patterns"'),
+ 'New red findings explain their premises and link to the red catalogue');
+console.log('Argument support: 480 parser/verdict variants, NLI lab and nonblocking Firefox UI validated.');
