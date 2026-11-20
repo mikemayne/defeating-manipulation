@@ -26,6 +26,7 @@ export function observableOverreach(premise, conclusion, {inferenceMarker=""}={}
  if(typeof premise!=="string"||typeof conclusion!=="string")return null;
  const p=premise.trim(),c=conclusion.trim();
  if(!p||!c||isHedged(c)||UNIVERSAL_PREMISE.test(p)||
+    /\bonly\s+(?:one|two|three|four|five|six|seven|eight|nine|ten)\b/i.test(p)||
     CONDITIONAL.test(p)||FINITE_RESULT.test(c))return null;
  // A small sample or time-limited observation is not an unqualified result
  // for everybody, all cases, every place or all future times.
