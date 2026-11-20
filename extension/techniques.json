@@ -561,9 +561,10 @@
         "A figurative or approximate expression is treated as a precise factual claim.",
         "A minor imprecision is used to dismiss an otherwise supported argument.",
         "The response concentrates on terminology while leaving the substantive point unanswered.",
-        "The article quotes a phrase without its context and criticises the wording rather than the claim."
+        "The article quotes a phrase without its context and criticises the wording rather than the claim.",
+        "A speaker's use of profanity is treated as grounds to disregard an otherwise relevant argument."
       ],
-      "example": "A report says a service is 'constantly failing'; a response focuses entirely on the fact that it did not fail every single day.",
+      "example": "A report says a service is 'constantly failing'; a response focuses entirely on the fact that it did not fail every single day. Someone makes a positive, constructive argument but uses the word 'cunt'; a critic responds, 'He said cunt, so ignore him,' rather than addressing the point.",
       "reader_effect": "Can divert attention from the substance of an argument and make a weak rebuttal appear decisive.",
       "references": [
         "da2019"
