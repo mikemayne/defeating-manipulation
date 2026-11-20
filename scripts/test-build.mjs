@@ -1275,3 +1275,6 @@ await import('./test-argument-typed-reasoning.mjs');
 await import('./test-argument-policy-prerequisites.mjs');
 // Open-class scoped logic, exact units, event dates and adversarial controls.
 await import('./test-argument-generalised-proofs.mjs');
+
+// Prove mutually exclusive register counts, machine intervals and complete lists.
+await import('./test-argument-closed-scope.mjs');
