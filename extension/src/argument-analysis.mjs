@@ -88,14 +88,66 @@ function scoresValid(scores) {
  return scores && ["contradiction", "neutral", "entailment"].every(
   key => Number.isFinite(scores[key]));
 }
+// A subset doesn't disprove a universal claim: "platform two is accessible"
+// is not evidence that *every* platform is accessible, but neither is it
+// evidence against that proposition. Keep quantifier scope separate from
+// semantic polarity instead of relying on raw NLI contradiction scores.
+const UNIVERSAL = /\b(?:all|every|each)\s+([a-z][a-z'-]*)\b/gi;
+const EXPLICIT_RESTRICTION_OR_NEGATION =
+ /\b(?:not|no|never|none|nothing|neither|without|only|except|cannot|can't|won't|wasn't|isn't|aren't|doesn't|didn't|don't)\b/i;
+const OPPOSING_WORDS = [
+ [/\b(?:open|opened)\b/i, /\b(?:closed|shut)\b/i],
+ [/\b(?:accessible|accessibility)\b/i, /\b(?:inaccessible)\b/i],
+ [/\b(?:safe|safely)\b/i, /\b(?:unsafe|dangerous|hazardous)\b/i],
+ [/\b(?:passed|passing|pass)\b/i, /\b(?:failed|failing|fail)\b/i],
+ [/\b(?:allowed|permitted)\b/i, /\b(?:banned|prohibited|forbidden)\b/i],
+ [/\b(?:available)\b/i, /\b(?:unavailable)\b/i],
+ [/\b(?:working|operational)\b/i, /\b(?:broken|inoperable)\b/i],
+ [/\b(?:present|exists?)\b/i, /\b(?:absent|missing)\b/i]
+];
+function singular(word) {
+ return word.endsWith("ies") && word.length > 4 ? word.slice(0,-3) + "y" :
+  word.endsWith("s") && !word.endsWith("ss") && word.length > 3 ?
+   word.slice(0,-1) : word;
+}
+function scopeWidening(premise, conclusion) {
+ if (!premise || !conclusion ||
+     EXPLICIT_RESTRICTION_OR_NEGATION.test(premise) ||
+     EXPLICIT_RESTRICTION_OR_NEGATION.test(conclusion) ||
+     OPPOSING_WORDS.some(([a,b]) =>
+      (a.test(premise) && b.test(conclusion)) ||
+      (b.test(premise) && a.test(conclusion)))) return false;
+
+ const words = new Set((premise.toLowerCase().match(/[a-z][a-z'-]*/g) || [])
+  .map(singular));
+ const premiseUniversals = new Set(
+  [...premise.matchAll(UNIVERSAL)].map(match => singular(match[1].toLowerCase())));
+ for (const match of conclusion.matchAll(UNIVERSAL)) {
+  const noun = singular(match[1].toLowerCase());
+  if (words.has(noun) && !premiseUniversals.has(noun)) return true;
+ }
+ return false;
+}
+
 export function classifyArgumentScore(forward, reverse = null) {
  if (!scoresValid(forward)) return null;
  const { contradiction, neutral, entailment } = forward;
  if (contradiction >= 0.84 && contradiction > neutral && contradiction > entailment) {
-  if (!scoresValid(reverse) || reverse.contradiction < 0.70 ||
-      reverse.contradiction <= reverse.neutral) return null;
-  return { label: "contradictory_claims",
-   score: Math.min(contradiction, reverse.contradiction) };
+  if (scoresValid(reverse) && reverse.contradiction >= 0.70 &&
+      reverse.contradiction > reverse.neutral)
+   return { label: "contradictory_claims",
+    score: Math.min(contradiction, reverse.contradiction) };
+  // The local NLI model sometimes scores an unrelated conclusion as
+  // contradiction in one direction but emphatically *not* in reverse.
+  // That does not prove a genuine contradiction. For a very strong,
+  // highly asymmetric result, treat the proposed inference as lacking
+  // support from these premises instead of silently omitting it.
+  if (contradiction >= 0.95 && scoresValid(reverse) &&
+      reverse.contradiction <= 0.15)
+   return { label: "unsupported_conclusion",
+    score: Math.min(contradiction, 1 - reverse.contradiction),
+    reason: "asymmetric_nli" };
+  return null;
  }
  if (entailment >= 0.76 && entailment > contradiction + 0.15 &&
      entailment > neutral + 0.15)
@@ -111,12 +163,22 @@ export function classifyArgumentScore(forward, reverse = null) {
 // verdict caused by adding irrelevant premises to the same NLI input.
 // A contradictory premise wins over a supporting one: the supplied set of
 // premises is then internally inconsistent. Uncertain scores abstain.
-export function combineArgumentEvidence(scored) {
- const classified = scored.map(item => ({
-  ...item, verdict: item.repeated
+export function combineArgumentEvidence(scored, conclusionText = "") {
+ const classified = scored.map(item => {
+  let verdict = item.repeated
    ? { label: "supported_conclusion", score: 1 }
-   : classifyArgumentScore(item.forward, item.reverse)
- }));
+   : classifyArgumentScore(item.forward, item.reverse);
+  // NLI occasionally calls "one platform is accessible" contradictory to
+  // "every platform is accessible." The first is narrower evidence, not an
+  // assertion that any other platform is inaccessible. Only downgrade a
+  // contradiction when the positive quantifier expands the stated scope
+  // without explicit opposing evidence. Do not change genuine negations.
+  if (verdict?.label === "contradictory_claims" &&
+      scopeWidening(item.text, conclusionText))
+   verdict = { label: "unsupported_conclusion",
+    score: verdict.score, reason: "scope_expansion" };
+  return { ...item, verdict };
+ });
  for (const type of ["contradictory_claims", "supported_conclusion", "unsupported_conclusion"]) {
   const matches = classified.filter(item => item.verdict?.label === type);
   if (matches.length) {
@@ -159,7 +221,7 @@ export async function analyseArguments(source, scorePair,
     reverse = await scorePair(argument.conclusion.text, item.text);
    scored.push({ ...item, repeated, forward, reverse });
   }
-  const result = combineArgumentEvidence(scored);
+  const result = combineArgumentEvidence(scored, argument.conclusion.text);
   onDiagnostic?.({
    conclusion: argument.conclusion.text,
    comparisons: scored.map(({ kind, text, repeated, forward, reverse }) =>
