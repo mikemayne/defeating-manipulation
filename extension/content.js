@@ -21,8 +21,9 @@
  }
 
  let tooltip;
- const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#0d9488";
- const colour = technique => technique.category === "Positive" ? GREEN :
+ const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#0d9488", RED = "#dc2626";
+ const colour = technique => technique.category === "Inconsistency" ? RED :
+   technique.category === "Positive" ? GREEN :
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
  const eligible = node => node.parentElement &&
    !node.parentElement.closest("script,style,noscript,textarea,input,select,option,button,code,pre,svg,mark,[contenteditable],#dm-pattern-tooltip");
@@ -33,9 +34,15 @@
    title.textContent = technique.title;
    const summary = document.createElement("div");
    summary.textContent = technique.summary || "";
+   if (match.kind === "inconsistency") {
+     const other = document.createElement("div");
+     other.textContent = "Conflicting passage: “" + match.otherText + "”";
+     other.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
+     summary.append(other);
+   }
    summary.style.margin = "6px 0 8px";
    const strength = document.createElement("div");
-   strength.textContent = match.method === "pattern"
+   strength.textContent = match.kind === "inconsistency" ? "Inference: possible contradiction" : match.method === "pattern"
      ? "Match: Rule"
      : "Match strength: " + (match.strength || "Low");
    strength.style.cssText = "margin:0 0 8px;font-size:12px;color:#b5d0e5;";
@@ -46,7 +53,8 @@
    link.target = "_blank";
    link.rel = "noopener noreferrer";
    link.style.color = "#7ee4e7";
-   tooltip.append(title, summary, strength, link);
+   tooltip.append(title, summary, strength);
+   if (match.kind !== "inconsistency") tooltip.append(link);
    const r = mark.getBoundingClientRect();
    tooltip.style.display = "block";
    tooltip.style.left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - 350)) + "px";
@@ -105,8 +113,17 @@
    return text.trim() ? { text, nodes } : null;
  }
  function underline(snapshot, matches) {
-   const spans = matches.filter(m => m.start >= 0 && m.end > m.start && m.end <= snapshot.text.length)
-     .sort((a, b) => a.start - b.start);
+   // Resolve overlaps before wrapping DOM ranges; red has priority.
+   const valid = matches.filter(m => m.start >= 0 && m.end > m.start && m.end <= snapshot.text.length);
+   const edges = [...new Set(valid.flatMap(m => [m.start, m.end]))].sort((a, b) => a - b);
+   const spans = [];
+   for (let i = 0; i + 1 < edges.length; i++) {
+     const start = edges[i], end = edges[i + 1];
+     const candidates = valid.filter(m => m.start <= start && m.end >= end)
+       .sort((a, b) => Number(b.kind === "inconsistency") - Number(a.kind === "inconsistency") ||
+         (b.score || 0) - (a.score || 0));
+     if (candidates.length) spans.push({ ...candidates[0], start, end });
+   }
    // Work backwards so earlier text offsets remain valid.
    for (const entry of snapshot.nodes.slice().reverse()) {
      if (!entry.node.isConnected) continue;

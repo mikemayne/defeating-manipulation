@@ -1,6 +1,7 @@
 import { pipeline, env } from "@huggingface/transformers";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
+import { findInconsistencies } from "./consistency.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -8,6 +9,26 @@ env.useBrowserCache = true;
 env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
 
 const MODEL = "Xenova/all-MiniLM-L6-v2";
+const NLI_MODEL = "Xenova/distilbert-base-uncased-mnli";
+let inferenceModel, inferenceAttempted = false;
+
+async function scorePair(premise, hypothesis) {
+ if (!inferenceAttempted) {
+  inferenceAttempted = true;
+  try { inferenceModel = await pipeline("text-classification", NLI_MODEL, { dtype: "q8" }); }
+  catch (error) { console.warn("Local consistency model unavailable:", error); }
+ }
+ if (!inferenceModel) return null;
+ const result = await inferenceModel({ text: premise, text_pair: hypothesis }, { top_k: null });
+ const scores = {};
+ for (const item of (Array.isArray(result[0]) ? result[0] : result)) {
+  const label = String(item.label).toLowerCase();
+  if (label.includes("contradiction") || label === "label_0") scores.contradiction = item.score;
+  if (label.includes("neutral") || label === "label_1") scores.neutral = item.score;
+  if (label.includes("entailment") || label === "label_2") scores.entailment = item.score;
+ }
+ return scores.contradiction === undefined || scores.neutral === undefined ? null : scores;
+}
 let extractor, techniques = [], rules = [], prototypes = [], initialising;
 
 async function embed(texts) {
@@ -50,7 +71,12 @@ self.addEventListener("message", async event => {
   await initialising;
   const matches = await matchText(data.text, { techniques, rules, prototypes,
    embed: extractor ? embed : null });
-  self.postMessage({ id: data.id, matches });
+  // The two analyses share the same selection and return one result set.
+  // A missing NLI model never prevents ordinary pattern highlighting.
+  let inconsistencies = [];
+  try { inconsistencies = await findInconsistencies(data.text, scorePair); }
+  catch (error) { console.warn("Consistency analysis unavailable:", error); }
+  self.postMessage({ id: data.id, matches: [...matches, ...inconsistencies] });
  } catch (error) {
   self.postMessage({ id: data.id, error: String(error?.message || error) });
  }
