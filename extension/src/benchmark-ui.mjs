@@ -17,7 +17,8 @@ function setError(text) {
 function updateSource() {
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
- const argumentMode = mode.value === "argument_support";
+ const argumentMode = mode.value === "argument_support" || mode.value === "argument_reasoning";
+ const argumentReasoning = mode.value === "argument_reasoning";
  const positive = mode.value.startsWith("positive_");
  const concealed = mode.value.startsWith("concealed_");
  $("count-control").hidden = upload;
@@ -38,7 +39,7 @@ function updateSource() {
   : consistency
    ? "200 labelled fictional cases: direct contradictions, paraphrases, consistent claims, different speakers/dates and hypotheticals. Generated variations test robustness, not independent accuracy."
    : argumentMode
-    ? "96 fictional multi-premise cases: supported, unsupported, contradicted, and no explicit conclusion. Only red-underline inconsistent conclusions; supported results appear in the lab."
+    ? (argumentReasoning ? "Experimental local instruction model assesses evidential strength, not just entailment. Larger model download; results can differ from NLI. 96 fictional cases are regression examples, not real-world accuracy evidence." : "96 fictional multi-premise cases: supported, unsupported, contradicted, and no explicit conclusion. Only red-underline inconsistent conclusions; supported results appear in the lab.")
     : concealed
      ? "96 fictional cases: 48 positive openings undermined by targeted pressure and 48 hard negatives. Tests relationships, not just green/blue co-occurrence; no intent inferred."
     : positive
@@ -162,7 +163,7 @@ function renderResults(data) {
   (lastMode === "consistency" ? " cases with no expected inconsistency." :
    lastMode.startsWith("positive_") ? " cases with no expected positive pattern." :
    lastMode.startsWith("concealed_") ? " cases with no expected concealed relationship." :
-   lastMode === "argument_support" ? " cases with no explicit conclusion to assess." :
+   (lastMode === "argument_support" || lastMode === "argument_reasoning") ? " cases with no explicit conclusion to assess." :
    " cases with no expected technique.") +
   " Results describe this test dataset, not accuracy on unseen writing.";
  tableRows($("confusion"), data.confusion.slice(0, 20)
@@ -220,6 +221,15 @@ function failureReport(data) {
     lines.push("  " + link.pattern + " | Positive: " + link.positive +
      " | Pressure: " + link.pressure +
      (link.relatedNegative ? " | Negative pattern: " + link.relatedNegative : ""));
+  }
+  if (item.reasoningResults?.length) {
+   lines.push("Experimental local argument reasoning (not NLI scores):");
+   for (const judgement of item.reasoningResults) {
+    lines.push("  " + judgement.label + " | Conclusion: " + judgement.conclusion +
+     " | Premises: " + judgement.premise +
+     " | Explanation: " + judgement.reason +
+     (judgement.marker ? " | Marker: " + judgement.marker : ""));
+   }
   }
   if (item.argumentAssessments?.length) {
    lines.push("Premise-to-conclusion assessments:");
@@ -305,7 +315,7 @@ function catalogues() {
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
- const maximum = mode.value === "consistency" || mode.value === "argument_support" || mode.value.startsWith("concealed_")
+ const maximum = mode.value === "consistency" || mode.value === "argument_support" || mode.value === "argument_reasoning" || mode.value.startsWith("concealed_")
   ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
   setError("Choose a test count between 1 and " + number(maximum) + ".");
@@ -332,7 +342,7 @@ runButton.addEventListener("click", async () => {
   const [catalogue, patterns, manipulationFixture, consistencyFixture,
    positiveFixture, concealedFixture, argumentFixture] = await catalogues();
   const fixture = mode.value === "consistency" ? consistencyFixture :
-   mode.value === "argument_support" ? argumentFixture :
+   (mode.value === "argument_support" || mode.value === "argument_reasoning") ? argumentFixture :
    mode.value.startsWith("positive_") ? positiveFixture :
    mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;
   runId++;

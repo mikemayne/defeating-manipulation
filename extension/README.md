@@ -343,3 +343,49 @@ add better argument-specific reasoning, rather than merely broader
 trigger phrases. For a valid external performance estimate, gather
 a **new held-out set** with real supported, unsupported and
 contradicted conclusions labelled before seeing predictions.
+
+
+### Experimental local argument-strength reasoning (after authentic pilot)
+
+The first **23 authentic source-linked passages** expose a model mismatch:
+the parser now finds all five supported arguments, but the original
+`Xenova/distilbert-base-uncased-mnli` model scores every one as
+`neutral` and the classifier maps neutrality to "unsupported".
+That mapping does not measure whether real evidence makes a qualified
+scientific conclusion reasonable; it measures strict NLI entailment.
+**A fresh run was verified** by newly recognised inline inference markers.
+
+The Matcher Test Lab now includes a **separate experimental** method:
+**Arguments — evidence strength (experimental local LLM)**. It uses
+the existing argument extractor and a browser-local
+`onnx-community/Qwen2.5-0.5B-Instruct` instruction model to assess
+premise relevance, probabilistic support, contradiction and overclaiming.
+The small language model is not automatically more accurate; that is
+what the next benchmark must establish.
+
+This mode is **opt-in** and never silently replaces the Firefox
+extension's faster red NLI matcher. The first run requires downloading
+a larger quantized model, and can use WebGPU (q4) or CPU WASM (q8)
+when WebGPU setup fails. Inference stays inside the browser. It
+does not need an API key or paid service. There is no external
+reasoning API or server storing the test text; model weights are
+obtained from the public model repository.
+
+The reasoner emits only one of the existing three argument labels
+plus an explicit `uncertain` fallback. Malformed or uncertain output
+is treated as abstention, not a red unsupported claim. The copied
+failure report includes the model's short explanation alongside the
+original premises, conclusion and source URL.
+
+**How to test:** `cd extension && npm run benchmark:dev` and open
+the Matcher Test Lab. Select the new reasoning mode, **Upload labelled
+JSON / JSONL**, and use the same `real_world_argument_pilot.json`
+file previously tested. Compare exact accuracy, false alarms,
+predictions and explanations against the 78.3% original NLI baseline,
+then test on **new independently labelled authentic writing** before
+deciding whether to use the reasoner for default Firefox highlighting.
+
+The GitHub tests validate argument extraction, model invocation,
+structured response handling and safety of abstention. **CI cannot
+confirm a model's real reasoning quality in Firefox**, and running
+on an unfamiliar browser or machine may require significant memory.
