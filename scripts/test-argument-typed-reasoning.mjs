@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {inferQuantifierRelation,extractQuantifiedPropositions} from './argument-quantifiers.mjs';
-import {inferTypedNumericRelation,extractTypedNumericalFacts} from './argument-numeric-relations.mjs';
+import {inferQuantifierRelation,extractQuantifiedPropositions} from '../extension/src/argument-quantifiers.mjs';
+import {inferTypedNumericRelation,extractTypedNumericalFacts} from '../extension/src/argument-numeric-relations.mjs';
 
 // Fresh, independent controls, distinct from the labelled 200-paragraph
 // corpus. The same rules must resist changed groups, scopes and modalities.
