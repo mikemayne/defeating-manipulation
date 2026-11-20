@@ -81,10 +81,9 @@ const OPPOSITES=[
 // text is ever interpreted as a regular expression or executable code.
 const DIRECT_STATES=[
  [/\b(?:unlocked)\b/i,/\b(?:locked)\b/i],
- [/\b(?:passed|passing)\s+(?:(?:the|that|same)\s+)?(?:test|inspection|check)\b/i,
-  /\b(?:failed|failing)\s+(?:(?:the|that|same)\s+)?(?:test|inspection|check)\b/i],
+ [/\b(?:passed|passing)\s+(?:(?:the|that|same)\s+)?(?:[a-z-]+\s+){0,2}(?:test|inspection|check)\b/i,
+  /\b(?:failed|failing)\s+(?:(?:the|that|same)\s+)?(?:[a-z-]+\s+){0,2}(?:test|inspection|check)\b/i],
  [/\bswitch(?:ed)?\s+on\b/i,/\bswitch(?:ed)?\s+off\b/i],
- [/\bsold\s+out\b/i,/\bunsold\b/i],
  [/\bsuspend(?:ed|s|ing)?\b/i,/\boperat(?:ing|ed|es?)\s+(?:normally|as usual)\b/i],
  [/\bvacant\b/i,/\boccupied\b/i],
  [/\b(?:accepted|admitted)\b/i,/\b(?:refused|denied)\s+entry\b/i]
