@@ -258,6 +258,12 @@ export function extractArguments(source, {includeImplicit=false}={}) {
   const explicitConclusions=new Set(results.map(a=>a.conclusion.start+":"+a.conclusion.end));
   const implicit=inferImplicitArguments(source,statements,{limit:Math.min(3,MAX_ARGUMENTS-results.length)});
   for(const candidate of implicit){
+   // Feed the temporary reconstructed sentence through the existing parser.
+   // Keep its syntactic relationship but NEVER reuse its synthetic offsets.
+   // The NLI stage receives only the unchanged source evidence and conclusion.
+   const parsedReconstruction=extractArguments(candidate.analysisText);
+   if(!parsedReconstruction.some(a=>a.conclusion.marker===candidate.inferredConnector))
+    continue;
    const key=candidate.conclusion.start+":"+candidate.conclusion.end;
    if(!explicitConclusions.has(key)) {
     results.push(candidate);
