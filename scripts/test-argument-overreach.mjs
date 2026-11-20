@@ -70,7 +70,7 @@ for(const [id,p,c,marker] of negatives)
  assert.equal(observableOverreach(p,c,{inferenceMarker:marker||""}),null,
   id+" should abstain rather than accuse");
 const ordinary={contradiction:.001,neutral:.997,entailment:.002};
-const example=positives[0];
+const example=positives.find(item=>item[0]==='usage-to-safety');
 const finding=combineArgumentEvidence([{kind:"combined",text:example[1],forward:ordinary}],example[2]);
 assert.equal(finding?.label,"unsupported_conclusion");
 assert.equal(finding?.status,"verified_scope_overreach");
