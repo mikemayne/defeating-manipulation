@@ -231,3 +231,27 @@ misclassification and an over-strict decision threshold.
 This refinement is covered by deterministic CI tests; actual accuracy
 must be measured by rerunning **the same 96 cases in Firefox**. Existing
 blue, green, turquoise, and pairwise-red detection remain unchanged.
+
+
+### Calibrating insufficient evidence vs contradictory conclusions
+
+After the first per-premise change, the 96-case real-model benchmark
+improved from 84.4% exact to **96.9%**, with three remaining errors:
+two unsupported conclusions were missed, and one was incorrectly
+called a contradiction.
+
+The NLI model had scored claims such as "a council published a report,
+therefore all waste is eliminated" as strongly contradictory in one
+direction but **not** the other. This is an unsupported inference, not
+a logical contradiction. The updated analyser checks for highly
+asymmetric NLI scores before abstaining, and explicitly handles a
+limited positive-example-to-universal-claim scope expansion (e.g.
+"platform two is accessible" does not prove "every platform is
+accessible"). Clear opposing claims remain in the contradiction class.
+
+The local failure report includes the precise decision reason when
+this calibration is used. Nine model-score replay and contrast cases
+are stored in `evaluation/argument-evidence-contrasts.json`, alongside
+existing regression tests. These are fixed diagnostic scores, **not**
+independent estimates of generalisation; the 96-case local AI test
+must be rerun to verify improvement before changing thresholds again.
