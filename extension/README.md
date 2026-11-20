@@ -345,77 +345,23 @@ a **new held-out set** with real supported, unsupported and
 contradicted conclusions labelled before seeing predictions.
 
 
-### Experimental local argument-strength reasoning (after authentic pilot)
+### Retired browser instruction-model experiment
 
-The first **23 authentic source-linked passages** expose a model mismatch:
-the parser now finds all five supported arguments, but the original
-`Xenova/distilbert-base-uncased-mnli` model scores every one as
-`neutral` and the classifier maps neutrality to "unsupported".
-That mapping does not measure whether real evidence makes a qualified
-scientific conclusion reasonable; it measures strict NLI entailment.
-**A fresh run was verified** by newly recognised inline inference markers.
+The opt-in Qwen argument-reasoning test mode has been **retired** after
+real Firefox measurements. The 23-case run took 507.4 seconds and
+returned five malformed model replies. After the output-handler
+changes, a one-case smoke test still required **94.4 seconds**, caused
+serious browser sluggishness, and generated gibberish instead of a
+meaningful argument classification.
 
-The Matcher Test Lab now includes a **separate experimental** method:
-**Arguments — evidence strength (experimental local LLM)**. It uses
-the existing argument extractor and a browser-local
-`onnx-community/Qwen2.5-0.5B-Instruct` instruction model to assess
-premise relevance, probabilistic support, contradiction and overclaiming.
-The small language model is not automatically more accurate; that is
-what the next benchmark must establish.
+The code no longer loads or runs that model; the test-lab option and
+model module are removed. The pre-existing local MNLI argument-support
+mode and original red highlighter remain intact and fast.
 
-This mode is **opt-in** and never silently replaces the Firefox
-extension's faster red NLI matcher. The first run requires downloading
-a larger quantized model, and can use WebGPU (q4) or CPU WASM (q8)
-when WebGPU setup fails. Inference stays inside the browser. It
-does not need an API key or paid service. There is no external
-reasoning API or server storing the test text; model weights are
-obtained from the public model repository.
-
-The reasoner emits only one of the existing three argument labels
-plus an explicit `uncertain` fallback. Malformed or uncertain output
-is treated as abstention, not a red unsupported claim. The copied
-failure report includes the model's short explanation alongside the
-original premises, conclusion and source URL.
-
-**How to test:** `cd extension && npm run benchmark:dev` and open
-the Matcher Test Lab. Select the new reasoning mode, **Upload labelled
-JSON / JSONL**, and use the same `real_world_argument_pilot.json`
-file previously tested. Compare exact accuracy, false alarms,
-predictions and explanations against the 78.3% original NLI baseline,
-then test on **new independently labelled authentic writing** before
-deciding whether to use the reasoner for default Firefox highlighting.
-
-The GitHub tests validate argument extraction, model invocation,
-structured response handling and safety of abstention. **CI cannot
-confirm a model's real reasoning quality in Firefox**, and running
-on an unfamiliar browser or machine may require significant memory.
-
-
-### Fix for Qwen model output format (first experimental browser run)
-
-The first 23-case browser run in experimental `argument_reasoning` mode took
-507.4 seconds and scored 18/23. The five real arguments returned **invalid
-structured assessments**, not meaningful judgements of support. That
-cannot be interpreted as evidence that the local reasoning model rejected
-all five arguments. A format or generation issue must be fixed first.
-
-The model is now asked for a short `LABEL:` verdict and optional `WHY:`
-explanation, instead of a long JSON object. The local decoder can read
-the Transformers.js chat-output structure, including the final assistant
-message, as well as plain strings and valid JSON. It rejects ambiguous or
-missing verdicts and never uses echoed user messages as a model response.
-Generation is capped at 64 new tokens to reduce unnecessary local CPU
-work. The underlying reasoning model and its experimental nature are
-otherwise unchanged; the original NLI checker is untouched.
-
-The result report now counts `valid_label`, `valid_json`,
-`explicit_uncertain` and `invalid_output` separately. Copied failure
-details include at most 700 characters of the **actual decoded model
-output**. This is especially important when the model returns invalid
-output again: we can diagnose the real response rather than guessing.
-
-**Retest efficiently:** first upload a single authentic labelled case
-into the experimental reasoning mode and inspect the result. When the
-output is parseable, run the full unchanged 23-case dataset. A successful
-format fix does **not** establish argument-level accuracy; that requires
-real labels and additional held-out examples.
+**Important distinction:** on the same real-text pilot, the NLI
+extractor found the five scientific arguments, but its neutral class
+did not recognise their qualified evidential support. That unresolved
+limitation must not be concealed by calling neutral "unsupported" with
+unwarranted certainty. Any future solution needs to be fast enough for
+ordinary browsing and evaluated on fresh, independently labelled
+real passages including supported, unsupported and contradicted claims.

@@ -379,57 +379,25 @@ rights before sharing excerpts; OGL and Open Parliament material has
 its own attribution conditions.
 
 
-## Experimental second model for authentic evidential support
+## Retired local browser instruction-model experiment
 
-A confirmed fresh 23-case real-world NLI rerun scored 18/23, with all
-five genuine supported arguments called `unsupported_conclusion`.
-After the inline parser fix, no arguments were missed; all five
-received high `neutral` rather than `entailment` probabilities.
-These five cases involve statistical selection bias, entropy and
-irreversibility, observed infection transmission, longitudinal
-testing, and tentative outbreak-source attribution.
+The optional Qwen2.5-0.5B browser experiment was discontinued after
+measurement, not merely because of code-level tests. The 23-case
+real-source run took 507.4 seconds and all five supported arguments
+returned malformed model outputs. A single-case rerun after simplifying
+the output format took 94.4 seconds and still produced meaningless
+tokens rather than a usable verdict; the browser experience was
+unacceptable. No evidence of real reasoning improvement was obtained.
 
-This is a **task mismatch**: MNLI neutrality does not mean an argument
-offers no meaningful probabilistic support. Simply reducing its
-neutral threshold would damage the carefully validated synthetic
-contradiction and unsupported-inference examples.
+The experimental model import, execution code and test-lab mode were
+removed. CI prevents accidental reintroduction of the heavy
+text-generation path. The fast local NLI argument analyser, original
+contradiction detector, positive patterns and concealed-pattern
+checks remain unchanged.
 
-To test a different task definition without altering the original
-model, the Matcher Test Lab offers **Arguments — evidence strength
-(experimental local LLM)**. The optional quantized instruction model
-uses the same extracted premises/conclusion but is asked whether
-the evidence provides meaningful, appropriately qualified support;
-`uncertain` is an allowed outcome. The model is downloaded once
-and inference is performed in Firefox, without a paid API key.
-
-Rerun the **exact same 23-case uploaded file** in this mode and copy
-the failure details. Compare results against the original NLI mode,
-including the 18 ordinary passages. Then collect a fresh independent
-held-out corpus with real contradictions and unsupported inferences,
-not just supported conclusions, to assess whether the new mode
-actually improves generalisation.
-
-CI only checks the integration and parsing using simulated outputs.
-No real-model accuracy claim is made until its inference is measured.
-
-
-## Local argument model format failure and corrected diagnostics
-
-In the first experimental `argument_reasoning` test, all five labelled
-arguments in the authentic 23-case file returned **unparseable output**.
-The 18 passages without arguments remained unchanged. 18/23 correct in
-this run measures lack of output, not reasoning accuracy; the run took
-507.4 seconds.
-
-The experimental output channel now accepts a short, unambiguous
-`LABEL: SUPPORTED|UNSUPPORTED|CONTRADICTED|UNCERTAIN` response with a
-`WHY:` line (as well as valid structured JSON). It decodes
-Transformers.js assistant chat messages directly, isolates assistant
-content from echoed prompts, bounds copied raw model output to 700
-characters, and distinguishes malformed output from a deliberate
-`UNCERTAIN` verdict. The generation limit is 64 new tokens.
-
-Retest a single unchanged real case before spending another long run
-on the complete dataset. If it fails, paste the new **Actual model
-output** diagnostic. Only once the model produces valid judgements is
-comparing its reasoning to the independent labels meaningful.
+The key research issue remains: the MNLI model's neutral category
+means a hypothesis is not entailed, **not** necessarily that the
+premise provides no reasonable inductive or probabilistic support.
+Future evaluation should use genuine, blindly labelled examples from
+multiple domains, with appropriate abstention, without reusing this
+failed browser generator or gaming scores on the same five passages.
