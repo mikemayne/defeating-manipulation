@@ -93,6 +93,16 @@ function timeCompatible(p,c){
  if(!source.length||!target.length)return true;
  return source[0]===target[0]||SCOPE_PRON.test(c);
 }
+function incompatibleObjectScope(left,right){
+ // Distinct labelled sub-entities are not interchangeable even when their
+ // generic metric names coincide: 'carriage A' is not 'carriage B'.
+ function localScope(hit){
+  const m=/^\s*(?:in|at|for|on|of)\s+(?:(?:the|this|that|same)\s+)?([a-z][a-z-]{2,20})\s+([a-z0-9][a-z0-9-]{0,18})\b/i.exec(hit.contextAfter);
+  return m&&m[2]!=="and"&&m[2]!=="was"&&m[2]!=="is"?m[1]+"|"+m[2]:null;
+ }
+ const a=localScope(left),b=localScope(right);
+ return Boolean(a&&b&&a.split('|')[0]===b.split('|')[0]&&a!==b);
+}
 function valueResult(label,reason,premise,claim,steps=[]){return {label,reason,chain:[{type:'source',text:premise},{type:'goal',text:claim},...steps],verified:true};}
 
 // A single exact quantity compared with a single exact quantity in the same
@@ -102,7 +112,7 @@ function exactValue(p,c){
  const source=mentions(p),claim=mentions(c);
  if(source.length!==1||claim.length!==1||!timeCompatible(p,c)||EXCEPT.test(p)||EXCEPT.test(c)||
    /\b(?:minimum|maximum|at least|at most|no less than|no more than|lower bound|upper bound)\b/i.test(p))return null;
- const x=source[0],y=claim[0];if(!x.unit||x.unit!==y.unit)return null;
+ const x=source[0],y=claim[0];if(!x.unit||x.unit!==y.unit||incompatibleObjectScope(x,y))return null;
  if(!/\b(?:exactly|final|total|record(?:s|ed)?|show(?:s|ed)?|lists?|states?|fixes?|allocated?|contains?|holds?|has|had|was|were|is|are|equals?)\b/i.test(p))return null;
  if(!/\b(?:exactly|final|total|record(?:s|ed)?|show(?:s|ed)?|lists?|states?|fixes?|allocated?|contains?|holds?|had|was|were|is|are|equal|same)\b/i.test(c))return null;
  // Two independent noun anchors in the local claims, or the same distinctive
