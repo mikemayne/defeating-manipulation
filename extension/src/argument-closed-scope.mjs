@@ -21,6 +21,7 @@ function single(t,regex){const a=[...t.matchAll(regex)];return a.length===1?a[0]
 function same(a,b){return typeof a==='string'&&typeof b==='string'&&a.trim().toLowerCase()===b.trim().toLowerCase();}
 function singular(s) {
  const x=s.toLowerCase();
+ if(x==='buses')return 'bus';
  if(x.endsWith('ies')&&x.length>4)return x.slice(0,-3)+'y';
  if(x.endsWith('ches')||x.endsWith('shes')||x.endsWith('sses')||x.endsWith('xes')||x.endsWith('zes'))return x.slice(0,-2);
  if(x.endsWith('s')&&!x.endsWith('ss')&&x.length>3)return x.slice(0,-1);
