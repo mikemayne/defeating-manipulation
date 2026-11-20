@@ -35,7 +35,7 @@ assert.ok(read('sitemap.xml').includes('inconsistency-patterns.json'),
  'Sitemap includes the red catalogue JSON');
 assert.ok(inconsistency.patterns.some(item =>
  item.id === 'unsupported_conclusion' &&
- /insufficient to support the conclusion/i.test(
+ /insufficient to support (?:this|the) conclusion/i.test(
   [item.definition,...item.observable_features].join(' '))),
  'Unsupported-conclusion pattern explains the limits of the evidence supplied');
 assert.ok(inconsistency.patterns.some(item => item.id === 'supported_conclusion'),
