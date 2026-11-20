@@ -139,7 +139,8 @@
         "\\b(?:proves?|shows?|confirms?|demonstrates?)\\b[^.!?]{0,110}[,;]\\s*(?:just\\s+)?(?:ignore|discount|exclude|leave out)\\b[^.!?]{0,70}\\b(?:other|remaining|contrary|conflicting|negative|opposing)\\b",
         "\\b(?:ignore|discount|exclude|leave out)\\b[^.!?]{0,55}\\b(?:other|remaining|contrary|conflicting|negative|opposing)\\b[^.!?]{0,120}\\b(?:proves?|shows?|confirms?)\\b",
         "\\b(?:one|two|three|four|five|six|\\d+)\\s+[^.!?;]{5,115}\\b(?:show|prove|demonstrate|reported?|found)\\b[^.!?;]{0,110}[;,]\\s*(?:so|therefore)\\b[^.!?;]{5,90}[;,]\\s*(?:ignore|discount|exclude|leave out)\\b[^.!?;]{0,70}\\b(?:other|remaining|rest|contrary|negative|conflicting)\\b",
-        "\\b(?:one|two|three|four|five|six|\\d+)\\s+[^.!?;]{5,115}\\b(?:reported?|found|showed|demonstrated)\\b[^.!?;]{5,110}\\b(?:so|therefore)\\b[^.!?;]{5,110}[;,]\\s*(?:ignore|discount|exclude|leave out)\\b[^.!?;]{0,70}\\b(?:other|remaining|rest|contrary|negative|conflicting)\\b"
+        "\\b(?:one|two|three|four|five|six|\\d+)\\s+[^.!?;]{5,115}\\b(?:reported?|found|showed|demonstrated)\\b[^.!?;]{5,110}\\b(?:so|therefore)\\b[^.!?;]{5,110}[;,]\\s*(?:ignore|discount|exclude|leave out)\\b[^.!?;]{0,70}\\b(?:other|remaining|rest|contrary|negative|conflicting)\\b",
+        "\\b(?:one|two|three|four|five|six|\\d+)\\s+[^.!?;]{5,140}\\b(?:so|therefore)\\b[^.!?;]{5,95};\\s*(?:ignore|discount|exclude|leave out)\\b[^.!?;]{0,70}\\b(?:other|remaining|rest|contrary|negative|conflicting)\\b"
       ]
     },
     {
@@ -208,7 +209,7 @@
     {
       "id": "loaded_language",
       "expressions": [
-        "\\b(?:appalling|shameful|grotesque|disgraceful|outrageous|revolting|abhorrent)\\b[^.!?]{0,125}\\b(?:appalling|shameful|grotesque|disgraceful|outrageous|revolting|abhorrent)\\b"
+        "^(?:this|that|the)\\s+(?:appalling|shameful|grotesque|disgraceful|outrageous|revolting|abhorrent)\\b[^.!?]{0,125}\\b(?:appalling|shameful|grotesque|disgraceful|outrageous|revolting|abhorrent)\\b"
       ]
     },
     {
