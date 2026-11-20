@@ -9,29 +9,9 @@ export const BOUNDARY_CHOICES=Object.freeze([
  {id:"but",label:"but"}
 ]);
 const MAX_PAIRS=2,MAX_STRATEGY_PAIRS=8,MAX_CONTEXT_LEFT=130,MAX_CONTEXT_RIGHT=95;
-function trimSpan(source,start,end){
- while(start<end&&/\s/u.test(source[start]))start++;
- while(end>start&&/\s/u.test(source[end-1]))end--;
- return start>=end?null:{start,end,text:source.slice(start,end)};
-}
-function titleBoundaries(source){
- const out=[],re=/\b(?:Mr|Mrs|Ms|Dr|Prof|Sen|Rep|Gen|Gov)\.(?=\s+[\p{Lu}])/gu;let match;
- while((match=re.exec(source))){
-  const dot=match.index+match[0].length-1;
-  let end=source.length;
-  for(let k=dot+1;k<source.length;k++){
-   if(/[!?\n]/u.test(source[k])||(source[k]==="."&&k!==dot)){
-    end=k+1;break;
-   }
-  }
-  const left=trimSpan(source,match.index,dot);
-  const right=trimSpan(source,dot+1,end);
-  if(left&&right&&right.text.length<=260&&right.text.match(/\s/u))
-   out.push({first:left,second:right,boundaryKind:"title",
-    boundaryOffset:dot+1,punctuationStart:dot,punctuationEnd:dot+1});
- }
- return out;
-}
+// Titles, initials, common inline abbreviations, decimals and ellipses are
+// handled deterministically by extractReaderPairs. They must never be
+// treated as optional discourse-join sites or sent to the language model.
 export function extractBoundaryProbes(source,{maxPairs=MAX_PAIRS}={}){
  if(typeof source!=="string"||source.length>3500||!Number.isSafeInteger(maxPairs)||maxPairs<1)return [];
  const pairs=extractReaderPairs(source,{maxPairs:20}),probes=[];
@@ -52,7 +32,6 @@ export function extractBoundaryProbes(source,{maxPairs=MAX_PAIRS}={}){
   if(source.slice(start,end).match(/[,.!?;]/u))
    probes.push({...pair,punctuationStart:start,punctuationEnd:end});
  }
- probes.push(...titleBoundaries(source));
  probes.sort((a,b)=>a.punctuationStart-b.punctuationStart);
  const unique=[];const seen=new Set();
  for(const p of probes){

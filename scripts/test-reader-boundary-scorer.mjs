@@ -33,17 +33,40 @@ assert.equal(scored[0].scoreType,"mean_conditional_token_log_probability");
 assert.equal((await rankBoundaryChoices(sample,async()=>-2))[0].choice,"keep");
 assert.equal((await rankBoundaryChoices(sample,async()=>-2))[0].uncertain,true,
  "Near-ties must retain original punctuation");
+// Titles and common abbreviations are deterministic parser work, not model input.
 const title="Mr. Smith arrived. He was late.";
 const titlePairs=extractBoundaryProbes(title);
-assert.equal(titlePairs.length,2,"Include title dot and actual sentence boundary");
-assert.equal(titlePairs[0].boundaryKind,"title");
+assert.equal(titlePairs.length,1,"Only the real boundary after arrived is scored");
 assert.equal(title.slice(titlePairs[0].punctuationStart,titlePairs[0].punctuationEnd),".");
-const titleScored=await rankBoundaryChoices(title,async (_prefix,completion)=>{
- return completion.startsWith(" Smith") ? -0.7 :
-  completion.startsWith(". ") ? -1.2 : -4;
+assert.equal(titlePairs[0].boundaryKind,"sentence");
+assert.equal(titlePairs[0].punctuationStart,title.indexOf("arrived.")+7);
+let titleCalls=0;
+await rankBoundaryChoices(title,async()=>{
+ titleCalls++;return -2;
 });
-assert.equal(titleScored[0].choice,"nothing","No inserted word must be a real option for Mr.");
-assert.equal(titleScored[0].boundaryKind,"title");
+assert.equal(titleCalls,4,"Mr. is never a neural-model candidate");
+for(const abbr of [
+ "Mrs. Smith arrived. She was late.",
+ "Ms. Smith arrived. She was late.",
+ "Dr. Smith arrived. She was late.",
+ "Prof. Brown spoke. The crowd listened.",
+ "Gen. Brown spoke. The crowd listened.",
+ "Sen. Lewis spoke. The committee listened.",
+ "Rev. Wells spoke. The crowd listened.",
+ "The examples, e.g. apples and pears, were listed. We checked everything.",
+ "The examples, i.e. the final group, were listed. We checked everything.",
+ "He lives near St. John Street. She lives nearby.",
+ "The U.S. government voted. The committee agreed."
+]){
+ const scored=extractBoundaryProbes(abbr);
+ assert.ok(!scored.some(x=>abbr.slice(x.punctuationStart,x.punctuationEnd)!=="."),
+  "Unexpected punctuation probe");
+ assert.equal(scored.length,1,"Only actual sentence boundary should be scored: "+abbr);
+}
+assert.equal(extractBoundaryProbes("Mr. Smith arrived.").length,0);
+assert.equal(extractBoundaryProbes(
+ "the most ruthless, fanatical... leaders that the world has ever seen"
+).length,0,"Do not split an ellipsis into bogus model joins");
 for(const input of [
  title,sample,"He paid 12.8 percent. The bill rose.",
  "The alarm failed, then the building was evacuated.",
@@ -71,5 +94,5 @@ assert.ok(good>-0.1);
 const bad=continuationLogScore([0,2,1],[0],fake);
 assert.ok(bad<good);
 assert.equal(continuationLogScore([0,1],[0],{dims:[2,2,3],data:[]}),null);
-console.log("Reader boundary reconstruction: four alternatives, title/comma/decimal cases, exact offsets, conservative ties and logits passed.");
+console.log("Reader boundary reconstruction: four alternatives, JS abbreviation/ellipsis filtering, comma/decimal cases, offsets, ties and logits passed.");
 

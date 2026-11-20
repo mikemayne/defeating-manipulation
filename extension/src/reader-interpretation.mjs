@@ -18,7 +18,16 @@ export const READER_RELATIONS = Object.freeze([
    hypothesis:"A typical reader would understand these as independent statements without an implied connection." }
 ]);
 const WORD = /[\p{L}\p{N}]+/gu;
-const ABBREVIATIONS = new Set(["mr","mrs","ms","dr","prof","sen","rep","gen","gov","sr","jr","st","vs","etc"]);
+// Only unambiguous title abbreviations should survive even before a capitalised name.
+const TITLES = new Set([
+ "mr","mrs","ms","dr","prof","sen","rep","gen","gov",
+ "sr","jr","rev","hon","capt","col","lt","sgt","st","mt"
+]);
+// These can end a sentence, so only suppress a period when the next word
+// clearly continues the current phrase.
+const INLINE_ABBREVIATIONS = new Set([
+"vs","etc","inc","ltd","corp","co","fig","vol","dept","approx","no"
+]);
 const MAX_STATEMENTS=14, MAX_PAIRS=2, MAX_TEXT_LENGTH=3500;
 function countWords(value){return (value.match(WORD)||[]).length;}
 function span(source,a,b){
@@ -29,10 +38,17 @@ function span(source,a,b){
  return {start:a,end:b,text};
 }
 function suppressedDot(source,i){
+ // Ellipses are NOT three possible sentence boundaries.
+ if(source[i-1]==="."||source[i+1]===".")return true;
  const before=source.slice(Math.max(0,i-24),i);
  const previous=(before.match(/[\p{L}]+$/u)||[])[0]||"";
  const next=source.slice(i+1).match(/^\s*(.)/u)?.[1]||"";
- if(ABBREVIATIONS.has(previous.toLowerCase())&&/\p{L}/u.test(next))return true;
+ const word=previous.toLowerCase();
+ if(TITLES.has(word)&&/\p{L}/u.test(next))return true;
+ if(INLINE_ABBREVIATIONS.has(word)&&/\p{Ll}/u.test(next))return true;
+ if(word==="no"&&/\p{N}/u.test(next))return true;
+ if(/\b(?:e\.g|i\.e|a\.m|p\.m)$/i.test(before)&&/\p{L}/u.test(next))
+  return true;
  if(/\d/u.test(source[i-1]||"")&&/\d/u.test(next))return true;
  // Single initial: "J. Smith", "U.S. policy"; not an utterance boundary.
  if(previous.length===1&&/\p{L}/u.test(next))return true;
