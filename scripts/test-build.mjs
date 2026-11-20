@@ -18,7 +18,7 @@ assert.ok(homepage.includes('id="positive-search"') && homepage.includes('id="po
 assert.ok(positive.patterns.length >= 10, 'Positive pattern library has an initial set of patterns');
 assert.ok(homepage.includes('id="search"') && homepage.includes('id="catalogue"'), 'Homepage provides searchable catalogue');
 assert.ok(homepage.includes('class="inconsistency-section"') &&
- homepage.includes('background:#ffe4e6'), 'Inconsistency section has a red background');
+ homepage.includes('background:#991b1b'), 'Inconsistency section has a red background');
 assert.ok(homepage.includes('id="inconsistency-search"') &&
  homepage.includes('id="inconsistency-catalogue"'), 'Inconsistency library is independently searchable');
 assert.ok(homepage.includes("mountLibrary({url:'inconsistency-patterns.json'"),
@@ -27,7 +27,7 @@ assert.ok(inconsistency.patterns.length >= 1, 'Inconsistency library has pattern
 for (const item of inconsistency.patterns) {
  const page = 'inconsistency-patterns/'+item.id+'.html';
  assert.ok(fs.existsSync('_site/'+page), 'Generated red page exists for '+item.id);
- assert.ok(read(page).includes('background:#ffe4e6'), 'Individual red pattern page uses a red background: '+item.id);
+ assert.ok(read(page).includes('background:#991b1b'), 'Individual red pattern page uses a red background: '+item.id);
  assert.ok(read(page).includes('<h2>Recognising the pattern</h2>'), 'Red pattern has observable features: '+item.id);
  assert.ok(read('sitemap.xml').includes(page), 'Sitemap includes red pattern: '+item.id);
 }
