@@ -109,6 +109,7 @@ self.addEventListener("message", async event => {
    stage("Checking whether conclusions follow from the evidence…");
    const assessed = await analyseArguments(data.text, memoScore, {
     includeImplicit:true,
+    includeModelDiscovery:true,
     onProgress: ({ completed, total }) => {
      if (total) stage("Checking conclusion " + Math.min(completed + 1, total) +
       " of " + total + "…");

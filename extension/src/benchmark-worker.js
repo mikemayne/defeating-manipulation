@@ -194,6 +194,28 @@ async function startRun(message) {
     if (Object.hasOwn(item, "expected") || item.analyse_reasoning === true) {
      argumentAssessments = await analyseArguments(item.text, nliScorer, {
       includeImplicit:unlabelledScan,
+      includeModelDiscovery:unlabelledScan,
+      // The synchronous structure pass cannot call a neural model.
+      // Extend its provisional hypotheses only when the AI pass proposes
+      // a source-exact candidate. Scored benchmarks never enter this path.
+      onCandidate: candidate => {
+       const h = {
+        sourceConclusion:candidate.conclusion.text,
+        modelConclusion:candidate.conclusion.text,
+        start:candidate.conclusion.start,
+        end:candidate.conclusion.end,
+        marker:candidate.conclusion.marker,
+        inferred:true, inferredConnector:candidate.inferredConnector,
+        analysisText:candidate.analysisText,
+        reconstructionMethod:candidate.reconstructionMethod,
+        relationScore:candidate.relationScore
+       };
+       if(item.text.slice(h.start,h.end)!==h.sourceConclusion)
+        throw Error("AI candidate lost original source offsets");
+       if(!structureCheck.hypotheses.some(x=>
+         x.start===h.start && x.end===h.end))
+        structureCheck.hypotheses.push(h);
+      },
       onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)
      });
      // This is only a benchmark classification; supported conclusions are
@@ -240,7 +262,9 @@ async function startRun(message) {
      start:h.start,end:h.end,marker:h.marker,
      inferred:h.inferred||false,
      inferredConnector:h.inferredConnector||null,
-     analysisText:h.analysisText||null
+     analysisText:h.analysisText||null,
+     reconstructionMethod:h.reconstructionMethod||null,
+     relationScore:h.relationScore??null
     }));
     const key=labels.join(", ") || (extracted.length ? "(no reasoning label)" : "(no extracted argument)");
     data.predictionCounts[key]=(data.predictionCounts[key]||0)+1;
