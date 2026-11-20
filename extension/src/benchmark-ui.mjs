@@ -270,7 +270,12 @@ function failureReport(data) {
       (a.status === "evidential_support_uncertain"
        ? "(abstained — insufficient evidence to judge; no underline)"
        : "(abstained)")) +
-     (a.reason ? " | Decision: " + a.reason : ""));
+     (a.reason ? " | Decision: " + a.reason : "") +
+     (a.propositionNormalization ? " | Structured facts: " +
+      a.propositionNormalization.facts + " | Claim type: " +
+      a.propositionNormalization.claimKind +
+      (a.propositionNormalization.relation ? " | Structured relation: " +
+       a.propositionNormalization.relation : "") : ""));
     for (const x of a.comparisons) {
      const f = x.forward || {}, r = x.reverse || {};
      lines.push("    " + x.kind + (x.repeated ? " [exact repetition]" : "") +
