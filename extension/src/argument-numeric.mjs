@@ -83,6 +83,10 @@ function labels(text){
 }
 function sharedTopic(p,c){const a=labels(p),b=labels(c);let count=0;for(const x of a)if(b.has(x))count++;return count;}
 function timeCompatible(p,c){
+ // 'The next 10 performances' identifies a different future cohort from
+ // 'one performance last year'. Do not recycle an earlier exact quantity.
+ const futureSeries=/\b(?:next|upcoming|following|subsequent)\s+(?:\d+(?:,\d{3})*|one|two|three|four|five|six|seven|eight|nine|ten|several|few)\b/i;
+ if(futureSeries.test(c)&&!futureSeries.test(p))return false;
  const source=[...clean(p).matchAll(SCOPE)].map(x=>x[0]);
  const target=[...clean(c).matchAll(SCOPE)].map(x=>x[0]);
  if(source.length>1||target.length>1){

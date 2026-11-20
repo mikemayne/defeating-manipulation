@@ -1281,3 +1281,6 @@ await import('./test-argument-closed-scope.mjs');
 
 // Exact finite arithmetic, bounded prerequisites and quantifier counterexamples.
 await import('./test-argument-finite-proofs.mjs');
+
+// Explicit evidence-scale and certainty mismatches; adversarial abstentions.
+await import('./test-argument-scope-certainty.mjs');
