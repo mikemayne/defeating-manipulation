@@ -189,7 +189,7 @@ function scopeWidening(premise, conclusion) {
 // the conclusion is false. Qualified claims are not automatically supported;
 // without an entailment signal, they must abstain instead of turning red.
 const CLAIMED_UNIVERSALS =
- /\b(?:all|every|each|everyone|everybody|everything|entire|whole|only|always|never|none|nobody|nothing|no one|everyone's)\b/i;
+ /\b(?:all|every|each|everyone|everybody|everything|entire|whole|only|always|never|none|nobody|nothing|no|no one|everyone's)\b/i;
 const CATEGORICAL_ABSOLUTES =
  /\b(?:completely|entirely|totally|absolutely|guaranteed|forever|everlasting|infallible|perfectly|flawless|zero|fully|eliminated|eradicated|solved|cured|proven|proved|definitively)\b/i;
 const SUPERLATIVE_SCOPE =
