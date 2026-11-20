@@ -66,7 +66,7 @@ assert.throws(()=>validateStrategyCases([{
  id:"b",text:source,expected_boundaries:[{offset:pairs[0].punctuationStart,choice:"because"}]
 }]),/Invalid/);
 assert.throws(()=>validateStrategyCases([{id:"a",text:"X"},{id:"a",text:"Y"}]),/duplicate|unique/);
-const repeated="Alpha was late. Beta had already arrived. Gamma waited. Delta made a call. Epsilon left. Zeta came back.";
+const repeated="Alpha arrived very late. Beta had already arrived. Gamma waited at home. Delta made a call. Epsilon left the room. Zeta came back.";
 const long=await compareReaderStrategies(repeated,async (_a,b)=>b.startsWith(" and ")?-1:-3);
 assert.equal(long.length,5,"All five boundaries should be scored, not just two");
 assert.ok(long.at(-1).contextChangedByEarlierJoins);
