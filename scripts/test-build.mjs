@@ -684,11 +684,13 @@ const headingsAndNoInference = [
 for (const text of headingsAndNoInference)
  assert.deepEqual(argumentEngine.extractArguments(text), [],
   'Reports, missing premises, and advice do not become factual conclusions');
-assert.ok(benchmarkPage.includes('value="argument_support"') &&
+assert.ok(benchmarkPage.includes('value="argument_paragraph"') &&
+ !benchmarkPage.includes('value="argument_support"') &&
+ !benchmarkPage.includes('value="argument_structure"') &&
  benchmarkWorker.includes('analyseArguments(item.text, nliScorer,') &&
- benchmarkUI.includes('argument-support-examples.json') &&
- localServer.includes('/evaluation/argument-support-examples.json'),
- 'Argument NLI lab uses actual local NLI model and dedicated dataset');
+ benchmarkWorker.includes('validateArgumentParagraphCases(rawSeeds)') &&
+ benchmarkUI.includes('expected_argument'),
+ 'Single paragraph argument lab accepts structure metadata plus optional NLI labels');
 assert.ok(extensionWorker.includes('analyseArguments(data.text, memoScore') &&
  extensionWorker.includes('argumentFindings(assessed)') &&
  extensionWorker.includes('...argumentIssues'),
@@ -1078,10 +1080,11 @@ assert.ok(!benchmarkPage.includes('value="argument_reasoning"') &&
  'Unsupported browser instruction-model path is completely disabled');
 assert.ok(!fs.existsSync('extension/src/argument-reasoner.mjs'),
  'Retired Qwen model module is not shipped to the extension');
-assert.ok(benchmarkPage.includes('value="argument_support"') &&
+assert.ok(benchmarkPage.includes('value="argument_paragraph"') &&
  benchmarkWorker.includes('analyseArguments(item.text, nliScorer') &&
- benchmarkWorker.includes('initialiseConsistencyModel()'),
- 'Fast local NLI argument analyser is preserved');
+ benchmarkWorker.includes('initialiseConsistencyModel()') &&
+ benchmarkWorker.includes('Object.hasOwn(item, "expected")'),
+ 'Fast local NLI argument analyser is preserved for explicitly labelled rows');
 assert.ok(benchmarkPage.includes('value="consistency"') &&
  benchmarkPage.includes('value="positive_ai"') &&
  benchmarkPage.includes('value="concealed_ai"'),
@@ -1222,3 +1225,6 @@ await import('./test-argument-evidence.mjs');
 
 // Fictional single-paragraph claim-completion and offset regression tests.
 await import('./test-media-social-arguments.mjs');
+
+// The lab runs one single-paragraph upload mode, not retired parallel argument modes.
+await import('./test-argument-paragraph-upload.mjs');
