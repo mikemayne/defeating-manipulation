@@ -75,6 +75,30 @@ const OPPOSITES=[
  [/\b(?:allow(?:ed|s)?|permit(?:s|ted)?|permitted)\b/i,
   /\b(?:bann?(?:ed|ing|s)?|forbidden|prohibit(?:ed|s)?)\b/i]
 ];
+// Explicitly incompatible states of the same object at the same time.
+// Unlike broad antonym matching, both sides must contain a *different*
+// state from the pair and enough shared subject/scope anchors. No source
+// text is ever interpreted as a regular expression or executable code.
+const DIRECT_STATES=[
+ [/\b(?:unlocked)\b/i,/\b(?:locked)\b/i],
+ [/\b(?:passed|passing)\s+(?:(?:the|that|same)\s+)?(?:test|inspection|check)\b/i,
+  /\b(?:failed|failing)\s+(?:(?:the|that|same)\s+)?(?:test|inspection|check)\b/i],
+ [/\bswitch(?:ed)?\s+on\b/i,/\bswitch(?:ed)?\s+off\b/i],
+ [/\bsold\s+out\b/i,/\bunsold\b/i],
+ [/\bsuspend(?:ed|s|ing)?\b/i,/\boperat(?:ing|ed|es?)\s+(?:normally|as usual)\b/i],
+ [/\bvacant\b/i,/\boccupied\b/i],
+ [/\b(?:accepted|admitted)\b/i,/\b(?:refused|denied)\s+entry\b/i]
+];
+function boundedStateConflict(p,c,shared) {
+ if(shared.length<2 || /["“”]/.test(p+c) ||
+    /\b(?:except|unless|different|another|separate|previously|subsequently|later)\b/i.test(p+c))
+  return false;
+ // Explicit conflicting clock readings cannot be silently collapsed.
+ const clock=/\b(?:[01]?\d|2[0-3]):[0-5]\d\b/g;
+ const pa=[...new Set(p.match(clock)||[])],ca=[...new Set(c.match(clock)||[])];
+ if(pa.length&&ca.length&&!pa.some(t=>ca.includes(t)))return false;
+ return DIRECT_STATES.some(([a,b])=>oneSide(p,c,a,b));
+}
 const FREE=/\bfree\b|\bno\b.{0,35}\b(?:fee|charge|payment)\b|\bwithout (?:a )?charge\b/i;
 const MUST_PAY=/\bmust pay\b|\brequir(?:es?|ed)\s+payment\b|\b(?:fee|payment)\s+(?:is|was|will be)\s+required\b/i;
 const ALL_CLAIMED=/\b(?:all|every)\b.{0,65}\b(?:prizes?|rewards?|places?|spaces?)\b.{0,55}\bclaimed\b/i;
@@ -91,6 +115,8 @@ export function observableContradiction(premise,conclusion) {
  if(/\b(?:may|might|could|possibly|perhaps|apparently)\b/i.test(c))
   return {verified:false,reason:'qualified_conclusion'};
  if(!shared?.length)return {verified:false,reason:'no_unambiguous_shared_scope'};
+ if(boundedStateConflict(p,c,shared))
+  return {verified:true,reason:'same_scope_opposite_states'};
  const normalizedP=p.replace(/\brather than\s+\w+\b/gi,'');
  const normalizedC=c.replace(/\brather than\s+\w+\b/gi,'');
  const sharedActionTarget = shared.some(word => {
