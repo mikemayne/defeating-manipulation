@@ -131,7 +131,8 @@ function buildSummary(data, elapsedMs, cancelled) {
   predictionCounts: data.unlabelledScan ? data.predictionCounts : null,
   readerMode: data.readerMode, readerCounts: data.readerMode ? data.readerCounts : null,
   readerPairs: data.readerMode ? data.readerPairs : null,
-  readerCasesWithPairs: data.readerMode ? data.readerCasesWithPairs : null
+  readerCasesWithPairs: data.readerMode ? data.readerCasesWithPairs : null,
+  readerExistingParserCases: data.readerMode ? data.readerExistingParserCases : null
  };
 }
 async function startRun(message) {
@@ -184,7 +185,8 @@ async function startRun(message) {
    paragraphStages: argumentMode && !unlabelledScan ? { structure:{total:0,exact:0},
     reasoning:{total:0,exact:0} } : null,
    unlabelledScan, readerMode, predictions: [], predictionCounts: {},
-   readerCounts:{}, readerPairs:0, readerCasesWithPairs:0 };
+   readerCounts:{}, readerPairs:0, readerCasesWithPairs:0,
+   readerExistingParserCases:0 };
   let lastUpdate = 0;
   for (let i = 0; i < total; i++) {
    if (stopRequested) break;
@@ -197,6 +199,8 @@ async function startRun(message) {
     // Reader interpretation is independent of argument truth and red findings.
     // Every test case is stored with exact original spans and uncalibrated
     // scores. The corpus itself is never committed or sent to a server.
+    const baseline=inspectArgumentStructure(item).hypotheses;
+    if(baseline.length)data.readerExistingParserCases++;
     const interpreted=await scoreReaderInterpretations(item.text,nliScorer);
     data.readerPairs+=interpreted.length;
     if(interpreted.length)data.readerCasesWithPairs++;
@@ -206,7 +210,10 @@ async function startRun(message) {
      id:item.id,text:item.text,
      source_url:item.source_url||null,
      source_annotation:item.source_annotation||null,
-     interpretations:interpreted
+     interpretations:interpreted,
+     existing_rule_arguments:baseline.map(h=>({
+      conclusion:h.sourceConclusion,start:h.start,end:h.end,marker:h.marker
+     }))
     });
     data.tested++;
     const now=performance.now();
