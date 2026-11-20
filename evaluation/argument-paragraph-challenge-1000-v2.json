@@ -1703,7 +1703,7 @@
     },
     {
       "id": "syn-v2-supported-154",
-      "text": "For the same trip to the hilltop depot, the planner lists a 12-minute walk and a 18-minute bus ride. Therefore, the walking estimate is 6 minutes shorter than the bus estimate.",
+      "text": "For the same trip to the hilltop depot, the planner lists a 12-minute walk and an 18-minute bus ride. Therefore, the walking estimate is 6 minutes shorter than the bus estimate.",
       "expected_argument": true,
       "expected": [
         "supported_conclusion"
@@ -1725,7 +1725,7 @@
     },
     {
       "id": "syn-v2-supported-156",
-      "text": "For the same trip to the harbour depot, the planner lists a 15-minute walk and a 18-minute bus ride. Consequently, the walking estimate is 3 minutes shorter than the bus estimate.",
+      "text": "For the same trip to the harbour depot, the planner lists a 15-minute walk and an 18-minute bus ride. Consequently, the walking estimate is 3 minutes shorter than the bus estimate.",
       "expected_argument": true,
       "expected": [
         "supported_conclusion"
@@ -1780,7 +1780,7 @@
     },
     {
       "id": "syn-v2-supported-161",
-      "text": "For the same trip to the harbour depot, the planner lists a 18-minute walk and a 21-minute bus ride. Thus, the walking estimate is 3 minutes shorter than the bus estimate.",
+      "text": "For the same trip to the harbour depot, the planner lists an 18-minute walk and a 21-minute bus ride. Thus, the walking estimate is 3 minutes shorter than the bus estimate.",
       "expected_argument": true,
       "expected": [
         "supported_conclusion"
@@ -1791,7 +1791,7 @@
     },
     {
       "id": "syn-v2-supported-162",
-      "text": "For the same trip to the orchard depot, the planner lists a 18-minute walk and a 22-minute bus ride. Thus, the walking estimate is 4 minutes shorter than the bus estimate.",
+      "text": "For the same trip to the orchard depot, the planner lists an 18-minute walk and a 22-minute bus ride. Thus, the walking estimate is 4 minutes shorter than the bus estimate.",
       "expected_argument": true,
       "expected": [
         "supported_conclusion"
@@ -1802,7 +1802,7 @@
     },
     {
       "id": "syn-v2-supported-163",
-      "text": "For the same trip to the market depot, the planner lists a 18-minute walk and a 23-minute bus ride. Thus, the walking estimate is 5 minutes shorter than the bus estimate.",
+      "text": "For the same trip to the market depot, the planner lists an 18-minute walk and a 23-minute bus ride. Thus, the walking estimate is 5 minutes shorter than the bus estimate.",
       "expected_argument": true,
       "expected": [
         "supported_conclusion"
@@ -1813,7 +1813,7 @@
     },
     {
       "id": "syn-v2-supported-164",
-      "text": "For the same trip to the hilltop depot, the planner lists a 18-minute walk and a 24-minute bus ride. Thus, the walking estimate is 6 minutes shorter than the bus estimate.",
+      "text": "For the same trip to the hilltop depot, the planner lists an 18-minute walk and a 24-minute bus ride. Thus, the walking estimate is 6 minutes shorter than the bus estimate.",
       "expected_argument": true,
       "expected": [
         "supported_conclusion"
@@ -1824,7 +1824,7 @@
     },
     {
       "id": "syn-v2-supported-165",
-      "text": "For the same trip to the riverside depot, the planner lists a 18-minute walk and a 25-minute bus ride. Thus, the walking estimate is 7 minutes shorter than the bus estimate.",
+      "text": "For the same trip to the riverside depot, the planner lists an 18-minute walk and a 25-minute bus ride. Thus, the walking estimate is 7 minutes shorter than the bus estimate.",
       "expected_argument": true,
       "expected": [
         "supported_conclusion"
