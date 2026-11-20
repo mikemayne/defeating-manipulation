@@ -271,6 +271,8 @@ function failureReport(data) {
        ? "(abstained — insufficient evidence to judge; no underline)"
        : "(abstained)")) +
      (a.reason ? " | Decision: " + a.reason : "") +
+     (a.reasoningBridge ? " | Verified bridge: " + a.reasoningBridge.reason +
+      " (" + a.reasoningBridge.steps + " steps)" : "") +
      (a.propositionNormalization ? " | Structured facts: " +
       a.propositionNormalization.facts + " | Claim type: " +
       a.propositionNormalization.claimKind +
