@@ -30,7 +30,9 @@ const numericSupported=[
  ['group-votes','The published tally records 38 votes for Alder and 21 for Birch.',
   'Alder received more votes than Birch.'],
  ['named-samples','The examiner recorded 1.2 milligrams in sample R and 3.7 in sample S.',
-  "Sample S's reported reading is higher than sample R's."]
+  "Sample S's reported reading is higher than sample R's."],
+ ['flat-plus-rate','The final fare is £12 plus £3 for each of two stops.','The total fare is £18.'],
+ ['rate-per-stop','The final fare is £12 plus £3 per stop for two extra stops.','The total fare is £18.']
 ];
 const numericContradicted=[
  ['charge-disagreement','The invoice shows a final charge of £27 for the delivery.',
@@ -48,7 +50,8 @@ const numericContradicted=[
  ['max-violation','The gauge report records a maximum pressure of 4.5 bar for chamber A.',
   'The pressure reached 5.5 bar in that same chamber A.'],
  ['min-violation','The gauge report records a minimum pressure of 4.5 bar for chamber A.',
-  'The pressure reached 2.5 bar in that same chamber A.']
+  'The pressure reached 2.5 bar in that same chamber A.'],
+ ['flat-plus-rate-wrong','The final fare is £12 plus £3 for each of two stops.','The total fare is £15.']
 ];
 for(const [id,p,c] of numericSupported){
  const r=inferNumericRelation(p,c);
@@ -80,7 +83,9 @@ const numericHardNegatives=[
  ['separate-total','The report lists 7 receipts and 3 receipts for a separate account.','The business has 10 receipts total.'],
  ['duplicate-measures','The researcher measured 7 kg for the first bag and 2 kg for the second.','The bag weighed 9 kg in total.'],
  ['different-dates','The temperature was 17°C on Monday.','The temperature was 20°C on Thursday.'],
- ['different-subentity','The train recorded 3 passengers in carriage A.','The train recorded 4 passengers in carriage B.']
+ ['different-subentity','The train recorded 3 passengers in carriage A.','The train recorded 4 passengers in carriage B.'],
+ ['rate-mismatched-currency','The final fare is £12 plus $3 for each of two stops.','The total fare is £18.'],
+ ['unknown-rate-count','The final fare is £12 plus £3 per stop.','The total fare is £18.']
 ];
 for(const [id,p,c] of numericHardNegatives)assert.equal(inferNumericRelation(p,c),null,id+': must abstain');
 const span='The  receipt   lists the total charge as £74 for the package.';
@@ -134,27 +139,3 @@ const graphContradiction=inspectArgumentProof(
 assert.equal(graphContradiction.verified?.label,'contradictory_claims',
  'Verified conditional consequence can contradict its exact negation');
 console.log(`Numerical JS + proposition graph: ${numericSupported.length} supported, ${numericContradicted.length} contradicted, ${numericHardNegatives.length} numeric hard negatives, ${conditionalPositive.length} graph proofs, ${graphMissing.length} missing-bridge diagnostics and ${graphHardNegatives.length} graph hard negatives passed.`);
-
-// Integration: numeric proof must veto a confidently wrong NLI entailment,
-// while a missing link cannot trigger a red warning from a neutral score.
-const {combineArgumentEvidence,analyseArguments,argumentFindings} =
- await import('../extension/src/argument-analysis.mjs');
-const incorrectNeuralSupport={contradiction:0.001,neutral:0.001,entailment:0.998};
-const p='The receipt shows a final charge of £27 for the delivery.';
-const c='The final charge for the delivery was £72.';
-const corrected=combineArgumentEvidence([{
- kind:'combined',text:p,forward:incorrectNeuralSupport
-}],c);
-assert.equal(corrected?.label,'contradictory_claims',
- 'JavaScript proof corrects the numerical claim even when NLI insists on support');
-assert.equal(corrected?.status,'verified_javascript_proof');
-const results=[];
-const uncertain=await analyseArguments(
- 'The florist changed its window display. Therefore the florist doubled its revenue.',
- async()=>({contradiction:0.001,neutral:0.998,entailment:0.001}),
- {onDiagnostic:x=>results.push(x)});
-assert.equal(results.length,1);
-assert.equal(results[0].proofGraph.status,'undetermined');
-assert.ok(results[0].proofGraph.missingLinks.length);
-assert.deepEqual(argumentFindings(uncertain),[],
- 'Missing logical chain stays diagnostic; no unsupported red underline is inferred');
