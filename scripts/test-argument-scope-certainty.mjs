@@ -201,7 +201,7 @@ for(const i of [0,3,6,8,10,13]){
   {inferenceMarker:marker});
  assert.equal(v?.label,'unsupported_conclusion','integrated: '+id+': '+JSON.stringify(v));
  assert.equal(v?.status,'verified_evidence_type_mismatch','status: '+id);
- assert.equal(v?.reason,undefined,'reason is held on evidence row, not top level: '+id);
+ assert.equal(v?.reason,positives[i][3],'source-grounded mechanism: '+id);
 }
 const diag=[];
 const passage='One Greenford clinic reported a 7 percent rise in vaccination visits. Therefore, the national rate of vaccination visits has risen by exactly 7 percent.';
