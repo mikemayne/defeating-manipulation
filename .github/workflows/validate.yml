@@ -111,6 +111,10 @@ jobs:
           node scripts/test-reader-contrast-error-audit.mjs
           node --check scripts/audit-reader-signal-shift.mjs
           node scripts/test-reader-signal-shift.mjs
+          node --check scripts/reader-contrast-review-core.mjs
+          node --check scripts/prepare-reader-contrast-review.mjs
+          node --check scripts/finalize-reader-contrast-review.mjs
+          node scripts/test-reader-contrast-review.mjs
           node --check scripts/finalize-reader-keep-reviews.mjs
           node scripts/test-reader-keep-reviews.mjs
       - name: Test attack-conflation detection and abstention
