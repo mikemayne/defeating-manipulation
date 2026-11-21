@@ -86,12 +86,16 @@ assert.equal(additionalContrasts(ambiguous,new Set()).length,0);
 assert.equal(additionalContrasts([makeCandidate("known",firstDoc)],
  new Set(["known"])).length,0);
 assert.throws(()=>additionalContrasts(duplicates,new Set(),0),/cap/);
+const extraCase=(id,document,text,relation="comparison.contrast")=>({
+ ...ex(id,document,"but"),text,relation,
+ expected_boundaries:[{offset:text.indexOf(". "),choice:"but"}]
+});
 const cases=[
- {...ex("extra-1",firstDoc,"but"),
-  text:"Fresh contrast example one. A different response followed."},
- {...ex("extra-2",newManifest.newTrainDocuments[1],"but"),
-  text:"Fresh contrast example two. The alternative remained possible.",
-  relation:"comparison.concession.arg2-as-denier"}
+ extraCase("extra-1",firstDoc,
+  "Fresh contrast example one. A different response followed."),
+ extraCase("extra-2",newManifest.newTrainDocuments[1],
+  "Fresh contrast example two. The alternative remained possible.",
+  "comparison.concession.arg2-as-denier")
 ];
 const categories={"comparison.contrast":1,"comparison.concession":1};
 const supplement={
