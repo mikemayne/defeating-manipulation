@@ -50,6 +50,9 @@ export function preprocessText(source,{spellchecker=null,correctSpelling=true,
  for(const candidate of maxSpelling===0?[]:
    findSpellingCandidates(source,spellchecker,maxSpelling)){
   const {start,end,original,suggestions}=candidate;
+  // Dictionary matches inside inline code and quoted URLs must not be
+  // promoted into text signals, even if spelling-bait is called separately.
+  if(isProtected(start,end))continue;
   const word=original.toLowerCase();
   words.set(word,(words.get(word)||0)+1);
   const correction=correctSpelling?candidate.correction:null;
