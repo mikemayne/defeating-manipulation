@@ -5,7 +5,10 @@ import {preprocessText,remapFindings,punctuationHookFindings,
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
 import { findInconsistencies } from "./consistency.mjs";
-import { analyseArguments, argumentFindings } from "./argument-analysis.mjs";
+import { analyseArguments, argumentFindings, combineArgumentEvidence } from "./argument-analysis.mjs";
+import { extractArgumentStatements } from "./argument-clauses.mjs";
+import { findImplicitConclusionQuestions, reconstructImplicitConclusions,
+ checkImpliedConclusions, implicitConclusionFindings } from "./implicit-conclusion-reconstruction.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { findConcealedPatterns } from "./concealed-matching.mjs";
@@ -18,6 +21,16 @@ env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
 
 const MODEL = "Xenova/all-MiniLM-L6-v2";
 let inferenceModelPromise;
+let conclusionGeneratorPromise;
+async function generateImpliedConclusion(prompt) {
+ if (!conclusionGeneratorPromise) conclusionGeneratorPromise =
+  pipeline("text2text-generation", "Xenova/flan-t5-small", { dtype: "q8" })
+   .catch(error => { console.warn("Optional implicit-conclusion model unavailable:", error); return null; });
+ const generator = await conclusionGeneratorPromise;
+ if (!generator) return "NONE";
+ const generated = await generator(prompt, { max_new_tokens: 54, do_sample: false });
+ return generated?.[0]?.generated_text || "NONE";
+}
 
 async function scorePair(premise, hypothesis) {
  // The same tokenised premise/hypothesis scoring is used in the test lab.
@@ -126,7 +139,7 @@ self.addEventListener("message", async event => {
    return cache.get(key);
   };
   const stage = message => self.postMessage({ id: data.id, type: "stage", message });
-  let inconsistencies = [], argumentIssues = [], argumentDiagnostics = [];
+  let inconsistencies = [], argumentIssues = [], argumentDiagnostics = [], implicitFindings = [];
   try {
    stage("Checking statements for contradictions…");
    inconsistencies = await findInconsistencies(analysedText, memoScore);
@@ -145,12 +158,36 @@ self.addEventListener("message", async event => {
    // A broken NLI model cannot erase successful blue, green or turquoise matches.
    console.warn("Local argument analysis unavailable:", error);
   }
+  // Only invoke the optional text-generation model on a bounded number of
+  // question-shaped candidates. Its output can only create an orange review
+  // cue, never red evidence or a statement about the author's intention.
+  // This pass is independent: unavailable weights do not affect other matches.
+  try {
+   const statements = extractArgumentStatements(analysedText);
+   if (findImplicitConclusionQuestions(analysedText, statements).length) {
+    stage("Checking for possible implied conclusions…");
+    const proposals = await reconstructImplicitConclusions(
+     analysedText, statements, generateImpliedConclusion);
+    const checked = await checkImpliedConclusions(proposals, async (premise, conclusion) => {
+     const scores = await memoScore(premise, conclusion);
+     // The check sees only actual preceding evidence, never the rhetorical
+     // question whose suggested conclusion is under consideration.
+     return combineArgumentEvidence([
+      {kind:"combined",text:premise,forward:scores,reverse:null}
+     ], conclusion);
+    });
+    implicitFindings = implicitConclusionFindings(analysedText, checked);
+   }
+  } catch (error) {
+   console.warn("Optional implied-conclusion analysis unavailable:", error);
+  }
   const recognised = [...matches, ...spellingMatches, ...vocabularyMatches, ...punctuationMatches,
-   ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues];
+   ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues,
+   ...implicitFindings];
   const scrutiny = findScrutinyWarnings(analysedText, {
    // Orthographic flags are weak signals, not confirmed techniques.
    findings: [...matches,...positiveMatches,...concealedMatches,
-    ...inconsistencies,...argumentIssues],
+    ...inconsistencies,...argumentIssues,...implicitFindings],
    nearMisses, argumentDiagnostics,
    preprocessingFlags: preprocessing.flags
   });
