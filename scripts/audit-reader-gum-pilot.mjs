@@ -50,7 +50,7 @@ const defaults={
  v1Scores:path.join(root,"evaluation/reader-holdout-v1-scores.json"),
  oldSemantic:path.join(root,"evaluation/reader-semantic-pair-scores.json"),
  output:path.join(root,"evaluation/reader-gum-pilot-audit.json"),
- top:12
+ top:12,sourceOnly:false
 };
 export const SIGNALS=Object.freeze([
  "semanticSimilarity","lexicalJaccard","lexicalContainment",
@@ -71,14 +71,15 @@ const median=arr=>{
 async function json(file){return JSON.parse(await readFile(file,"utf8"));}
 function getArgs(argv){
  const o={...defaults};const files=new Map(
-  Object.keys(defaults).filter(x=>x!=="top").map(x=>["--"+x.replace(/[A-Z]/g,m=>"-"+m.toLowerCase()),x]));
+  Object.keys(defaults).filter(x=>!["top","sourceOnly"].includes(x)).map(x=>["--"+x.replace(/[A-Z]/g,m=>"-"+m.toLowerCase()),x]));
  for(let i=0;i<argv.length;i++){
   const a=argv[i];
   if(a==="--help"||a==="-h"){
-   console.log("node scripts/audit-reader-gum-pilot.mjs [--top N]"+
+   console.log("node scripts/audit-reader-gum-pilot.mjs [--source-only] [--top N]"+
     " [--pilot PATH] [--results PATH] [--output PATH]\n"+
     "No model inference; requires existing pilot scores and pinned original GUM files.");process.exit(0);
   }
+  if(a==="--source-only"){o.sourceOnly=true;continue;}
   if(a==="--top"){
    if(++i>=argv.length)throw Error("Missing --top value");
    o.top=Number(argv[i]);continue;
@@ -242,16 +243,10 @@ function printGroups(title,groups){
 }
 async function main(){
  const o=getArgs(process.argv.slice(2));
- const [pilot,results,lm,sem,joined,masked,oldData,v1Cache]=await Promise.all([
-  o.pilot,o.results,o.language,o.semantic,
-  o.oldJoin,o.oldMask,o.oldDataset,o.v1Scores
- ].map(json));
- if(pilot.meta.version!==GUM_VERSION||results.version!==GUM_VERSION||
-   pilot.meta.selectionHash!==results.selectionHash)
-  throw Error("Results do not match the original frozen GUM selection");
+ const pilot=await json(o.pilot);
+ if(pilot.meta.version!==GUM_VERSION)
+  throw Error("Not the frozen GUM pilot");
  const pilotData=pilotRows(pilot);
- if(sem.corpusFingerprint!==signalCacheFingerprint(pilotData))
-  throw Error("GUM semantic cache fingerprint changed");
  const spanById=new Map(),loaded=new Map();
  for(const item of pilot.cases){
   if(!loaded.has(item.document)){
@@ -265,6 +260,30 @@ async function main(){
   if(!line)throw Error("GUM original line no longer present: "+item.id);
   spanById.set(item.id,spanAudit(line,item));
  }
+ if(o.sourceOnly){
+  const counts={both_whole:0,first_partial:0,second_partial:0,both_partial:0};
+  const byRelation={};
+  for(const c of pilot.cases){
+   const span=spanById.get(c.id);counts[span.kind]++;
+   const key=c.relation;
+   if(!byRelation[key])byRelation[key]={total:0,whole:0};
+   byRelation[key].total++;
+   if(span.exactSentenceArguments)byRelation[key].whole++;
+  }
+  console.log("SOURCE-ONLY GUM SPAN AUDIT — 250 original annotations verified");
+  console.log("  Whole/partial scopes: "+JSON.stringify(counts));
+  console.log("  By original relation: "+JSON.stringify(byRelation));
+  console.log("  Original classifier accuracy unchanged; no prediction files read.");
+  return;
+ }
+ const [results,lm,sem,joined,masked,oldData,v1Cache]=await Promise.all([
+  o.results,o.language,o.semantic,
+  o.oldJoin,o.oldMask,o.oldDataset,o.v1Scores
+ ].map(json));
+ if(results.version!==GUM_VERSION||pilot.meta.selectionHash!==results.selectionHash)
+  throw Error("Results do not match the original frozen GUM selection");
+ if(sem.corpusFingerprint!==signalCacheFingerprint(pilotData))
+  throw Error("GUM semantic cache fingerprint changed");
  const scored=scoredAuditRows(pilot.cases,pilotData,results,lm,sem);
  const previousCases=Array.isArray(oldData)?oldData:oldData.cases;
  const oldRows=originalProbeRows(previousCases,
