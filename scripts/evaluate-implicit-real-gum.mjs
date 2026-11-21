@@ -23,10 +23,6 @@ import {extractArgumentStatements}
  from "../extension/src/argument-clauses.mjs";
 import {findImplicitConclusionQuestions,reconstructImplicitConclusions,
  checkImpliedConclusions} from "../extension/src/implicit-conclusion-reconstruction.mjs";
-import {generateImpliedConclusion}
- from "../extension/src/implicit-conclusion-model.mjs";
-import {createNliScorer}
- from "../extension/src/nli-inference.mjs";
 import {combineArgumentEvidence}
  from "../extension/src/argument-analysis.mjs";
 import {summarizeImplicitConclusionCases}
@@ -253,6 +249,12 @@ async function run({sampleOnly=false,run=false}={}){
    selectionHash:sha(JSON.stringify(sample.rows.map(r=>r.id)))}));
  if(sampleOnly)return;
  if(!run)throw Error("Choose --run or --sample-only");
+ // Deliberately lazy: sample-only, unit tests and CLI --help run without
+ // downloading or even importing the Transformers.js runtime.
+ const [{generateImpliedConclusion},{createNliScorer}]=await Promise.all([
+  import("../extension/src/implicit-conclusion-model.mjs"),
+  import("../extension/src/nli-inference.mjs")
+ ]);
  const safe=await evaluateRows(AUTHORED,generateImpliedConclusion,
   async(p,c)=>({label:"not_scored_in_authored_controls"}),{
    captureSafeExamples:true,
