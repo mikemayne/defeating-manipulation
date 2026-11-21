@@ -59,3 +59,9 @@ _site/
 /evaluation/reader-contrast-error-audit-v1.md
 /evaluation/reader-contrast-error-review-v1.tsv
 /evaluation/reader-signal-shift-v1.json
+/evaluation/reader-contrast-review-key-v1.json
+/evaluation/reader-contrast-reviewer-a-v1.tsv
+/evaluation/reader-contrast-reviewer-b-v1.tsv
+/evaluation/reader-contrast-review-instructions-v1.md
+/evaluation/reader-contrast-review-reconciled-v1.json
+/evaluation/reader-contrast-review-disagreements-v1.tsv
