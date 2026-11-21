@@ -104,6 +104,80 @@ const interventionHardNegatives=[
 for(const [id,p,c] of interventionHardNegatives){
  assert.equal(observableOverreach(p,c),null,id+' must abstain');
 }
+// Independent synthetic controls for two distinct, explicit scope leaps.
+const newScopePositives=[
+ ["finite-donation-to-poverty",
+  "A community group donated two hundred school supplies to families.",
+  "The group has ended poverty across the district.",
+  "limited_donation_to_claimed_systemic_eradication"],
+ ["finite-aid-to-homelessness",
+  "The charity distributed fifty blankets in September.",
+  "The charity has eliminated homelessness in the city.",
+  "limited_donation_to_claimed_systemic_eradication"],
+ ["planned-feature-to-total-demand",
+  "The residential plan includes a garden and entrance lobby.",
+  "All households in the county will move into the development.",
+  "planned_amenity_to_universal_future_adoption"],
+ ["planned-feature-to-total-relocation",
+  "The housing proposal features a rooftop terrace.",
+  "Every family in the region will relocate to the housing estate.",
+  "planned_amenity_to_universal_future_adoption"]
+];
+for(const [id,p,c,reason] of newScopePositives){
+ const found=observableOverreach(p,c);
+ assert.equal(found?.reason,reason,id);
+ const scored=combineArgumentEvidence([{kind:"combined",text:p,forward:{
+  contradiction:.001,neutral:.998,entailment:.001}}],c);
+ assert.equal(scored?.label,"unsupported_conclusion",id+": scored verdict");
+}
+const newScopeNegatives=[
+ ["donation-not-universal",
+  "The charity donated fifty blankets.",
+  "Some residents may be warmer tonight."],
+ ["donation-with-evidence",
+  "The nonprofit donated fifty bags and independently tested the outcome.",
+  "The nonprofit has ended poverty in this neighbourhood."],
+ ["bounded-description",
+  "The group distributed one hundred meal vouchers.",
+  "It handed out one hundred vouchers."],
+ ["feature-no-behaviour",
+  "The housing plan includes a playground.",
+  "The housing plan now contains a playground."],
+ ["hedged-adoption",
+  "The housing plan includes a playground.",
+  "Some households may choose to live in the development."],
+ ["verified-uptake",
+  "The housing plan includes a playground and independently verified all residents signed leases.",
+  "All residents will move into the development."],
+ ["unrelated-project",
+  "The school plan includes a playground.",
+  "All families in the region will move into the development."],
+ ["same-population",
+  "Every family in the district signed an unconditional contract to move into the new housing.",
+  "Every family in the district will move into the development."]
+];
+for(const [id,p,c] of newScopeNegatives)
+ assert.equal(observableOverreach(p,c),null,id+": should abstain");
+const unlabelledNeutral=async()=>({contradiction:.001,neutral:.998,entailment:.001});
+for(const [id,p,c] of [
+ ["donation","A large retailer donated two hundred school bags last month.",
+  "This proves it has ended child poverty in the borough."],
+ ["housing","The new housing plan includes a playground near the entrance.",
+  "So all families in the district will move into the development."]
+]){
+ const actual=await analyseArguments(p+" "+c,unlabelledNeutral);
+ assert.equal(actual.length,1,id+": should extract exactly one argument");
+ assert.equal(actual[0].label,"unsupported_conclusion",id+": should identify evidential overreach");
+ assert.equal((p+" "+c).slice(actual[0].conclusion.start,actual[0].conclusion.end)
+  .replace(/[.!]\s*$/,""),c.replace(/^(?:This proves|So)\s+/,"").replace(/[.!]\s*$/,""),
+  id+": highlighted conclusion must retain source offsets");
+}
+const ambiguousDay=await analyseArguments(
+ "Every renewal submitted after Friday attracts a fee. A resident submitted one on Monday, so the fee applies.",
+ unlabelledNeutral);
+assert.deepEqual(ambiguousDay,[],
+ "Monday relative to an unspecified Friday is not enough to force support");
+
 const ordinary={contradiction:.001,neutral:.997,entailment:.002};
 const example=positives.find(item=>item[0]==='usage-to-safety');
 const finding=combineArgumentEvidence([{kind:"combined",text:example[1],forward:ordinary}],example[2]);
