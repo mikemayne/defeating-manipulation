@@ -149,3 +149,28 @@ The preprocessing module is `extension/src/text-preprocessing.mjs`. Run
 protected text, spelling ambiguity and scrutiny gating. Corrections are
 **not retroactively applied to existing evaluation caches**, so historical
 benchmarks remain comparable.
+
+## Authentic-text reader training experiment
+
+A reproducible document-disjoint GUM experiment now tests whether training the
+KEEP / AND / BUT reader on additional genuine GDTB AND/BUT relations improves
+generalisation. Source documents and all local scores remain excluded from Git.
+There is no independently verified authentic KEEP dataset yet; an **unlabelled**
+review queue and two-reviewer gate are provided separately.
+
+```sh
+node scripts/build-reader-gum-transfer.mjs
+node scripts/evaluate-reader-gum-transfer.mjs --preview
+node scripts/evaluate-reader-gum-transfer.mjs --max-errors 5
+```
+
+The comparison uses 402 existing synthetic cases, plus authentic GUM training
+examples, and evaluates on different GUM documents. It reports per-class and
+balanced recall, not just the heavily AND-skewed overall score. Details and
+reviewer instructions are in
+`evaluation/reader-authentic-transfer-protocol.md`.
+
+The previously merged nonstandard vocabulary/synonym checker (PR #98) remains
+part of the browser preprocessing pipeline. This training experiment does not
+change or train that checker.
+
