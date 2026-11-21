@@ -15,3 +15,6 @@ _site/
 /evaluation/reader-join-cross-validation.json
 /evaluation/reader-mask-infill.json
 /evaluation/reader-fusion.json
+/evaluation/reader-holdout-v1.json
+/evaluation/reader-holdout-v1-scores.json
+/evaluation/reader-holdout-v1-results.json
