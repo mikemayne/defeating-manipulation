@@ -397,6 +397,75 @@ because it would repair four previously inspected false BUT predictions.
 Fresh labels or independently adjudicated AND/BUT ambiguity are needed
 before trusting a new decision rule.
 
+## Blind review of the AND/BUT distinction
+
+Preparation and reconciliation live in the repository. This is a
+development/measurement step, not a production release. It does not train,
+calibrate, or modify the classifier automatically.
+
+After the previous error audit and local cache scoring have completed,
+prepare a blinded, independently shuffled 48-pair development sample:
+
+```powershell
+node scripts/prepare-reader-contrast-review.mjs --preview
+node scripts/prepare-reader-contrast-review.mjs --offline
+```
+
+The sampler replays the historical **187/308** grouped-CV argmax baseline
+with 402 original synthetic and 110 extra genuine BUT examples. Its
+candidate pool contains ONLY the existing 308 original authentic TRAIN
+pairs; the 217-case test, the separate KEEP review queue and the 39
+future-reserved documents are NOT used. The six prominent examples
+already displayed in a previous error audit are excluded.
+
+Forty-eight cases are selected with a deterministic fixed seed: **12
+false BUT predictions, 12 missed BUT, 12 correct BUT and 12 correct AND**
+under that original model. Selection is deliberately balanced by
+outcome, and constrained to at most three samples per source document
+and eight per writing genre, across the original source-document folds.
+These proportions must NOT be interpreted as natural class frequencies.
+
+Only the private local answer key contains original GUM identifiers,
+gold labels, model decisions, genres and selection stratum. The two
+reviewer sheets contain **only anonymised case IDs and the pair of
+sentences**; each has a different shuffled order. Reviewers must have
+no access to gold labels, model scores, the other reviewer's answers
+or the private key until both independent reviews are finished.
+
+Available judgements are:
+
+- **and_only**: a continuation/addition, without needed contrast
+- **but_only**: a meaningful contrast, concession or violated expectation
+- **both**: both connections would be reasonable
+- **neither**: neither connection fits the given sentences
+- **uncertain**: insufficient context or insufficient reviewer confidence
+
+This judges **interpretive plausibility**, not grammatical connector
+insertion alone. Do not force a single label when both are reasonable.
+The original GDTB annotation is one interpretation, not proof of
+exclusive connector validity.
+
+Two distinct human reviewers complete different local TSV sheets
+independently (confidence 1–3 is optional). Run:
+
+```powershell
+node scripts/finalize-reader-contrast-review.mjs --reviewer-a ReviewerA --reviewer-b ReviewerB
+```
+
+The reconciler verifies unmodified text, identical case sets, distinct
+reviewer pseudonyms and valid labels. It computes raw agreement, Cohen's
+kappa, consensus including `both`, and whether the original GDTB label
+and model predictions are **compatible** with that consensus.
+A separate local disagreement queue supports later adjudication.
+No disputed or uncertain item is assigned a new gold label. A consensus
+showing `both` is compatible with either original label, not evidence
+that both mean exactly the same thing.
+
+**All generated human-review outputs and public-source excerpts,
+including the private answer key, are gitignored.** Do not upload
+these files to a public pull request or commit. Tests use invented
+synthetic examples only; they include no public post content.
+
 ## Genuine KEEP: blinded two-reviewer procedure
 
 No sentence is automatically labelled KEEP. A pair lacking a GDTB annotation,
