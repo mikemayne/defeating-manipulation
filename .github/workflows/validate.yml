@@ -21,6 +21,12 @@ jobs:
           node-version: '22'
       - name: Validate catalogue and generated pages
         run: node scripts/test-build.mjs
+      - name: Test non-destructive JavaScript spelling/punctuation preprocessing
+        run: |
+          node --check extension/src/text-preprocessing.mjs
+          node --check extension/src/spelling-bait.mjs
+          node scripts/test-spelling-bait.mjs
+          node scripts/test-text-preprocessing.mjs
       - name: Test advisory orange scrutiny signals
         run: node scripts/test-scrutiny-signals.mjs
       - name: Test explicit connector normalisation
