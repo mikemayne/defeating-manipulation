@@ -87,7 +87,13 @@ export function pickCandidates(candidates,role,limit=LIMITS[role]){
   if(new Set(group.map(x=>x.gold)).size>1)continue;
   kept.push(group.slice().sort((a,b)=>rank(a).localeCompare(rank(b)))[0]);
  }
- return kept.sort((a,b)=>rank(a).localeCompare(rank(b))).slice(0,limit);
+ // The newly held-out GUM subset has very few contrasts. Freeze a
+ // bounded, explicitly stratified selection BEFORE model inference so BOTH
+ // relationship types can be assessed. It is not natural class prevalence.
+ const ordered=kept.sort((a,b)=>rank(a).localeCompare(rank(b)));
+ const contrast=ordered.filter(x=>x.gold==="but").slice(0,Math.min(4,limit));
+ const addition=ordered.filter(x=>x.gold==="and").slice(0,limit-contrast.length);
+ return [...contrast,...addition].sort((a,b)=>rank(a).localeCompare(rank(b));
 }
 export async function buildTransfer({offline=false,load=getRels,log=console.log}={}){
  const manifest=JSON.parse(await readFile(MANIFEST,"utf8"));
@@ -140,7 +146,7 @@ export async function buildTransfer({offline=false,load=getRels,log=console.log}
    version:VERSION,sourceRevision:GUM_COMMIT,
    sourceManifest:"reader-authentic-transfer-documents-v1",
    manifestFingerprint:sha(JSON.stringify(manifest)),
-   selectionPolicy:"SHA256-shuffled, up to 12 unique unambiguous implicit relations per source document. Not prevalence-weighted.",
+   selectionPolicy:"Pinned, SHA256-ordered, max 12 per doc: prioritize up to 4 BUT then fill with AND. Stratified by relation; NOT natural class prevalence.",
    annotation:"GUM GDTB labels mapped provisionally to AND/BUT. KEEP is not automatically inferred.",
    docCounts:{train:partitions.train.length,test:partitions.test.length,
     review:partitions.review.length},
