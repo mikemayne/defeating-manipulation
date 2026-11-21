@@ -29,6 +29,10 @@ jobs:
           node --check scripts/evaluate-reader-mask-infill.mjs
           node scripts/evaluate-reader-mask-infill.mjs --preview
           node scripts/test-reader-mask-infill.mjs
+      - name: Test offline GPT2 and BERT score fusion
+        run: |
+          node --check scripts/evaluate-reader-fusion.mjs
+          node scripts/test-reader-fusion.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
