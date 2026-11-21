@@ -159,10 +159,16 @@ function buildSummary(data, elapsedMs, cancelled) {
 async function runImplicitConclusionLab(message,begin){
  const seeds=validateImplicitConclusionCases(await parseUpload(message.file));
  const total=seeds.length,predictions=[];
+ let announcedModel=false;
  for(let i=0;i<total;i++){
   if(stopRequested)break;
   const item=seeds[i],statements=extractArgumentStatements(item.text);
   const candidates=findImplicitConclusionQuestions(item.text,statements);
+  if(candidates.length&&!announcedModel){
+   announcedModel=true;
+   self.postMessage({type:"stage",
+    message:"Loading local FLAN-T5 conclusion model (first run may download weights)…"});
+  }
   const attempts=[];
   const proposals=await reconstructImplicitConclusions(
    item.text,statements,generateImpliedConclusion,{
