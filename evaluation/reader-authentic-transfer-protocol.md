@@ -175,6 +175,63 @@ validation. A rise in recall should still be tested later on the untouched
 reserved documents with independently fixed selection and adequate KEEP gold.
 The implicit-conclusion module is independent and unchanged.
 
+## Balanced authentic AND/BUT training-mixture experiment
+
+The previous training-only CV demonstrated that adding 110 authentic BUT
+examples alone increased BUT recall, but shifted many genuine AND examples
+toward BUT. We now hold the added 110 BUT examples FIXED and add genuinely
+annotated AND examples in **nested 0/110/220/440-sized batches**, with
+the model's original loss weight **BUT x1**. This isolates the effect of
+training class composition rather than conflating it with extra class weight.
+
+All AND examples come from the already-pinned 118 expansion TRAINING
+documents, not from the previously inspected 217-case holdout, the 250-case
+pilot, the 12 review documents or the 39 untouched future documents.
+The program checks every source against its previously pinned SHA-256 hash
+and rejects conflicting labels, repeated sentence pairs and changed
+case fingerprints. It samples a fixed seed ordering across documents,
+rotating between them rather than taking all cases from the first few
+documents. Human GDTB AND relation families are retained (expansion,
+causal/contingency and temporal). There are no fabricated AND/KEEP labels.
+
+Live source verification has found 440 new AND examples across 110 contributing
+training documents: 295 expansion, 93 contingency and 52 temporal.
+The original 308 authentic examples and 110 added BUT examples are
+unchanged. The identical original five document-heldout CV folds and
+their gold labels are retained for **every** mixture. No new AND examples
+are added to the evaluation side, and examples from a heldout source
+document are excluded from training for that fold.
+
+```powershell
+git pull
+node scripts/build-reader-gum-and-mixtures.mjs --offline
+node scripts/evaluate-reader-gum-and-mixtures.mjs --preview
+node scripts/evaluate-reader-gum-and-mixtures.mjs --max-errors 5
+```
+
+The full evaluation reuses the original 402 synthetic score caches, 308
+original authentic training caches and 110 added BUT caches. Only the 440
+new AND pairs require neural inference. All new GUM source and model-score
+files stay local and gitignored:
+
+- `evaluation/reader-gum-and-mixtures-v1.json` (new AND source pool)
+- `evaluation/reader-gum-and-mixtures-lm-v1.json` (resumable local LM)
+- `evaluation/reader-gum-and-mixtures-sem-v1.json` (resumable embedding/NLI)
+- `evaluation/reader-gum-and-mixtures-cv-v1.json` (results)
+
+Both previously used feature configurations (full fusion and minus period/
+hyphen) run at the original BUT weight 1.0. Mixture AND=0 MUST reproduce
+the previously inspected 110-BUT-only CV results of **187/308** and
+**175/308**, respectively, or the evaluation fails. Results report
+balanced AND/BUT recall, class recall, individual AND relation families,
+BUT contrast/concession, matched corrected and regressed predictions,
+and unchanged fold membership.
+
+This is still training-only, post-hoc diagnostic work. Because the authentic
+folds do not have KEEP gold labels, KEEP recall remains unknown. Do not
+select a production model or claim real-world accuracy from this comparison.
+Freeze a choice before testing on the untouched 39-document reserve.
+
 ## Genuine KEEP: blinded two-reviewer procedure
 
 No sentence is automatically labelled KEEP. A pair lacking a GDTB annotation,
