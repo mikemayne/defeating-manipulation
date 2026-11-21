@@ -33,6 +33,11 @@ jobs:
         run: |
           node --check scripts/evaluate-reader-fusion.mjs
           node scripts/test-reader-fusion.mjs
+      - name: Test frozen 300-case reader holdout
+        run: |
+          node --check scripts/build-reader-holdout-v1.mjs
+          node --check scripts/evaluate-reader-holdout-v1.mjs
+          node scripts/test-reader-holdout-v1.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
