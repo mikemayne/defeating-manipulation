@@ -56,6 +56,11 @@ jobs:
           node scripts/build-reader-holdout-v2.mjs
           node scripts/build-reader-holdout-v2.mjs --check
           node scripts/test-reader-holdout-v2.mjs
+      - name: Test authentic GUM pilot mapping without source downloads
+        run: |
+          node --check scripts/build-reader-gum-pilot.mjs
+          node --check scripts/evaluate-reader-gum-pilot.mjs
+          node scripts/test-reader-gum-pilot.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
