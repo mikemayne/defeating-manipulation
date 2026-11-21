@@ -13,3 +13,4 @@ _site/
 # Local model scores and cross-validation diagnostics
 /evaluation/reader-join-fit.json
 /evaluation/reader-join-cross-validation.json
+/evaluation/reader-mask-infill.json
