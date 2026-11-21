@@ -232,6 +232,70 @@ folds do not have KEEP gold labels, KEEP recall remains unknown. Do not
 select a production model or claim real-world accuracy from this comparison.
 Freeze a choice before testing on the untouched 39-document reserve.
 
+## Conservative BUT decisions: only choose contrast on strong evidence
+
+A new, **experimental-only** decision layer treats AND as the default for
+*meaningfully connected* sentence pairs. In ordinary English, “and” can
+connect an event to a surprising continuation; “but” adds a more specific
+claim that the second statement **contrasts with an expectation**.
+
+The new gate therefore:
+
+- Preserves `KEEP` when the existing three-class model ranks it highest
+  (no clear connection). Authentic GUM validation contains no gold KEEP
+  examples, so this branch remains unverified on real writing.
+- Returns `BUT` only if the original model ranks BUT above both other
+  classes, the **BUT softmax score** exceeds a threshold, and the score
+  exceeds the runner-up class by a minimum margin.
+- Otherwise returns `AND`. If the model initially favoured BUT but
+  did not clear the gate, sets an optional
+  `deserves_scrutiny` **advisory**, not a manipulation accusation or
+  a new gold class. This advisory is **NOT enabled in the extension**.
+
+The logits produced by the previously fitted linear-fusion classifier are
+exposed as normalized softmax values through a new, backwards-compatible
+`classifier.probabilities(row)` read-only method. The original classifier
+still returns the **identical argmax label** and its production behaviour is
+unchanged. Softmax values are **not calibrated probabilities of being right**;
+thresholds are experimental score cutoffs.
+
+The candidate decision gates were fixed in advance:
+`argmax`, `low` (0.40 score / 0.05 margin),
+`moderate` (0.50 / 0.10),
+`cautious` (0.60 / 0.15),
+`strict` (0.70 / 0.20) and
+`very-strict` (0.80 / 0.25).
+
+Run against the existing local neural-score caches (no new inference):
+
+```powershell
+git pull
+node scripts/evaluate-reader-conservative-but.mjs --preview
+node scripts/evaluate-reader-conservative-but.mjs --offline
+```
+
+The experiment fits the same original 402 synthetic plus authentic GUM
+training mixtures (0, 110, 220, 440 added AND with 110 added BUT), two
+feature sets and five original **document-grouped** validation folds. It
+evaluates every candidate gate on the **same out-of-fold class scores**
+without refitting on those validation labels.
+
+Reported metrics include **BUT precision** (of predicted BUT statements,
+how many were annotated BUT), BUT/AND recall, false BUT positives,
+balanced recall, number of scrutiny advisories, KEEP predictions, ranked
+AUROC, average precision (PR), and examples changed by the gate.
+The runner checks that all previously observed argmax CV results are
+exactly reproduced. Report is stored locally in
+`evaluation/reader-conservative-but-cv-v1.json`.
+
+**Scope:** all 308 GUM cases in these folds have already been explored
+in several previous experiments, so this is a **post-hoc diagnostic** and
+NOT an independent confirmation of a high-precision rule. The 217-case
+previous test and 39 untouched reserved documents are not used here.
+The genuine KEEP class remains unmeasured; there is no production
+threshold selection until independent validation. The separate
+implicit-conclusion system is unaffected.
+
 ## Genuine KEEP: blinded two-reviewer procedure
 
 No sentence is automatically labelled KEEP. A pair lacking a GDTB annotation,
