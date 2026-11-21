@@ -7,6 +7,7 @@ on:
       - '.github/workflows/verify-gum-pilot.yml'
       - 'scripts/build-reader-gum-pilot.mjs'
       - 'scripts/build-reader-gum-transfer.mjs'
+      - 'scripts/build-reader-gum-contrast-supplement.mjs'
       - 'scripts/evaluate-reader-gum-transfer.mjs'
       - 'evaluation/reader-authentic-transfer-documents-v1.json'
   workflow_dispatch:
@@ -33,5 +34,6 @@ jobs:
           node scripts/evaluate-reader-gum-preprocessing.mjs --preview
           node scripts/audit-reader-gum-pilot.mjs --source-only
           node scripts/build-reader-gum-transfer.mjs
+          node scripts/build-reader-gum-contrast-supplement.mjs --offline
           node scripts/evaluate-reader-gum-transfer.mjs --preview
       # Do NOT upload or publish the local third-party source text.
