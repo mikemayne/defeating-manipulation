@@ -351,6 +351,52 @@ review answers stay **local and gitignored**; check GUM licence before any
 public sharing. The extension's existing reader and implicit-conclusion
 components remain unchanged.
 
+## Synthetic-to-authentic contrast-score mismatch
+
+The local training cache can be inspected with:
+
+```powershell
+node scripts/audit-reader-signal-shift.mjs --offline
+```
+
+This prints **only counts**, grouped by original label and data partition.
+It never prints or commits source posts, case IDs, titles, or sentence pairs.
+Nine fixed combinations of masked-BERT `but - and` score
+(`>2`, `>3`, `>4`) and shared-word Jaccard overlap
+(`<=0`, `<=0.05`, `<=0.10`) are reported together, not optimised
+against labels. Its local numeric report is gitignored.
+
+At `bertContrast > 3` and `lexicalJaccard = 0`, the initial
+uploaded caches give:
+
+| Cohort | Gold AND | Gold BUT | Matching AND | Matching BUT |
+| --- | ---: | ---: | ---: | ---: |
+| Original synthetic (402 cases; also 124 KEEP) | 154 | 124 | 0 | 7 |
+| Original authentic TRAIN (308) | 266 | 42 | 4 | 0 |
+| Extra authentic BUT (110) | 0 | 110 | 0 | 0 |
+| Extra authentic AND (440) | 440 | 0 | 1 | 0 |
+
+This is a candidate **dataset shift**: among a small set of
+high-contrast, zero-overlap examples, synthetic labels favour BUT whereas
+the authentic GDTB labels favour AND. Some examples can support multiple
+readings; these figures do **not** establish that the original GDTB
+annotations are incorrect, or prove why a prediction was wrong.
+
+A private, post-hoc analysis reproduced all eight original authentic
+document-fold baselines exactly from the uploaded caches. Several cheap
+extensions (NLI direction agreement, BERT/similarity interactions,
+surface negation and discourse cues), as well as dropping some or all
+synthetic AND/BUT training cases, failed to provide a convincing,
+stable improvement across the existing folds. Removing all synthetic
+AND/BUT cases in particular depressed BUT recall. This is a **negative
+development result**, not fresh held-out evidence. Keep the entire
+feature/threshold search out of claims of independent performance.
+
+Do not hard-code an AND rule for this extreme-score signature merely
+because it would repair four previously inspected false BUT predictions.
+Fresh labels or independently adjudicated AND/BUT ambiguity are needed
+before trusting a new decision rule.
+
 ## Genuine KEEP: blinded two-reviewer procedure
 
 No sentence is automatically labelled KEEP. A pair lacking a GDTB annotation,
