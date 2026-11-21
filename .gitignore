@@ -9,3 +9,7 @@ _site/
 
 /extension/spell-en-gb.aff
 /extension/spell-en-gb.dic
+
+# Local model scores and cross-validation diagnostics
+/evaluation/reader-join-fit.json
+/evaluation/reader-join-cross-validation.json
