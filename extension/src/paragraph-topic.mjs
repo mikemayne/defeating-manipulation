@@ -25,7 +25,10 @@ export async function paragraphTopicFindings(text, matchOpening, generate) {
   const hooks = await matchOpening(opening);
   if (!hooks.length) continue;
   const prompt = [
-   "Do these two sentences discuss the same specific topic? Answer yes or no.",
+   "Does the second sentence endorse the judgment or reaction expressed or suggested by the first?",
+   "Answer yes if it validates that reaction or states the invited conclusion.",
+   "Answer no if it challenges the judgment, merely adds information, or changes subject.",
+   "If the relationship is ambiguous, answer unclear.",
    "First: " + opening,
    "Second: " + second,
    "Answer:"
@@ -34,7 +37,7 @@ export async function paragraphTopicFindings(text, matchOpening, generate) {
   try {
    answer = await generate(prompt);
   } catch (error) {
-   console.warn("Local paragraph topic check unavailable:", error);
+   console.warn("Local paragraph confirmation check unavailable:", error);
    break;
   }
   if (!/^yes[.!]?$/i.test(answer.trim())) continue;
