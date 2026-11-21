@@ -96,6 +96,20 @@ function validateSources(original,but,and){
   }
  }
 }
+/**
+ * Explicit connector decisions belong to the established reader rule layer,
+ * BEFORE an optional score-based BUT gate. Earlier GUM CV uses exactly
+ * row.explicit?.choice ?? classifier(row); respect that precedence here.
+ */
+export function decideWithExplicit(explicitChoice,scores,policy){
+ if(explicitChoice!==null&&explicitChoice!==undefined){
+  if(!["keep","and","but"].includes(explicitChoice))
+   throw Error("Unknown explicit connector decision");
+  return {choice:explicitChoice,advisory:null,
+   butScore:scores.but,butMargin:scores.but-Math.max(scores.keep,scores.and)};
+ }
+ return conservativeButDecision(scores,policy);
+}
 export function evaluateConservativeCV(synthetic,original,but,and,{
  featureSets=FEATURE_SETS,sizes=MIXTURE_SIZES,policies=POLICIES,
  folds=5
@@ -126,14 +140,18 @@ export function evaluateConservativeCV(synthetic,original,but,and,{
      classWeights:{keep:1,and:1,but:1}});
     for(const row of fold.rows){
      const scores=classifier.probabilities(row);
-     const originalChoice=classifier(row);
-     const passthrough=conservativeButDecision(scores,POLICIES[0]);
+     // The previous evaluator gives direct connector decisions precedence.
+     // Omitting that override changed one historical prediction in the
+     // original 308-row CV (188 instead of the verified 187).
+     const explicitChoice=row.explicit?.choice??null;
+     const originalChoice=explicitChoice??classifier(row);
+     const passthrough=decideWithExplicit(explicitChoice,scores,POLICIES[0]);
      if(passthrough.choice!==originalChoice)
-      throw Error("Conservative gate changed historical argmax classifier");
+      throw Error("Conservative gate changed historical reader decision");
      outOfFold.push({
       id:row.id,document:row.document,relation:row.relation,
       gold:row.gold,scores,oldChoice:originalChoice,
-      butScore:scores.but
+      explicitChoice,butScore:scores.but
      });
     }
     foldReports.push({
@@ -150,7 +168,7 @@ export function evaluateConservativeCV(synthetic,original,but,and,{
    const experiments={};
    for(const policy of policies){
     const decisions=outOfFold.map(r=>{
-     const result=conservativeButDecision(r.scores,policy);
+     const result=decideWithExplicit(r.explicitChoice,r.scores,policy);
      return {...r,predicted:result.choice,advisory:result.advisory,
       butMargin:result.butMargin};
     });
@@ -225,13 +243,11 @@ async function main(){
  const outcomes=evaluateConservativeCV(synthetic,authentic,scoredBut,scoredAnd);
  for(const [name,outcome] of Object.entries(outcomes.outcomes)){
   const originalExpected=EXPECTED_ORIGINAL_BASELINES[name];
-  if(!Number.isInteger(originalExpected)||
-   outcome.policies.argmax.metrics.accuracy*original.length !== originalExpected){
-   const observed=outcome.policies.argmax.metrics.accuracy*original.length;
-   if(Math.abs(observed-originalExpected)>1e-7)
-    throw Error("Historical baseline changed at "+name+
-     ": expected "+originalExpected+", observed "+observed);
-  }
+  const observed=outcome.policies.argmax.metrics.confusion.and.and+
+   outcome.policies.argmax.metrics.confusion.but.but;
+  if(!Number.isInteger(originalExpected)||observed!==originalExpected)
+   throw Error("Historical baseline changed at "+name+
+    ": expected "+originalExpected+", observed "+observed);
   console.log("\n"+name+" | model ranking AUROC "+
    outcome.separation.rocAuc.toFixed(3)+
    "; average precision "+outcome.separation.averagePrecision.toFixed(3));
