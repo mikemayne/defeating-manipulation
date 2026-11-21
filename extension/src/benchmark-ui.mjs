@@ -4,6 +4,8 @@ const file = $("file"), runButton = $("run"), stopButton = $("stop");
 const status = $("status"), progress = $("progress"), progressCount = $("progress-count");
 const message = $("message"), results = $("results"), copyButton = $("copy");
 const downloadButton = $("download-predictions");
+const minScoreControl=$("join-min-score"),minMarginControl=$("join-min-margin");
+const applyFittedButton=$("apply-fitted-thresholds");
 let runner = null, running = false, lastResult = null, lastMode = "", lastSource = "";
 let runId = 0, loadCatalogues;
 
@@ -30,13 +32,15 @@ function updateSource() {
  $("count-control").hidden = upload;
  $("seed-control").hidden = upload;
  $("file-control").hidden = !upload;
+ $("join-score-control").hidden=!(boundaryMode||compareMode);
+ $("join-margin-control").hidden=!(boundaryMode||compareMode);
  count.max = consistency || argumentMode || readerMode || boundaryMode || compareMode || concealed ? 10000 : 1000000;
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
   ? compareMode
-   ? 'Upload the same 1,000 real-world {id,text} examples to compare progressive joins against original-context joins, using the same four candidate wordings and local model. Results show agreement and latency. Accuracy is only shown if a case includes expected_boundaries:[{offset,choice}], labelled by a reviewer; otherwise accuracy is unknown.'
+   ? 'Upload the same 1,000 real-world {id,text} examples to compare progressive joins against original-context joins, using only AND and BUT plus default KEEP. Both methods share thresholds; scores can be fitted to labels without more model calls. Accuracy is only shown if a case includes expected_boundaries:[{offset,choice}], labelled by a reviewer; otherwise accuracy is unknown.'
    : boundaryMode
-   ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. Four-way local language-model comparison: original punctuation, no punctuation, and, but. One-time model download; scores indicate linguistic plausibility, not human reader percentages. Original text is never modified.'
+   ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. Two neural language-model scores: AND and BUT, with KEEP as the JavaScript fallback. Thresholds can be fitted on labelled cases. One-time model download; scores indicate linguistic plausibility, not human reader percentages. Original text is never modified.'
    : readerMode
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. This runs an experimental local NLI probe for seven possible reader interpretations, including no implied connection; all model scores are uncalibrated, not percentages of readers or accuracy.'
    : argumentMode
@@ -137,8 +141,40 @@ function tableRows(body, rows, emptyLabel) {
   body.append(tr);
  }
 }
+function renderThresholdFit(data){
+ const fit=data.joinThresholdFit;
+ const show=!!(data.boundaryMode||data.compareMode);
+ const p=$("threshold-fit-note");
+ p.hidden=!show;applyFittedButton.hidden=!show;
+ if(!show)return;
+ const t=data.joinThresholds||{minScore:-3.5,minMargin:.2};
+ if(fit?.available){
+  p.textContent="Applied thresholds: min score "+t.minScore+", margin "+t.minMargin+
+   ". Fit (training only, no neural reruns): score "+fit.fitted.minScore+
+   ", margin "+fit.fitted.minMargin+
+   ". Held-out balanced recall "+percent(100*fit.holdout.balancedAccuracy)+
+   " vs default "+percent(100*fit.defaultHoldout.balancedAccuracy)+
+   " across "+fit.holdout.cases+" labelled boundaries. "+
+   "Synthetic labels are not human reader judgements.";
+  applyFittedButton.disabled=false;
+ }else{
+  p.textContent="Applied thresholds: score "+t.minScore+
+   ", margin "+t.minMargin+
+   ". No tuning: "+(fit?.reason||"no reference labels")+
+   ". Add expected_boundaries labels to estimate correctness.";
+  applyFittedButton.disabled=true;
+ }
+}
+applyFittedButton.addEventListener("click",()=>{
+ const fit=lastResult?.joinThresholdFit;
+ if(!fit?.available)return;
+ minScoreControl.value=String(fit.fitted.minScore);
+ minMarginControl.value=String(fit.fitted.minMargin);
+ $("copied").textContent="Fitted thresholds selected. Run tests to apply.";
+});
 function renderResults(data) {
  results.hidden = false;
+ renderThresholdFit(data);
  if(data.compareMode){
   const m=data.strategyComparison||{};
   const accuracy=m.labelled?(
@@ -156,7 +192,7 @@ function renderResults(data) {
   );
   $("real-breakdown").hidden=true;
   $("summary-note").textContent=
-   "Two strategies use the same four choices and local causal model. The progressive variant applies earlier confident joins; original-context uses unedited text. Their agreement is not accuracy."+
+   "Two strategies each score AND and BUT; KEEP is the threshold fallback. Progressive uses earlier inferred joins; original-context uses unedited text. Agreement is not accuracy."+
    accuracy+
    (m.unmatchedLabels?" | Unmatched gold offsets: "+m.unmatchedLabels:"");
   const values=new Set([...Object.keys(m.byContext||{}),...Object.keys(m.byProgressive||{})]);
@@ -187,7 +223,7 @@ function renderResults(data) {
    metric("Elapsed time, seconds",oneDecimal(data.elapsedSeconds))
   );
   $("real-breakdown").hidden=true;
-  $("summary-note").textContent="Four complete candidate wordings scored using a local language model. Higher mean conditional token log probability = more linguistically plausible, not a measured reader percentage. Close results keep the original. No input text is changed.";
+  $("summary-note").textContent="Two alternatives (AND and BUT) scored locally. KEEP is the fallback when neither score and margin meet the configured thresholds. Scores are not reader percentages; input text is unchanged.";
   tableRows($("confusion"),Object.entries(data.boundaryCounts||{})
    .sort((a,b)=>b[1]-a[1]).map(([label,count])=>[label,number(count)]),
    "No candidate punctuation boundary.");
@@ -438,7 +474,9 @@ function comparisonReport(data){
  const m=data.strategyComparison||{};
  const lines=[
   "Defeating Manipulation — Context vs Progressive Reconstruction",
-  "Model: local causal LM; same 4 choices and same length budget",
+  "Model: local causal LM; AND/BUT scores with default KEEP",
+  "Applied thresholds: "+JSON.stringify(data.joinThresholds),
+  "Offline threshold fit: "+JSON.stringify(data.joinThresholdFit),
   "Real-world predictions are UNLABELLED unless expected_boundaries supplied",
   "Cases: "+data.total+" / "+data.requested,
   "Cases with joins: "+m.casesWithBoundaries,
@@ -480,7 +518,9 @@ function comparisonReport(data){
 }
 function boundaryReport(data){
  const lines=[
-  "Defeating Manipulation — Four-way Punctuation Experiment",
+  "Defeating Manipulation — Two-score Punctuation Experiment",
+  "Applied thresholds: "+JSON.stringify(data.joinThresholds),
+  "Offline threshold fit: "+JSON.stringify(data.joinThresholdFit),
   "Model: local distilgpt2 causal LM, quantized q8",
   "Scores: mean conditional token log probability, NOT reader agreement",
   "Scanned: "+data.total+" / "+data.requested,
@@ -621,12 +661,14 @@ downloadButton.addEventListener("click", () => {
  const payload=lastResult.compareMode ? JSON.stringify({
   schema_version:1,mode:"reader_context_vs_progressive",
   total:lastResult.total,summary:lastResult.strategyComparison,
+  thresholds:lastResult.joinThresholds,offline_fit:lastResult.joinThresholdFit,
   predictions:lastResult.predictions,
   score_type:"mean_conditional_token_log_probability",
   scores_are_human_percentages:false
  },null,2)+"\n" : lastResult.boundaryMode ? JSON.stringify({
   schema_version:1,mode:"reader_boundary_reconstruction",
   total:lastResult.total,counts:lastResult.boundaryCounts,
+  thresholds:lastResult.joinThresholds,offline_fit:lastResult.joinThresholdFit,
   boundaries:lastResult.boundaryPairs,predictions:lastResult.predictions,
   scores_are_human_percentages:false
  },null,2)+"\n" : lastResult.readerMode ? JSON.stringify({
@@ -680,6 +722,18 @@ function catalogues() {
 runButton.addEventListener("click", async () => {
  if (running) return;
  const amount = Number(count.value);
+ const joinThresholds={
+  minScore:Number(minScoreControl.value),
+  minMargin:Number(minMarginControl.value)
+ };
+ if((mode.value==="reader_boundary"||mode.value==="reader_compare")&&(
+   !minScoreControl.value||!minMarginControl.value||
+   !Number.isFinite(joinThresholds.minScore)||joinThresholds.minScore>0||
+   joinThresholds.minScore< -20||!Number.isFinite(joinThresholds.minMargin)||
+   joinThresholds.minMargin<0||joinThresholds.minMargin>5)){
+  setError("Minimum score must be between -20 and 0; margin between 0 and 5.");
+  return;
+ }
  const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare" || mode.value.startsWith("concealed_")
   ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
@@ -713,7 +767,7 @@ runButton.addEventListener("click", async () => {
   runId++;
   setupWorker().postMessage({
    type: "start", runId, mode: mode.value, source: source.value,
-   amount, seed: Number(seed.value), catalogue, patterns, fixture,
+   amount, seed: Number(seed.value), catalogue, patterns, fixture, joinThresholds,
    file: source.value === "uploaded" ? file.files[0] : null
   });
  } catch (error) {
