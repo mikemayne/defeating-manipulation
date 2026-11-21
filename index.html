@@ -20,7 +20,7 @@
 .inconsistency-section .tech p,.inconsistency-section .count{color:#fee2e2}
 .inconsistency-section .toolbar input{background:#7f1d1d;border-color:#dc5555;color:#fff7f7}
 @media(prefers-color-scheme:dark){.inconsistency-section{color:#ffe7ec}.inconsistency-section::before{background:#450a0a}.inconsistency-section .intro,.inconsistency-section .tech p,.inconsistency-section .count{color:#f2b5c2}.inconsistency-section .tech{background:#7f1d1d;border-color:#b91c1c}.inconsistency-section .category{color:#fecaca}.inconsistency-section .tech h2 a{color:#ffe7ec}.inconsistency-section .toolbar input{background:#7f1d1d;color:#fff7f7;border-color:#b91c1c}}
-.install{margin:0 0 36px;padding:22px 26px;border:1px solid var(--line);border-left:5px solid #168f9b;border-radius:5px;background:var(--surface)}.install h2{margin:0 0 8px;font:600 1.35rem/1.3 var(--sans)}.install p{margin:8px 0}.install ol{margin:12px 0;padding-left:24px}.install li{padding:3px 0}.install code{padding:2px 5px;border-radius:3px;background:var(--paper);overflow-wrap:anywhere}.install-note{color:var(--muted);font-size:.9rem}
+.install{margin:0 0 36px;padding:22px 26px;border:1px solid var(--line);border-left:5px solid #168f9b;border-radius:5px;background:var(--surface)}.install h2{margin:0 0 8px;font:600 1.35rem/1.3 var(--sans)}.install p{margin:8px 0}.install ol{margin:12px 0;padding-left:24px}.install li{padding:3px 0}.install code{padding:2px 5px;border-radius:3px;background:var(--paper);overflow-wrap:anywhere}.install-note{color:var(--muted);font-size:.9rem}.analysis-notes{margin:0 0 44px;max-width:880px}.analysis-notes h2{margin:0 0 10px;font:600 1.35rem/1.3 var(--sans)}.analysis-notes ul{margin:0;padding-left:24px}.analysis-notes li{padding:4px 0}
 </style>
 </head>
 <body>
@@ -37,6 +37,15 @@
 <li>Open a webpage and click the new toolbar icon to turn highlighting on or off.</li>
 </ol>
 <p class="install-note">This is a temporary developer installation, not yet a signed Firefox Add-ons release. Firefox removes temporary add-ons when it closes; repeat the last installation steps after restarting Firefox.</p>
+</section>
+<section class="analysis-notes" aria-labelledby="analysis-notes-title">
+<h2 id="analysis-notes-title">How to interpret the analysis</h2>
+<ul>
+<li><strong>Facts:</strong> The analyser does not attempt to establish whether statements are true or false. It examines the structure, consistency and reasoning of arguments. A logically consistent argument can still be based on false premises.</li>
+<li><strong>Interpretation:</strong> It does not attempt to determine the writer's intentions. It examines what a reader is likely to understand or infer.</li>
+<li><strong>Accuracy:</strong> Like any software, it can make mistakes. It may flag reasonable arguments or fail to detect problematic ones.</li>
+<li><strong>No endorsement:</strong> An argument that is not flagged is not necessarily a good argument. It simply means the analyser has not identified a problem.</li>
+</ul>
 </section>
 <h1>Manipulation techniques</h1>
 <div class="toolbar"><input id="search" type="search" placeholder="Search techniques…" aria-label="Search techniques"><span class="count" id="count" aria-live="polite"></span></div>
