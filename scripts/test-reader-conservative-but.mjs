@@ -117,7 +117,7 @@ const measured=evaluateConservativeCV(synthetic,original,but,and,{
 assert.equal(measured.validationCount,120);
 assert.equal(Object.keys(measured.outcomes).length,4);
 const folds=documentFolds(original,{folds:3});
-assert.deepEqual(measured.folds.map(x=>x.documents),
+assert.deepEqual(measured.folds.map(x=>x.sourceDocuments),
  folds.map(f=>f.documents));
 for(const out of Object.values(measured.outcomes)){
  assert.equal(Object.keys(out.policies).length,POLICIES.length);
