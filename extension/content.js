@@ -175,7 +175,18 @@
      nodes.push({ node, start, end, textStart: text.length, textEnd: text.length + end - start });
      text += node.nodeValue.slice(start, end);
    }
-   return text.trim() ? { text, nodes } : null;
+   const headingSpans = new Map();
+   for (const entry of nodes) {
+     const heading = entry.node.parentElement.closest("h1,h2,h3,h4,h5,h6");
+     if (!heading) continue;
+     const span = headingSpans.get(heading);
+     if (span) span.end = entry.textEnd;
+     else headingSpans.set(heading, { start: entry.textStart, end: entry.textEnd });
+   }
+   const headings = Array.from(headingSpans, ([heading, span]) => ({
+     ...span, text: heading.innerText.trim()
+   })).filter(heading => heading.text);
+   return text.trim() ? { text, nodes, headings } : null;
  }
  function underline(snapshot, matches) {
    // Resolve overlaps before wrapping DOM ranges; red has priority.
@@ -216,7 +227,7 @@
    if (!snapshot) return;
    setBusy(true);
    try {
-     const matches = await browser.runtime.sendMessage({ type: "DM_MATCH", text: snapshot.text });
+     const matches = await browser.runtime.sendMessage({ type: "DM_MATCH", text: snapshot.text, headings: snapshot.headings });
      // Keep captured text nodes intact until the new underlines are applied.
      underline(snapshot, matches || []);
      window.getSelection()?.removeAllRanges();

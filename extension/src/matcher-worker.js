@@ -21,7 +21,38 @@ env.useBrowserCache = true;
 env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
 
 const MODEL = "Xenova/all-MiniLM-L6-v2";
-let inferenceModelPromise;
+let inferenceModelPromise, headlineClassifierPromise;
+
+async function headlineFindings(headings, selectionLength) {
+ if (!Array.isArray(headings) || !headings.length) return [];
+ try {
+  headlineClassifierPromise ??= pipeline("text-classification",
+   "CoolpantsMcBadass/headline-classifier", { dtype: "q8" }).catch(error => {
+    headlineClassifierPromise = null;
+    throw error;
+   });
+  const classify = await headlineClassifierPromise;
+  const findings = [];
+  for (const { text, start, end } of headings) {
+   if (!text || start < 0 || end <= start || end > selectionLength) continue;
+   const scores = await classify(text, { top_k: 2 });
+   const score = scores.find(result => result.label.toLowerCase() === "manipulative")?.score;
+   // A provisional threshold for the advisory, pending headline evaluation.
+   if (score >= 0.8) findings.push({
+    start, end, score, kind: "scrutiny", method: "headline_classifier",
+    signals: ["Clickbait-style wording"],
+    technique: {
+     id: "headline_clickbait", title: "Heading deserves scrutiny", category: "Scrutiny",
+     summary: "The local headline classifier flagged the wording. Compare what the heading suggests with what the article supports."
+    }
+   });
+  }
+  return findings;
+ } catch (error) {
+  console.warn("Local headline analysis unavailable:", error);
+  return [];
+ }
+}
 async function scorePair(premise, hypothesis) {
  // Keep the existing pairwise local NLI scorer independent of text generation.
  if (!inferenceModelPromise) inferenceModelPromise = createNliScorer()
@@ -182,7 +213,9 @@ self.addEventListener("message", async event => {
    preprocessingFlags: preprocessing.flags
   });
   const mapped = remapFindings(preprocessing,[...recognised,...scrutiny]);
-  self.postMessage({id:data.id,matches:mapped,
+  if (data.headings?.length) stage("Checking headings for clickbait-style wording…");
+  const headlines = await headlineFindings(data.headings, data.text.length);
+  self.postMessage({id:data.id,matches:[...mapped, ...headlines],
    analysisSignals:preprocessing.signals});
 
  } catch (error) {
