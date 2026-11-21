@@ -3,6 +3,7 @@
 // estimate. Every candidate is analysis-only; source offsets stay untouched.
 import { extractReaderPairs } from "./reader-interpretation.mjs";
 import {selectJoin,DEFAULT_JOIN_THRESHOLDS,validateJoinThresholds} from "./reader-join-thresholds.mjs";
+import {explicitBoundaryConnector,normaliseConnectorCandidate} from "./reader-connector-normalisation.mjs";
 export const BOUNDARY_CHOICES=Object.freeze([{id:"and",label:"and"},{id:"but",label:"but"}]);
 const MAX_PAIRS=2,MAX_STRATEGY_PAIRS=8,MAX_CONTEXT_LEFT=130,MAX_CONTEXT_RIGHT=95;
 // Titles, initials, common inline abbreviations, decimals and ellipses are
@@ -60,13 +61,14 @@ function windowAround(source,probe){
 export function buildBoundaryChoices(source,probe){
  const context=windowAround(source,probe);
  if(!context)return [];
- const {before,after,punctuation}=context;
- const joined=normalizeRightStart(after);
+ const {before,after}=context;
  return BOUNDARY_CHOICES.map(({id,label})=>{
-  let completion;
-  completion=" "+id+" "+joined;
+  // Remove an already present connector from the analysis-only candidate.
+  // Explicit relationships are classified by JS without model scoring.
+  const normalised=normaliseConnectorCandidate(id,after);
+  const completion=" "+id+" "+normalizeRightStart(normalised.text);
   return {id,label,analysisText:before+completion,
-   prefix:before,completion};
+   prefix:before,completion,removedConnector:normalised.removedConnector};
  });
 }
 export async function rankBoundaryChoices(source,scoreContinuation,{
@@ -80,6 +82,29 @@ export async function rankBoundaryChoices(source,scoreContinuation,{
  for(const probe of probes){
   const choices=buildBoundaryChoices(source,probe);
   if(choices.length!==2)continue;
+  const explicit=explicitBoundaryConnector(source,probe);
+  const originalWindow=
+   source.slice(Math.max(0,probe.punctuationStart-MAX_CONTEXT_LEFT),probe.punctuationStart).trimStart()+
+   source.slice(probe.punctuationStart,probe.punctuationEnd)+" "+
+   source.slice(probe.punctuationEnd,Math.min(source.length,probe.punctuationEnd+MAX_CONTEXT_RIGHT)).trim();
+  if(explicit){
+   // This is classification of an already expressed relationship, not a
+   // recommendation to replace the existing punctuation.
+   out.push({
+    first:probe.first,second:probe.second,boundaryKind:probe.boundaryKind,
+    punctuation:source.slice(probe.punctuationStart,probe.punctuationEnd),
+    punctuationStart:probe.punctuationStart,punctuationEnd:probe.punctuationEnd,
+    choice:explicit.choice,relationship:explicit.relation,
+    decisionSource:"explicit_connector",explicitConnector:explicit.marker,
+    punctuationAction:"keep",uncertain:false,
+    leadingModelChoice:null,topModelScore:null,margin:null,thresholds,
+    keepIsDefault:false,analysisText:originalWindow,
+    candidates:choices.map(c=>({id:c.id,label:c.label,
+      analysisText:c.analysisText,score:null})),
+    scoreType:"explicit_connector_rule",humanAgreementMeasured:false
+   });
+   continue;
+  }
   const ranked=[];
   for(const c of choices){
    const value=await scoreContinuation(c.prefix,c.completion);
@@ -88,10 +113,6 @@ export async function rankBoundaryChoices(source,scoreContinuation,{
   }
   const decision=selectJoin(ranked,thresholds);
   const choice=decision.choice;
-  const originalWindow=
-   source.slice(Math.max(0,probe.punctuationStart-MAX_CONTEXT_LEFT),probe.punctuationStart).trimStart()+
-   source.slice(probe.punctuationStart,probe.punctuationEnd)+" "+
-   source.slice(probe.punctuationEnd,Math.min(source.length,probe.punctuationEnd+MAX_CONTEXT_RIGHT)).trim();
   out.push({
    first:probe.first,second:probe.second,
    boundaryKind:probe.boundaryKind,
@@ -99,6 +120,9 @@ export async function rankBoundaryChoices(source,scoreContinuation,{
    punctuationStart:probe.punctuationStart,
    punctuationEnd:probe.punctuationEnd,
    ...decision,
+   relationship:choice==="keep"?null:choice==="and"?"addition":"contrast",
+   decisionSource:"language_model",explicitConnector:null,
+   punctuationAction:choice==="keep"?"keep":"analysis_only_replace",
    analysisText:choice==="keep"?originalWindow:
     ranked.find(x=>x.id===choice)?.analysisText??null,
    candidates:ranked,
