@@ -513,7 +513,7 @@ assert.ok(selectionScript.includes('match.technique.category === "Positive" ? 1 
  'Blue highlights take priority over overlapping green spans');
 assert.ok(selectionScript.includes('technique.category === "Positive" ? "positive-patterns"'),
  'Green tooltip links to green pattern page rather than blue manipulation page');
-assert.ok(extensionWorker.includes('matchPositiveText(data.text'),
+assert.ok(extensionWorker.includes('matchPositiveText(analysedText'),
  'Firefox worker runs positive matching without replacing blue or red passes');
 assert.ok(benchmarkPage.includes('value="positive_rules"') &&
  benchmarkPage.includes('value="positive_ai"') &&
@@ -590,7 +590,7 @@ assert.ok(selectionScript.includes('match.kind === "concealed"') &&
 assert.ok(selectionScript.includes('TURQUOISE = "#12B6CF"') &&
  selectionScript.includes('border-left:3px solid ${TURQUOISE}'),
  'Turquoise underlines and tooltip accents both use Reform UK colour #12B6CF');
-assert.ok(extensionWorker.includes('findConcealedPatterns(data.text') &&
+assert.ok(extensionWorker.includes('findConcealedPatterns(analysedText') &&
  extensionWorker.includes('...concealedMatches'),
  'Firefox worker performs the relationship pass with the other three colours');
 assert.ok(benchmarkPage.includes('value="concealed_rules"') &&
@@ -692,7 +692,7 @@ assert.ok(benchmarkPage.includes('value="argument_paragraph"') &&
  benchmarkWorker.includes('validateArgumentParagraphCases(rawSeeds)') &&
  benchmarkUI.includes('expected_argument'),
  'Single paragraph argument lab accepts structure metadata plus optional NLI labels');
-assert.ok(extensionWorker.includes('analyseArguments(data.text, memoScore') &&
+assert.ok(extensionWorker.includes('analyseArguments(analysedText, memoScore') &&
  extensionWorker.includes('argumentFindings(assessed)') &&
  extensionWorker.includes('...argumentIssues'),
  'Firefox worker performs argument analysis with the existing NLI scorer');
