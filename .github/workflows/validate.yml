@@ -25,6 +25,8 @@ jobs:
         run: |
           node --check extension/src/text-preprocessing.mjs
           node --check extension/src/spelling-bait.mjs
+          node --check extension/src/nonstandard-vocabulary.mjs
+          node scripts/test-nonstandard-vocabulary.mjs
           node scripts/test-spelling-bait.mjs
           node scripts/test-text-preprocessing.mjs
       - name: Test advisory orange scrutiny signals
