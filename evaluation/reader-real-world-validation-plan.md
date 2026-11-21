@@ -52,6 +52,46 @@ AND/BUT mappings, plus a separately annotated genuine KEEP dataset.
 DiscoGeM remains a complementary research track for multiple-annotator
 distributions; it has not yet been integrated into this pilot.
 
+## First-GUM-pilot audit (original model unchanged)
+
+The initial 250-case, ten-genre pilot scored **30/250 (12.0%)** on
+the provisional mapped labels. Class-level observations from that first
+unmodified run:
+
+- GDTB mapped AND: 221; classifier recalled AND for 17 (7.7%).
+- GDTB mapped BUT: 29; classifier recalled BUT for 13 (44.8%).
+- Classifier predicted KEEP for 131/250 (52.4%), but **GUM contains no
+  KEEP ground truth**, so KEEP recall is not measurable.
+- This is a meaningful test-domain failure on these mapped relations, but
+  is not an overall estimate of three-class performance.
+
+The source-only verification against GUM revision
+`1d999e5a0327ecb83015007774f6a9be23ecbc41` found **250/250
+original annotated argument spans cover the entire adjacent sentences**.
+The hypothesised narrower-span mismatch did **not** explain the low score.
+
+Original GUM `expansion.conjunction` is treated as AND even if consecutive
+sentences make separate observations about one match or topic. An AND
+relation does not require explicit causal linkage. Reclassifying the soccer
+example as KEEP would invalidate the intended broad reading.
+
+The no-inference audit compares the 250 original labels with predictions,
+original relation senses and source genre; reports model feature shifts from
+the previous 402 synthetic examples; and checks every source-row checksum,
+token span and prediction/score identifier. It never modifies the corpus,
+the model, the labels, or the original 12% headline.
+
+```powershell
+git pull
+node scripts/audit-reader-gum-pilot.mjs --source-only
+node scripts/audit-reader-gum-pilot.mjs --top 15
+```
+
+The second command uses existing local model caches; no downloads or
+inference. It writes `evaluation/reader-gum-pilot-audit.json` (gitignored,
+because source excerpts can carry third-party text). These are diagnostics,
+not a tuned benchmark. Do not change the label mapping to maximise a score.
+
 ## Current benchmark
 
 The v2 corpus (reader-holdout-v2.json, generated from reader-holdout-v2-seeds.tsv) is **1,000 synthetic, developer-labelled** sentence-boundary examples from **100 scenario families** in 10 domains. The classes are nearly balanced: KEEP 333, AND 334, BUT 333. Ten cases share a scenario family, so these are **not 1,000 independent observations**.
