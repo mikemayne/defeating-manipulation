@@ -70,7 +70,8 @@ const cTest=Array.from({length:80},(_,i)=>make("test"+i,
 const hash=sha(JSON.stringify(["train","test"].map((role,i)=>
  [cTrain,cTest][i].map(c=>[c.id,c.document,c.row,c.text,c.expected_boundaries[0].choice]))));
 const corpus={meta:{version:VERSION,
- sourceRevision:data.sourceRevision,selectionHash:hash},
+ sourceRevision:data.sourceRevision,selectionHash:hash,
+ docCounts:{train:36,test:24,review:12}},
  train:cTrain,test:cTest};
 const verified=verifyTransferCorpus(corpus);
 assert.equal(verified.trainDocuments.size,36);
