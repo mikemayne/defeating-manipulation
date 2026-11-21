@@ -19,6 +19,7 @@ function setError(text) {
 }
 function updateSource() {
  const argumentMode = mode.value === "argument_paragraph";
+ const implicitMode = mode.value === "implicit_conclusion";
  const readerMode = mode.value === "reader_inference";
  const boundaryMode = mode.value === "reader_boundary";
  const compareMode = mode.value === "reader_compare";
@@ -37,7 +38,9 @@ function updateSource() {
  count.max = consistency || argumentMode || readerMode || boundaryMode || compareMode || concealed ? 10000 : 1000000;
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
-  ? compareMode
+  ? implicitMode
+   ? 'Upload JSON/JSONL with {id,text}, optionally expected_implicit:true/false and expected_conclusion. Uses the local FLAN-T5 generator; review each reconstructed conclusion and rejected output. Only annotated presence gets precision/recall; wording quality requires manual review. Maximum 2,000 cases.'
+   : compareMode
    ? 'Upload the same 1,000 real-world {id,text} examples to compare progressive joins against original-context joins, using only AND and BUT plus default KEEP. Both methods share thresholds; scores can be fitted to labels without more model calls. Accuracy is only shown if a case includes expected_boundaries:[{offset,choice}], labelled by a reviewer; otherwise accuracy is unknown.'
    : boundaryMode
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. Two neural language-model scores: AND and BUT, with KEEP as the JavaScript fallback. Thresholds can be fitted on labelled cases. One-time model download; scores indicate linguistic plausibility, not human reader percentages. Original text is never modified.'
