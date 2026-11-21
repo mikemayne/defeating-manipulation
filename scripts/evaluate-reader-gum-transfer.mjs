@@ -274,9 +274,11 @@ async function main(){
   const a=x.syntheticOnly,b=x.syntheticPlusAuthentic;
   console.log("\n"+name);
   console.log("  Synthetic-only: "+a.correct+"/"+a.count+" = "+pct(a.accuracy)+
+   " | balanced AND/BUT recall "+pct(a.balancedAccuracy)+
    " | AND "+pct(a.recall.and)+", BUT "+pct(a.recall.but)+
    ", predicted KEEP "+a.predicted.keep);
   console.log("  + authentic GUM: "+b.correct+"/"+b.count+" = "+pct(b.accuracy)+
+   " | balanced AND/BUT recall "+pct(b.balancedAccuracy)+
    " | AND "+pct(b.recall.and)+", BUT "+pct(b.recall.but)+
    ", predicted KEEP "+b.predicted.keep);
   console.log("  Paired recovery "+x.paired.recovered+", regressions "+
