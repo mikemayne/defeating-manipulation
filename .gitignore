@@ -31,3 +31,6 @@ _site/
 /evaluation/reader-gum-pilot-semantic-scores.json
 /evaluation/reader-gum-pilot-results.json
 /evaluation/reader-gum-pilot-audit.json
+/evaluation/reader-gum-preprocessed-lm-v1.json
+/evaluation/reader-gum-preprocessed-semantic-v1.json
+/evaluation/reader-gum-preprocessing-comparison-v1.json
