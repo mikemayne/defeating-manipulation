@@ -3,7 +3,7 @@ import {readFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import path from "node:path";
 import {spawnSync} from "node:child_process";
-import {spanAudit,range,tabulate,distribution,analyzeAudit,SIGNALS}
+import {spanAudit,range,tabulate,distribution,analyzeAudit,scoredAuditRows,SIGNALS}
  from "./audit-reader-gum-pilot.mjs";
 import {candidatesFromGdtb,mapGdtbLabel}
  from "./build-reader-gum-pilot.mjs";
@@ -89,6 +89,44 @@ const out=candidatesFromGdtb(content,"GUM_news_soccer","news");
 assert.equal(out.candidates.length,1);
 assert.equal(out.candidates[0].gold,"and");
 assert.equal(out.candidates[0].relation,"expansion.conjunction");
+// Exact replay from cache uses the source text/offset and unchanged prediction.
+const cachedSample={
+ id:"cached-sample",offset:text1.length-1,source:text1+" "+text2,
+ prompt:"fixture",left:text1.replace(/\\.$/u,""),right:text2,
+ gold:"and",predicted:"keep",relation:"expansion.conjunction",
+ challenge:"expansion.conjunction",explicit:null,
+ features:{},genre:"news",document:"GUM_news_soccer",family:"GUM_news_soccer"
+};
+const modelResult={results:{predictions:[{id:cachedSample.id,offset:cachedSample.offset,
+ gold:"and",predicted:"keep",challenge:"expansion.conjunction"}]}};
+const modelLm={predictions:[{id:cachedSample.id,offset:cachedSample.offset,
+ source:cachedSample.source,prompt:"fixture",scores:{
+ gptAnd:-3,gptBut:-4,
+ mask:{and:2,but:1,"-":0,".":0,so:1}
+}}]};
+const modelSemantic={predictions:[{id:cachedSample.id,offset:cachedSample.offset,
+ source:cachedSample.source,
+ left:cachedSample.left,right:cachedSample.right,
+ signals:{similarity:0.6,
+ forward:{contradiction:0.1,neutral:0.7,entailment:0.2},
+ reverse:{contradiction:0.2,neutral:0.7,entailment:0.1}}
+}]};
+const scoredCache=scoredAuditRows([{
+ id:cachedSample.id,
+ text:cachedSample.source,
+ expected_boundaries:[{offset:cachedSample.offset,choice:"and"}]}],
+ [cachedSample],modelResult,modelLm,modelSemantic);
+assert.equal(scoredCache[0].predicted,"keep");
+assert.equal(scoredCache[0].features.semanticSimilarity,0.6);
+assert.ok(Number.isFinite(scoredCache[0].features.lexicalJaccard));
+const damaged=structuredClone(modelLm);
+damaged.predictions[0].source="Different content";
+assert.throws(()=>scoredAuditRows([{
+ id:cachedSample.id,
+ text:cachedSample.source,
+ expected_boundaries:[{offset:cachedSample.offset,choice:"and"}]}],
+ [cachedSample],modelResult,damaged,modelSemantic),/provenance mismatch/);
+
 const cmd=spawnSync(process.execPath,[
  path.join(root,"scripts/audit-reader-gum-pilot.mjs"),"--help"
 ],{encoding:"utf8",timeout:60000});
