@@ -18,3 +18,5 @@ _site/
 /evaluation/reader-holdout-v1.json
 /evaluation/reader-holdout-v1-scores.json
 /evaluation/reader-holdout-v1-results.json
+/evaluation/reader-semantic-pair-scores.json
+/evaluation/reader-semantic-fusion.json
