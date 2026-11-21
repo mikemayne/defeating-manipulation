@@ -21,6 +21,8 @@ jobs:
           node-version: '22'
       - name: Validate catalogue and generated pages
         run: node scripts/test-build.mjs
+      - name: Test advisory orange scrutiny signals
+        run: node scripts/test-scrutiny-signals.mjs
       - name: Test explicit connector normalisation
         run: node scripts/test-reader-connector-normalisation.mjs
       - name: Test masked infill benchmark without model downloads

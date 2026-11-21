@@ -38,13 +38,15 @@
  }
 
  let tooltip;
- const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", RED = "#dc2626";
- const colour = technique => technique.category === "Inconsistency" ? RED :
+ const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", RED = "#dc2626", ORANGE = "#f59e0b";
+ const colour = technique => technique.category === "Scrutiny" ? ORANGE :
+   technique.category === "Inconsistency" ? RED :
    technique.category === "Positive" ? GREEN :
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
  // A positive phrase must never visually cover an overlapping negative
  // finding; this is not yet a concealed-manipulation judgement.
- const priority = match => match.kind === "argument_support" ? 5 :
+ const priority = match => match.kind === "scrutiny" ? 0 :
+   match.kind === "argument_support" ? 5 :
    match.kind === "inconsistency" ? 4 :
    match.kind === "spelling" ? 3.5 :
    match.technique.category === "Concealed manipulation" ? 3 :
@@ -82,9 +84,16 @@
        summary.append(relation);
      }
    }
+   if (match.kind === "scrutiny" && Array.isArray(match.signals)) {
+     const signals = document.createElement("div");
+     signals.textContent = "Signals: " + match.signals.join("; ") + ".";
+     signals.style.cssText = "margin-top:8px;font-size:12px;color:#ffd89a;";
+     summary.append(signals);
+   }
    summary.style.margin = "6px 0 8px";
    const strength = document.createElement("div");
-   strength.textContent = match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
+   strength.textContent = match.kind === "scrutiny" ? "Review suggested, not a detected pattern" :
+     match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
      match.kind === "inconsistency" ? "Inference: possible contradiction" :
      match.kind === "concealed" ? "Relationship: positive wording followed by pressure (check context)" :
      match.kind === "argument_support" ? "Inference: premise-to-conclusion support (check context)" :
@@ -99,7 +108,8 @@
    link.rel = "noopener noreferrer";
    link.style.color = "#7ee4e7";
    tooltip.append(title, summary, strength);
-   if (match.kind !== "inconsistency" && match.kind !== "concealed") tooltip.append(link);
+   if (match.kind !== "inconsistency" && match.kind !== "concealed" &&
+       match.kind !== "scrutiny") tooltip.append(link);
    const r = mark.getBoundingClientRect();
    tooltip.style.display = "block";
    tooltip.style.left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - 350)) + "px";

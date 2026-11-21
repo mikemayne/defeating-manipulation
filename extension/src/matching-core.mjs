@@ -45,7 +45,7 @@ export function cosineSimilarity(a, b) {
 }
 
 export async function matchText(text, { techniques, rules, prototypes = [], embed = null,
-  evidence = hasSemanticEvidence, semanticOptions = {} }) {
+  evidence = hasSemanticEvidence, semanticOptions = {}, onNearMiss = null }) {
  const parts = windows(text);
  const patterned = [];
  const alreadyMatched = new Set();
@@ -85,6 +85,15 @@ export async function matchText(text, { techniques, rules, prototypes = [], embe
      semantic.push({ start: candidates[i].start, end: candidates[i].end,
       technique: matchedTechnique, score: result.score,
       method: "semantic", strength: semanticMatchStrength(result.score, result.margin) });
+    } else if (onNearMiss) {
+     // Reuse the existing embedding, never issue another model call.
+     // Similarity alone is not evidence of a recognised technique.
+     let best = -Infinity;
+     for (const prototype of prototypes)
+      best = Math.max(best, cosineSimilarity(embedded[i], prototype.vector));
+     if (best >= 0.63) onNearMiss({
+      start: candidates[i].start, end: candidates[i].end, score: best
+     });
     }
    }
   } catch (error) {
