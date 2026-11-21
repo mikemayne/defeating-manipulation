@@ -188,7 +188,7 @@ export function compareAuthenticTraining(synthetic,realTrain,test){
  return result;
 }
 function addFeatures(rows){return attachLexicalFeatures(addSemanticFeatures(rows.map(heldoutFeatures)));}
-async function syntheticTraining(o){
+export async function syntheticTraining(o){
  const [join,mask,source,v1]=await Promise.all([
   o.oldJoin,o.oldMask,o.oldDataset,o.v1Scores
  ].map(json));
@@ -212,7 +212,7 @@ async function syntheticTraining(o){
  });
  return attachLexicalFeatures(addSemanticFeatures(rows));
 }
-async function scoreBatch(rows,{lmPath,semPath,offline,hash}){
+export async function scoreBatch(rows,{lmPath,semPath,offline,hash}){
  const {createMaskedGapScorer}=await import("../extension/src/reader-mask-infill.mjs");
  const {createBoundaryLanguageScorer}=await import("../extension/src/reader-language-model.mjs");
  const lmDigest=sha(JSON.stringify([VERSION,hash,
