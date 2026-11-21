@@ -5,13 +5,13 @@ import { leadingExplicitConnector } from "./reader-connector-normalisation.mjs";
 
 export const MASK_MODEL="Xenova/distilbert-base-uncased";
 export const MASK_TEMPLATE_VERSION="masked-gap-v1";
-export const MASK_WORDS=Object.freeze(["and","but","so","erm","um","uh","well","anyway"]);
-export const NEUTRAL_WORDS=Object.freeze(["erm","um","uh","well","anyway"]);
+export const MASK_WORDS=Object.freeze(["and","but","so","erm","um","uh","well","anyway","-","—","."]);
+export const NEUTRAL_WORDS=Object.freeze(["erm","um","uh","well","anyway","-","—","."]);
 export const CLASS_LABELS=Object.freeze(["keep","and","but"]);
 export const MASK_PLACEHOLDER="[MASK]";
 const LOWERCASE_START=/^(He|She|It|They|We|You|The|A|An|This|That|Those|These|There|His|Her|Their|Our|Your)\b/u;
 
-// The mask is one word between the two statements, not a replacement of
+// The mask is one token between the two statements, including punctuation.\n// A hyphen or em dash is an experimental nonlexical KEEP candidate, not\n// evidence that the statements have no semantic relationship.\n// The mask is a single position between statements, not a replacement of
 // source punctuation. Existing explicit connectives are stripped only from
 // the *experimental model prompt*, to avoid e.g. "but But ..." duplication.
 export function maskedGapPrompt(source,probe,{mask=MASK_PLACEHOLDER}={}){
