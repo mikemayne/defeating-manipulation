@@ -1306,6 +1306,41 @@
       ],
       "reader_effect": "May make a revisable choice or contested interpretation feel self-evident, permanent and beyond scrutiny, although the literal statement provides no supporting reason. The relevant question is what independently establishes the alleged necessity. A tautology on its own does not prove manipulation: sometimes repetition simply confirms a label, and some decisions really are constrained.",
       "references": []
+    },
+    {
+      "id": "attack_conflation",
+      "title": "Attack conflation",
+      "category": "Argumentation",
+      "summary": "Treating criticism of a minor error or particular claim as an attack on the wider argument, the person who made it, or everyone who shares their position.",
+      "tags": [
+        "criticism escalation",
+        "identity threat",
+        "credibility spillover",
+        "group defensiveness",
+        "attack transfer",
+        "ad hominem",
+        "spelling correction"
+      ],
+      "status": "starter",
+      "definition": "Attack conflation is a shift in what a criticism is taken to target. A remark about presentation (such as a spelling mistake) is used or understood as a judgement on the argument, then on the speaker's intelligence or character, and sometimes on anyone who shares the speaker's view. The shift can come from a critic treating an error as proof that the claim or its author is worthless, or from a respondent interpreting a narrow correction as a broader personal or group attack. The broader conclusion must be distinguished from what was actually criticised. This is a descriptive label for an observable change in meaning, not an established psychological diagnosis or evidence of deliberate intent.",
+      "observable_features": [
+        "A critic points to spelling, grammar, formatting or an imprecise phrase, then presents it as a reason to dismiss the substance of an argument or the speaker's intelligence.",
+        "A response to a narrow correction asserts that the critic has rejected the speaker's entire idea or insulted the speaker personally, without the original criticism saying that.",
+        "An observer converts an insult or objection aimed at one speaker into a claimed insult towards everyone who shares the speaker's position.",
+        "Words such as 'so you think', 'that means', 'you're calling us' or 'therefore we're all' mark the transfer from a narrower criticism to a broader target.",
+        "The exchange moves from examining the claim to defending a person's or group's dignity, while the original claim remains unaddressed.",
+        "A typo, legitimate disagreement, direct personal insult or well-founded criticism is not by itself this pattern: look for the additional unsupported transfer between levels."
+      ],
+      "example": "Post: 'The proposal is a terrrible idea.' Reply: 'You can't even spell terrible, so your argument is worthless.' Observer: 'So you're saying everyone who opposes the proposal is stupid?'",
+      "examples": [
+        "You made one spelling mistake, so your argument is nonsense and you're clearly an idiot.",
+        "You corrected my grammar, so you must think my idea is stupid and I'm stupid too.",
+        "That typo proves your argument is worthless.",
+        "You criticised my wording, so you're attacking everyone who supports the proposal.",
+        "The critic questioned my opinion, so apparently they're insulting all of us."
+      ],
+      "reader_effect": "Can turn a small correction into a dispute about credibility, self-worth or group loyalty. People who identify with the speaker or position may feel personally targeted and defend the person or group instead of assessing the claim. This escalation can occur without deliberate manipulation and is not inevitable. The relevant check is whether the original criticism actually justified each broader interpretation.",
+      "references": []
     }
   ]
 }
