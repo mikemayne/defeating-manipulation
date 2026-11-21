@@ -4,7 +4,7 @@ import path from "node:path";
 import {fileURLToPath} from "node:url";
 import {trainFusion} from "./evaluate-reader-fusion.mjs";
 import {documentFolds} from "./evaluate-reader-gum-but-cv.mjs";
-import {evaluateConservativeCV,EXPECTED_ORIGINAL_BASELINES}
+import {evaluateConservativeCV,EXPECTED_ORIGINAL_BASELINES,decideWithExplicit}
  from "./evaluate-reader-conservative-but.mjs";
 import {conservativeButDecision,scoreButOutcomes,separationMetrics,POLICIES}
  from "./reader-conservative-but-decision.mjs";
@@ -28,6 +28,16 @@ assert.equal(decide(.1,.35,.55,{minButScore:.50,minButMargin:.1}).choice,
  "but");
 assert.equal(decide(.1,.35,.55,{minButScore:.8,minButMargin:.1}).choice,
  "and");
+const scores={keep:.08,and:.12,but:.80};
+assert.equal(decideWithExplicit(null,scores,POLICIES[0]).choice,"but");
+assert.equal(decideWithExplicit("and",scores,POLICIES[0]).choice,"and");
+assert.equal(decideWithExplicit("keep",scores,POLICIES[4]).choice,"keep");
+assert.equal(decideWithExplicit("but",{keep:.10,and:.85,but:.05},
+ POLICIES[4]).choice,"but");
+assert.equal(decideWithExplicit("and",scores,POLICIES[4]).advisory,null,
+ "Explicit decision is authoritative, not a borderline model suggestion");
+assert.throws(()=>decideWithExplicit("unknown",scores,POLICIES[0]),
+ /Unknown explicit/);
 assert.throws(()=>conservativeButDecision({keep:0,and:0,but:2}),/normalized/);
 assert.throws(()=>conservativeButDecision({keep:0,and:.3,but:.7},{
  minButScore:-.1}),/threshold/);
@@ -114,6 +124,20 @@ assert.deepEqual(changedGold.map(model),before,
 const measured=evaluateConservativeCV(synthetic,original,but,and,{
  folds:3,featureSets:{"mini-fusion":keys}
 });
+const withExplicit=original.map((r,i)=>i===0?{...r,explicit:{choice:"keep"}}:r);
+const explicitMeasure=evaluateConservativeCV(synthetic,withExplicit,but,and,{
+ folds:3,featureSets:{"mini-fusion":keys}
+});
+assert.equal(explicitMeasure.outcomes["mini-fusion__AND+0"].policies.argmax
+ .metrics.predictedKeep,
+ measured.outcomes["mini-fusion__AND+0"].policies.argmax
+ .metrics.predictedKeep+1,
+ "Existing connector output must take precedence over inferred class");
+for(const out of Object.values(explicitMeasure.outcomes)){
+ assert.equal(out.policies.strict.metrics.predictedKeep,
+  out.policies.argmax.metrics.predictedKeep,
+  "BUT gate must never override the existing explicit connector KEEP result");
+}
 assert.equal(measured.validationCount,120);
 assert.equal(Object.keys(measured.outcomes).length,4);
 const folds=documentFolds(original,{folds:3});
