@@ -123,3 +123,29 @@ trigger it. Known blue, red, turquoise and green matches take precedence.
 This is experimental; thresholds should be validated against independently
 labelled, real-world positive and negative examples before interpreting its
 accuracy. Test the fallback with `node scripts/test-scrutiny-signals.mjs`.
+
+## Local text preprocessing and attention cues
+
+The extension now runs a conservative JavaScript pre-processing pass before
+its model and pattern analysis. The original selection is preserved verbatim;
+only a separate **analysis copy** is changed. A character-to-original offset
+map keeps all highlights aligned with the actual page text.
+
+- Unambiguous corpus-style spacing artefacts (for example, split apostrophes,
+  common split prefix hyphens, and spaces before punctuation) are cleaned for
+  analysis but **not** treated as manipulation signals.
+- A local British-English dictionary identifies plausible misspellings.
+  Only a single one-edit suggestion can be substituted in the working copy;
+  ambiguous words, proper names, URLs, handles and code are left alone.
+- Unusual repeated punctuation, adjacent repeated words and possible spelling
+  errors create **weak attention-hook signals**. Such wording may attract
+  attention or corrective replies, but intention cannot be inferred.
+- The existing spelling highlight and new punctuation annotation identify
+  possible attention hooks. These signals may also contribute to the orange
+  multi-signal scrutiny category; a lone typo never triggers orange.
+
+The preprocessing module is `extension/src/text-preprocessing.mjs`. Run
+`node scripts/test-text-preprocessing.mjs` to check original offsets,
+protected text, spelling ambiguity and scrutiny gating. Corrections are
+**not retroactively applied to existing evaluation caches**, so historical
+benchmarks remain comparable.
