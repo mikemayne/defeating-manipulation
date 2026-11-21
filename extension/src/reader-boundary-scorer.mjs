@@ -4,6 +4,7 @@
 import { extractReaderPairs } from "./reader-interpretation.mjs";
 import {selectJoin,DEFAULT_JOIN_THRESHOLDS,validateJoinThresholds} from "./reader-join-thresholds.mjs";
 import {explicitBoundaryConnector,normaliseConnectorCandidate} from "./reader-connector-normalisation.mjs";
+import {structuralContrastEvidence} from "./reader-structural-contrast.mjs";
 export const BOUNDARY_CHOICES=Object.freeze([{id:"and",label:"and"},{id:"but",label:"but"}]);
 const MAX_PAIRS=2,MAX_STRATEGY_PAIRS=8,MAX_CONTEXT_LEFT=130,MAX_CONTEXT_RIGHT=95;
 // Titles, initials, common inline abbreviations, decimals and ellipses are
@@ -102,6 +103,31 @@ export async function rankBoundaryChoices(source,scoreContinuation,{
     candidates:choices.map(c=>({id:c.id,label:c.label,
       analysisText:c.analysisText,score:null})),
     scoreType:"explicit_connector_rule",humanAgreementMeasured:false
+   });
+   continue;
+  }
+  // A contrast can concern two DIFFERENT referents, even where their
+  // propositions do not contradict one another. A finding can also be
+  // qualified by uncertainty about why it occurred. Apply only narrow,
+  // inspectable cues after explicit connectors (which take precedence).
+  const structural=structuralContrastEvidence(
+   probe.first.text,probe.second.text);
+  if(structural.contrastCandidate){
+   out.push({
+    first:probe.first,second:probe.second,boundaryKind:probe.boundaryKind,
+    punctuation:source.slice(probe.punctuationStart,probe.punctuationEnd),
+    punctuationStart:probe.punctuationStart,
+    punctuationEnd:probe.punctuationEnd,
+    choice:"but",relationship:"contrast",
+    decisionSource:"structural_contrast_cue",
+    structuralCue:structural.kind,
+    explicitConnector:null,punctuationAction:"analysis_only_replace",
+    uncertain:false,
+    leadingModelChoice:null,topModelScore:null,margin:null,thresholds,
+    keepIsDefault:false,
+    analysisText:choices.find(c=>c.id==="but")?.analysisText??originalWindow,
+    candidates:choices.map(c=>({...c,score:null})),
+    scoreType:"structural_relation_rule",humanAgreementMeasured:false
    });
    continue;
   }
