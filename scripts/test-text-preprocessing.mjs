@@ -66,7 +66,7 @@ assert.equal(orthographic.analysisText,"An over spaced sentence.");
 assert.ok(orthographic.signals.formattingArtifacts>0);
 assert.equal(orthographic.signals.possibleAttentionHooks,0);
 const context="Obviously, you must support this decision immediately for the benefit of the whole organisation.";
-const c=preprocessText(context+"??");
+const c=preprocessText(context.slice(0,-1)+"??");
 assert.equal(findScrutinyWarnings(c.analysisText).length,0);
 assert.equal(findScrutinyWarnings(c.analysisText,{preprocessingFlags:c.flags}).length,1,
  "Three independent lexical signals plus attention cue allow orange review");
