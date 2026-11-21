@@ -34,3 +34,11 @@ _site/
 /evaluation/reader-gum-preprocessed-lm-v1.json
 /evaluation/reader-gum-preprocessed-semantic-v1.json
 /evaluation/reader-gum-preprocessing-comparison-v1.json
+/evaluation/reader-gum-transfer-v1.json
+/evaluation/reader-gum-keep-review-queue-v1.json
+/evaluation/reader-gum-transfer-train-lm-v1.json
+/evaluation/reader-gum-transfer-train-sem-v1.json
+/evaluation/reader-gum-transfer-test-lm-v1.json
+/evaluation/reader-gum-transfer-test-sem-v1.json
+/evaluation/reader-gum-transfer-results-v1.json
+/evaluation/reader-gum-review-finalized-v1.json
