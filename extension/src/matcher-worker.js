@@ -136,7 +136,10 @@ self.addEventListener("message", async event => {
   const recognised = [...matches, ...spellingMatches, ...punctuationMatches,
    ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues];
   const scrutiny = findScrutinyWarnings(analysedText, {
-   findings: recognised, nearMisses, argumentDiagnostics,
+   // Orthographic flags are weak signals, not confirmed techniques.
+   findings: [...matches,...positiveMatches,...concealedMatches,
+    ...inconsistencies,...argumentIssues],
+   nearMisses, argumentDiagnostics,
    preprocessingFlags: preprocessing.flags
   });
   const mapped = remapFindings(preprocessing,[...recognised,...scrutiny]);
