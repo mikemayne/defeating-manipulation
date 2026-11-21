@@ -50,3 +50,7 @@ _site/
 /evaluation/reader-gum-contrast-expansion-lm-v1.json
 /evaluation/reader-gum-contrast-expansion-sem-v1.json
 /evaluation/reader-gum-contrast-expansion-cv-v1.json
+/evaluation/reader-gum-and-mixtures-v1.json
+/evaluation/reader-gum-and-mixtures-lm-v1.json
+/evaluation/reader-gum-and-mixtures-sem-v1.json
+/evaluation/reader-gum-and-mixtures-cv-v1.json
