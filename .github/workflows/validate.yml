@@ -43,6 +43,12 @@ jobs:
           node --check extension/src/reader-semantic-signals.mjs
           node --check scripts/evaluate-reader-semantic-fusion.mjs
           node scripts/test-reader-semantic-fusion.mjs
+      - name: Test offline nonlinear reader fusion
+        run: |
+          node --check extension/src/reader-boosted-fusion.mjs
+          node --check extension/src/reader-lexical-features.mjs
+          node --check scripts/evaluate-reader-nonlinear-fusion.mjs
+          node scripts/test-reader-nonlinear-fusion.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
