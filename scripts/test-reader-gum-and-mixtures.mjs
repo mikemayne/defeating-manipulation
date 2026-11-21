@@ -50,7 +50,9 @@ const base={meta:{
  selectionHash:originalHash,docCounts:{train:36,test:24,review:12}
 },train,test:holdout};
 const firstDoc=newManifest.newTrainDocuments[0];
-const contrast=item("new-contrast",firstDoc,"but");
+const contrast=item("new-contrast",firstDoc,"but",
+ "comparison.contrast",
+ "A distinct contrast proposition appeared. The response challenged that proposition.");
 const butExpansion={meta:{
  version:"reader-gum-contrast-expansion-v1",
  sourceRevision:originalManifest.sourceRevision,
