@@ -4,6 +4,7 @@
 // Both use the same two scored conjunctions and JS KEEP fallback;
 // no original source text is modified and neither method asserts causality.
 import { extractBoundaryProbes, buildBoundaryChoices } from "./reader-boundary-scorer.mjs";
+import { explicitBoundaryConnector } from "./reader-connector-normalisation.mjs";
 import {selectJoin,DEFAULT_JOIN_THRESHOLDS,validateJoinThresholds} from "./reader-join-thresholds.mjs";
 const CHOICES=new Set(["keep","and","but"]);
 const MAX_PAIRS=8;
@@ -112,13 +113,22 @@ export async function compareReaderStrategies(source,scoreContinuation,{
   const progressivePrefix=reconstructedPrefix(source,boundary.punctuationStart,edits)
    .slice(-LEFT_CONTEXT_CHARS).trimStart();
   if(!progressivePrefix)continue;
-  const context=await evaluate(candidates);
+  const explicit=explicitBoundaryConnector(source,boundary);
+  const directDecision=explicit?{
+   choice:explicit.choice,relationship:explicit.relation,
+   decisionSource:"explicit_connector",explicitConnector:explicit.marker,
+   punctuationAction:"keep",uncertain:false,leadingModelChoice:null,
+   topModelScore:null,margin:null,thresholds,keepIsDefault:false,candidates:[]
+  }:null;
+  // Already expressed relations are classified without re-scoring or
+  // modifying punctuation. Otherwise use the normal neural comparison.
+  const context=directDecision??await evaluate(candidates);
   const progressiveCandidates=candidates.map(c=>({
    ...c,prefix:progressivePrefix
   }));
-  const progressive=await evaluate(progressiveCandidates);
+  const progressive=directDecision??await evaluate(progressiveCandidates);
   const changed=progressivePrefix!==originalPrefix;
-  const newEdits=proposedEdits(source,boundary,progressive.choice);
+  const newEdits=explicit?[]:proposedEdits(source,boundary,progressive.choice);
   if(!progressive.uncertain){
    for(const edit of newEdits)edits.push(edit);
    edits.sort((a,b)=>a.start-b.start);
@@ -130,6 +140,11 @@ export async function compareReaderStrategies(source,scoreContinuation,{
    boundaryKind:boundary.boundaryKind,
    first:boundary.first,second:boundary.second,
    context,progressive,
+   relationship:explicit?.relation??(context.choice==="and"?"addition":
+    context.choice==="but"?"contrast":null),
+   decisionSource:explicit?"explicit_connector":"language_model",
+   punctuationAction:explicit||context.choice==="keep"?"keep":"analysis_only_replace",
+   explicitConnector:explicit?.marker??null,
    contextChangedByEarlierJoins:changed,
    sameChoice:context.choice===progressive.choice,
    progressiveReconstructionThroughSecond:
