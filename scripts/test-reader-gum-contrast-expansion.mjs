@@ -87,8 +87,10 @@ assert.equal(additionalContrasts([makeCandidate("known",firstDoc)],
  new Set(["known"])).length,0);
 assert.throws(()=>additionalContrasts(duplicates,new Set(),0),/cap/);
 const cases=[
- ex("extra-1",firstDoc,"but"),
+ {...ex("extra-1",firstDoc,"but"),
+  text:"Fresh contrast example one. A different response followed."},
  {...ex("extra-2",newManifest.newTrainDocuments[1],"but"),
+  text:"Fresh contrast example two. The alternative remained possible.",
   relation:"comparison.concession.arg2-as-denier"}
 ];
 const categories={"comparison.contrast":1,"comparison.concession":1};
