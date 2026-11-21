@@ -10,8 +10,8 @@ const RULES = Object.freeze([
  {marker:"on the other hand",choice:"but",relation:"contrast",re:/^on\s+the\s+other\s+hand,\s*/iu},
  {marker:"still",choice:"but",relation:"contrast",re:/^still,\s*/iu},
  // 'Yet to arrive', 'yet another' and 'yet more' aren't contrastive joins.
- {marker:"yet",choice:"but",relation:"contrast",re:/^yet\s+(?!(?:to|another|more)\b)/iu},
- {marker:"and",choice:"and",relation:"addition",re:/^and(?:,\s*|\s+)/iu},
+ {marker:"yet",choice:"but",relation:"contrast",re:/^yet(?!\s+(?:to|another|more)\b)\s+/iu},
+ {marker:"and",choice:"and",relation:"addition",re:/^and(?!\s+yet\b)(?:,\s*|\s+)/iu},
  {marker:"furthermore",choice:"and",relation:"addition",re:/^furthermore,\s*/iu},
  {marker:"moreover",choice:"and",relation:"addition",re:/^moreover,\s*/iu},
  {marker:"additionally",choice:"and",relation:"addition",re:/^additionally,\s*/iu},
