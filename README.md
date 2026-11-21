@@ -105,3 +105,21 @@ supported by its premises. The supported-conclusion entry is a reference
 pattern, not an error simply because it is displayed in the red library.
 The current local second-stage model detects potential contradictions;
 paragraph-level conclusion support remains a planned classifier enhancement.
+
+## Orange: deserves scrutiny
+
+The browser analyser may underline a passage **orange** when several different
+weak signals converge but none of its named detectors identifies a pattern.
+It looks for combinations of reader pressure, unqualified certainty, strongly
+emotive stakes, urgency, threatened consequences and presumed agreement. When
+available, a near-miss semantic match or uncertain inference can contribute
+another signal. Four independent text-signal families can also trigger the
+advisory without a local model.
+
+Orange is **not a manipulation finding** and says nothing about the author's
+intent or the truth of the statement. It means *check the wording, context and
+supporting argument*. Individual signals (including emotional language) do not
+trigger it. Known blue, red, turquoise and green matches take precedence.
+This is experimental; thresholds should be validated against independently
+labelled, real-world positive and negative examples before interpreting its
+accuracy. Test the fallback with `node scripts/test-scrutiny-signals.mjs`.

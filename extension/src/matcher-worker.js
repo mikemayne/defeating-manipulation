@@ -8,6 +8,7 @@ import { analyseArguments, argumentFindings } from "./argument-analysis.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { findConcealedPatterns } from "./concealed-matching.mjs";
+import { findScrutinyWarnings } from "./scrutiny-signals.mjs";
 
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
@@ -82,8 +83,10 @@ self.addEventListener("message", async event => {
   await initialising;
   const spellingMatches = findSpellingBait(data.text, spellchecker,
    techniques.find(item => item.id === "deliberate_errors"));
+  const nearMisses = [];
   const matches = await matchText(data.text, { techniques, rules, prototypes,
-   embed: extractor ? embed : null });
+   embed: extractor ? embed : null,
+   onNearMiss: signal => nearMisses.push(signal) });
   // Separate green pass: do not let it compete with the established negative
   // technique rankings or suppress blue matches. Relationship analysis comes later.
   const positiveMatches = await matchPositiveText(data.text, {
@@ -102,7 +105,7 @@ self.addEventListener("message", async event => {
    return cache.get(key);
   };
   const stage = message => self.postMessage({ id: data.id, type: "stage", message });
-  let inconsistencies = [], argumentIssues = [];
+  let inconsistencies = [], argumentIssues = [], argumentDiagnostics = [];
   try {
    stage("Checking statements for contradictions…");
    inconsistencies = await findInconsistencies(data.text, memoScore);
@@ -110,6 +113,7 @@ self.addEventListener("message", async event => {
    const assessed = await analyseArguments(data.text, memoScore, {
     includeImplicit:true,
     includeModelDiscovery:true,
+    onDiagnostic: info => argumentDiagnostics.push(info),
     onProgress: ({ completed, total }) => {
      if (total) stage("Checking conclusion " + Math.min(completed + 1, total) +
       " of " + total + "…");
@@ -120,9 +124,12 @@ self.addEventListener("message", async event => {
    // A broken NLI model cannot erase successful blue, green or turquoise matches.
    console.warn("Local argument analysis unavailable:", error);
   }
-  self.postMessage({ id: data.id,
-   matches: [...matches, ...spellingMatches, ...positiveMatches, ...concealedMatches,
-    ...inconsistencies, ...argumentIssues] });
+  const recognised = [...matches, ...spellingMatches, ...positiveMatches,
+   ...concealedMatches, ...inconsistencies, ...argumentIssues];
+  const scrutiny = findScrutinyWarnings(data.text, {
+   findings: recognised, nearMisses, argumentDiagnostics
+  });
+  self.postMessage({ id: data.id, matches: [...recognised, ...scrutiny] });
  } catch (error) {
   self.postMessage({ id: data.id, error: String(error?.message || error) });
  }
