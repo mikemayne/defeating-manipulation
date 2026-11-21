@@ -60,7 +60,9 @@
    title.textContent = technique.title;
    const summary = document.createElement("div");
    summary.textContent = match.kind === "spelling" ?
-     "Possible correction bait — don\u2019t take it. Correcting a typo creates engagement; insulting the author may also make people who agree with them defensive. The error may be accidental." :
+     "Possible correction bait. The spelling may be accidental; correcting or insulting an author can create unnecessary engagement." :
+     match.kind === "punctuation" ?
+     "Unusual or repeated punctuation may draw attention. It can be accidental or expressive; no intent is inferred." :
      technique.summary || "";
    if (match.kind === "inconsistency") {
      const other = document.createElement("div");
@@ -94,6 +96,7 @@
    const strength = document.createElement("div");
    strength.textContent = match.kind === "scrutiny" ? "Review suggested, not a detected pattern" :
      match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
+     match.kind === "punctuation" ? "Punctuation: weak attention signal, intent unknown" :
      match.kind === "inconsistency" ? "Inference: possible contradiction" :
      match.kind === "concealed" ? "Relationship: positive wording followed by pressure (check context)" :
      match.kind === "argument_support" ? "Inference: premise-to-conclusion support (check context)" :
