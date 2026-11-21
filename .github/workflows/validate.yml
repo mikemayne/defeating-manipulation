@@ -29,6 +29,11 @@ jobs:
           node scripts/test-nonstandard-vocabulary.mjs
           node scripts/test-spelling-bait.mjs
           node scripts/test-text-preprocessing.mjs
+      - name: Test bounded implicit-conclusion reconstruction
+        run: |
+          node --check extension/src/implicit-conclusion-reconstruction.mjs
+          node --check extension/src/matcher-worker.js
+          node scripts/test-implicit-conclusion-reconstruction.mjs
       - name: Test advisory orange scrutiny signals
         run: node scripts/test-scrutiny-signals.mjs
       - name: Test explicit connector normalisation
