@@ -1,0 +1,30 @@
+name: Verify pinned authentic GUM pilot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-gum-pilot.yml'
+      - 'scripts/build-reader-gum-pilot.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Build local 250-case authentic-text pilot from pinned GUM
+        run: |
+          node scripts/build-reader-gum-pilot.mjs
+          node scripts/build-reader-gum-pilot.mjs --offline
+          node scripts/evaluate-reader-gum-pilot.mjs --preview
+      # Do NOT upload or publish the local third-party source text.
