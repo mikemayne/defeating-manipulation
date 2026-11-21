@@ -41,6 +41,8 @@ jobs:
           node scripts/test-implicit-conclusion-copy.mjs
           node --check scripts/evaluate-implicit-real-gum.mjs
           node scripts/test-implicit-real-gum.mjs
+          node --check scripts/implicit-gum-argument-links.mjs
+          node scripts/test-implicit-gum-argument-links.mjs
       - name: Test bounded implicit-conclusion reconstruction
         run: |
           node --check extension/src/implicit-conclusion-reconstruction.mjs
