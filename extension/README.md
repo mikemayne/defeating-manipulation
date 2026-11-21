@@ -920,10 +920,12 @@ unseen corpus.
 
 ## Context vs progressive reader reconstruction (experimental)
 
-The Matcher Test Lab's **Reader strategies — context vs progressive (A/B test)**
+The Matcher Test Lab's **Reader strategies — context vs progressive (2-score A/B test)**
 mode runs the two methods on the **same uploaded cases** and uses the existing
-quantised local DistilGPT2 language model and the same four candidate wordings:
-original punctuation, no punctuation/word, "and", or "but".
+quantised local DistilGPT2 language model. Each candidate boundary is scored
+only twice, once for "and" and once for "but". Original punctuation is retained
+in JavaScript unless the top score passes both the minimum score and winner
+margin thresholds. "Keep" is NOT a third neural-model score.
 
 - **Original-context**: score each potential join against preceding original
   text, independently of how earlier joins scored.
@@ -949,7 +951,7 @@ original punctuation, no punctuation/word, "and", or "but".
   provide \`expected_boundaries: [{"offset": 23, "choice": "but"}]\`
   on an uploaded case, where \`offset\` points to the exact **zero-based
   punctuation character** in the original text and \`choice\` is
-  \`keep\`, \`nothing\`, \`and\`, or \`but\`. Accuracy is calculated only for
+  \`keep\`, \`and\`, or \`but\`. Accuracy is calculated only for
   labelled boundaries that were eligible for analysis; unmatched label
   counts are also shown.
 - **Synthetic reference pilot**: upload
@@ -958,9 +960,45 @@ original punctuation, no punctuation/word, "and", or "but".
   and face-validity check, **not evidence of accuracy in real readers**.
   The private 1,000-case real-world corpus is not included in the repository.
 
-The four options measure the local model's preferred *wording*, not actual
+The two scored alternatives measure the local model's preferred *wording*, not actual
 human agreement and not causality. Even a grammatically natural "but" or "and"
 does not by itself establish an argument or the cause of an event. Human
 reader annotations are needed before any claim that one strategy is more
 accurate at predicting interpretation.
+
+## Fitting the two-score reader decision thresholds (no model retraining)
+
+The **Reader punctuation** and **Reader strategies** modes now show two numeric
+controls: **Minimum AND/BUT log score** (default -3.5) and **Minimum winner
+margin** (default 0.2). Both control a JavaScript decision:
+
+1. Score the **and** reconstruction and the **but** reconstruction, using the
+   same local causal LM and unchanged source offsets.
+2. Choose the higher score **only if** it meets the minimum log score and its
+   lead over the other exceeds the minimum margin.
+3. Otherwise, **keep** the original punctuation. Keeping it is an abstention
+   about reconstruction, NOT a judgement that no discourse relationship exists.
+
+These scores are average continuation token **log probabilities**, not
+calibrated "confidence percentages". The defaults are provisional.
+
+To tune thresholds, upload an **annotated** dataset with the existing
+\`expected_boundaries:[{"offset":23,"choice":"but"}]\` format. The lab
+automatically grid-searches threshold pairs over the **cached two candidate
+scores**, optimising class-balanced recall on the training split. A fifth of
+cases (not individual boundaries) are reserved as a holdout; the report shows
+both held-out performance of the fitted thresholds and the default thresholds.
+**No extra neural model calls or training weights are needed** for the search.
+Click **Use fitted thresholds on next run** to populate the controls.
+
+The unlabelled 1,000-example real-world dataset can benchmark runtime and
+candidate distributions but **cannot establish an optimal accuracy threshold**:
+it contains no reader-reference labels. The repository's synthetic 54-case
+reference dataset contains 102 author-chosen labels, **not independently
+validated human-reader interpretations**. Fitting on that dataset is a
+smoke test, not proof of real-world accuracy.
+
+When changing thresholds for the **progressive** strategy, rerun the benchmark:
+earlier decisions affect later contexts, so simply reclassifying its saved
+scores cannot reproduce the new reconstruction sequence.
 
