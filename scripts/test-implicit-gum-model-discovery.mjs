@@ -22,6 +22,10 @@ assert.ok(called>=2);
 assert.ok(good.candidates>=1);
 assert.equal(good.modelErrors,0);
 assert.equal(good.sourceOffsetsValid,true);
+assert.ok(good.checkerAssessed>=1);
+assert.equal(Object.values(good.checkerLabels).reduce((a,b)=>a+b,0),
+ good.checkerAssessed);
+
 assert.doesNotMatch(JSON.stringify(good),/committee recorded|local publications|agency received/);
 const none=await evaluateModelDiscovery(rows,async()=>({
  entailment:.1,neutral:.85,contradiction:.05
