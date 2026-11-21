@@ -123,7 +123,8 @@ for(const group of Object.values(evaluated)){
  assert.equal(group.paired.records.length,250);
 }
 const fakeGold=dataset.map(row=>({...row,gold:row.gold==="and"?"but":"and"}));
-const changedLabels=compareStrategies(train,fakeGold,clean,meta);
+const cleanWithSameAlteredGold=clean.map((row,i)=>({...row,gold:fakeGold[i].gold}));
+const changedLabels=compareStrategies(train,fakeGold,cleanWithSameAlteredGold,meta);
 for(const name of Object.keys(evaluated)){
  assert.deepEqual(evaluated[name].original.predictions.map(x=>x.predicted),
   changedLabels[name].original.predictions.map(x=>x.predicted),
