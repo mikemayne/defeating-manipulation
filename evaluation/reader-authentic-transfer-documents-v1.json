@@ -1,0 +1,176 @@
+{
+  "version": "reader-authentic-transfer-docs-v1",
+  "sourceRevision": "1d999e5a0327ecb83015007774f6a9be23ecbc41",
+  "partitionSeed": "20261121-reader-authentic-1",
+  "format": "train/test/review source-document partitions fixed before any model inference",
+  "genres": {
+    "academic": {
+      "train": [
+        "GUM_academic_eegimaa",
+        "GUM_academic_exposure",
+        "GUM_academic_enjambment"
+      ],
+      "test": [
+        "GUM_academic_implicature",
+        "GUM_academic_epistemic"
+      ],
+      "review": [
+        "GUM_academic_thrones"
+      ]
+    },
+    "bio": {
+      "train": [
+        "GUM_bio_holt",
+        "GUM_bio_fillmore",
+        "GUM_bio_emperor"
+      ],
+      "test": [
+        "GUM_bio_jespersen",
+        "GUM_bio_enfant"
+      ],
+      "review": [
+        "GUM_bio_jerome"
+      ]
+    },
+    "conversation": {
+      "train": [
+        "GUM_conversation_vet",
+        "GUM_conversation_risk",
+        "GUM_conversation_artist"
+      ],
+      "test": [
+        "GUM_conversation_blacksmithing",
+        "GUM_conversation_christmas"
+      ],
+      "review": [
+        "GUM_conversation_lambada"
+      ]
+    },
+    "court": {
+      "train": [
+        "GUM_court_way",
+        "GUM_court_fire",
+        "GUM_court_insanity"
+      ],
+      "test": [
+        "GUM_court_crash",
+        "GUM_court_property"
+      ],
+      "review": [
+        "GUM_court_mitigation"
+      ]
+    },
+    "essay": {
+      "train": [
+        "GUM_essay_merit",
+        "GUM_essay_dividends",
+        "GUM_essay_sexlife"
+      ],
+      "test": [
+        "GUM_essay_public",
+        "GUM_essay_fear"
+      ],
+      "review": [
+        "GUM_essay_ghost"
+      ]
+    },
+    "fiction": {
+      "train": [
+        "GUM_fiction_pag",
+        "GUM_fiction_oversite",
+        "GUM_fiction_claus"
+      ],
+      "test": [
+        "GUM_fiction_honour",
+        "GUM_fiction_sneeze"
+      ],
+      "review": [
+        "GUM_fiction_frankenstein"
+      ]
+    },
+    "letter": {
+      "train": [
+        "GUM_letter_wiki",
+        "GUM_letter_marcie3",
+        "GUM_letter_marcie2"
+      ],
+      "test": [
+        "GUM_letter_zora",
+        "GUM_letter_sacco"
+      ],
+      "review": [
+        "GUM_letter_conference"
+      ]
+    },
+    "news": {
+      "train": [
+        "GUM_news_imprisoned",
+        "GUM_news_questionnaire",
+        "GUM_news_flag"
+      ],
+      "test": [
+        "GUM_news_afghan",
+        "GUM_news_stampede"
+      ],
+      "review": [
+        "GUM_news_expo"
+      ]
+    },
+    "reddit": {
+      "train": [
+        "GUM_reddit_introverts",
+        "GUM_reddit_space",
+        "GUM_reddit_pandas"
+      ],
+      "test": [
+        "GUM_reddit_card",
+        "GUM_reddit_callout"
+      ],
+      "review": [
+        "GUM_reddit_stroke"
+      ]
+    },
+    "vlog": {
+      "train": [
+        "GUM_vlog_appearance",
+        "GUM_vlog_mermaid",
+        "GUM_vlog_hiking"
+      ],
+      "test": [
+        "GUM_vlog_exams",
+        "GUM_vlog_london"
+      ],
+      "review": [
+        "GUM_vlog_wine"
+      ]
+    },
+    "interview": {
+      "train": [
+        "GUM_interview_licen",
+        "GUM_interview_hill",
+        "GUM_interview_shalev"
+      ],
+      "test": [
+        "GUM_interview_brotherhood",
+        "GUM_interview_messina"
+      ],
+      "review": [
+        "GUM_interview_dungeon"
+      ]
+    },
+    "textbook": {
+      "train": [
+        "GUM_textbook_sociology",
+        "GUM_textbook_anthropology",
+        "GUM_textbook_evoethics"
+      ],
+      "test": [
+        "GUM_textbook_artwork",
+        "GUM_textbook_stats"
+      ],
+      "review": [
+        "GUM_textbook_entrepreneurship"
+      ]
+    }
+  }
+}
