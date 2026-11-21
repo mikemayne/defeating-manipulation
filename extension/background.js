@@ -39,7 +39,7 @@ browser.runtime.onMessage.addListener(async (m, sender) => {
    e.data.error ? reject(Error(e.data.error)) : resolve(e.data.matches);
   };
   w.addEventListener("message", listener);
-  w.postMessage({ type: "match", id, text: m.text });
+  w.postMessage({ type: "match", id, text: m.text, headings: m.headings });
  });
 });
 

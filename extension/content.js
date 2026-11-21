@@ -38,14 +38,16 @@
  }
 
  let tooltip;
- const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", RED = "#dc2626", ORANGE = "#f59e0b";
- const colour = technique => technique.category === "Scrutiny" ? ORANGE :
+ const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", RED = "#dc2626", ORANGE = "#f59e0b", YELLOW = "#eab308";
+ const colour = ({ method, technique }) => method === "headline_classifier" ? YELLOW :
+   technique.category === "Scrutiny" ? ORANGE :
    technique.category === "Inconsistency" ? RED :
    technique.category === "Positive" ? GREEN :
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
  // A positive phrase must never visually cover an overlapping negative
  // finding; this is not yet a concealed-manipulation judgement.
- const priority = match => match.kind === "scrutiny" ? 0 :
+ const priority = match => match.method === "headline_classifier" ? 0.5 :
+   match.kind === "scrutiny" ? 0 :
    match.kind === "argument_support" ? 5 :
    match.kind === "inconsistency" ? 4 :
    (match.kind === "spelling" || match.kind === "vocabulary") ? 3.5 :
@@ -175,7 +177,18 @@
      nodes.push({ node, start, end, textStart: text.length, textEnd: text.length + end - start });
      text += node.nodeValue.slice(start, end);
    }
-   return text.trim() ? { text, nodes } : null;
+   const headingSpans = new Map();
+   for (const entry of nodes) {
+     const heading = entry.node.parentElement.closest("h1,h2,h3,h4,h5,h6");
+     if (!heading) continue;
+     const span = headingSpans.get(heading);
+     if (span) span.end = entry.textEnd;
+     else headingSpans.set(heading, { start: entry.textStart, end: entry.textEnd });
+   }
+   const headings = Array.from(headingSpans, ([heading, span]) => ({
+     ...span, text: heading.innerText.trim()
+   })).filter(heading => heading.text);
+   return text.trim() ? { text, nodes, headings } : null;
  }
  function underline(snapshot, matches) {
    // Resolve overlaps before wrapping DOM ranges; red has priority.
@@ -203,7 +216,7 @@
        range.setEnd(entry.node, end);
        const mark = document.createElement("mark");
        mark.setAttribute(MARK, match.technique.id);
-       mark.style.cssText = `background:transparent;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-color:${colour(match.technique)};text-decoration-thickness:3px;text-underline-offset:3px;cursor:help;`;
+       mark.style.cssText = `background:transparent;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-color:${colour(match)};text-decoration-thickness:3px;text-underline-offset:3px;cursor:help;`;
        mark.addEventListener("mouseenter", () => show(mark, match));
        mark.addEventListener("focus", () => show(mark, match));
        mark.tabIndex = 0;
@@ -216,7 +229,7 @@
    if (!snapshot) return;
    setBusy(true);
    try {
-     const matches = await browser.runtime.sendMessage({ type: "DM_MATCH", text: snapshot.text });
+     const matches = await browser.runtime.sendMessage({ type: "DM_MATCH", text: snapshot.text, headings: snapshot.headings });
      // Keep captured text nodes intact until the new underlines are applied.
      underline(snapshot, matches || []);
      window.getSelection()?.removeAllRanges();
