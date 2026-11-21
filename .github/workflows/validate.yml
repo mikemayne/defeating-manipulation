@@ -38,6 +38,11 @@ jobs:
           node --check scripts/build-reader-holdout-v1.mjs
           node --check scripts/evaluate-reader-holdout-v1.mjs
           node scripts/test-reader-holdout-v1.mjs
+      - name: Test semantic similarity and NLI fusion
+        run: |
+          node --check extension/src/reader-semantic-signals.mjs
+          node --check scripts/evaluate-reader-semantic-fusion.mjs
+          node scripts/test-reader-semantic-fusion.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
