@@ -65,3 +65,5 @@ _site/
 /evaluation/reader-contrast-review-instructions-v1.md
 /evaluation/reader-contrast-review-reconciled-v1.json
 /evaluation/reader-contrast-review-disagreements-v1.tsv
+/evaluation/reader-contrast-reviewer-a-v1.txt
+/evaluation/reader-contrast-reviewer-b-v1.txt
