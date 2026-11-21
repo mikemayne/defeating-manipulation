@@ -45,3 +45,8 @@ _site/
 /evaluation/reader-gum-review-sheet-a-v1.json
 /evaluation/reader-gum-review-sheet-b-v1.json
 /evaluation/reader-gum-training-only-but-cv-v1.json
+/evaluation/reader-gum-contrast-supplement-v1.json
+/evaluation/reader-gum-contrast-expansion-v1.json
+/evaluation/reader-gum-contrast-expansion-lm-v1.json
+/evaluation/reader-gum-contrast-expansion-sem-v1.json
+/evaluation/reader-gum-contrast-expansion-cv-v1.json
