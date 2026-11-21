@@ -175,14 +175,26 @@ function softmax(scores){
  const sum=weights.reduce((a,b)=>a+b,0);
  return weights.map(x=>x/sum);
 }
-export function trainFusion(train,keys,{balanced=false}={}){
+export function trainFusion(train,keys,{balanced=false,classWeights=null}={}){
  if(train.length<6)throw Error("Too few training rows");
+ // Class weights are an optional EXPERIMENTAL loss multiplier. An omitted
+ // value is exactly equivalent to the established frozen classifier.
+ // Keys are explicit; model output can never supply executable weight code.
+ if(classWeights!==null){
+  if(!classWeights||typeof classWeights!=="object"||
+   Array.isArray(classWeights)||Object.keys(classWeights).some(
+    k=>!LABELS.includes(k))||
+   LABELS.some(k=>!Number.isFinite(classWeights[k])||
+    classWeights[k]<=0||classWeights[k]>10))
+   throw Error("Invalid fixed class weights");
+ }
  const scale=makeScaler(train,keys);
  const vectors=train.map(scale);
  const classes=LABELS.map(g=>train.filter(r=>r.gold===g).length);
  if(classes.some(x=>x===0))throw Error("Training fold has no examples of a class");
- const sampleWeights=train.map(r=>balanced?
-  Math.sqrt(train.length/(LABELS.length*classes[LABELS.indexOf(r.gold)])):1);
+ const sampleWeights=train.map(r=>(balanced?
+  Math.sqrt(train.length/(LABELS.length*classes[LABELS.indexOf(r.gold)])):1)*
+  (classWeights?classWeights[r.gold]:1));
  const denominator=sampleWeights.reduce((s,x)=>s+x,0);
  const width=keys.length+1;
  const weights=LABELS.map(()=>new Float64Array(width));
