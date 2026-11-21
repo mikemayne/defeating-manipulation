@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "term": "muslamic",
+      "suggestions": [
+        "Islamic",
+        "Muslim"
+      ],
+      "nextWordReplacements": {
+        "law": "Islamic",
+        "laws": "Islamic",
+        "religion": "Islamic",
+        "religions": "Islamic",
+        "tradition": "Islamic",
+        "traditions": "Islamic",
+        "practice": "Islamic",
+        "practices": "Islamic",
+        "architecture": "Islamic",
+        "people": "Muslim",
+        "person": "Muslim",
+        "men": "Muslim",
+        "women": "Muslim",
+        "man": "Muslim",
+        "woman": "Muslim"
+      },
+      "signals": [
+        "possible_engagement_bait",
+        "potentially_derogatory"
+      ]
+    },
+    {
+      "term": "muzzlim",
+      "suggestions": [
+        "Muslim"
+      ],
+      "replacement": "Muslim",
+      "signals": [
+        "possible_engagement_bait",
+        "potentially_derogatory"
+      ]
+    },
+    {
+      "term": "islamik",
+      "suggestions": [
+        "Islamic"
+      ],
+      "replacement": "Islamic",
+      "signals": [
+        "possible_engagement_bait",
+        "potentially_derogatory"
+      ]
+    },
+    {
+      "term": "edumacation",
+      "suggestions": [
+        "education"
+      ],
+      "replacement": "education",
+      "signals": [
+        "possible_engagement_bait"
+      ]
+    }
+  ]
+}

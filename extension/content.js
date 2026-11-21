@@ -48,7 +48,7 @@
  const priority = match => match.kind === "scrutiny" ? 0 :
    match.kind === "argument_support" ? 5 :
    match.kind === "inconsistency" ? 4 :
-   match.kind === "spelling" ? 3.5 :
+   (match.kind === "spelling" || match.kind === "vocabulary") ? 3.5 :
    match.technique.category === "Concealed manipulation" ? 3 :
    match.technique.category === "Positive" ? 1 : 2;
  const eligible = node => node.parentElement &&
@@ -59,7 +59,13 @@
    const title = document.createElement("strong");
    title.textContent = technique.title;
    const summary = document.createElement("div");
-   summary.textContent = match.kind === "spelling" ?
+   summary.textContent = match.kind === "vocabulary" ?
+     "Possible correction bait" +
+       (match.vocabularySignals?.includes("potentially_derogatory") ?
+         " and potentially derogatory wording" : "") +
+       ". Suggested reading: " + (match.suggestions || []).join(" / ") +
+       ". Context matters; intention is unknown." :
+     match.kind === "spelling" ?
      "Possible correction bait. The spelling may be accidental; correcting or insulting an author can create unnecessary engagement." :
      match.kind === "punctuation" ?
      "Unusual or repeated punctuation may draw attention. It can be accidental or expressive; no intent is inferred." :
@@ -96,6 +102,7 @@
    const strength = document.createElement("div");
    strength.textContent = match.kind === "scrutiny" ? "Review suggested, not a detected pattern" :
      match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
+     match.kind === "vocabulary" ? "Nonstandard vocabulary: weak signal, intent unknown" :
      match.kind === "punctuation" ? "Punctuation: weak attention signal, intent unknown" :
      match.kind === "inconsistency" ? "Inference: possible contradiction" :
      match.kind === "concealed" ? "Relationship: positive wording followed by pressure (check context)" :
@@ -112,7 +119,7 @@
    link.style.color = "#7ee4e7";
    tooltip.append(title, summary, strength);
    if (match.kind !== "inconsistency" && match.kind !== "concealed" &&
-       match.kind !== "scrutiny") tooltip.append(link);
+       match.kind !== "scrutiny" && match.kind !== "vocabulary") tooltip.append(link);
    const r = mark.getBoundingClientRect();
    tooltip.style.display = "block";
    tooltip.style.left = Math.min(Math.max(8, r.left), Math.max(8, innerWidth - 350)) + "px";

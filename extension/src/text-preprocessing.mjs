@@ -2,8 +2,9 @@
 // Formatting is normalised for inference; misspellings receive tentative
 // signals, not guesses about the writer's intentions.
 import {findSpellingCandidates} from "./spelling-bait.mjs";
-export const PREPROCESS_VERSION="reader-preprocess-v1";
-const PROTECTED=/(?:\x60\x60\x60[\s\S]*?\x60\x60\x60|\x60[^\x60\n]*\x60|https?:\/\/[^\s<>]+|www\.[^\s<>]+|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b)/giu;
+import {findVocabularyCandidates} from "./nonstandard-vocabulary.mjs";
+export const PREPROCESS_VERSION="reader-preprocess-v2";
+const PROTECTED=/(?:\x60\x60\x60[\s\S]*?\x60\x60\x60|\x60[^\x60\n]*\x60|https?:\/\/[^\s<>]+|www\.[^\s<>]+|\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b|\b[a-z0-9-]+\.(?:com|org|net|co\.uk|gov\.uk|io|uk|dev)\b)/giu;
 const REPEAT=/[!?]{2,}|\.{4,}/gu;
 const WORD_REPEAT=/\b([a-z]{3,})[ \t]+\1\b/giu;
 const PREFIX=/\b(anti|pan|pre|post|non|re|co|ex|well|long|self|pro|techno)\s+-\s+(?=[a-z]{3})/giu;
@@ -46,13 +47,29 @@ export function preprocessText(source,{spellchecker=null,correctSpelling=true,
  replaceMatches(SPACE_PUNCT,m=>m[0].trimStart(),"spacing before punctuation");
  replaceMatches(SPACE_DOT,()=>".","spacing before full stop");
  replaceMatches(SPACE_RUN,()=>" ","repeated horizontal spaces");
+ const vocabulary=findVocabularyCandidates(source,{
+  maxFindings:maxSpelling,isProtected
+ });
+ for(const item of vocabulary){
+  const {start,end,original,suggestions}=item;
+  const correction=correctSpelling?item.correction:null;
+  if(correction)proposed.push({
+   kind:"nonstandard_vocabulary",start,end,replacement:correction,
+   reason:"curated vocabulary normalisation"
+  });
+  flag("nonstandard_vocabulary",start,end,{
+   suggestions,correction,vocabularySignals:item.signals,
+   attentionSignal:true,confidence:"curated",
+   reason:item.reason
+  });
+ }
  const words=new Map();
- for(const candidate of maxSpelling===0?[]:
-   findSpellingCandidates(source,spellchecker,maxSpelling)){
+ for(const candidate of maxSpelling<=vocabulary.length?[]:
+   findSpellingCandidates(source,spellchecker,maxSpelling-vocabulary.length)){
   const {start,end,original,suggestions}=candidate;
   // Dictionary matches inside inline code and quoted URLs must not be
   // promoted into text signals, even if spelling-bait is called separately.
-  if(isProtected(start,end))continue;
+  if(isProtected(start,end)||vocabulary.some(item=>overlap(item,{start,end})))continue;
   const word=original.toLowerCase();
   words.set(word,(words.get(word)||0)+1);
   const correction=correctSpelling?candidate.correction:null;
@@ -102,6 +119,8 @@ export function preprocessText(source,{spellchecker=null,correctSpelling=true,
   signals:{
    formattingArtifacts:flags.filter(x=>x.kind==="formatting_artifact").length,
    spellingCandidates:flags.filter(x=>x.kind==="spelling_candidate").length,
+   nonstandardVocabularyCandidates:flags.filter(x=>x.kind==="nonstandard_vocabulary").length,
+   vocabularyNormalisations:edits.filter(x=>x.kind==="nonstandard_vocabulary").length,
    punctuationAnomalies:flags.filter(x=>x.kind==="punctuation_anomaly").length,
    repeatedWords:flags.filter(x=>x.kind==="repeated_word").length,
    repeatedMisspellings:flags.filter(x=>x.repeatedMisspelling).length,

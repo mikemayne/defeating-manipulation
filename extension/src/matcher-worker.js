@@ -91,6 +91,18 @@ self.addEventListener("message", async event => {
    preprocessing.flags.filter(f => f.kind === "spelling_candidate")
     .map(f => ({start:f.analysisStart,end:f.analysisEnd,technique:spellingTechnique,
      kind:"spelling",method:"spellcheck",score:0.5})) : [];
+  const vocabularyTechnique = {
+   id:"nonstandard_vocabulary",title:"Nonstandard vocabulary: possible bait",
+   category:"Attention and memory",
+   summary:"Nonstandard wording may attract corrections or frame a subject. Intention is unknown."
+  };
+  const vocabularyMatches = preprocessing.flags
+   .filter(f => f.kind === "nonstandard_vocabulary")
+   .map(f => ({start:f.analysisStart,end:f.analysisEnd,
+    technique:vocabularyTechnique,kind:"vocabulary",
+    method:"curated_vocabulary",score:0.5,
+    original:f.original,suggestions:f.suggestions,
+    vocabularySignals:f.vocabularySignals}));
   const punctuationMatches = punctuationHookFindings(preprocessing);
   const nearMisses = [];
   const matches = await matchText(analysedText, { techniques, rules, prototypes,
@@ -133,7 +145,7 @@ self.addEventListener("message", async event => {
    // A broken NLI model cannot erase successful blue, green or turquoise matches.
    console.warn("Local argument analysis unavailable:", error);
   }
-  const recognised = [...matches, ...spellingMatches, ...punctuationMatches,
+  const recognised = [...matches, ...spellingMatches, ...vocabularyMatches, ...punctuationMatches,
    ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues];
   const scrutiny = findScrutinyWarnings(analysedText, {
    // Orthographic flags are weak signals, not confirmed techniques.
