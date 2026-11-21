@@ -304,7 +304,12 @@ function tsv(rows){
   "and_plausible","but_plausible","expectation_violation","explicit_contradiction",
   "interpretation","notes"
  ];
- const value=x=>tidy(x).replace(/\t/gu," ").replace(/\r?\n/gu," ");
+ // TSV may be opened in Excel/Sheets. Prevent sentence text starting
+ // with formula operators from being interpreted as spreadsheet formulas.
+ const value=x=>{
+  const cleaned=tidy(x).replace(/\t/gu," ").replace(/\r?\n/gu," ");
+  return /^[=+\-@]/u.test(cleaned)?"'"+cleaned:cleaned;
+ };
  return [header.join("\t"),...rows.map(r=>header.map(name=>value(r[name])).join("\t"))].join("\n")+"\n";
 }
 export function reviewSheet(result){
