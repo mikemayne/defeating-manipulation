@@ -4,7 +4,6 @@
 import { extractReaderPairs } from "./reader-interpretation.mjs";
 import {selectJoin,DEFAULT_JOIN_THRESHOLDS,validateJoinThresholds} from "./reader-join-thresholds.mjs";
 import {explicitBoundaryConnector,normaliseConnectorCandidate} from "./reader-connector-normalisation.mjs";
-import {simplifyDiscourseForModel} from "./reader-discourse-simplifier.mjs";
 export const BOUNDARY_CHOICES=Object.freeze([{id:"and",label:"and"},{id:"but",label:"but"}]);
 const MAX_PAIRS=2,MAX_STRATEGY_PAIRS=8,MAX_CONTEXT_LEFT=130,MAX_CONTEXT_RIGHT=95;
 // Titles, initials, common inline abbreviations, decimals and ellipses are
@@ -59,8 +58,7 @@ function windowAround(source,probe){
  if(!before||!after)return null;
  return {before,after,punctuation:source.slice(start,end)};
 }
-export function buildBoundaryChoices(source,probe,{simplifyForModel=false}={}){
- if(typeof simplifyForModel!=="boolean")throw Error("simplifyForModel must be boolean");
+export function buildBoundaryChoices(source,probe){
  const context=windowAround(source,probe);
  if(!context)return [];
  const {before,after}=context;
@@ -70,25 +68,19 @@ export function buildBoundaryChoices(source,probe,{simplifyForModel=false}={}){
   const normalised=normaliseConnectorCandidate(id,after);
   const completion=" "+id+" "+normalizeRightStart(normalised.text);
   return {id,label,analysisText:before+completion,
-   // Only the model inputs are simplified; original text and offsets are never
-   // rewritten, and reporting still shows the natural reconstruction.
-   prefix:simplifyForModel?simplifyDiscourseForModel(before).text:before,
-   completion:simplifyForModel?simplifyDiscourseForModel(completion).text:completion,
-   originalPrefix:before,originalCompletion:completion,
-   simplifyForModel,removedConnector:normalised.removedConnector};
+   prefix:before,completion,removedConnector:normalised.removedConnector};
  });
 }
 export async function rankBoundaryChoices(source,scoreContinuation,{
  maxPairs=MAX_PAIRS,
  minScore=DEFAULT_JOIN_THRESHOLDS.minScore,
- minMargin=DEFAULT_JOIN_THRESHOLDS.minMargin,
- simplifyForModel=false
+ minMargin=DEFAULT_JOIN_THRESHOLDS.minMargin
 }={}){
  if(typeof scoreContinuation!=="function")return [];
  const thresholds=validateJoinThresholds({minScore,minMargin});
  const probes=extractBoundaryProbes(source,{maxPairs}),out=[];
  for(const probe of probes){
-  const choices=buildBoundaryChoices(source,probe,{simplifyForModel});
+  const choices=buildBoundaryChoices(source,probe);
   if(choices.length!==2)continue;
   const explicit=explicitBoundaryConnector(source,probe);
   const originalWindow=
@@ -130,7 +122,6 @@ export async function rankBoundaryChoices(source,scoreContinuation,{
    ...decision,
    relationship:choice==="keep"?null:choice==="and"?"addition":"contrast",
    decisionSource:"language_model",explicitConnector:null,
-   modelInputSimplified:simplifyForModel,
    punctuationAction:choice==="keep"?"keep":"analysis_only_replace",
    analysisText:choice==="keep"?originalWindow:
     ranked.find(x=>x.id===choice)?.analysisText??null,
