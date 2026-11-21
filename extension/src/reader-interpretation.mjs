@@ -1,3 +1,5 @@
+import {structuralContrastEvidence} from "./reader-structural-contrast.mjs";
+import {leadingExplicitConnector} from "./reader-connector-normalisation.mjs";
 // Experimental reader-interpretation probe, separate from argument correctness.
 // Original source text and character offsets are immutable. The NLI scores are
 // uncalibrated evidence for competing interpretations, NOT reader percentages.
@@ -136,6 +138,23 @@ export async function scoreReaderInterpretations(source,scorePair,{
  const pairs=extractReaderPairs(source,{maxPairs});
  const outputs=[];
  for(const pair of pairs){
+  // Preserve the priority of explicit discourse markers. Otherwise an
+  // inspectable subject-property or explanation-qualification relation can
+  // establish a contrast without first requiring an NLI contradiction.
+  const structural=structuralContrastEvidence(pair.first.text,pair.second.text);
+  if(structural.contrastCandidate&&
+   !leadingExplicitConnector(pair.second.text)){
+   outputs.push({
+    first:pair.first,second:pair.second,
+    boundaryKind:pair.boundaryKind,boundaryOffset:pair.boundaryOffset,
+    interpretation:"contrast",proposedConnector:"but",
+    topModelOption:null,topModelScore:null,margin:null,options:[],
+    scoreType:"structural_relation_rule",
+    decisionSource:"structural_contrast_cue",structuralCue:structural.kind,
+    humanAgreementMeasured:false
+   });
+   continue;
+  }
   const probe="Statement one: "+pair.first.text+"\nStatement two: "+pair.second.text;
   const options=[];
   for(const relation of READER_RELATIONS){
