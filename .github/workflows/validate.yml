@@ -48,6 +48,12 @@ jobs:
         run: node scripts/test-scrutiny-signals.mjs
       - name: Test explicit connector normalisation
         run: node scripts/test-reader-connector-normalisation.mjs
+      - name: Test structural subject and qualification contrast relations
+        run: |
+          node --check extension/src/reader-structural-contrast.mjs
+          node --check extension/src/reader-boundary-scorer.mjs
+          node --check extension/src/reader-interpretation.mjs
+          node scripts/test-reader-structural-contrast.mjs
       - name: Test masked infill benchmark without model downloads
         run: |
           node --check extension/src/reader-mask-infill.mjs
