@@ -92,6 +92,42 @@ inference. It writes `evaluation/reader-gum-pilot-audit.json` (gitignored,
 because source excerpts can carry third-party text). These are diagnostics,
 not a tuned benchmark. Do not change the label mapping to maximise a score.
 
+## Offline diagnostic: feature ablations (existing caches only)
+
+The current GUM pilot's first, unmodified score was **30/250 = 12.0%**
+on provisional mapped AND/BUT labels. The separate 1000-example synthetic
+holdout scored **743/1000 = 74.3%**. These are not comparable three-class
+real-world accuracy measurements: the GUM sample has **no KEEP gold**.
+
+After observing the large shift in the masked-BERT period feature, evaluate
+fixed alternative feature sets **without running any additional model**:
+
+```powershell
+git pull
+node scripts/evaluate-reader-gum-ablations.mjs
+```
+
+The script refits the same balanced linear fusion on the previous 402
+synthetic examples, separately reporting GUM AND/BUT mapped-label recall,
+predicted KEEP counts, synthetic-v2 recall in all three classes, and
+family-grouped development cross-validation. It verifies the **original
+30/250 and 743/1000 baselines** before comparing variants. Output remains
+local at `evaluation/reader-gum-feature-ablations.json`.
+
+Variants remove `bertPeriod`, both `bertPeriod` and `bertHyphen`, all
+masked-BERT punctuation features, or the NLI scores; other variants retain
+only GPT2 + semantic similarity + lexical features, or semantic + lexical
+features. These are **post-hoc diagnostics** of an inspected sample, NOT a
+new independently valid accuracy estimate. Do not select a production
+configuration solely from their observed GUM improvement.
+
+The browser's new `text-preprocessing.mjs` stage operates on a cleaned
+working copy and emits weak spelling/punctuation signals while preserving
+source offsets. **It does not modify the existing GUM model-score caches**.
+A future normalised-text comparison needs its own separately versioned
+source and score caches; substituting new text into old cached scores is not
+a valid experiment.
+
 ## Current benchmark
 
 The v2 corpus (reader-holdout-v2.json, generated from reader-holdout-v2-seeds.tsv) is **1,000 synthetic, developer-labelled** sentence-boundary examples from **100 scenario families** in 10 domains. The classes are nearly balanced: KEEP 333, AND 334, BUT 333. Ten cases share a scenario family, so these are **not 1,000 independent observations**.
