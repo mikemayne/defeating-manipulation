@@ -23,6 +23,8 @@ jobs:
         run: node scripts/test-build.mjs
       - name: Test explicit connector normalisation
         run: node scripts/test-reader-connector-normalisation.mjs
+      - name: Test opt-in discourse simplification
+        run: node scripts/test-reader-discourse-simplifier.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
