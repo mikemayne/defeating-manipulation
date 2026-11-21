@@ -26,6 +26,7 @@ const GROUPS={
 const DEFAULTS={
  join:path.join(root,"evaluation/reader-join-cross-validation.json"),
  mask:path.join(root,"evaluation/reader-mask-infill.json"),
+ dataset:path.join(root,"evaluation/reader-strategy-synthetic-reference.json"),
  output:path.join(root,"evaluation/reader-fusion.json"),
  folds:5,seed:20261121,maxErrors:5
 };
@@ -34,13 +35,13 @@ const percent=x=>x==null?"n/a":(x*100).toFixed(1)+"%";
 const rowKey=(id,offset)=>JSON.stringify([id,offset]);
 function options(argv){
  const o={...DEFAULTS};
- const files=new Map([["--join","join"],["--mask","mask"],["--output","output"]]);
+ const files=new Map([["--join","join"],["--mask","mask"],["--dataset","dataset"],["--output","output"]]);
  const nums=new Map([["--folds","folds"],["--seed","seed"],["--max-errors","maxErrors"]]);
  for(let i=0;i<argv.length;i++){
   const key=argv[i];
   if(key==="--help"||key==="-h"){
    console.log("Usage: node scripts/evaluate-reader-fusion.mjs "+
-    "[--join PATH] [--mask PATH] [--output PATH] [--folds N] [--seed N] [--max-errors N]\n"+
+    "[--join PATH] [--mask PATH] [--dataset PATH] [--output PATH] [--folds N] [--seed N] [--max-errors N]\n"+
     "No model download. Inputs must contain complete scored predictions. "+
     "Production thresholds unchanged.");process.exit(0);
   }
@@ -56,7 +57,9 @@ function options(argv){
  if(o.folds<2||o.folds>20||o.maxErrors<0||o.maxErrors>100)throw Error("Bad folds/max-errors");
  return o;
 }
-export function alignModelScores(join,mask){
+export function alignModelScores(join,mask,dataset){
+ if(!Array.isArray(dataset)||!dataset.length)throw Error("Missing reference dataset");
+ const sources=new Map(dataset.map(c=>[c.id,c.text]));
  if(!Array.isArray(join?.predictions)||!Array.isArray(mask?.predictions))
   throw Error("Both JSON files must have a predictions array");
  if(mask.model!=="Xenova/distilbert-base-uncased"||
@@ -87,6 +90,8 @@ export function alignModelScores(join,mask){
    seen.add(key);
    const target=maskRows.get(key);
    if(!target)throw Error("Missing masked prediction "+key);
+   if(target.source!==sources.get(item.id))
+    throw Error("Masked input differs from reference dataset at "+key);
    if(target.gold!==gold.get(b.punctuationStart))
     throw Error("Different ground truth label at "+key);
    if(target.source?.[target.offset]!==b.punctuation)
@@ -99,7 +104,7 @@ export function alignModelScores(join,mask){
    const best=Math.max(m.and,m.but);
    rows.push({
     id:item.id,offset:b.punctuationStart,gold:target.gold,
-    explicit:target.source && /./u.test(target.source)?null:null,
+    explicit:null,
     source:target.source,
     features:{
      gptQuality:Math.max(gAnd,gBut),
@@ -253,10 +258,11 @@ export function publishedBaseline(rows,section){
 }
 async function main(){
  const o=options(process.argv.slice(2));
- const [join,mask]=await Promise.all([o.join,o.mask].map(p=>
+ const [join,mask,datasetJson]=await Promise.all([o.join,o.mask,o.dataset].map(p=>
   readFile(p,"utf8").then(JSON.parse)));
+ const dataset=Array.isArray(datasetJson)?datasetJson:datasetJson.cases;
  const {explicitBoundaryConnector}=await import("../extension/src/reader-connector-normalisation.mjs");
- const rows=assignExplicitRules(alignModelScores(join,mask),
+ const rows=assignExplicitRules(alignModelScores(join,mask,dataset),
   (source,offset)=>explicitBoundaryConnector(source,{
    punctuationStart:offset,punctuationEnd:offset+1
   }));
