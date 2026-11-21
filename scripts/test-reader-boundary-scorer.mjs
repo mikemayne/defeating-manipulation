@@ -5,17 +5,15 @@ import {
 import { continuationLogScore } from "../extension/src/reader-language-model.mjs";
 
 // All examples are synthetic; no private benchmark data is committed.
-assert.deepEqual(BOUNDARY_CHOICES.map(x=>x.id),["keep","nothing","and","but"]);
+assert.deepEqual(BOUNDARY_CHOICES.map(x=>x.id),["and","but"]);
 const sample="He promised lower taxes. He raised them.";
 const probes=extractBoundaryProbes(sample);
 assert.equal(probes.length,1);
 assert.equal(sample.slice(probes[0].punctuationStart,probes[0].punctuationEnd),".");
 const variants=buildBoundaryChoices(sample,probes[0]);
-assert.deepEqual(variants.map(x=>x.id),["keep","nothing","and","but"]);
-assert.equal(variants[0].analysisText,sample);
-assert.equal(variants[1].analysisText,"He promised lower taxes He raised them.");
-assert.equal(variants[2].analysisText,"He promised lower taxes and he raised them.");
-assert.equal(variants[3].analysisText,"He promised lower taxes but he raised them.");
+assert.deepEqual(variants.map(x=>x.id),["and","but"]);
+assert.equal(variants[0].analysisText,"He promised lower taxes and he raised them.");
+assert.equal(variants[1].analysisText,"He promised lower taxes but he raised them.");
 const before=sample;
 let calls=0;
 const scored=await rankBoundaryChoices(sample,async (_prefix,completion)=>{
@@ -24,13 +22,16 @@ const scored=await rankBoundaryChoices(sample,async (_prefix,completion)=>{
   completion.startsWith(".")?-3:-4;
 });
 assert.equal(sample,before,"Source text must not be rewritten");
-assert.equal(calls,4,"Four candidate continuations for one punctuation boundary");
+assert.equal(calls,2,"Exactly two candidate model calls per boundary");
 assert.equal(scored[0].choice,"but");
 assert.equal(scored[0].uncertain,false);
 assert.equal(scored[0].humanAgreementMeasured,false);
-assert.equal(scored[0].candidates.length,4);
+assert.equal(scored[0].candidates.length,2);
 assert.equal(scored[0].scoreType,"mean_conditional_token_log_probability");
 assert.equal((await rankBoundaryChoices(sample,async()=>-2))[0].choice,"keep");
+assert.equal((await rankBoundaryChoices(sample,async(_a,completion)=>
+ completion.startsWith(" but ")?-5:-5.5))[0].choice,"keep",
+ "Raw language-model scores too weak should default KEEP");
 assert.equal((await rankBoundaryChoices(sample,async()=>-2))[0].uncertain,true,
  "Near-ties must retain original punctuation");
 // Titles and common abbreviations are deterministic parser work, not model input.
@@ -44,7 +45,7 @@ let titleCalls=0;
 await rankBoundaryChoices(title,async()=>{
  titleCalls++;return -2;
 });
-assert.equal(titleCalls,4,"Mr. is never a neural-model candidate");
+assert.equal(titleCalls,2,"Mr. is never a neural-model candidate");
 for(const abbr of [
  "Mrs. Smith arrived. She was late.",
  "Ms. Smith arrived. She was late.",
