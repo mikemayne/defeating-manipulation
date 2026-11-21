@@ -54,9 +54,22 @@ function positiveCategorySubject(text,property){
  if(["other","local","different"].includes(toks[i]))i++;
  if(i>=toks.length||singular(toks[i])!==property)return false;
  if(toks.slice(0,i).some(w=>["no","non","not","without"].includes(w)))return false;
- // Do not conflate a class of people with a named property of some object.
+ // A singular category used attributively before another noun is NOT
+ // the referent (e.g. 'the cellist section', 'the American flag').
+ // Require the singular subject head to be followed by a finite verb;
+ // plural group heads are allowed to be verbless discourse fragments.
+ const next=toks[i+1];
+ if(next&&singular(toks[i])===toks[i]&&
+  !["is","are","was","were","has","have","had","will","would",
+   "can","could","should","may","might","must","does","did",
+   "went","came","sang","stood","met","left","said","wrote",
+   "spoke","told"].includes(next)&&
+  !/(?:ed|ing|es)$/u.test(next))return false;
+ // Domain nouns immediately after a putative plural head are generally
+ // constructions rather than category referents.
  if(["people","policy","politics","flag","car","cars","music","history",
-  "culture","food","party","school","language","company","companies","film"].includes(toks[i+1]))return false;
+  "culture","food","party","school","language","company","companies",
+  "film","section","departments"].includes(next))return false;
  return true;
 }
 function otherPositiveMember(text,property,leftSubject){
