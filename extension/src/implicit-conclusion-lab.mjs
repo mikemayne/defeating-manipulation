@@ -23,7 +23,7 @@ export function validateImplicitConclusionCases(cases){
 export function summarizeImplicitConclusionCases(rows){
  const out={cases:rows.length,withCandidates:0,eligibleQuestions:0,
   withSuggestions:0,suggestions:0,accepted:0,rejected:0,returnedNone:0,errors:0,
-  skipped:0,labelled:0,tp:0,fp:0,fn:0,tn:0};
+  skipped:0,labelled:0,labelledProvided:0,unscoredModelErrors:0,tp:0,fp:0,fn:0,tn:0};
  for(const item of rows){
   const candidates=item.candidates||[],attempts=item.attempts||[];
   out.eligibleQuestions+=candidates.length;
@@ -38,6 +38,11 @@ export function summarizeImplicitConclusionCases(rows){
    else if(attempt.status==="model_error")out.errors++;
   }
   if(typeof item.expected_implicit==="boolean"){
+   out.labelledProvided++;
+   if(attempts.some(a=>a.status==="model_error")){
+    out.unscoredModelErrors++;
+    continue;
+   }
    out.labelled++;
    if(item.expected_implicit&&item.predicted_implicit)out.tp++;
    else if(!item.expected_implicit&&item.predicted_implicit)out.fp++;
