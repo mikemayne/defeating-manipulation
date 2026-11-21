@@ -14,6 +14,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { selectJoin, DEFAULT_JOIN_THRESHOLDS } from '../extension/src/reader-join-thresholds.mjs';
+import { explicitBoundaryConnector } from '../extension/src/reader-connector-normalisation.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LABELS = ['keep', 'and', 'but'];
@@ -109,7 +110,11 @@ function extractRows(predictions, texts) {
       matched.add(b.punctuationStart);
       rows.push({ id: item.id, offset: b.punctuationStart,
         gold: label, and: a, but, keep: isScore(b.keepScore) ? b.keepScore : null,
-        punctuation: b.punctuation, text: source });
+        punctuation: b.punctuation, text: source,
+        explicitConnector: explicitBoundaryConnector(source,{
+          punctuationStart:b.punctuationStart,
+          punctuationEnd:b.punctuationStart+b.punctuation.length
+        }) });
     }
     for (const [offset, label] of gold)
       if (!matched.has(offset)) unmatched.push({ id: item.id, offset, label, reason: 'unmatched label' });
@@ -191,7 +196,7 @@ function errorDetails(rows, choose) {
     }];
   });
 }
-function crossValidate(rows, folds, seed, mode) {
+function crossValidate(rows, folds, seed, mode, {explicit = false} = {}) {
   const uniqueIDs = shuffle([...new Set(rows.map(x => x.id))], seed);
   if (uniqueIDs.length < folds) throw Error('Not enough distinct cases for number of folds');
   const idsByFold = Array.from({ length: folds }, () => new Set());
@@ -200,12 +205,18 @@ function crossValidate(rows, folds, seed, mode) {
   for (let i = 0; i < folds; i++) {
     const test = rows.filter(row => idsByFold[i].has(row.id));
     const train = rows.filter(row => !idsByFold[i].has(row.id));
-    const fit = fitGrid(train, mode);
-    const choose = r => mode === 'two' ? predictTwo(r, fit.params) : predictThree(r, fit.params);
+    // Pre-existing explicit markers need no model inference. Fit the model
+    // thresholds only on genuinely implicit relations, using training cases.
+    const trainModel = explicit ? train.filter(r => !r.explicitConnector) : train;
+    if (trainModel.length < 3) throw Error('Too few implicit training boundaries');
+    const fit = fitGrid(trainModel, mode);
+    const choose = r => explicit && r.explicitConnector ? r.explicitConnector.choice :
+      mode === 'two' ? predictTwo(r, fit.params) : predictThree(r, fit.params);
     const metric = measure(test, choose);
     perFold.push({ fold: i + 1, trainCases: new Set(train.map(r => r.id)).size,
       testCases: idsByFold[i].size, trainBoundaries: train.length,
-      testBoundaries: test.length, thresholds: fit.params,
+      testBoundaries: test.length, explicitMarkers: test.filter(r=>r.explicitConnector).length,
+      thresholds: fit.params,
       train: { accuracy: fit.metric.accuracy, balancedAccuracy: fit.metric.balancedAccuracy },
       holdout: { accuracy: metric.accuracy, balancedAccuracy: metric.balancedAccuracy } });
     all.push(...test.map(r => ({ ...r, fold: i + 1, predicted: choose(r) })));
@@ -213,7 +224,8 @@ function crossValidate(rows, folds, seed, mode) {
   if (all.length !== rows.length) throw Error('Cross-validation omitted rows');
   const combined = measure(all, r => r.predicted);
   const errors = errorDetails(all, r => r.predicted);
-  return { mode, folds: perFold, combined, errors,
+  return { mode, explicit, explicitMarkerCount:explicit?rows.filter(r=>r.explicitConnector).length:0,
+    folds: perFold, combined, errors,
     predictions: all.map(r => ({ id: r.id, offset: r.offset, fold: r.fold, gold: r.gold, predicted: r.predicted })) };
 }
 async function scoreKeepCandidates(predictions, dataset) {
@@ -259,7 +271,8 @@ function printMatrix(m) {
   console.log(`  Accuracy ${pct(m.accuracy)}; macro recall ${pct(m.balancedAccuracy)} (class-balanced)`);
 }
 function printCV(cv, maxErrors) {
-  console.log(`\n${cv.mode === 'two' ? 'TWO scores: AND/BUT + KEEP fallback' : 'THREE scores: KEEP/AND/BUT'} — ${cv.folds.length}-fold CV`);
+  console.log(`\n${cv.mode === 'two' ? 'TWO scores: AND/BUT + KEEP fallback' : 'THREE scores: KEEP/AND/BUT'}${cv.explicit ? ' + explicit connector rules' : ''} — ${cv.folds.length}-fold CV`);
+  if(cv.explicit)console.log(`  Explicit connectors: ${cv.explicitMarkerCount} boundaries; others use fitted model thresholds.`);
   for (const f of cv.folds)
     console.log(`  Fold ${f.fold}: ${f.testCases} unseen cases, ${f.testBoundaries} boundaries, ` +
       `accuracy ${pct(f.holdout.accuracy)}, balanced ${pct(f.holdout.balancedAccuracy)}, ` +
@@ -294,6 +307,8 @@ async function main() {
   if (unmatched.length) console.warn('WARNING: Unmatched labels in output JSON');
   const two = crossValidate(rows, o.folds, o.seed, 'two');
   printCV(two, o.maxErrors);
+  const twoRules = crossValidate(rows, o.folds, o.seed, 'two', {explicit:true});
+  printCV(twoRules, o.maxErrors);
   const defaults = measure(rows, r => predictTwo(r, DEFAULT_JOIN_THRESHOLDS));
   const keepBaseline = measure(rows, () => 'keep');
   console.log('\nBaselines across the same examples:');
@@ -303,12 +318,16 @@ async function main() {
   const three = hasKeep ? crossValidate(rows, o.folds, o.seed, 'three') : null;
   if (three) printCV(three, o.maxErrors);
   else console.log('\nThree-score CV skipped: rerun with --score-keep to score original punctuation.');
+  const threeRules = hasKeep ? crossValidate(rows, o.folds, o.seed, 'three', {explicit:true}) : null;
+  if (threeRules) printCV(threeRules, o.maxErrors);
   const summary = {
     description: 'Five-fold case-separated CV. Every reported CV prediction is held out of its fold\'s threshold fitting.',
     caveat: 'Gold choices are developer-authored; NOT human-reader accuracy. Tiny folds have high variance.',
     sourceScores: o.scores, sourceDataset: o.dataset, seed: o.seed,
     caseCount: new Set(rows.map(r => r.id)).size, boundaryCount: rows.length,
     unmatched, twoScore: two, threeScore: three,
+    ruleAssistedTwoScore:twoRules, ruleAssistedThreeScore:threeRules,
+    ruleCaveat:'Explicit cue rules were designed after looking at synthetic test errors. These results are exploratory and are NOT an independent validation.',
     baselines: { defaults, alwaysKeep: keepBaseline },
     predictions, // Keep model score cache so reruns require no inference.
   };
