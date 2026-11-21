@@ -92,6 +92,54 @@ inference. It writes `evaluation/reader-gum-pilot-audit.json` (gitignored,
 because source excerpts can carry third-party text). These are diagnostics,
 not a tuned benchmark. Do not change the label mapping to maximise a score.
 
+## Paired preprocessing evaluation: formatting-only GUM
+
+The live browser worker now keeps the original text and creates a cleaned
+analysis copy with mapped character offsets. Before attributing a score change
+to this stage, measure its effect on identical, previously scored GUM pairs.
+
+```powershell
+git pull
+node scripts/evaluate-reader-gum-preprocessing.mjs --preview
+node scripts/evaluate-reader-gum-preprocessing.mjs --max-errors 5
+```
+
+The preview validates that all 250 original targets survive normalization
+with exact punctuation-offset round trips, without loading any neural models.
+The full run uses your previously cached original GUM results and the old
+402 synthetic training scores. It calculates **new local LM, MiniLM and
+NLI scores on the cleaned text** and checkpoints them into separate files:
+
+- `evaluation/reader-gum-preprocessed-lm-v1.json`
+- `evaluation/reader-gum-preprocessed-semantic-v1.json`
+- `evaluation/reader-gum-preprocessing-comparison-v1.json` (results)
+
+Existing original GUM caches remain untouched. The scorer checks the original
+30/250, 102/250 and 101/250 baselines before computing the corrected inputs.
+It compares the same previously defined classifier configurations:
+
+- Full linear + lexical fusion
+- Without BERT period and hyphen signals
+- Without any BERT punctuation signals, retaining BERT contrast
+
+The first test deliberately runs the `text-preprocessing.mjs` stage in
+**formatting-only mode** (`maxSpelling=0`, `correctSpelling=false`) to isolate
+GUM tokenization, including split apostrophes and common split hyphens.
+Potentially ambiguous dictionary corrections and curated vocabulary
+replacements are excluded for now. Their flags remain available in the
+browser extension, where they are weak *attention cues*, never proof of
+manipulative intention or evidence that the original GUM writer erred.
+
+The output separates accuracy on text that changed and text that did not,
+reports changes in AND and BUT recall, and lists paired corrected/regressed
+predictions. Original GUM label definitions and source-document identifiers
+are preserved. Since GUM has no labelled KEEP negatives, this cannot establish
+real-world three-class accuracy. Since the pilot has already been examined,
+the comparison is post-hoc and cannot be used as an independent estimate.
+
+To replay entirely from caches afterward, run the same command with
+`--offline`. Do not commit any cached GUM excerpts or model scores.
+
 ## Current benchmark
 
 The v2 corpus (reader-holdout-v2.json, generated from reader-holdout-v2-seeds.tsv) is **1,000 synthetic, developer-labelled** sentence-boundary examples from **100 scenario families** in 10 domains. The classes are nearly balanced: KEEP 333, AND 334, BUT 333. Ten cases share a scenario family, so these are **not 1,000 independent observations**.
