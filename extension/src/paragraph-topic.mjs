@@ -26,7 +26,7 @@ export async function paragraphTopicFindings(text, matchOpening, generate) {
   if (!hooks.length) continue;
   const prompt = [
    "Does the second sentence endorse the judgment or reaction expressed or suggested by the first?",
-   "Answer yes if it validates that reaction or states the invited conclusion.",
+   "Answer yes for direct agreement. Answer implied yes if the second sentence takes that judgment for granted or suggests the same conclusion indirectly.",
    "Answer no if it challenges the judgment, merely adds information, or changes subject.",
    "If the relationship is ambiguous, answer unclear.",
    "First: " + opening,
@@ -40,7 +40,7 @@ export async function paragraphTopicFindings(text, matchOpening, generate) {
    console.warn("Local paragraph confirmation check unavailable:", error);
    break;
   }
-  if (!/^yes[.!]?$/i.test(answer.trim())) continue;
+  if (!/^(?:yes|implied yes)[.!]?$/i.test(answer.trim())) continue;
   const hook = hooks.reduce((best, item) => item.score > best.score ? item : best);
   const start = line.index + line[0].indexOf(paragraph);
   findings.push({...hook, kind: "paragraph_topic", start, end: start + paragraph.length});
