@@ -1,6 +1,7 @@
 import { pipeline, env } from "@huggingface/transformers";
 import nspell from "nspell";
-import { findSpellingBait } from "./spelling-bait.mjs";
+import {preprocessText,remapFindings,punctuationHookFindings,
+ analysisRangeForOriginal} from "./text-preprocessing.mjs";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
 import { findInconsistencies } from "./consistency.mjs";
@@ -81,19 +82,27 @@ self.addEventListener("message", async event => {
  if (data.type !== "match") return;
  try {
   await initialising;
-  const spellingMatches = findSpellingBait(data.text, spellchecker,
-   techniques.find(item => item.id === "deliberate_errors"));
+  // Preserve the original selection and its offsets. Normalisation applies
+  // ONLY to the working analysis copy; user-visible spans are mapped back.
+  const preprocessing = preprocessText(data.text,{spellchecker});
+  const analysedText = preprocessing.analysisText;
+  const spellingTechnique = techniques.find(item => item.id === "deliberate_errors");
+  const spellingMatches = spellingTechnique ?
+   preprocessing.flags.filter(f => f.kind === "spelling_candidate")
+    .map(f => ({start:f.analysisStart,end:f.analysisEnd,technique:spellingTechnique,
+     kind:"spelling",method:"spellcheck",score:0.5})) : [];
+  const punctuationMatches = punctuationHookFindings(preprocessing);
   const nearMisses = [];
-  const matches = await matchText(data.text, { techniques, rules, prototypes,
+  const matches = await matchText(analysedText, { techniques, rules, prototypes,
    embed: extractor ? embed : null,
    onNearMiss: signal => nearMisses.push(signal) });
   // Separate green pass: do not let it compete with the established negative
   // technique rankings or suppress blue matches. Relationship analysis comes later.
-  const positiveMatches = await matchPositiveText(data.text, {
+  const positiveMatches = await matchPositiveText(analysedText, {
    prototypes: positivePrototypes,
    embed: extractor ? embed : null
   });
-  const concealedMatches = findConcealedPatterns(data.text, {
+  const concealedMatches = findConcealedPatterns(analysedText, {
    positiveMatches, negativeMatches: matches
   });
   // Use one memoised local NLI scorer for both red analyses.
@@ -108,9 +117,9 @@ self.addEventListener("message", async event => {
   let inconsistencies = [], argumentIssues = [], argumentDiagnostics = [];
   try {
    stage("Checking statements for contradictions…");
-   inconsistencies = await findInconsistencies(data.text, memoScore);
+   inconsistencies = await findInconsistencies(analysedText, memoScore);
    stage("Checking whether conclusions follow from the evidence…");
-   const assessed = await analyseArguments(data.text, memoScore, {
+   const assessed = await analyseArguments(analysedText, memoScore, {
     includeImplicit:true,
     includeModelDiscovery:true,
     onDiagnostic: info => argumentDiagnostics.push(info),
@@ -124,12 +133,16 @@ self.addEventListener("message", async event => {
    // A broken NLI model cannot erase successful blue, green or turquoise matches.
    console.warn("Local argument analysis unavailable:", error);
   }
-  const recognised = [...matches, ...spellingMatches, ...positiveMatches,
-   ...concealedMatches, ...inconsistencies, ...argumentIssues];
-  const scrutiny = findScrutinyWarnings(data.text, {
-   findings: recognised, nearMisses, argumentDiagnostics
+  const recognised = [...matches, ...spellingMatches, ...punctuationMatches,
+   ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues];
+  const scrutiny = findScrutinyWarnings(analysedText, {
+   findings: recognised, nearMisses, argumentDiagnostics,
+   preprocessingFlags: preprocessing.flags
   });
-  self.postMessage({ id: data.id, matches: [...recognised, ...scrutiny] });
+  const mapped = remapFindings(preprocessing,[...recognised,...scrutiny]);
+  self.postMessage({id:data.id,matches:mapped,
+   analysisSignals:preprocessing.signals});
+
  } catch (error) {
   self.postMessage({ id: data.id, error: String(error?.message || error) });
  }
