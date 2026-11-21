@@ -50,7 +50,7 @@ assert.equal(summary.labelled,2);
 assert.equal(summary.correctContext,1);
 assert.equal(summary.correctProgressive,1);
 assert.equal(summary.changedContext,1);
-assert.equal(summary.modelCalls,12);
+assert.equal(summary.modelCalls,6);
 const tie=await compareReaderStrategies(source,async()=>-2);
 assert.equal(tie.length,2);
 assert.ok(tie.every(x=>x.context.uncertain && x.progressive.uncertain));
