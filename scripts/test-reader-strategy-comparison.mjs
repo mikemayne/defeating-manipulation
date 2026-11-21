@@ -35,8 +35,8 @@ assert.equal(out[1].contextChangedByEarlierJoins,true);
 assert.ok(out[1].progressive.candidates.some(c=>c.analysisText.includes(
  "but he raised them")), "Second join should carry previous inferred but");
 assert.equal(out[1].punctuationStart,39);
-assert.equal(calls.length,12,
- "Identical first-boundary candidates cached: 4+4+4, not 16");
+assert.equal(calls.length,6,
+ "Identical first-boundary candidates cached: 2+2+2, not 8");
 const summary=summarizeStrategyComparison([{
  id:"a",text:source,boundaries:out,
  expected_boundaries:[
@@ -50,7 +50,7 @@ assert.equal(summary.labelled,2);
 assert.equal(summary.correctContext,1);
 assert.equal(summary.correctProgressive,1);
 assert.equal(summary.changedContext,1);
-assert.equal(summary.modelCalls,12);
+assert.equal(summary.modelCalls,6);
 const tie=await compareReaderStrategies(source,async()=>-2);
 assert.equal(tie.length,2);
 assert.ok(tie.every(x=>x.context.uncertain && x.progressive.uncertain));

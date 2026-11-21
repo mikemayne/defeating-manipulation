@@ -60,7 +60,7 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <h2 id="setup-title">Test setup</h2>
 <div class="controls">
 <label>Matching method
-<select id="mode"><option value="rules">Rules only (fast)</option><option value="ai">Rules + local AI (slower)</option><option value="consistency">Inconsistencies — local NLI</option><option value="argument_paragraph">Arguments — single paragraph (structure + optional NLI)</option><option value="reader_inference">Reader interpretation — local NLI probe (experimental)</option><option value="reader_boundary">Reader punctuation — keep / nothing / and / but (experimental LM)</option><option value="reader_compare">Reader strategies — context vs progressive (A/B test)</option><option value="positive_rules">Positive patterns — rules only</option><option value="positive_ai">Positive patterns — rules + local AI</option><option value="concealed_rules">Concealed manipulation — relationships (rules)</option><option value="concealed_ai">Concealed manipulation — local AI + relationships</option></select></label>
+<select id="mode"><option value="rules">Rules only (fast)</option><option value="ai">Rules + local AI (slower)</option><option value="consistency">Inconsistencies — local NLI</option><option value="argument_paragraph">Arguments — single paragraph (structure + optional NLI)</option><option value="reader_inference">Reader interpretation — local NLI probe (experimental)</option><option value="reader_boundary">Reader punctuation — AND / BUT, default KEEP (2 model scores)</option><option value="reader_compare">Reader strategies — context vs progressive (2-score A/B test)</option><option value="positive_rules">Positive patterns — rules only</option><option value="positive_ai">Positive patterns — rules + local AI</option><option value="concealed_rules">Concealed manipulation — relationships (rules)</option><option value="concealed_ai">Concealed manipulation — local AI + relationships</option></select></label>
 <label>Dataset
 <select id="source"><option value="generated">Generate labelled variants</option><option value="uploaded">Upload labelled JSON / JSONL</option></select></label>
 <label id="count-control">Number of tests
@@ -69,6 +69,10 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <input id="seed" type="number" min="0" max="4294967295" step="1" value="2026"></label>
 <label id="file-control" hidden>Local labelled file
 <input id="file" type="file" accept=".json,.jsonl,application/json"></label>
+<label id="join-score-control" hidden>Minimum AND/BUT log score
+<input id="join-min-score" type="number" min="-20" max="0" step="0.05" value="-3.5"></label>
+<label id="join-margin-control" hidden>Minimum winner margin
+<input id="join-min-margin" type="number" min="0" max="5" step="0.05" value="0.2"></label>
 </div>
 <div class="actions"><button id="run">Run tests</button><button class="secondary" id="stop" disabled>Stop</button></div>
 <p class="note" id="dataset-note">Generates cases lazily from manually labelled seeds, with line breaks, neutral text and combined techniques. Repetitions test stability; they do not create independent evidence of accuracy.</p>
@@ -83,7 +87,8 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <h2 id="results-title">Results</h2>
 <div id="stats" class="stats"></div>
 <p id="summary-note" class="note"></p>
-<div class="actions"><button id="copy" disabled>Copy failure details</button><button class="secondary" id="download-predictions" hidden disabled>Download predictions JSON</button><span id="copied" role="status" aria-live="polite"></span></div>
+<div class="actions"><button id="apply-fitted-thresholds" class="secondary" hidden disabled>Use fitted thresholds on next run</button><button id="copy" disabled>Copy failure details</button><button class="secondary" id="download-predictions" hidden disabled>Download predictions JSON</button><span id="copied" role="status" aria-live="polite"></span></div>
+<p id="threshold-fit-note" class="note" hidden></p>
 <p id="failure-note" class="note"></p>
 <section id="real-breakdown" hidden>
 <h2>Results by real-world sampling strategy</h2>

@@ -9,6 +9,7 @@ import { analyseArguments } from "./argument-analysis.mjs";
 import { scoreReaderInterpretations, validateReaderCases } from "./reader-interpretation.mjs";
 import { rankBoundaryChoices } from "./reader-boundary-scorer.mjs";
 import { createBoundaryLanguageScorer } from "./reader-language-model.mjs";
+import {fitJoinThresholds,validateJoinThresholds} from "./reader-join-thresholds.mjs";
 import { compareReaderStrategies,validateStrategyCases,summarizeStrategyComparison } from "./reader-strategy-comparison.mjs";
 import { validateArgumentParagraphCases, inspectArgumentStructure } from "../../evaluation/argument-structure-evaluator.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
@@ -142,7 +143,9 @@ function buildSummary(data, elapsedMs, cancelled) {
   boundaryPairs:data.boundaryMode?data.boundaryPairs:null,
   boundaryCasesWithPairs:data.boundaryMode?data.boundaryCasesWithPairs:null,
   compareMode:data.compareMode,
-  strategyComparison:data.compareMode?summarizeStrategyComparison(data.predictions):null
+  strategyComparison:data.compareMode?summarizeStrategyComparison(data.predictions):null,
+  joinThresholds:data.boundaryMode||data.compareMode?data.joinThresholds:null,
+  joinThresholdFit:data.boundaryMode||data.compareMode?fitJoinThresholds(data.predictions):null
  };
 }
 async function startRun(message) {
@@ -152,6 +155,7 @@ async function startRun(message) {
  const begin = performance.now(), id = message.runId;
  try {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
+  const joinThresholds=validateJoinThresholds(message.joinThresholds);
   const consistency = mode === "consistency";
   const argumentMode = mode === "argument_paragraph";
   const readerMode = mode === "reader_inference";
@@ -202,7 +206,7 @@ async function startRun(message) {
    realTracks: {}, failures: [],
    paragraphStages: argumentMode && !unlabelledScan ? { structure:{total:0,exact:0},
     reasoning:{total:0,exact:0} } : null,
-   unlabelledScan, readerMode, boundaryMode, compareMode, predictions: [], predictionCounts: {},
+   unlabelledScan, readerMode, boundaryMode, compareMode, joinThresholds, predictions: [], predictionCounts: {},
    readerCounts:{}, readerPairs:0, readerCasesWithPairs:0,
    readerExistingParserCases:0,
    boundaryCounts:{}, boundaryPairs:0, boundaryCasesWithPairs:0 };
@@ -215,7 +219,7 @@ async function startRun(message) {
     generatedCase(seeds, i, Number(seed) || 2026);
    let matches, argumentAssessments = [], argumentDiagnostics = [], structureCheck = null;
    if(compareMode){
-    const comparisons=await compareReaderStrategies(item.text,boundaryLanguageScorer);
+    const comparisons=await compareReaderStrategies(item.text,boundaryLanguageScorer,joinThresholds);
     const modelCalls=comparisons.length?comparisons.at(-1).neuralCallsForCase:0;
     data.predictions.push({
      id:item.id,text:item.text,
@@ -233,7 +237,7 @@ async function startRun(message) {
     continue;
    }
    if(boundaryMode){
-    const boundaries=await rankBoundaryChoices(item.text,boundaryLanguageScorer);
+    const boundaries=await rankBoundaryChoices(item.text,boundaryLanguageScorer,joinThresholds);
     data.boundaryPairs+=boundaries.length;
     if(boundaries.length)data.boundaryCasesWithPairs++;
     for(const b of boundaries)
@@ -241,6 +245,7 @@ async function startRun(message) {
       (data.boundaryCounts[b.uncertain?"uncertain (kept original)":b.choice]||0)+1;
     data.predictions.push({
      id:item.id,text:item.text,
+     expected_boundaries:item.expected_boundaries||[],
      source_url:item.source_url||null,
      source_annotation:item.source_annotation||null,
      boundaries

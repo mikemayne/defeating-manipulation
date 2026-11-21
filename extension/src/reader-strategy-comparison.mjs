@@ -1,26 +1,15 @@
 // Compare two ways to infer a punctuation join over a growing paragraph.
 // A: context-aware, independently score each boundary using original context.
 // B: progressive, score the same boundary after applying earlier joins.
-// Both use the identical four alternatives and the same local language model;
+// Both use the same two scored conjunctions and JS KEEP fallback;
 // no original source text is modified and neither method asserts causality.
 import { extractBoundaryProbes, buildBoundaryChoices } from "./reader-boundary-scorer.mjs";
-const CHOICES=new Set(["keep","nothing","and","but"]);
+import {selectJoin,DEFAULT_JOIN_THRESHOLDS,validateJoinThresholds} from "./reader-join-thresholds.mjs";
+const CHOICES=new Set(["keep","and","but"]);
 const MAX_PAIRS=8;
 const LEFT_CONTEXT_CHARS=130;
 const LOWERCASE_AFTER_JOIN=/^(He|She|It|They|We|You|The|A|An|This|That|Those|These|There|His|Her|Their|Our|Your)\b/u;
 
-function choose(options,minMargin){
- const sorted=options.filter(o=>Number.isFinite(o.score))
-  .sort((a,b)=>b.score-a.score);
- const best=sorted[0],runner=sorted[1];
- const margin=best&&runner?best.score-runner.score:null;
- const uncertain=!best||!runner||margin<minMargin;
- const choice=uncertain?"keep":best.id;
- return {
-  choice,uncertain,margin,leadingModelChoice:best?.id??null,
-  candidates:options
- };
-}
 
 function reconstructedPrefix(source,to,edits){
  if(!edits.length)return source.slice(0,to);
@@ -37,7 +26,7 @@ function reconstructedPrefix(source,to,edits){
 function proposedEdits(source,boundary,choice){
  if(!CHOICES.has(choice)||choice==="keep")return [];
  const start=boundary.punctuationStart,end=boundary.punctuationEnd;
- const replacement=choice==="nothing"?"":" "+choice;
+ const replacement=" "+choice;
  const edits=[{start,end,value:replacement}];
  if(choice==="and"||choice==="but"){
   let pos=end;
@@ -83,8 +72,11 @@ export function validateStrategyCases(items){
 }
 
 export async function compareReaderStrategies(source,scoreContinuation,{
- maxPairs=MAX_PAIRS,minMargin=.12
+ maxPairs=MAX_PAIRS,
+ minScore=DEFAULT_JOIN_THRESHOLDS.minScore,
+ minMargin=DEFAULT_JOIN_THRESHOLDS.minMargin
 }={}){
+ const thresholds=validateJoinThresholds({minScore,minMargin});
  if(typeof source!=="string"||typeof scoreContinuation!=="function")
   return [];
  const bound=Number.isSafeInteger(maxPairs)?Math.min(MAX_PAIRS,Math.max(0,maxPairs)):0;
@@ -107,13 +99,13 @@ export async function compareReaderStrategies(source,scoreContinuation,{
   for(const c of candidates)
    ranked.push({id:c.id,score:await scoreCandidate(c.prefix,c.completion),
     analysisText:c.prefix+c.completion});
-  return choose(ranked,minMargin);
+  return {...selectJoin(ranked,thresholds),candidates:ranked};
  }
  for(const boundary of boundaries){
   if(boundary.punctuationStart<lastEnd||!validatePairText(source,boundary))
    continue;
   const candidates=buildBoundaryChoices(source,boundary);
-  if(candidates.length!==4)continue;
+  if(candidates.length!==2)continue;
   // Both strategies receive the SAME right-hand continuation and the SAME
   // short context budget. Only past inferred edits can differ.
   const originalPrefix=candidates[0].prefix;

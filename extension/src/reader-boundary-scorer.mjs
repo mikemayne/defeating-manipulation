@@ -2,12 +2,8 @@
 // punctuation boundary. This is NOT an argument verdict or reader-percentage
 // estimate. Every candidate is analysis-only; source offsets stay untouched.
 import { extractReaderPairs } from "./reader-interpretation.mjs";
-export const BOUNDARY_CHOICES=Object.freeze([
- {id:"keep",label:"Original punctuation"},
- {id:"nothing",label:"No punctuation or inserted word"},
- {id:"and",label:"and"},
- {id:"but",label:"but"}
-]);
+import {selectJoin,DEFAULT_JOIN_THRESHOLDS,validateJoinThresholds} from "./reader-join-thresholds.mjs";
+export const BOUNDARY_CHOICES=Object.freeze([{id:"and",label:"and"},{id:"but",label:"but"}]);
 const MAX_PAIRS=2,MAX_STRATEGY_PAIRS=8,MAX_CONTEXT_LEFT=130,MAX_CONTEXT_RIGHT=95;
 // Titles, initials, common inline abbreviations, decimals and ellipses are
 // handled deterministically by extractReaderPairs. They must never be
@@ -68,45 +64,43 @@ export function buildBoundaryChoices(source,probe){
  const joined=normalizeRightStart(after);
  return BOUNDARY_CHOICES.map(({id,label})=>{
   let completion;
-  if(id==="keep")completion=punctuation+" "+after;
-  else if(id==="nothing")completion=" "+after;
-  else completion=" "+id+" "+joined;
+  completion=" "+id+" "+joined;
   return {id,label,analysisText:before+completion,
    prefix:before,completion};
  });
 }
 export async function rankBoundaryChoices(source,scoreContinuation,{
- maxPairs=MAX_PAIRS,minMargin=0.12
+ maxPairs=MAX_PAIRS,
+ minScore=DEFAULT_JOIN_THRESHOLDS.minScore,
+ minMargin=DEFAULT_JOIN_THRESHOLDS.minMargin
 }={}){
  if(typeof scoreContinuation!=="function")return [];
+ const thresholds=validateJoinThresholds({minScore,minMargin});
  const probes=extractBoundaryProbes(source,{maxPairs}),out=[];
  for(const probe of probes){
   const choices=buildBoundaryChoices(source,probe);
-  if(choices.length!==4)continue;
+  if(choices.length!==2)continue;
   const ranked=[];
   for(const c of choices){
    const value=await scoreContinuation(c.prefix,c.completion);
    ranked.push({id:c.id,label:c.label,analysisText:c.analysisText,
     score:Number.isFinite(value)?value:null});
   }
-  const ordered=ranked.filter(x=>Number.isFinite(x.score))
-   .sort((a,b)=>b.score-a.score);
-  const first=ordered[0],second=ordered[1];
-  const margin=first&&second?first.score-second.score:null;
-  // An ambiguous ranking defaults to keeping the original punctuation.
-  const abstained=!first||!second||margin<minMargin;
-  const choice=abstained?"keep":first.id;
+  const decision=selectJoin(ranked,thresholds);
+  const choice=decision.choice;
+  const originalWindow=
+   source.slice(Math.max(0,probe.punctuationStart-MAX_CONTEXT_LEFT),probe.punctuationStart).trimStart()+
+   source.slice(probe.punctuationStart,probe.punctuationEnd)+" "+
+   source.slice(probe.punctuationEnd,Math.min(source.length,probe.punctuationEnd+MAX_CONTEXT_RIGHT)).trim();
   out.push({
    first:probe.first,second:probe.second,
    boundaryKind:probe.boundaryKind,
    punctuation:source.slice(probe.punctuationStart,probe.punctuationEnd),
    punctuationStart:probe.punctuationStart,
    punctuationEnd:probe.punctuationEnd,
-   choice,
-   leadingModelChoice:first?.id??null,
-   margin,
-   uncertain:abstained,
-   analysisText:ranked.find(x=>x.id===choice)?.analysisText??null,
+   ...decision,
+   analysisText:choice==="keep"?originalWindow:
+    ranked.find(x=>x.id===choice)?.analysisText??null,
    candidates:ranked,
    scoreType:"mean_conditional_token_log_probability",
    humanAgreementMeasured:false
