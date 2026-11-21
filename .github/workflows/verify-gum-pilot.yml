@@ -27,5 +27,6 @@ jobs:
           node scripts/build-reader-gum-pilot.mjs
           node scripts/build-reader-gum-pilot.mjs --offline
           node scripts/evaluate-reader-gum-pilot.mjs --preview
+          node scripts/evaluate-reader-gum-preprocessing.mjs --preview
           node scripts/audit-reader-gum-pilot.mjs --source-only
       # Do NOT upload or publish the local third-party source text.
