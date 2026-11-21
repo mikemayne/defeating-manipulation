@@ -92,7 +92,7 @@ assert.equal(out.candidates[0].relation,"expansion.conjunction");
 // Exact replay from cache uses the source text/offset and unchanged prediction.
 const cachedSample={
  id:"cached-sample",offset:text1.length-1,source:text1+" "+text2,
- prompt:"fixture",left:text1.replace(/\\.$/u,""),right:text2,
+ prompt:"fixture",left:text1.slice(0,-1),right:text2,
  gold:"and",predicted:"keep",relation:"expansion.conjunction",
  challenge:"expansion.conjunction",explicit:null,
  features:{},genre:"news",document:"GUM_news_soccer",family:"GUM_news_soccer"
