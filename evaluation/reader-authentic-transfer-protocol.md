@@ -397,6 +397,56 @@ because it would repair four previously inspected false BUT predictions.
 Fresh labels or independently adjudicated AND/BUT ambiguity are needed
 before trusting a new decision rule.
 
+## Subject/category polarity and unexplained-findings contrast cues
+
+The reader now includes two **narrow, deterministic** sentence-pair cues,
+separate from proof of claim correctness or factual verification:
+
+1. **Different subjects, opposing category membership.** A negated
+   membership claim about one referent followed by positive membership
+   of a DIFFERENT referent or category can express contrast without
+   the statements being logically contradictory. Simply encountering
+   a negated word is NOT sufficient.
+2. **A finding whose explanation is explicitly uncertain.** A stated
+   experimental observation can be qualified by a following statement
+   that says its cause or explanation remains unknown, even when the
+   finding itself is not denied.
+
+Both rules are applied only when there is no explicit leading discourse
+connector. They affect the reader's **proposed AND/BUT relationship**,
+not source text or character offsets, and never judge author intention.
+The interpretation mode exposes `structuralCue` and
+`decisionSource=structural_contrast_cue` rather than presenting a
+fictitious neural confidence score. The direct model-only evaluation
+still retains its frozen historical results. The cues can miss
+paraphrases and can over-predict context-sensitive contrast.
+
+Tests use only invented sentences, including challenging negative
+examples (shared category as an adjectival modifier, negation without
+topic shift, same-subject contradiction, unrelated uncertainty). No
+GUM sentence or public post is committed.
+
+**Post-hoc numeric diagnostic**, with existing caches only:
+
+```powershell
+node scripts/evaluate-reader-structural-contrast.mjs --preview
+node scripts/evaluate-reader-structural-contrast.mjs --offline
+```
+
+This replays five document-disjoint folds of the original 308 authentic
+TRAIN cases under the frozen full/no-period fusion variants and four
+synthetic AND mixture sizes. It compares each baseline prediction
+against a hypothetical structural-cue promotion to BUT, and reports
+ONLY counts by category. It does **not** inspect the existing 217-case
+test, the KEEP-review queue, or the 39 future-reserved documents.
+The private, numeric-only JSON report is gitignored.
+
+The previously inspected data contain very few instances matching
+these narrow constructions. Accordingly, any small gain is a
+developer diagnostic, NOT independently validated generalisation.
+The historical GDTB label for some pairs conflicts with the user's
+preferred AND/BUT interpretation; preserve both as separate notions.
+
 ## Blind review of the AND/BUT distinction
 
 Preparation and reconciliation live in the repository. This is a
