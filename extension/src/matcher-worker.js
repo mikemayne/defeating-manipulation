@@ -22,6 +22,16 @@ env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
 
 const MODEL = "Xenova/all-MiniLM-L6-v2";
 let inferenceModelPromise;
+async function scorePair(premise, hypothesis) {
+ // Keep the existing pairwise local NLI scorer independent of text generation.
+ if (!inferenceModelPromise) inferenceModelPromise = createNliScorer()
+  .catch(error => {
+   console.warn("Local consistency model unavailable:", error);
+   return null;
+  });
+ const score = await inferenceModelPromise;
+ return score ? score(premise, hypothesis) : null;
+}
 let extractor, spellchecker, techniques = [], rules = [], prototypes = [], positivePrototypes = [], initialising;
 
 async function embed(texts) {
