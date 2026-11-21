@@ -22,6 +22,15 @@ const COMPLETED=/\b(?:all|every|zero|entire|whole|permanently|eliminated|eradica
 const LOCAL_INTERVENTION=/\b(?:added|installed|replaced|redesigned|repainted|changed|introduced|purchased|bought|launched|started|began|opened|planted|removed|offered|hired|updated|repaired|upgraded)\b/i;
 const STRONG_UNIVERSAL=/\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|entirely|guaranteed|without exception)\b/i;
 const QUOTED_LABEL=/\b(?:used the words|used the phrase|wrote the words|claimed in (?:an?|the) (?:advert|advertisement|marketing)|labelled itself)\b/i;
+// A bounded charitable distribution is not a measurement establishing
+// complete eradication of a broader social condition.
+const LIMITED_DISTRIBUTION=/\b(?:donated|distributed|supplied|handed\s+out|gave\s+away)\b.{0,100}\b(?:\d[\d,.]*|one|two|three|four|five|ten|twenty|fifty|hundred|thousand)\b/i;
+const ENDED_SYSTEMIC_CONDITION=/\b(?:has|have|had)\s+(?:now\s+)?(?:completely\s+)?(?:ended|eradicated|eliminated|solved)\b.{0,85}\b(?:poverty|homelessness|hunger|food\s+insecurity)\b/i;
+const OUTCOME_MEASURED=/\b(?:measured|verified|independently\s+tested|population\s+census|independent\s+study)\b/i;
+// A planned amenity does not demonstrate universal future uptake of
+// a residential development. Demand and the presence of a feature differ.
+const HOUSING_AMENITY=/\b(?:housing|residential)\s+(?:plan|proposal|scheme|development)\b.{0,90}\b(?:includes?|features?|offers?|contains?|has)\b/i;
+const EVERYONE_MOVES=/\b(?:all|every)\s+(?:families|family|households|household|residents|resident)\b.{0,95}\b(?:will|must|are\s+guaranteed\s+to)\s+(?:move|relocate|buy|rent)\b.{0,85}\b(?:development|housing|home|homes|estate|properties|property)\b/i;
 function isHedged(text){
  // "in May" is a calendar month, not the epistemic modal "may".
  // "cannot possibly" is emphatic certainty, not a hedge.
@@ -67,6 +76,18 @@ export function observableOverreach(premise, conclusion, {inferenceMarker=""}={}
     !/\b(?:every|everyone|everybody|all|always|never|nobody|no one|nothing|permanently|entire|guaranteed)\b/i.test(p)&&
     !/\b(?:if|provided|only|necessarily|entails|logically)\b/i.test(p))
   return {label:"unsupported_conclusion",reason:"local_intervention_to_universal_outcome"};
+ // A finite giveaway cannot itself prove a social condition has ended.
+ // Do not infer the mismatch if the premise reports direct outcome evidence.
+ if(LIMITED_DISTRIBUTION.test(p)&&ENDED_SYSTEMIC_CONDITION.test(c)&&
+    !OUTCOME_MEASURED.test(p))
+  return {label:"unsupported_conclusion",
+   reason:"limited_donation_to_claimed_systemic_eradication"};
+ // A feature included in proposed housing cannot imply that every
+ // household will move there, without separately stated uptake evidence.
+ if(HOUSING_AMENITY.test(p)&&EVERYONE_MOVES.test(c)&&
+    !OUTCOME_MEASURED.test(p))
+  return {label:"unsupported_conclusion",
+   reason:"planned_amenity_to_universal_future_adoption"};
  // First wins do not *guarantee* the rest of a season.
  if(/\b(?:first|opening|initial)\s+(?:game|match|contest|trial)\b/i.test(p)&&
     /\b(?:won|success|succeeded|passed)\b/i.test(p)&&
