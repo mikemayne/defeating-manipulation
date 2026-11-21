@@ -49,6 +49,13 @@ jobs:
           node --check extension/src/reader-lexical-features.mjs
           node --check scripts/evaluate-reader-nonlinear-fusion.mjs
           node scripts/test-reader-nonlinear-fusion.mjs
+      - name: Generate and validate frozen 1000-case reader holdout
+        run: |
+          node --check scripts/build-reader-holdout-v2.mjs
+          node --check scripts/evaluate-reader-holdout-v2.mjs
+          node scripts/build-reader-holdout-v2.mjs
+          node scripts/build-reader-holdout-v2.mjs --check
+          node scripts/test-reader-holdout-v2.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
