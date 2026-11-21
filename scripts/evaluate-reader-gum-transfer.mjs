@@ -119,8 +119,14 @@ export function verifyTransferCorpus(data){
  }
  for(const d of trainDocs)if(testDocs.has(d))
   throw Error("Source-document overlap between train/test: "+d);
- if(trainDocs.size!==36||testDocs.size!==24)
-  throw Error("Unexpected train/holdout document partition size");
+ if(data.meta.docCounts?.train!==36||
+    data.meta.docCounts?.test!==24||data.meta.docCounts?.review!==12)
+   throw Error("Pinned manifest reserved-document counts changed");
+ // Some reserved documents have no valid implicit full-sentence GDTB
+ // relations. Count only contributing docs here; never invent examples.
+ if(trainDocs.size<20||testDocs.size<14)
+   throw Error("Too few contributing train/test documents: "+
+    trainDocs.size+"/"+testDocs.size);
  const hash=sha(JSON.stringify(["train","test"].map(role=>
   data[role].map(c=>[c.id,c.document,c.row,c.text,c.expected_boundaries[0].choice]))));
  if(hash!==data.meta.selectionHash)throw Error("Training/test frozen fingerprint mismatch");
@@ -241,9 +247,9 @@ async function main(){
  console.log("AUTHENTIC-TRAINING GUM PILOT: 402 synthetic + "+train.length+
   " authentic train relationships; "+test.length+
   " unseen GUM holdout relationships");
- console.log("Train docs "+documents.trainDocuments.size+
-  ", held-out docs "+documents.testDocuments.size+
-  ", unchanged human GDTB AND/BUT mappings.");
+ console.log("Contributing train docs "+documents.trainDocuments.size+
+  "/36 reserved; held-out docs "+documents.testDocuments.size+
+  "/24 reserved; unchanged human GDTB AND/BUT mappings.");
  console.log("Holdout labels: AND "+test.filter(x=>x.gold==="and").length+
   ", BUT "+test.filter(x=>x.gold==="but").length+
   ", KEEP 0 (NOT TESTED).");
