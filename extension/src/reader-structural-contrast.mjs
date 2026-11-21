@@ -79,7 +79,7 @@ function distinctCategoryMembership(left,right){
 }
 function uncertaintyAboutExplanation(left,right){
  const intro=/^(?:(?:but|however|yet|still|nevertheless)\s*,?\s*)?(?:(?:it|this|that)\s+(?:still\s+)?(?:remains|is|was|remained)\s+(?:unclear|unknown|uncertain)|(?:the|an?|its|their|these)\s+(?:cause|reason|explanation|mechanism|basis|source)s?\b.{0,85}?\b(?:remain|remains|is|are|was|were)\s+(?:unclear|unknown|uncertain))/iu;
- const cause=/\b(?:why|because|explain|explanation|causes?|attribut(?:ed|ion)|account(?:ed|s)?|responsible|underlie|behind|mechanism|reasons?)\b/iu;
+ const cause=/\b(?:why|because|explain|explanation|caus(?:e|es|ed|ing)|attribut(?:ed|ion)|account(?:ed|s)?|responsible|underlie|behind|mechanism|reasons?)\b/iu;
  const observed=/\b(?:observ(?:ed|ation)|found|show(?:ed|n|s)?|report(?:ed|s)?|gain(?:ed|s)?|improv(?:ed|ement|ements)|increas(?:ed|es)?|decreas(?:ed|es)?|results?|benefit(?:s|ted)?|discover(?:ed|y)|perform(?:ed|ance)|stud(?:y|ies))\b/iu;
  return intro.test(right)&&cause.test(right)&&observed.test(left);
 }
