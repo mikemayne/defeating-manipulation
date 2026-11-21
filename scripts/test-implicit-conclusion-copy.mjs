@@ -54,4 +54,22 @@ assert.match(copied.text,/LLM accepted/);
 assert.match(copied.text,/Suggested: Those figures should not be trusted/);
 assert.match(copied.text,/ID: negative/);
 assert.match(copied.text,/No eligible question/);
-console.log("Implicit-conclusion lab Copy click handler and complete report passed.");
+
+// A corpus of explicit conclusions is not an LLM failure: the user needs a
+// precise explanation that zero questions passed the candidate gate.
+const warningStart=ui.indexOf("function implicitCorpusWarning(data){");
+const warningEnd=ui.indexOf("function renderImplicitResults(data){",warningStart);
+assert.ok(warningStart>=0&&warningEnd>warningStart,
+ "The test lab must expose a diagnostic for datasets with zero eligible questions");
+const warningContext={};
+vm.runInNewContext(ui.slice(warningStart,warningEnd),warningContext);
+assert.match(warningContext.implicitCorpusWarning({
+ total:100,summary:{eligibleQuestions:0}}),/local LLM was not run/);
+assert.match(warningContext.implicitCorpusWarning({
+ total:100,summary:{eligibleQuestions:0}}),/Arguments — single paragraph/);
+assert.equal(warningContext.implicitCorpusWarning({
+ total:10,summary:{eligibleQuestions:1}}),"");
+assert.equal(warningContext.implicitCorpusWarning({
+ total:0,summary:{eligibleQuestions:0}}),"");
+
+console.log("Implicit-conclusion lab Copy handler and zero-eligible dataset diagnostics passed.");
