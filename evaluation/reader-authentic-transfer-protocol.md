@@ -79,6 +79,40 @@ The first evaluation on this split should be retained as the unmodified
 baseline. Do not iteratively adjust thresholds or model choice to optimize
 this held-out set and then call it independent.
 
+## Next experiment: BUT reweighting on training documents only
+
+A separate training-only diagnostic is available to address weak authentic
+contrast recall without tuning against the **already inspected** 217-case
+test. It does not change the merged implicit-conclusion phase (PRs #99–100)
+or the synonym checker (PR #98).
+
+```powershell
+git pull
+node scripts/evaluate-reader-gum-but-cv.mjs --preview
+node scripts/evaluate-reader-gum-but-cv.mjs
+```
+
+The experiment reuses the cached 402 synthetic scores (including genuine
+synthetic KEEP examples) and the 308 authentic **training** scores. It
+partitions only authentic training data into five document-disjoint folds,
+always fitting on the 402 synthetic rows plus other authentic training
+documents. The 217-case authentic holdout and its score caches are neither
+loaded nor evaluated.
+
+The old balanced linear fusion is unchanged by default. The experimental
+training loss compares predeclared relative BUT multipliers **1.0, 1.4,
+2.0 and 3.0**, using two existing feature configurations (full fusion and
+without period/hyphen). Training-only selection maximises pooled balanced
+AND/BUT recall, with a smaller weighting preferred at equal scores.
+It also reports individual class recall and KEEP prediction counts.
+These class-weight hypotheses are diagnostics, not the production model.
+
+Output: `evaluation/reader-gum-training-only-but-cv-v1.json` (gitignored).
+The target test was already inspected, so another score on it would be
+exploratory and not independent confirmation. A future new document split
+must be frozen before testing any revised classifier. Without independently
+annotated authentic KEEP cases, three-class performance remains unmeasured.
+
 ## Genuine KEEP: blinded two-reviewer procedure
 
 No sentence is automatically labelled KEEP. A pair lacking a GDTB annotation,
