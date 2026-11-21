@@ -39,7 +39,7 @@ export const ABLATIONS=Object.freeze({
  "minus-all-bert-punctuation":Object.freeze(only(k=>!["bertPeriod","bertHyphen","bertSo"].includes(k))),
  "minus-nli":Object.freeze(only(k=>!k.startsWith("nli"))),
  "gpt-semantic-lexical":Object.freeze(only(k=>k.startsWith("gpt")||k.startsWith("semantic")||k.startsWith("lexical"))),
- "no-bert-and-no-nli":Object.freeze(only(k=>k.startsWith("gpt")||k.startsWith("semantic")||k.startsWith("lexical")))
+ "semantic-lexical-only":Object.freeze(only(k=>k.startsWith("semantic")||k.startsWith("lexical")))
 });
 export const ABLATION_VERSION="reader-fusion-ablation-v1";
 const KEY=r=>JSON.stringify([r.id,r.offset]);
