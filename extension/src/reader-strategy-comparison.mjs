@@ -5,7 +5,6 @@
 // no original source text is modified and neither method asserts causality.
 import { extractBoundaryProbes, buildBoundaryChoices } from "./reader-boundary-scorer.mjs";
 import { explicitBoundaryConnector } from "./reader-connector-normalisation.mjs";
-import {simplifyDiscourseForModel} from "./reader-discourse-simplifier.mjs";
 import {selectJoin,DEFAULT_JOIN_THRESHOLDS,validateJoinThresholds} from "./reader-join-thresholds.mjs";
 const CHOICES=new Set(["keep","and","but"]);
 const MAX_PAIRS=8;
@@ -76,8 +75,7 @@ export function validateStrategyCases(items){
 export async function compareReaderStrategies(source,scoreContinuation,{
  maxPairs=MAX_PAIRS,
  minScore=DEFAULT_JOIN_THRESHOLDS.minScore,
- minMargin=DEFAULT_JOIN_THRESHOLDS.minMargin,
- simplifyForModel=false
+ minMargin=DEFAULT_JOIN_THRESHOLDS.minMargin
 }={}){
  const thresholds=validateJoinThresholds({minScore,minMargin});
  if(typeof source!=="string"||typeof scoreContinuation!=="function")
@@ -107,11 +105,11 @@ export async function compareReaderStrategies(source,scoreContinuation,{
  for(const boundary of boundaries){
   if(boundary.punctuationStart<lastEnd||!validatePairText(source,boundary))
    continue;
-  const candidates=buildBoundaryChoices(source,boundary,{simplifyForModel});
+  const candidates=buildBoundaryChoices(source,boundary);
   if(candidates.length!==2)continue;
   // Both strategies receive the SAME right-hand continuation and the SAME
   // short context budget. Only past inferred edits can differ.
-  const originalPrefix=candidates[0].originalPrefix;
+  const originalPrefix=candidates[0].prefix;
   const progressivePrefix=reconstructedPrefix(source,boundary.punctuationStart,edits)
    .slice(-LEFT_CONTEXT_CHARS).trimStart();
   if(!progressivePrefix)continue;
@@ -126,7 +124,7 @@ export async function compareReaderStrategies(source,scoreContinuation,{
   // modifying punctuation. Otherwise use the normal neural comparison.
   const context=directDecision??await evaluate(candidates);
   const progressiveCandidates=candidates.map(c=>({
-   ...c,prefix:simplifyForModel?simplifyDiscourseForModel(progressivePrefix).text:progressivePrefix
+   ...c,prefix:progressivePrefix
   }));
   const progressive=directDecision??await evaluate(progressiveCandidates);
   const changed=progressivePrefix!==originalPrefix;
@@ -145,7 +143,6 @@ export async function compareReaderStrategies(source,scoreContinuation,{
    relationship:explicit?.relation??(context.choice==="and"?"addition":
     context.choice==="but"?"contrast":null),
    decisionSource:explicit?"explicit_connector":"language_model",
-   modelInputSimplified:simplifyForModel,
    punctuationAction:explicit||context.choice==="keep"?"keep":"analysis_only_replace",
    explicitConnector:explicit?.marker??null,
    contextChangedByEarlierJoins:changed,
