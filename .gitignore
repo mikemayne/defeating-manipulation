@@ -55,3 +55,6 @@ _site/
 /evaluation/reader-gum-and-mixtures-sem-v1.json
 /evaluation/reader-gum-and-mixtures-cv-v1.json
 /evaluation/reader-conservative-but-cv-v1.json
+/evaluation/reader-contrast-error-audit-v1.json
+/evaluation/reader-contrast-error-audit-v1.md
+/evaluation/reader-contrast-error-review-v1.tsv
