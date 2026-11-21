@@ -52,7 +52,7 @@ const SENSE_PAIRS=[
  ['The gardener trimmed the hedge along the border.','The designer added a border to the printed invitation.'],
  ['The drummer tuned the snare before rehearsal.','The ranger set a snare to capture an invasive animal.'],
  ['The sailor estimated the ship’s draft.','The novelist revised a first draft overnight.'],
- ['The mechanic tightened the wheel nut.','A squirrel buried a hazelnut beneath the tree.'],
+ ['The mechanic tightened a nut on the wheel.','A squirrel buried a nut beneath the tree.'],
  ['The musician found a short break in the score.','Engineers investigated a break in the water pipe.'],
  ['The artist selected a pale wash for the background.','The launderette charged extra for a delicate wash.'],
  ['The photographer adjusted the exposure of the shot.','The referee reviewed the disputed shot on goal.'],
