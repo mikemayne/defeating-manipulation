@@ -296,6 +296,61 @@ The genuine KEEP class remains unmeasured; there is no production
 threshold selection until independent validation. The separate
 implicit-conclusion system is unaffected.
 
+## High-confidence AND/BUT error audit
+
+The first high-confidence BUT gate produced fewer false BUT classifications,
+but AUROC stayed around 0.63–0.66. Before changing features, inspect where
+the score model confidently disagrees with human GDTB relationship labels.
+
+```powershell
+git pull
+node scripts/audit-reader-contrast-errors.mjs --preview
+node scripts/audit-reader-contrast-errors.mjs --offline --top 12
+```
+
+No new neural inference: this reuses the 402 synthetic, 308 original
+authentic, 110 extra BUT and 440 extra AND local score caches. The original
+five document-disjoint validation folds and earlier calibrated-classifier
+settings remain unchanged. The prior 217-case test and 39 untouched reserved
+documents are not read. All three scenarios replay *previously observed*
+argmax accuracy totals (187, 237 and 221 of 308), and abort if these differ.
+
+The audit compares the previous reader's argmax to a conservative BUT gate
+for three **fixed** configurations:
+
+- `full-fusion__AND+0__strict`: 110 extra BUT, no extra AND
+- `full-fusion__AND+440__strict`: 110 extra BUT, 440 extra AND
+- `no-period-hyphen__AND+220__moderate`: 110 extra BUT, 220 extra AND
+
+Per scenario it ranks **confident false BUT** predictions, **missed BUT**
+examples (including confidently scored AND), **correct BUT** predictions,
+**rescued false BUT** (demoted to AND by the gate), and **lost true BUT**
+(demoted genuine contrasts). It prints the highest-priority sentence pairs,
+and emits:
+
+- `evaluation/reader-contrast-error-audit-v1.md` — locally readable
+  excerpts, GDTB relation subtypes, models' class scores, signed connective
+  scores, NLI estimates, similarity, lexical overlap and elementary surface
+  cues
+- `evaluation/reader-contrast-error-audit-v1.json` — structured local
+  audit plus cue incidence counts by category
+- `evaluation/reader-contrast-error-review-v1.tsv` — manual annotation
+  sheet with unfilled *AND plausible?*, *BUT plausible?*, *expectation
+  violation?*, *explicit contradiction?*, *interpretation* and *notes*
+  fields (spreadsheet formula prefixes escaped)
+
+Surface cues (negation, negative/positive vocabulary, surprise/expectation
+terms, temporal/causal connectives) are **hypotheses only**, not ground
+truth and not replacement labels. An author or human reader may plausibly
+read the same pair as both AND and BUT. A single GDTB discourse label
+does not show that the other reading is impossible.
+
+This audit is for inspecting high-confidence mistakes, not for training a
+new classifier or changing decision thresholds. All source excerpts and
+review answers stay **local and gitignored**; check GUM licence before any
+public sharing. The extension's existing reader and implicit-conclusion
+components remain unchanged.
+
 ## Genuine KEEP: blinded two-reviewer procedure
 
 No sentence is automatically labelled KEEP. A pair lacking a GDTB annotation,
