@@ -25,3 +25,8 @@ _site/
 /evaluation/reader-holdout-v2-lm-scores.json
 /evaluation/reader-holdout-v2-semantic-scores.json
 /evaluation/reader-holdout-v2-results.json
+/evaluation/reader-gum-source-cache/
+/evaluation/reader-gum-pilot-v1.json
+/evaluation/reader-gum-pilot-lm-scores.json
+/evaluation/reader-gum-pilot-semantic-scores.json
+/evaluation/reader-gum-pilot-results.json
