@@ -64,7 +64,7 @@ function positiveCategorySubject(text,property){
    "can","could","should","may","might","must","does","did",
    "went","came","sang","stood","met","left","said","wrote",
    "spoke","told"].includes(next)&&
-  !/(?:ed|ing|es)$/u.test(next))return false;
+  !/ed$/u.test(next))return false;
  // Domain nouns immediately after a putative plural head are generally
  // constructions rather than category referents.
  if(["people","policy","politics","flag","car","cars","music","history",
