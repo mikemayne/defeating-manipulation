@@ -7,6 +7,8 @@ import {extractArgumentStatements,extractArguments}
  from "../extension/src/argument-clauses.mjs";
 import {discoverModelArgumentCandidates}
  from "../extension/src/argument-model-discovery.mjs";
+import {analyseArguments}
+ from "../extension/src/argument-analysis.mjs";
 
 const sha=x=>createHash("sha256").update(String(x)).digest("hex");
 export const VERSION="implicit-model-discovery-gum-v1";
@@ -23,6 +25,10 @@ export async function evaluateModelDiscovery(rows,scorePair,{
  const summary={version:VERSION,inputParagraphs:rows.length,
   eligibleForDiscovery:eligible.length,withCandidate:0,
   candidates:0,modelScoringCalls:0,modelErrors:0,
+  checkerAssessed:0,checkerLabels:{
+   supported_conclusion:0,unsupported_conclusion:0,
+   contradictory_claims:0,abstained:0
+  },
   sourceOffsetsValid:true,byGenre:{},
   limitation:"The original GUM paragraphs carry no human reference labels "+
    "for the hypothesised omitted relationship; this is candidate "+
@@ -33,15 +39,35 @@ export async function evaluateModelDiscovery(rows,scorePair,{
   const counts=summary.byGenre[genre]??={analysed:0,candidates:0};
   counts.analysed++;
   try{
-   const proposals=await discoverModelArgumentCandidates(
-    row.text,extractArgumentStatements(row.text),
-    async(premise,conclusion)=>{
+   // Cache source-only model scores for both candidate discovery and the
+   // actual argument checker. We never score a reconstructed link as
+   // evidence supporting itself.
+   const cache=new Map();
+   const memoScore=async(premise,conclusion)=>{
+    const key=JSON.stringify([premise,conclusion]);
+    if(!cache.has(key)){
      summary.modelScoringCalls++;
-     return scorePair(premise,conclusion);
-    });
+     cache.set(key,Promise.resolve(scorePair(premise,conclusion)));
+    }
+    return cache.get(key);
+   };
+   const proposals=await discoverModelArgumentCandidates(
+    row.text,extractArgumentStatements(row.text),memoScore);
    if(proposals.length)summary.withCandidate++;
    summary.candidates+=proposals.length;
    counts.candidates+=proposals.length;
+   if(proposals.length){
+    await analyseArguments(row.text,memoScore,{
+     includeImplicit:true,includeModelDiscovery:true,
+     onDiagnostic:d=>{
+      if(!d.inferred)return;
+      summary.checkerAssessed++;
+      const k=Object.hasOwn(summary.checkerLabels,d.verdict)?
+       d.verdict:"abstained";
+      summary.checkerLabels[k]++;
+     }
+    });
+   }
    for(const p of proposals)
     if(row.text.slice(p.conclusion.start,p.conclusion.end)!==
       p.conclusion.text||
