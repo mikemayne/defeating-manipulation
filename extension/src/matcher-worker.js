@@ -9,6 +9,7 @@ import { analyseArguments, argumentFindings, combineArgumentEvidence } from "./a
 import { extractArgumentStatements } from "./argument-clauses.mjs";
 import { findImplicitConclusionQuestions, reconstructImplicitConclusions,
  checkImpliedConclusions, implicitConclusionFindings } from "./implicit-conclusion-reconstruction.mjs";
+import { generateImpliedConclusion } from "./implicit-conclusion-model.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
 import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { findConcealedPatterns } from "./concealed-matching.mjs";
@@ -21,27 +22,6 @@ env.backends.onnx.wasm.wasmPaths = new URL("./ort/", self.location.href).href;
 
 const MODEL = "Xenova/all-MiniLM-L6-v2";
 let inferenceModelPromise;
-let conclusionGeneratorPromise;
-async function generateImpliedConclusion(prompt) {
- if (!conclusionGeneratorPromise) conclusionGeneratorPromise =
-  pipeline("text2text-generation", "Xenova/flan-t5-small", { dtype: "q8" })
-   .catch(error => { console.warn("Optional implicit-conclusion model unavailable:", error); return null; });
- const generator = await conclusionGeneratorPromise;
- if (!generator) return "NONE";
- const generated = await generator(prompt, { max_new_tokens: 54, do_sample: false });
- return generated?.[0]?.generated_text || "NONE";
-}
-
-async function scorePair(premise, hypothesis) {
- // The same tokenised premise/hypothesis scoring is used in the test lab.
- if (!inferenceModelPromise) inferenceModelPromise = createNliScorer()
-  .catch(error => {
-   console.warn("Local consistency model unavailable:", error);
-   return null;
-  });
- const score = await inferenceModelPromise;
- return score ? score(premise, hypothesis) : null;
-}
 let extractor, spellchecker, techniques = [], rules = [], prototypes = [], positivePrototypes = [], initialising;
 
 async function embed(texts) {
