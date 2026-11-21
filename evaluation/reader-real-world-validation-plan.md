@@ -1,5 +1,57 @@
 # Reader relation evaluation: synthetic holdout and real-world check
 
+## First authentic-text pilot: 250 GUM relations
+
+Implementation is in `scripts/build-reader-gum-pilot.mjs` and
+`scripts/evaluate-reader-gum-pilot.mjs`.
+
+```powershell
+git pull
+node scripts/build-reader-gum-pilot.mjs
+node scripts/evaluate-reader-gum-pilot.mjs --preview
+node scripts/evaluate-reader-gum-pilot.mjs --max-errors 5
+```
+
+The importer fetches and caches original `.rels` files from the pinned GUM
+source revision `1d999e5a0327ecb83015007774f6a9be23ecbc41`. It samples
+25 examples in each of ten genres (news, essay, academic, interview, fiction,
+speech, biography, textbook, voyage and podcast), max 14 per source document.
+It intentionally favours the rare contrast category, so class proportions
+are **not representative** of naturally occurring writing.
+
+The data is authentic and the original GDTB discourse annotations were made
+by corpus annotators. The conversion into the project's AND/BUT categories
+is **our operational mapping** and has not yet been separately adjudicated.
+Allowed source types are implicit, immediately adjacent, forward-ordered
+full-sentence discourse relations, with a visible sentence boundary.
+
+Mapping:
+- `comparison.contrast`, `comparison.concession` -> BUT
+- `expansion.conjunction`, `expansion.level-of-detail`,
+  `expansion.instantiation`, `expansion.equivalence`,
+  `contingency.cause`, `temporal.asynchronous/synchronous` -> AND
+- Everything else -> ABSTAIN and excluded from scored sample
+- KEEP is **not inferred** from absent annotations, entity relations,
+  isolated paragraphs or topic shifts. This pilot **does not test KEEP recall**.
+
+The frozen linear+lexical classifier is fitted on the prior 402 synthetic
+development examples only. It is then scored against 250 authentic pairs
+without fitting on any GUM labels. Reports include per-class precision,
+recall, two-class macro-F1, mapped accuracy and rates of KEEP predictions.
+Mapped accuracy is NOT overall three-class accuracy. Run the command once
+and retain the first result as a baseline.
+
+All downloaded source texts, assembled excerpts and inference scores are
+gitignored and should remain local. GUM is built from texts with varying
+source-specific licences, including non-commercial restrictions; review
+`https://github.com/amir-zeldes/gum/blob/master/LICENSE.md` and original
+document terms before any public redistribution or commercial use.
+
+The natural next step after this pilot is independent human review of the
+AND/BUT mappings, plus a separately annotated genuine KEEP dataset.
+DiscoGeM remains a complementary research track for multiple-annotator
+distributions; it has not yet been integrated into this pilot.
+
 ## Current benchmark
 
 The v2 corpus (reader-holdout-v2.json, generated from reader-holdout-v2-seeds.tsv) is **1,000 synthetic, developer-labelled** sentence-boundary examples from **100 scenario families** in 10 domains. The classes are nearly balanced: KEEP 333, AND 334, BUT 333. Ten cases share a scenario family, so these are **not 1,000 independent observations**.
