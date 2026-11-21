@@ -77,6 +77,9 @@ jobs:
           node scripts/test-reader-gum-ablations.mjs
           node --check scripts/evaluate-reader-gum-preprocessing.mjs
           node scripts/test-reader-gum-preprocessing.mjs
+          node --check scripts/build-reader-gum-transfer.mjs
+          node --check scripts/evaluate-reader-gum-transfer.mjs
+          node scripts/test-reader-gum-transfer.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers
