@@ -46,6 +46,7 @@
  // A positive phrase must never visually cover an overlapping negative
  // finding; this is not yet a concealed-manipulation judgement.
  const priority = match => match.kind === "scrutiny" ? 0 :
+   match.kind === "paragraph_topic" ? 1.5 :
    match.kind === "argument_support" ? 5 :
    match.kind === "inconsistency" ? 4 :
    (match.kind === "spelling" || match.kind === "vocabulary") ? 3.5 :
@@ -98,9 +99,17 @@
      signals.style.cssText = "margin-top:8px;font-size:12px;color:#ffd89a;";
      summary.append(signals);
    }
+   if (match.paragraph && match.kind !== "paragraph_topic") {
+     const context = document.createElement("div");
+     context.textContent = "Paragraph cue: " + match.paragraph.technique.title +
+       ". The model reads the second sentence as directly or indirectly affirming the opening judgment or reaction.";
+     summary.append(context);
+   }
    summary.style.margin = "6px 0 8px";
    const strength = document.createElement("div");
-   strength.textContent = match.kind === "scrutiny" ? "Review suggested, not a detected pattern" :
+   strength.textContent = match.kind === "paragraph_topic" ?
+     "Paragraph cue: the opening matched this technique and the model reads the next sentence as directly or indirectly affirming its judgment or reaction." :
+     match.kind === "scrutiny" ? "Review suggested, not a detected pattern" :
      match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
      match.kind === "vocabulary" ? "Nonstandard vocabulary: weak signal, intent unknown" :
      match.kind === "punctuation" ? "Punctuation: weak attention signal, intent unknown" :
@@ -187,7 +196,10 @@
      const candidates = valid.filter(m => m.start <= start && m.end >= end)
        .sort((a, b) => priority(b) - priority(a) ||
          (b.score || 0) - (a.score || 0));
-     if (candidates.length) spans.push({ ...candidates[0], start, end });
+     if (candidates.length) {
+       const paragraph = candidates.find(candidate => candidate.kind === "paragraph_topic");
+       spans.push({ ...candidates[0], paragraph, start, end });
+     }
    }
    // Work backwards so earlier text offsets remain valid.
    for (const entry of snapshot.nodes.slice().reverse()) {
@@ -204,6 +216,10 @@
        const mark = document.createElement("mark");
        mark.setAttribute(MARK, match.technique.id);
        mark.style.cssText = `background:transparent;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-color:${colour(match.technique)};text-decoration-thickness:3px;text-underline-offset:3px;cursor:help;`;
+       if (match.paragraph && match.kind !== "paragraph_topic" &&
+           match.paragraph.technique.id !== match.technique.id) {
+         mark.style.borderBottom = "1px solid " + colour(match.paragraph.technique);
+       }
        mark.addEventListener("mouseenter", () => show(mark, match));
        mark.addEventListener("focus", () => show(mark, match));
        mark.tabIndex = 0;

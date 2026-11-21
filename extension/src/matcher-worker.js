@@ -15,6 +15,8 @@ import { positiveTechniques, matchPositiveText } from "./positive-matching.mjs";
 import { findConcealedPatterns } from "./concealed-matching.mjs";
 import { findScrutinyWarnings } from "./scrutiny-signals.mjs";
 
+import { paragraphTopicFindings } from "./paragraph-topic.mjs";
+
 env.allowLocalModels = false;
 env.allowRemoteModels = true;
 env.useBrowserCache = true;
@@ -171,7 +173,10 @@ self.addEventListener("message", async event => {
   } catch (error) {
    console.warn("Optional implied-conclusion analysis unavailable:", error);
   }
-  const recognised = [...matches, ...spellingMatches, ...vocabularyMatches, ...punctuationMatches,
+  const paragraphMatches = await paragraphTopicFindings(analysedText,
+   opening => matchText(opening, { techniques, rules, prototypes, embed: extractor ? embed : null }),
+   generateImpliedConclusion);
+  const recognised = [...paragraphMatches, ...matches, ...spellingMatches, ...vocabularyMatches, ...punctuationMatches,
    ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues,
    ...implicitFindings];
   const scrutiny = findScrutinyWarnings(analysedText, {
