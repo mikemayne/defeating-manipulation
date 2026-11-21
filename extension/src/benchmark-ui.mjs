@@ -192,7 +192,7 @@ function renderResults(data) {
   );
   $("real-breakdown").hidden=true;
   $("summary-note").textContent=
-   "Two strategies each score AND and BUT; KEEP is the threshold fallback. Progressive uses earlier inferred joins; original-context uses unedited text. Agreement is not accuracy."+
+   "Explicit connecting words are classified in JavaScript without changing punctuation. For implicit boundaries, two strategies score AND and BUT with KEEP as a fallback. Agreement is not accuracy."+
    accuracy+
    (m.unmatchedLabels?" | Unmatched gold offsets: "+m.unmatchedLabels:"");
   const values=new Set([...Object.keys(m.byContext||{}),...Object.keys(m.byProgressive||{})]);
