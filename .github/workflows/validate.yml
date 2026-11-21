@@ -29,6 +29,15 @@ jobs:
           node scripts/test-nonstandard-vocabulary.mjs
           node scripts/test-spelling-bait.mjs
           node scripts/test-text-preprocessing.mjs
+      - name: Test implicit-conclusion real-world lab
+        run: |
+          node --check extension/src/implicit-conclusion-model.mjs
+          node --check extension/src/implicit-conclusion-lab.mjs
+          node --check extension/src/implicit-conclusion-reconstruction.mjs
+          node --check extension/src/benchmark-ui.mjs
+          node --check extension/src/benchmark-worker.js
+          node --check extension/src/matcher-worker.js
+          node scripts/test-implicit-conclusion-lab.mjs
       - name: Test bounded implicit-conclusion reconstruction
         run: |
           node --check extension/src/implicit-conclusion-reconstruction.mjs
