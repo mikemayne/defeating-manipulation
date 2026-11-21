@@ -130,7 +130,7 @@ const uncertainA=parseReviewSheet(fill(a,"A",{
 assert.equal(reconcileReviews(key,uncertainA,reviewedB)
  .usableConsensus,47);
 assert.throws(()=>reconcileReviews(key,new Map(),reviewedB),/complete/);
-assert.throws(()=>chooseReviewCases(rows,{perStratum:40,
+assert.throws(()=>chooseReviewCases(rows,{perStratum:12,
  excludedIds:rows.filter(x=>x.predicted==="but").map(x=>x.id)}),
  /Too few/);
 const audit={outcomes:{
