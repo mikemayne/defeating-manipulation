@@ -27,7 +27,8 @@ const overlap = (a, b) => a.start < b.end && a.end > b.start;
 // Weak signals must come from different families, not repeated occurrences
 // of one expressive word. Model signals are optional; no model is required.
 export function findScrutinyWarnings(source,
- { findings = [], nearMisses = [], argumentDiagnostics = [], maxFindings = 6 } = {}) {
+ { findings = [], nearMisses = [], argumentDiagnostics = [],
+   preprocessingFlags = [], maxFindings = 6 } = {}) {
  if (typeof source !== "string" || !source.trim() || maxFindings < 1) return [];
  const candidates = [];
  for (const part of windows(source)) {
@@ -41,6 +42,11 @@ export function findScrutinyWarnings(source,
   const lexical = SIGNALS.filter(signal => signal.re.test(part.text));
   if (!lexical.some(item => ["pressure", "certainty", "agreement"].includes(item.id)))
    continue;
+  const orthographic = preprocessingFlags.some(item =>
+   item.attentionSignal &&
+   Number.isSafeInteger(item.analysisStart) &&
+   Number.isSafeInteger(item.analysisEnd) &&
+   overlap(span,{start:item.analysisStart,end:item.analysisEnd}));
   const semantic = nearMisses.some(item => item.score >= 0.63 &&
    overlap(span, item));
   const argument = argumentDiagnostics.some(item =>
@@ -50,9 +56,10 @@ export function findScrutinyWarnings(source,
   // Require >=4 separate lexical families without ML, or a combination
   // of multiple textual cues and independent model observations.
   if (!(lexical.length >= 4 ||
-        (lexical.length >= 3 && (semantic || argument)) ||
+        (lexical.length >= 3 && (semantic || argument || orthographic)) ||
         (lexical.length >= 2 && semantic && argument))) continue;
   const signals = lexical.map(item => item.label);
+  if (orthographic) signals.push("unusual spelling or punctuation may attract attention; intent unknown");
   if (semantic) signals.push("similarity to known patterns without a reliable match");
   if (argument) signals.push("uncertain support for a stated conclusion");
   candidates.push({ ...span, kind: "scrutiny", technique: ADVISORY,
