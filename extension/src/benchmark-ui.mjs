@@ -175,6 +175,13 @@ applyFittedButton.addEventListener("click",()=>{
  minMarginControl.value=String(fit.fitted.minMargin);
  $("copied").textContent="Fitted thresholds selected. Run tests to apply.";
 });
+function implicitCorpusWarning(data){
+ return data?.total>0&&data?.summary?.eligibleQuestions===0
+  ? "No eligible rhetorical questions in this dataset. The local LLM was not run. "+
+    "This mode does not evaluate explicit conclusions such as therefore/so; "+
+    "choose Arguments — single paragraph (structure + optional NLI) for those examples. "
+  : "";
+}
 function renderImplicitResults(data){
  const s=data.summary;
  $("stats").replaceChildren(
@@ -194,7 +201,9 @@ function renderImplicitResults(data){
   "; precision "+(s.precision===null?"undefined":percent(100*s.precision))+
   ", recall "+(s.recall===null?"undefined":percent(100*s.recall))+
   ", accuracy "+percent(100*s.accuracy)+".":" No reviewer presence labels: accuracy is not measured.";
+ const mismatch=implicitCorpusWarning(data);
  $("summary-note").textContent=
+  mismatch+
   "Experimental implied-conclusion reconstruction from rhetorical questions. "+
   "A proposed interpretation is not evidence of bad reasoning or author intent. "+
   "Source wording is unchanged; generated conclusions must be reviewed manually."+
