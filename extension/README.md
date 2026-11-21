@@ -34,6 +34,17 @@ and provides a button to copy failure details. It also accepts local labelled
 JSON/JSONL datasets. See `evaluation/README.txt` for the test data format.
 
 
+## Test implied conclusions on real-world examples
+
+Open the local Matcher Test Lab with `npm run benchmark:dev` and choose
+**Implicit conclusions — local LLM (real examples)**. Upload JSON or JSONL
+with `{id,text}` rows; optional reviewer fields `expected_implicit` and
+`expected_conclusion` allow presence-label scoring and manual interpretation
+review. The lab uses the same local FLAN-T5 reconstruction stage as the
+Firefox extension, shows raw model results and abstentions, and exports all
+cases as JSON. See [the implicit-conclusion lab guide](../evaluation/README-implicit-conclusion-lab.md)
+for input schema, score limitations and model-download notes.
+
 ## Second-pass inconsistency benchmark
 
 Open the same local Matcher Test Lab and choose **Inconsistencies — local NLI**.
