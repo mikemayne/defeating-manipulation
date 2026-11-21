@@ -14,3 +14,4 @@ _site/
 /evaluation/reader-join-fit.json
 /evaluation/reader-join-cross-validation.json
 /evaluation/reader-mask-infill.json
+/evaluation/reader-fusion.json
