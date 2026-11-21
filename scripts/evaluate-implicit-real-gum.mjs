@@ -27,6 +27,8 @@ import {combineArgumentEvidence}
  from "../extension/src/argument-analysis.mjs";
 import {summarizeImplicitConclusionCases}
  from "../extension/src/implicit-conclusion-lab.mjs";
+import {identifyImplicitLinks,scoreImplicitLinks}
+ from "./implicit-gum-argument-links.mjs";
 
 export const VERSION="implicit-gum-real-e2e-v1";
 export const GUM_SHA="1d999e5a0327ecb83015007774f6a9be23ecbc41";
@@ -247,6 +249,16 @@ async function run({sampleOnly=false,run=false}={}){
    selected:sample.selected,candidateEnriched:sample.selectedCandidates,
    genres:sample.genres.length,sourceDocs:sample.documents,
    selectionHash:sha(JSON.stringify(sample.rows.map(r=>r.id)))}));
+ const structural=identifyImplicitLinks(sample.rows);
+ console.log("REAL GUM DECLARATIVE-LINK CANDIDATES (no source text): "+
+  JSON.stringify({
+   paragraphs:structural.paragraphs,
+   explicitCandidates:structural.explicitCandidates,
+   inferredCandidates:structural.implicitCandidates,
+   paragraphsWithInferred:structural.withImplicit,
+   genres:Object.fromEntries(Object.entries(structural.byGenre)
+    .map(([g,v])=>[g,v.withInferred]))
+  }));
  if(sampleOnly)return;
  if(!run)throw Error("Choose --run or --sample-only");
  // Deliberately lazy: sample-only, unit tests and CLI --help run without
@@ -272,6 +284,20 @@ async function run({sampleOnly=false,run=false}={}){
    {kind:"combined",text:premise,forward:nli,reverse:null}
   ],conclusion);
  };
+ // Declarative inference is separate from rhetorical-question rewriting.
+ // The same actual MNLI model is scored on original source premise and
+ // hypothesis; do not count inferred text as its own supporting evidence.
+ const scorePair=async(premise,hypothesis)=>{
+  if(!scorePromise)scorePromise=createNliScorer();
+  const score=await scorePromise;
+  return score(premise,hypothesis);
+ };
+ const linkReport=await scoreImplicitLinks(structural,scorePair,{
+  maxParagraphs:40,
+  onStatus:m=>console.log("DECLARATIVE PROGRESS "+JSON.stringify(m))
+ });
+ console.log("REAL GUM DECLARATIVE INFERENCE RESULT (no source text): "+
+  JSON.stringify(linkReport));
  const result=await evaluateRows(sample.rows,generateImpliedConclusion,check,{
   onStatus:m=>console.log("GUM PROGRESS "+JSON.stringify(m))
  });
