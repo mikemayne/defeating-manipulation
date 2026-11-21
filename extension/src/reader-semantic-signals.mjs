@@ -2,7 +2,8 @@
 // The analyser already uses these two local models elsewhere. This module
 // adds pairwise scoring; it never changes the input/source punctuation.
 import {embeddingRows} from "./embedding-rows.mjs";
-import {createNliScorer,NLI_MODEL} from "./nli-inference.mjs";
+// Import NLI implementation lazily: offline benchmarks must not load ONNX.
+export const NLI_MODEL="Xenova/distilbert-base-uncased-mnli";
 
 export const EMBEDDING_MODEL="Xenova/all-MiniLM-L6-v2";
 export const SEMANTIC_SIGNAL_VERSION="reader-semantic-v1";
@@ -65,7 +66,9 @@ export function semanticFeatures(signals){
 export async function createSemanticPairScorer({onStatus=()=>{}}={}){
  onStatus("Loading local sentence embeddings ("+EMBEDDING_MODEL+") and NLI ("+
   NLI_MODEL+"); first run may download models…");
- const {pipeline}=await import("@huggingface/transformers");
+ const [{pipeline},{createNliScorer}]=await Promise.all([
+  import("@huggingface/transformers"),import("./nli-inference.mjs")
+ ]);
  const [embed,nli]=await Promise.all([
   pipeline("feature-extraction",EMBEDDING_MODEL,{dtype:"q8"}),
   createNliScorer({onStatus})
@@ -83,4 +86,3 @@ export async function createSemanticPairScorer({onStatus=()=>{}}={}){
   return validateSemanticSignals({similarity,forward,reverse});
  };
 }
-export {NLI_MODEL};
