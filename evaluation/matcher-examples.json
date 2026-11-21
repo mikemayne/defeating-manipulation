@@ -380,6 +380,48 @@
         "bandwagon"
       ],
       "gate": true
+    },
+    {
+      "id": "inevitability-timetable",
+      "text": "The timetable is the timetable. There's no point asking whether it could be revised.",
+      "expected": [
+        "manufactured_inevitability"
+      ],
+      "gate": true
+    },
+    {
+      "id": "inevitability-decision",
+      "text": "The decision is the decision. Nobody gets to challenge it.",
+      "expected": [
+        "manufactured_inevitability"
+      ],
+      "gate": true
+    },
+    {
+      "id": "inevitability-rules",
+      "text": "Rules are rules. We don't have to explain why they can't change.",
+      "expected": [
+        "manufactured_inevitability"
+      ],
+      "gate": true
+    },
+    {
+      "id": "inevitability-neutral",
+      "text": "The timetable is the timetable currently published, but the committee will review it next month.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "inevitability-appeal",
+      "text": "The decision is the decision recorded in the minutes, and an appeal is possible within fourteen days.",
+      "expected": [],
+      "gate": true
+    },
+    {
+      "id": "inevitability-explained-constraint",
+      "text": "The filing deadline is fixed in the legislation, and the court has no statutory power to extend it.",
+      "expected": [],
+      "gate": true
     }
   ]
 }

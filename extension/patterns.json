@@ -221,6 +221,13 @@
         "\\bif you (?:do not|don't|fail to|refuse to)\\b[^.!?]{4,135}\\b(?:your|the)\\s+(?:entire|whole)?\\s*(?:family|children|loved ones|community|neighbours|neighbors)\\b[^.!?]{0,120}\\b(?:catastrophe|disaster|danger|harm|ruin|grave risk|terrible consequences)\\b",
         "\\bif you (?:do not|don't|fail to|refuse to)\\b[^.!?]{0,95}\\b(?:buy|order|purchase|subscribe|sign up|switch|renew|join|support|vote|pay)\\b[^.!?]{0,125}\\b(?:your|the)\\b[^.!?]{0,45}\\b(?:family|children|loved ones)\\b[^.!?]{0,95}\\b(?:catastrophe|disaster|tragedy|serious harm|ruin|deadly danger)\\b"
       ]
+    },
+    {
+      "id": "manufactured_inevitability",
+      "expressions": [
+        "\\b(?:the\\s+)?(plan|policy|decision|timetable|schedule|deadline|contract|agreement|arrangement|rule)\\s+(?:is|means)\\s+(?:the\\s+)?\\1\\b[.!?;:,\\s]{1,5}(?:there(?:'s| is)\\s+(?:nothing\\s+(?:left\\s+)?to\\s+(?:discuss|debate|question|reconsider)|no\\s+point\\s+(?:in\\s+)?(?:asking|questioning|debating))|(?:no\\s+one|nobody)\\s+(?:gets\\s+to|can|may)\\s+(?:question|challenge|reconsider)|(?:it|this|that)\\s+(?:can't|cannot|won't|will\\s+not)\\s+be\\s+(?:changed|questioned|challenged|revised)|(?:we|they|you)\\s+(?:don't|do\\s+not)\\s+have\\s+to\\s+explain\\b|(?:end\\s+of\\s+discussion|that's\\s+final))",
+        "\\b(rules|policies|decisions|deadlines)\\s+are\\s+\\1\\b[.!?;:,\\s]{1,5}(?:there(?:'s| is)\\s+(?:nothing\\s+(?:left\\s+)?to\\s+(?:discuss|debate|question|reconsider)|no\\s+point\\s+(?:in\\s+)?(?:asking|questioning|debating))|(?:no\\s+one|nobody)\\s+(?:gets\\s+to|can|may)\\s+(?:question|challenge|reconsider)|(?:we|they|you)\\s+(?:don't|do\\s+not)\\s+have\\s+to\\s+explain\\b)"
+      ]
     }
   ]
 }

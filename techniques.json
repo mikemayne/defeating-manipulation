@@ -1213,6 +1213,41 @@
       ],
       "reader_effect": "Can make people defend their autonomy more strongly than they defend the claim itself. The original evidence or reasoning goes unexamined while the parties argue over freedom, censorship and authority. Disagreement is not automatically censorship, but a credible threat to someone's ability to speak is a separate issue that may deserve attention.",
       "references": []
+    },
+    {
+      "id": "manufactured_inevitability",
+      "title": "Manufactured inevitability",
+      "category": "Framing",
+      "summary": "Making a choice, interpretation or policy sound fixed and unchallengeable by repeating its name or treating its existence as its own justification.",
+      "tags": [
+        "empty certainty",
+        "tautological slogan",
+        "circular assertion",
+        "false finality",
+        "immutable framing",
+        "foreclosing alternatives",
+        "unchallengeable decision",
+        "unexplained inevitability"
+      ],
+      "status": "starter",
+      "definition": "A decision, rule or outcome is presented as though it cannot be changed, challenged or interpreted differently simply because it has already been named or declared. Repeating a term in an identity statement (X is X, or X means X) adds no premise that establishes necessity, yet can rhetorically suggest that alternatives are impossible or questioning is illegitimate. The pattern concerns the gap between this logically empty assertion and the stronger conclusion the reader is invited to accept. Genuine legal, technical or practical constraints are separate evidence and must be assessed on their merits.",
+      "observable_features": [
+        "A key label is repeated as its own definition or justification: 'the decision is the decision' or 'the plan means the plan'.",
+        "The repetition is paired with claims that there is nothing to debate, reconsider, interpret or appeal.",
+        "A contingent choice is presented as a fact of nature or an unavoidable consequence without explaining why it cannot change.",
+        "Requests for clarification or alternative arrangements are answered with the same phrase rather than reasons.",
+        "The sentence has an appearance of certainty or finality while stating no concrete requirement or justification."
+      ],
+      "example": "The timetable is the timetable. There's no point asking whether it could be revised.",
+      "examples": [
+        "The timetable is the timetable. There's no point asking whether it could be revised.",
+        "The decision is the decision. Nobody gets to challenge it.",
+        "The plan means the plan. There is nothing left to discuss.",
+        "Rules are rules. We don't have to explain why they can't change.",
+        "The agreement is the agreement, so considering a different arrangement is pointless."
+      ],
+      "reader_effect": "May make a revisable choice or contested interpretation feel self-evident, permanent and beyond scrutiny, although the literal statement provides no supporting reason. The relevant question is what independently establishes the alleged necessity. A tautology on its own does not prove manipulation: sometimes repetition simply confirms a label, and some decisions really are constrained.",
+      "references": []
     }
   ]
 }
