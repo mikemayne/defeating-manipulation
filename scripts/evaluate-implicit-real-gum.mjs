@@ -29,6 +29,8 @@ import {summarizeImplicitConclusionCases}
  from "../extension/src/implicit-conclusion-lab.mjs";
 import {identifyImplicitLinks,scoreImplicitLinks}
  from "./implicit-gum-argument-links.mjs";
+import {evaluateModelDiscovery}
+ from "./implicit-gum-model-discovery.mjs";
 
 export const VERSION="implicit-gum-real-e2e-v1";
 export const GUM_SHA="1d999e5a0327ecb83015007774f6a9be23ecbc41";
@@ -298,6 +300,12 @@ async function run({sampleOnly=false,run=false}={}){
  });
  console.log("REAL GUM DECLARATIVE INFERENCE RESULT (no source text): "+
   JSON.stringify(linkReport));
+ const discovery=await evaluateModelDiscovery(sample.rows,scorePair,{
+  limit:120,
+  onStatus:m=>console.log("MODEL DISCOVERY PROGRESS "+JSON.stringify(m))
+ });
+ console.log("REAL GUM MODEL-ASSISTED DISCOVERY (no source text): "+
+  JSON.stringify(discovery));
  const result=await evaluateRows(sample.rows,generateImpliedConclusion,check,{
   onStatus:m=>console.log("GUM PROGRESS "+JSON.stringify(m))
  });
