@@ -104,6 +104,9 @@ jobs:
           node --check scripts/build-reader-gum-and-mixtures.mjs
           node --check scripts/evaluate-reader-gum-and-mixtures.mjs
           node scripts/test-reader-gum-and-mixtures.mjs
+          node --check scripts/reader-conservative-but-decision.mjs
+          node --check scripts/evaluate-reader-conservative-but.mjs
+          node scripts/test-reader-conservative-but.mjs
           node --check scripts/finalize-reader-keep-reviews.mjs
           node scripts/test-reader-keep-reviews.mjs
       - name: Test attack-conflation detection and abstention
