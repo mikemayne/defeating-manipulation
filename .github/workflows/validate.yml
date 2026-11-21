@@ -115,6 +115,8 @@ jobs:
           node --check scripts/prepare-reader-contrast-review.mjs
           node --check scripts/finalize-reader-contrast-review.mjs
           node scripts/test-reader-contrast-review.mjs
+          node --check scripts/convert-reader-review-to-text.mjs
+          node scripts/test-convert-reader-review-to-text.mjs
           node --check scripts/finalize-reader-keep-reviews.mjs
           node scripts/test-reader-keep-reviews.mjs
       - name: Test attack-conflation detection and abstention
