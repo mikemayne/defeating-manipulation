@@ -228,6 +228,13 @@
         "\\b(?:the\\s+)?(plan|policy|decision|timetable|schedule|deadline|contract|agreement|arrangement|rule)\\s+(?:is|means)\\s+(?:the\\s+)?\\1\\b[.!?;:,\\s]{1,5}(?:there(?:'s| is)\\s+(?:nothing\\s+(?:left\\s+)?to\\s+(?:discuss|debate|question|reconsider)|no\\s+point\\s+(?:in\\s+)?(?:asking|questioning|debating))|(?:no\\s+one|nobody)\\s+(?:gets\\s+to|can|may)\\s+(?:question|challenge|reconsider)|(?:it|this|that)\\s+(?:can't|cannot|won't|will\\s+not)\\s+be\\s+(?:changed|questioned|challenged|revised)|(?:we|they|you)\\s+(?:don't|do\\s+not)\\s+have\\s+to\\s+explain\\b|(?:end\\s+of\\s+discussion|that's\\s+final))",
         "\\b(rules|policies|decisions|deadlines)\\s+are\\s+\\1\\b[.!?;:,\\s]{1,5}(?:there(?:'s| is)\\s+(?:nothing\\s+(?:left\\s+)?to\\s+(?:discuss|debate|question|reconsider)|no\\s+point\\s+(?:in\\s+)?(?:asking|questioning|debating))|(?:no\\s+one|nobody)\\s+(?:gets\\s+to|can|may)\\s+(?:question|challenge|reconsider)|(?:we|they|you)\\s+(?:don't|do\\s+not)\\s+have\\s+to\\s+explain\\b)"
       ]
+    },
+    {
+      "id": "attack_conflation",
+      "expressions": [
+        "\\b(?:spelling (?:mistake|error)|typo|grammar|punctuation|wording)\\b.{0,125}\\b(?:so|therefore|(?:that|which|it) (?:means|proves|shows)|means|proves|shows)\\b.{0,135}\\b(?:argument|idea|opinion|view|position|claim|belief|person|people|supporters|everyone|I|you|we|they)\\b.{0,90}\\b(?:wrong|stupid|idiots?|fools?|worthless|invalid|nonsense|ignorant|dishonest|incompetent)\\b",
+        "\\b(?:question(?:ed|ing)|correct(?:ed|ing)|criticis(?:ed|ing)|criticiz(?:ed|ing))\\b.{0,105}\\b(?:wording|grammar|spelling|typo|argument|opinion|idea|view|policy|claim|proposal)\\b.{0,115}\\b(?:so|that means|which means|apparently|therefore)\\b.{0,120}\\b(?:attack(?:ing|ed)?|insult(?:ing|ed)?|hate|hating|call(?:ing|ed)?)\\b.{0,85}\\b(?:me|us|people|everyone|supporters|voters|them)\\b"
+      ]
     }
   ]
 }

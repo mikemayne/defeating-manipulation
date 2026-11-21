@@ -106,6 +106,8 @@ jobs:
           node scripts/test-reader-gum-and-mixtures.mjs
           node --check scripts/finalize-reader-keep-reviews.mjs
           node scripts/test-reader-keep-reviews.mjs
+      - name: Test attack-conflation detection and abstention
+        run: node scripts/test-attack-conflation.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
         run: node extension/evaluate.mjs --strict
       - name: Bundle Firefox and local benchmark workers

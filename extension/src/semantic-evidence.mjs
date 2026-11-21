@@ -28,10 +28,23 @@ function isNarrativeReframing(text) {
  return medium.test(text) && ordering.test(text) && omission.test(text);
 }
 
+// A narrow criticism may be reinterpreted as a judgement on a person's
+// idea or group. Semantic resemblance alone must not flag an ordinary typo.
+function isAttackConflation(text) {
+ const source=/\b(?:typo|spelling|grammar|punctuation|wording|word choice|corrected|correcting|criticised|criticized|questioned)\b/i;
+ const widened=/\b(?:argument|idea|claim|opinion|view|position|policy|proposal|belief|person|people|everyone|supporters|me|us|you|they)\b/i;
+ const judgement=/\b(?:wrong|stupid|idiots?|fools?|worthless|invalid|nonsense|ignorant|dishonest|incompetent|attack(?:ed|ing)?|insult(?:ed|ing)?|hate|hating)\b/i;
+ const transfer=/\b(?:so|therefore|that means|which means|must mean|apparently|proves?|shows?|implies|calling)\b/i;
+ const denial=/\b(?:does(?: not|n't)|do(?: not|n't)|cannot|can't|never)\s+(?:mean|prove|show|imply)\b/i;
+ return source.test(text) && widened.test(text) && judgement.test(text) &&
+  transfer.test(text) && !denial.test(text);
+}
+
 export function hasSemanticEvidence(techniqueId, text) {
  switch (techniqueId) {
   case "bandwagon": return isBandwagon(text);
   case "narrative_reframing": return isNarrativeReframing(text);
+  case "attack_conflation": return isAttackConflation(text);
   default: return true;
  }
 }
