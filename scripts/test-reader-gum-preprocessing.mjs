@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
 import {spawnSync} from "node:child_process";
-import {normaliseGumRows,compareStrategies,summarizePairs,STRATEGIES,
+import {normaliseGumRows,compareStrategies,summarizePairs,signalDeltas,STRATEGIES,
  EXPERIMENT_VERSION} from "./evaluate-reader-gum-preprocessing.mjs";
 import {extractBoundaryProbes,buildBoundaryChoices}
  from "../extension/src/reader-boundary-scorer.mjs";
@@ -115,6 +115,11 @@ const clean=dataset.map((row,i)=>({...row,features:{
 }));
 const meta=new Map(dataset.map((r,i)=>[r.id,{changed:i%2===0,changedPair:false,
  formattingEdits:i%2===0?1:0}]));
+const deltas=signalDeltas(dataset,clean,meta);
+assert.equal(deltas.bertPeriod.all.count,250);
+assert.equal(deltas.gptQuality.changedOnly.count,125);
+assert.ok(deltas.gptQuality.changedOnly.pairedChangeMedian>=0);
+assert.throws(()=>signalDeltas(dataset,clean,new Map()),/row keys differ/);
 const evaluated=compareStrategies(train,dataset,clean,meta);
 assert.deepEqual(Object.keys(evaluated),Object.keys(STRATEGIES));
 for(const group of Object.values(evaluated)){
