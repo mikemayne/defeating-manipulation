@@ -93,7 +93,7 @@ export function pickCandidates(candidates,role,limit=LIMITS[role]){
  const ordered=kept.sort((a,b)=>rank(a).localeCompare(rank(b)));
  const contrast=ordered.filter(x=>x.gold==="but").slice(0,Math.min(4,limit));
  const addition=ordered.filter(x=>x.gold==="and").slice(0,limit-contrast.length);
- return [...contrast,...addition].sort((a,b)=>rank(a).localeCompare(rank(b));
+ return [...contrast,...addition].sort((a,b)=>rank(a).localeCompare(rank(b)));
 }
 export async function buildTransfer({offline=false,load=getRels,log=console.log}={}){
  const manifest=JSON.parse(await readFile(MANIFEST,"utf8"));
