@@ -23,6 +23,12 @@ assert.equal(findings[0].technique.id, "ad_hominem");
 assert.equal(prompts.length, 1);
 assert.ok(prompts[0].includes(topic));
 assert.ok(!prompts[0].includes(tail));
+const implied = "All that remains is to work out where your reasoning went wrong.";
+const indirectPassage = [hook, implied, tail].join(" ");
+const indirect = await paragraphTopicFindings(indirectPassage, analyse, async () => "Implied yes.");
+assert.equal(indirect.length, 1);
+assert.equal(indirect[0].technique.id, "ad_hominem");
+assert.equal(indirect[0].end, indirectPassage.length);
 for (const response of ["no", "unclear", "uncertain", "yes and no"]) {
  assert.deepEqual(await paragraphTopicFindings(passage, analyse, async () => response), []);
 }
@@ -31,6 +37,7 @@ assert.deepEqual(await paragraphTopicFindings(topic + " " + hook, analyse, unexp
 assert.deepEqual(await paragraphTopicFindings(hook + "\n" + topic, analyse, unexpected), []);
 // Keep the opening fixed so shared subject matter alone cannot pass the contrast.
 const contrasts = [
+ { second: implied, confirms: true },
  { second: "You're absolutely right to dismiss that argument.", confirms: true },
  { second: "That argument deserves to be dismissed.", confirms: true },
  { second: "The argument appeared on page three of the report.", confirms: false },
@@ -38,6 +45,7 @@ const contrasts = [
  { second: "It depends which part of the argument you mean.", confirms: false }
 ];
 assert.match(prompts[0], /endorse the judgment or reaction/);
+assert.match(prompts[0], /implied yes/);
 assert.match(prompts[0], /unclear/);
 if (process.argv.includes("--live")) {
  const { generateImpliedConclusion } = await import("../extension/src/implicit-conclusion-model.mjs");
