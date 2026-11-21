@@ -54,6 +54,8 @@ jobs:
           node --check extension/src/reader-boundary-scorer.mjs
           node --check extension/src/reader-interpretation.mjs
           node scripts/test-reader-structural-contrast.mjs
+          node --check scripts/evaluate-reader-structural-contrast.mjs
+          node scripts/test-reader-structural-contrast-audit.mjs
       - name: Test masked infill benchmark without model downloads
         run: |
           node --check extension/src/reader-mask-infill.mjs
