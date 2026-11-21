@@ -502,12 +502,14 @@ function comparisonReport(data){
     " | Gold: "+(gold?.choice??"(unlabelled)"),
     "Context: "+p.context.choice+
     (p.context.uncertain?" (uncertain)":"")+
+    (p.decisionSource==="explicit_connector"?" | Explicit marker: "+p.explicitConnector:
     " | Scores: "+p.context.candidates.map(x=>
-     x.id+"="+(x.score===null?"N/A":x.score.toFixed(3))).join(", "),
+     x.id+"="+(x.score===null?"N/A":x.score.toFixed(3))).join(", ")),
     "Progressive: "+p.progressive.choice+
     (p.progressive.uncertain?" (uncertain)":"")+
+    (p.decisionSource==="explicit_connector"?" | Original punctuation kept":
     " | Scores: "+p.progressive.candidates.map(x=>
-     x.id+"="+(x.score===null?"N/A":x.score.toFixed(3))).join(", "),
+     x.id+"="+(x.score===null?"N/A":x.score.toFixed(3))).join(", ")),
     "Earlier joins affected context: "+p.contextChangedByEarlierJoins+
     " | Disagree: "+(!p.sameChoice),
     "Cumulative reconstruction: "+p.progressiveReconstructionThroughSecond
@@ -527,7 +529,7 @@ function boundaryReport(data){
   "Cases with boundaries: "+data.boundaryCasesWithPairs,
   "Boundaries tested: "+data.boundaryPairs,
   "Elapsed (seconds): "+oneDecimal(data.elapsedSeconds),
-  "","REPLACEMENT SUMMARY"
+  "","RELATIONSHIP SUMMARY (source punctuation unchanged)"
  ];
  for(const [label,count] of Object.entries(data.boundaryCounts||{})
   .sort((a,b)=>b[1]-a[1]))lines.push(label+": "+count);
@@ -539,11 +541,16 @@ function boundaryReport(data){
    lines.push("Punctuation: "+b.punctuation+
     " | Original offset: "+b.punctuationStart+
     " | Boundary type: "+b.boundaryKind,
-    "Selected: "+b.choice+(b.uncertain?" (uncertain; original retained)":""),
+    "Relationship: "+(b.relationship??"uncertain")+
+      " | Connector: "+b.choice+
+      " | Decision: "+(b.decisionSource==="explicit_connector"?
+       "explicit marker '"+b.explicitConnector+"'":"model score thresholds"),
     "Before: "+b.first.text,"After: "+b.second.text,
+    "Punctuation: "+(b.punctuationAction==="keep"?"original retained":"only analysis reconstruction changes"),
     "Analysis-only reconstruction: "+b.analysisText,
-    "Scores (higher is better): "+b.candidates.map(c=>
-     c.id+"="+(c.score===null?"N/A":c.score.toFixed(3))).join(" | "));
+    b.decisionSource==="explicit_connector"?
+      "Scores: not needed (explicit marker)": "Scores (higher is better): "+b.candidates.map(c=>
+       c.id+"="+(c.score===null?"N/A":c.score.toFixed(3))).join(" | "));
   }
  }
  return lines.join("\n");
