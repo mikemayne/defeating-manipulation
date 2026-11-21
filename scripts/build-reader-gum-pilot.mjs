@@ -26,7 +26,7 @@ const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 export const GUM_COMMIT="1d999e5a0327ecb83015007774f6a9be23ecbc41";
 export const VERSION="reader-gum-pilot-v1";
 export const SOURCE_PREFIX="rst/gdtb/disrpt/";
-const CACHE_DIR=path.join(ROOT,"evaluation/reader-gum-source-cache");
+const CACHE_DIR=path.join(ROOT,"evaluation/reader-gum-source-cache",GUM_COMMIT);
 const OUTPUT=path.join(ROOT,"evaluation/reader-gum-pilot-v1.json");
 export const GENRES=Object.freeze({
  news:["election","warming","nasa","soccer","hackers","homeopathic"],
@@ -216,7 +216,7 @@ export async function buildGumPilot({offline=false,load=getRels,log=console.log}
 }
 async function main(){
  const offline=process.argv.includes("--offline");
- if(process.argv.some(x=>!["--offline","--help","-h"].includes(x)))
+ if(process.argv.slice(2).some(x=>!["--offline","--help","-h"].includes(x)))
   throw Error("Unrecognised option");
  if(process.argv.includes("--help")||process.argv.includes("-h")){
   console.log("node scripts/build-reader-gum-pilot.mjs [--offline]");return;
