@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/implicit-gum-e2e.yml
       - scripts/evaluate-implicit-real-gum.mjs
+      - scripts/implicit-gum-argument-links.mjs
+      - scripts/implicit-gum-model-discovery.mjs
   workflow_dispatch:
 
 permissions:
