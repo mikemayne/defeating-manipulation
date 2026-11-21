@@ -19,12 +19,13 @@ function setError(text) {
 }
 function updateSource() {
  const argumentMode = mode.value === "argument_paragraph";
+ const implicitMode = mode.value === "implicit_conclusion";
  const readerMode = mode.value === "reader_inference";
  const boundaryMode = mode.value === "reader_boundary";
  const compareMode = mode.value === "reader_compare";
  // One uploaded paragraph test schema, with optional NLI labels.
- source.options[0].disabled = argumentMode || readerMode || boundaryMode || compareMode;
- if ((argumentMode || readerMode || boundaryMode || compareMode) && source.value !== "uploaded") source.value = "uploaded";
+ source.options[0].disabled = implicitMode || argumentMode || readerMode || boundaryMode || compareMode;
+ if ((implicitMode || argumentMode || readerMode || boundaryMode || compareMode) && source.value !== "uploaded") source.value = "uploaded";
  const upload = source.value === "uploaded";
  const consistency = mode.value === "consistency";
  const positive = mode.value.startsWith("positive_");
@@ -37,7 +38,9 @@ function updateSource() {
  count.max = consistency || argumentMode || readerMode || boundaryMode || compareMode || concealed ? 10000 : 1000000;
  if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
-  ? compareMode
+  ? implicitMode
+   ? 'Upload JSON/JSONL with {id,text}, optionally expected_implicit:true/false and expected_conclusion. Uses the local FLAN-T5 generator; review each reconstructed conclusion and rejected output. Only annotated presence gets precision/recall; wording quality requires manual review. Maximum 2,000 cases.'
+   : compareMode
    ? 'Upload the same 1,000 real-world {id,text} examples to compare progressive joins against original-context joins, using only AND and BUT plus default KEEP. Both methods share thresholds; scores can be fitted to labels without more model calls. Accuracy is only shown if a case includes expected_boundaries:[{offset,choice}], labelled by a reviewer; otherwise accuracy is unknown.'
    : boundaryMode
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. Two neural language-model scores: AND and BUT, with KEEP as the JavaScript fallback. Thresholds can be fitted on labelled cases. One-time model download; scores indicate linguistic plausibility, not human reader percentages. Original text is never modified.'
@@ -172,9 +175,72 @@ applyFittedButton.addEventListener("click",()=>{
  minMarginControl.value=String(fit.fitted.minMargin);
  $("copied").textContent="Fitted thresholds selected. Run tests to apply.";
 });
+function renderImplicitResults(data){
+ const s=data.summary;
+ $("stats").replaceChildren(
+  metric("Examples scanned",number(data.total)),
+  metric("Eligible questions",number(s.eligibleQuestions)),
+  metric("Accepted conclusions",number(s.accepted)),
+  metric("Rejected outputs",number(s.rejected)),
+  metric("Model returned NONE",number(s.returnedNone)),
+  metric("Model errors",number(s.errors)),
+  metric("Labelled cases",number(s.labelled)),
+  metric("Elapsed, seconds",oneDecimal(data.elapsedSeconds))
+ );
+ $("real-breakdown").hidden=true;
+ const score=s.labelled?
+  " Reviewer-labelled presence: TP "+s.tp+", FP "+s.fp+
+  ", FN "+s.fn+", TN "+s.tn+
+  "; precision "+(s.precision===null?"undefined":percent(100*s.precision))+
+  ", recall "+(s.recall===null?"undefined":percent(100*s.recall))+
+  ", accuracy "+percent(100*s.accuracy)+".":" No reviewer presence labels: accuracy is not measured.";
+ $("summary-note").textContent=
+  "Experimental implied-conclusion reconstruction from rhetorical questions. "+
+  "A proposed interpretation is not evidence of bad reasoning or author intent. "+
+  "Source wording is unchanged; generated conclusions must be reviewed manually."+
+  score;
+ const body=$("implicit-rows");
+ body.replaceChildren();
+ for(const item of data.predictions.slice(0,100)){
+  const tr=document.createElement("tr");
+  const status=item.attempts.length?
+   item.attempts.map(a=>a.status+
+    (a.status==="model_error"?": "+(a.error||"unknown error"):
+     a.status==="rejected"?": "+(a.rawOutput||"no output"):"")).join(" | "):
+   "No eligible rhetorical question";
+  const columns=[
+   item.id,
+   item.text.length>450?item.text.slice(0,447)+"…":item.text,
+   item.conclusions.map(c=>c.impliedConclusion+
+    " (support: "+c.supportStatus+")").join("\n")||"—",
+   status,
+   item.expected_implicit===null?"Unlabelled":
+    (item.expected_implicit?"Yes":"No")+
+    (item.expected_conclusion?" — "+item.expected_conclusion:"")
+  ];
+  for(let i=0;i<columns.length;i++){
+   const td=document.createElement("td");
+   td.className="example";
+   td.textContent=columns[i];
+   tr.append(td);
+  }
+  body.append(tr);
+ }
+ $("failure-note").textContent="Showing "+number(Math.min(100,data.total))+
+  " of "+number(data.total)+" cases. Copy the full report or export every raw "+
+  "LLM response, accepted proposal, source offset and reference label.";
+ copyButton.disabled=false;
+ copyButton.textContent="Copy all implied-conclusion results";
+ downloadButton.hidden=false;
+ downloadButton.disabled=false;
+ $("copied").textContent="";
+}
 function renderResults(data) {
  results.hidden = false;
  renderThresholdFit(data);
+ $("implicit-results").hidden=!data.implicitMode;
+ $("standard-tables").hidden=!!data.implicitMode;
+ if(data.implicitMode){renderImplicitResults(data);return;}
  if(data.compareMode){
   const m=data.strategyComparison||{};
   const accuracy=m.labelled?(
@@ -642,6 +708,45 @@ async function copyTextToClipboard(text, successMessage) {
   $("copied").textContent = copied ? successMessage : "Clipboard unavailable";
  }
 }
+function implicitConclusionReport(data){
+ const s=data.summary;
+ const lines=[
+  "Defeating Manipulation — Implicit Conclusions (local FLAN-T5)",
+  "Tested: "+data.total+" / "+data.requested+(data.stopped?" (stopped early)":""),
+  "Eligible rhetorical questions: "+s.eligibleQuestions,
+  "Accepted: "+s.accepted+" | Rejected: "+s.rejected+
+   " | NONE: "+s.returnedNone+" | Model errors: "+s.errors,
+  "Reviewer-labelled presence cases: "+s.labelled,
+  ...(s.labelled?[
+   "TP: "+s.tp+" FP: "+s.fp+" FN: "+s.fn+" TN: "+s.tn,
+   "Precision: "+(s.precision===null?"undefined":percent(100*s.precision))+
+    " | Recall: "+(s.recall===null?"undefined":percent(100*s.recall))
+  ]:[]),
+  "Scores measure the presence of a validated candidate, not semantic correctness.",
+  "Interpretations are provisional; assess conclusion wording manually."
+ ];
+ for(const item of data.predictions){
+  lines.push("","ID: "+item.id,
+   "Source: "+(item.source_url||"(not supplied)"),
+   "Text: "+item.text,
+   "Detected: "+(item.predicted_implicit?"yes":"no")+
+    " | Reference: "+(item.expected_implicit===null?
+      "(unlabelled)":item.expected_implicit?"yes":"no"),
+   "Expected conclusion: "+(item.expected_conclusion||"(unlabelled)"));
+  for(const candidate of item.candidates)
+   lines.push("Candidate @"+candidate.start+".."+candidate.end+
+    ": "+candidate.question,
+    "Previous premise: "+(candidate.context||"(none)"));
+  for(const attempt of item.attempts)
+   lines.push("LLM "+attempt.status+" @"+attempt.start+".."+attempt.end+
+    ": "+(attempt.rawOutput??attempt.error??"(none)"));
+  for(const conclusion of item.conclusions)
+   lines.push("Suggested: "+conclusion.impliedConclusion+
+    " | Evidence check: "+conclusion.supportStatus);
+  if(!item.candidates.length)lines.push("No eligible question.");
+ }
+ return lines.join("\n");
+}
 copyButton.addEventListener("click", async () => {
  if (!lastResult) return;
  if(lastResult.compareMode){
@@ -664,8 +769,13 @@ copyButton.addEventListener("click", async () => {
  await copyTextToClipboard(failureReport(lastResult), "Copied failure details");
 });
 downloadButton.addEventListener("click", () => {
- if (!lastResult?.unlabelledScan && !lastResult?.readerMode && !lastResult?.boundaryMode && !lastResult?.compareMode) return;
- const payload=lastResult.compareMode ? JSON.stringify({
+ if (!lastResult?.implicitMode && !lastResult?.unlabelledScan && !lastResult?.readerMode && !lastResult?.boundaryMode && !lastResult?.compareMode) return;
+ const payload=lastResult.implicitMode ? JSON.stringify({
+   schema_version:1,mode:"implicit_conclusion_real_world",
+   total:lastResult.total,requested:lastResult.requested,stopped:lastResult.stopped,
+   summary:lastResult.summary,predictions:lastResult.predictions,
+   generated_conclusions_are_verified:false
+  },null,2)+"\n" : lastResult.compareMode ? JSON.stringify({
   schema_version:1,mode:"reader_context_vs_progressive",
   total:lastResult.total,summary:lastResult.strategyComparison,
   thresholds:lastResult.joinThresholds,offline_fit:lastResult.joinThresholdFit,
@@ -690,7 +800,8 @@ downloadButton.addEventListener("click", () => {
  const blob=new Blob([payload],{type:"application/json"});
  const url=URL.createObjectURL(blob);
  const anchor=document.createElement("a");
- anchor.href=url;anchor.download=lastResult.compareMode?
+ anchor.href=url;anchor.download=lastResult.implicitMode?
+   "implicit-conclusion-predictions.json":lastResult.compareMode?
   "reader-strategies-context-vs-progressive.json":lastResult.boundaryMode?
   "reader-boundary-replacements.json":lastResult.readerMode?
   "reader-interpretation-predictions.json":"real-world-argument-predictions.json";
@@ -768,7 +879,7 @@ runButton.addEventListener("click", async () => {
   const [catalogue, patterns, manipulationFixture, consistencyFixture,
    positiveFixture, concealedFixture] = await catalogues();
   const fixture = mode.value === "consistency" ? consistencyFixture :
-   (mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare") ? {cases:[]} :
+   (mode.value === "implicit_conclusion" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare") ? {cases:[]} :
    mode.value.startsWith("positive_") ? positiveFixture :
    mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;
   runId++;

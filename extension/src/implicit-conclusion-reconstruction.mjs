@@ -83,16 +83,29 @@ export function validateImpliedConclusion(raw,item){
 export async function reconstructImplicitConclusions(source,statements,generate,options={}){
  if(typeof generate!=='function')return [];
  const targets=findImplicitConclusionQuestions(source,statements,options),result=[];
+ const report=details=>{
+  // Diagnostics are optional. A consumer callback cannot alter detection.
+  try{options.onAttempt?.(details);}catch{}
+ };
  for(const target of targets){
+  const details={start:target.question.start,end:target.question.end,
+   question:target.question.text};
   try{
    const raw=await generate(promptFor(target));
    const conclusion=validateImpliedConclusion(raw,target);
+   const none=typeof raw==='string'&&/^(?:none|no\s+(?:clear\s+)?conclusion|n\/a)\.?$/i.test(raw.trim());
+   report({...details,status:conclusion?'accepted':none?'none':'rejected',
+    rawOutput:typeof raw==='string'?raw.slice(0,500):null,
+    impliedConclusion:conclusion});
    if(!conclusion)continue;
    result.push({start:target.question.start,end:target.question.end,
     original:target.question.text,impliedConclusion:conclusion,
     context:target.context,provisional:true,
     reconstructionMethod:'local_llm_implied_conclusion'});
-  }catch{/* Model failure leaves normal detection intact. */}
+  }catch(error){
+   report({...details,status:'model_error',
+    error:String(error?.message||error).slice(0,200)});
+  }
  }
  return result;
 }

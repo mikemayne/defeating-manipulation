@@ -5,7 +5,13 @@ import { generatedCase, validateSeeds } from "../../evaluation/benchmark-generat
 import { validateConsistencyCases, generatedConsistencyCase } from "../../evaluation/inconsistency-generator.mjs";
 import { findInconsistencies } from "./consistency.mjs";
 import { createNliScorer } from "./nli-inference.mjs";
-import { analyseArguments } from "./argument-analysis.mjs";
+import { analyseArguments, combineArgumentEvidence } from "./argument-analysis.mjs";
+import { extractArgumentStatements } from "./argument-clauses.mjs";
+import { findImplicitConclusionQuestions, reconstructImplicitConclusions,
+ checkImpliedConclusions } from "./implicit-conclusion-reconstruction.mjs";
+import { generateImpliedConclusion } from "./implicit-conclusion-model.mjs";
+import { validateImplicitConclusionCases,
+ summarizeImplicitConclusionCases } from "./implicit-conclusion-lab.mjs";
 import { scoreReaderInterpretations, validateReaderCases } from "./reader-interpretation.mjs";
 import { rankBoundaryChoices } from "./reader-boundary-scorer.mjs";
 import { createBoundaryLanguageScorer } from "./reader-language-model.mjs";
@@ -148,6 +154,67 @@ function buildSummary(data, elapsedMs, cancelled) {
   joinThresholdFit:data.boundaryMode||data.compareMode?fitJoinThresholds(data.predictions):null
  };
 }
+// Unlabelled examples expose predictions only. Optional reviewer labels are
+// scored at case level; generated interpretations are never treated as truth.
+async function runImplicitConclusionLab(message,begin){
+ const seeds=validateImplicitConclusionCases(await parseUpload(message.file));
+ const total=seeds.length,predictions=[];
+ let announcedModel=false;
+ for(let i=0;i<total;i++){
+  if(stopRequested)break;
+  const item=seeds[i],statements=extractArgumentStatements(item.text);
+  const candidates=findImplicitConclusionQuestions(item.text,statements);
+  if(candidates.length&&!announcedModel){
+   announcedModel=true;
+   self.postMessage({type:"stage",
+    message:"Loading local FLAN-T5 conclusion model (first run may download weights)…"});
+  }
+  const attempts=[];
+  const proposals=await reconstructImplicitConclusions(
+   item.text,statements,generateImpliedConclusion,{
+    onAttempt:detail=>attempts.push(detail)
+   });
+  const checked=await checkImpliedConclusions(proposals,async(premise,conclusion)=>{
+   const score=await initialiseConsistencyModel();
+   const result=await score(premise,conclusion);
+   return combineArgumentEvidence([
+    {kind:"combined",text:premise,forward:result,reverse:null}
+   ],conclusion);
+  });
+  predictions.push({
+   id:item.id,text:item.text,source_url:item.source_url||null,
+   source_title:item.source_title||null,
+   expected_implicit:typeof item.expected_implicit==='boolean'?
+    item.expected_implicit:null,
+   expected_conclusion:item.expected_conclusion||null,
+   predicted_implicit:checked.length>0,
+   candidates:candidates.map(c=>({
+    question:c.question.text,start:c.question.start,end:c.question.end,
+    context:c.context?.text||null
+   })),
+   attempts,
+   conclusions:checked.map(c=>({
+    question:c.original,start:c.start,end:c.end,
+    impliedConclusion:c.impliedConclusion,
+    context:c.context?.text||null,
+    supportStatus:c.supportStatus,
+    provisional:true
+   }))
+  });
+  self.postMessage({type:"progress",runId:message.runId,
+   completed:predictions.length,total});
+  // Yield so a stop request can be delivered even for skipped cases.
+  await new Promise(resolve=>setTimeout(resolve,0));
+ }
+ self.postMessage({type:"done",runId:message.runId,
+  mode:message.mode,source:message.source,result:{
+   implicitMode:true,total:predictions.length,requested:total,
+   stopped:stopRequested,elapsedSeconds:(performance.now()-begin)/1000,
+   summary:summarizeImplicitConclusionCases(predictions),
+   predictions
+  }});
+}
+
 async function startRun(message) {
  if (running) return;
  running = true;
@@ -155,6 +222,11 @@ async function startRun(message) {
  const begin = performance.now(), id = message.runId;
  try {
   const { catalogue, patterns, fixture, source, mode, amount, seed } = message;
+  if(mode==="implicit_conclusion"){
+   if(source!=="uploaded")throw Error("Implicit-conclusion tests require a JSON/JSONL upload");
+   await runImplicitConclusionLab(message,begin);
+   return;
+  }
   const joinThresholds=validateJoinThresholds(message.joinThresholds);
   const consistency = mode === "consistency";
   const argumentMode = mode === "argument_paragraph";
