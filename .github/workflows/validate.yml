@@ -38,6 +38,7 @@ jobs:
           node --check extension/src/benchmark-worker.js
           node --check extension/src/matcher-worker.js
           node scripts/test-implicit-conclusion-lab.mjs
+          node scripts/test-implicit-conclusion-copy.mjs
       - name: Test bounded implicit-conclusion reconstruction
         run: |
           node --check extension/src/implicit-conclusion-reconstruction.mjs

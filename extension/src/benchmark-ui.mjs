@@ -749,6 +749,11 @@ function implicitConclusionReport(data){
 }
 copyButton.addEventListener("click", async () => {
  if (!lastResult) return;
+ if (lastResult.implicitMode) {
+  await copyTextToClipboard(implicitConclusionReport(lastResult),
+   "Copied all implied-conclusion results");
+  return;
+ }
  if(lastResult.compareMode){
   await copyTextToClipboard(comparisonReport(lastResult),"Copied A/B comparison");
   return;
