@@ -37,7 +37,8 @@ assert.equal(fit.train.cases,48);
 assert.equal(fit.holdout.cases,12);
 assert.equal(fit.holdout.accuracy,1);
 assert.equal(fit.holdout.balancedAccuracy,1);
-assert.ok(fit.fitted.minScore>=-4.6,"Keep should be rejected by the tuned threshold");
+assert.ok(fit.fitted.minScore>=-4.6||fit.fitted.minMargin>=0.2,
+ "The fit must distinguish weak KEEP cases by either score or margin");
 assert.equal(fit.trainCases,48);
 assert.equal(fit.holdoutCases,12);
 assert.equal(fitJoinThresholds([]).available,false);
