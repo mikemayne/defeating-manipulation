@@ -120,7 +120,9 @@ export function parseReviewSheet(text,key,reviewer,{
  if(typeof text!=="string"||key?.version!==VERSION||
   !["A","B"].includes(reviewer))
   throw Error("Invalid reviewer sheet or key");
- const lines=text.trimEnd().split(/\r?\n/u);
+ // Remove only the final line ending; trimEnd would remove trailing TABs
+ // from the last blank-review row, corrupting the TSV column count.
+ const lines=text.replace(/\r?\n$/u,"").split(/\r?\n/u);
  if(lines.shift()!==REVIEW_HEADER.join("\t"))
   throw Error("Reviewer sheet columns changed");
  const expected=new Map(key.items.map(r=>[r.caseId,r])),seen=new Map();
