@@ -30,9 +30,9 @@ function oneEditAway(source, target) {
  return changes + Number(i < source.length || j < target.length) === 1;
 }
 
-export function findSpellingBait(text, spellchecker, technique, maxFindings = MAX_FINDINGS) {
+export function findSpellingCandidates(text, spellchecker, maxFindings = MAX_FINDINGS) {
  if (typeof text !== 'string' || !spellchecker?.correct || !spellchecker?.suggest ||
-   !technique || !Number.isInteger(maxFindings) || maxFindings < 1) return [];
+   !Number.isInteger(maxFindings) || maxFindings < 1) return [];
  const protectedRanges = [...text.matchAll(WEB_PARTS)].map(hit =>
   [hit.index, hit.index + hit[0].length]);
  const matches = [], checked = new Map();
@@ -45,18 +45,31 @@ export function findSpellingBait(text, spellchecker, technique, maxFindings = MA
   if (original !== word || COMMON_NAMES.has(word) || /[_@#\p{L}\p{N}]/u.test(before) ||
    /[_\p{L}\p{N}]/u.test(after) || protectedRanges.some(([a, b]) => a < end && b > start)) continue;
   if (!checked.has(word)) {
-   let plausible = false;
+   let options = [];
    try {
     if (!spellchecker.correct(word)) {
-     plausible = spellchecker.suggest(word).slice(0, 5).some(suggestion =>
-      /^[a-z]+$/i.test(suggestion) && oneEditAway(word, suggestion.toLowerCase()));
+     options = [...new Set(spellchecker.suggest(word).slice(0, 5)
+      .map(suggestion => suggestion.toLowerCase())
+      .filter(suggestion => /^[a-z]+$/i.test(suggestion) &&
+       oneEditAway(word, suggestion)))];
     }
    } catch { /* A dictionary issue must not cause a false warning. */ }
-   checked.set(word, plausible);
+   checked.set(word, options);
   }
-  if (!checked.get(word)) continue;
-  matches.push({ start, end, technique, kind: 'spelling',
-   method: 'spellcheck', score: 0.5 });
+  const suggestions = checked.get(word);
+  if (!suggestions?.length) continue;
+  matches.push({ start, end, original, suggestions,
+   // A single one-edit suggestion is only a candidate for a working-copy
+   // correction. It is never proof the author intended that word.
+   correction: suggestions.length === 1 ? suggestions[0] : null });
  }
  return matches;
+}
+
+ // separate semantic output layer, retaining old callers and match shape
+export function findSpellingBait(text, spellchecker, technique, maxFindings = MAX_FINDINGS) {
+ if (!technique) return [];
+ return findSpellingCandidates(text, spellchecker, maxFindings)
+  .map(({start, end}) => ({start, end, technique, kind:'spelling',
+   method:'spellcheck', score:0.5}));
 }
