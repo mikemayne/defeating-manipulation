@@ -234,6 +234,35 @@ export function compareStrategies(train,originalRows,normalizedRows,changes){
 function features(rows){
  return attachLexicalFeatures(addSemanticFeatures(rows.map(heldoutFeatures)));
 }
+export function signalDeltas(raw,cleaned,changes){
+ const keys=["bertPeriod","bertHyphen","bertContrast","gptQuality",
+  "semanticSimilarity","lexicalJaccard","nliForwardEntailment"];
+ const before=new Map(raw.map(row=>[row.id,row]));
+ if(before.size!==cleaned.length||changes.size!==cleaned.length)
+  throw Error("Cannot compare feature distributions: row keys differ");
+ const midpoint=values=>{
+  const sorted=[...values].sort((a,b)=>a-b);
+  const i=Math.floor(sorted.length/2);
+  return sorted.length%2?sorted[i]:0.5*(sorted[i-1]+sorted[i]);
+ };
+ return Object.fromEntries(keys.map(name=>{
+  const all=[],changed=[];
+  for(const next of cleaned){
+   const old=before.get(next.id),meta=changes.get(next.id);
+   if(!old||!meta||!Number.isFinite(old.features[name])||
+     !Number.isFinite(next.features[name]))
+    throw Error("Feature delta provenance mismatch: "+name+" at "+next.id);
+   all.push([old.features[name],next.features[name]]);
+   if(meta.changed)changed.push([old.features[name],next.features[name]]);
+  }
+  const summary=list=>list.length?{
+   count:list.length,originalMedian:midpoint(list.map(pair=>pair[0])),
+   cleanedMedian:midpoint(list.map(pair=>pair[1])),
+   pairedChangeMedian:midpoint(list.map(pair=>pair[1]-pair[0]))
+  }:null;
+  return [name,{all:summary(all),changedOnly:summary(changed)}];
+ }));
+}
 async function originalTraining(o){
  const [joined,masked,dataset,v1]=await Promise.all([
   o.oldJoin,o.oldMask,o.oldDataset,o.v1Scores
@@ -328,6 +357,14 @@ async function main(){
  const cleaned=enrichAndCheck(normalized,lmCache,semCache);
  const changes=new Map(observed.map(r=>[r.id,r]));
  const comparisons=compareStrategies(train,originalFeatures,cleaned,changes);
+ const featureChanges=signalDeltas(originalFeatures,cleaned,changes);
+ console.log("\nSIGNAL CHANGES: median values on the "+summary.changed+" changed texts");
+ for(const [name,values] of Object.entries(featureChanges)){
+  const x=values.changedOnly;
+  if(x)console.log("  "+name+": "+x.originalMedian.toFixed(3)+
+   " -> "+x.cleanedMedian.toFixed(3)+
+   " (paired median shift "+x.pairedChangeMedian.toFixed(3)+")");
+ }
  for(const [name,comparison] of Object.entries(comparisons)){
   const old=comparison.original,now=comparison.normalized,p=comparison.paired;
   if(old.correct!==oldPredictions.get(name).correct)
@@ -341,6 +378,10 @@ async function main(){
    "; KEEP predictions "+now.predicted.keep);
   console.log("  Paired: fixed "+p.fixed+", regressed "+p.regressed+
    ", net "+p.net);
+  if(p.groups.unchanged.changedPrediction)
+   console.warn("  WARNING: "+p.groups.unchanged.changedPrediction+
+    " predictions changed on identical text; inspect model-score drift"+
+    " before attributing differences to preprocessing.");
   for(const [group,x] of Object.entries(p.groups))
    console.log("  "+group+": "+x.total+" cases, fixed "+x.improved+
     ", regressed "+x.worsened+", predictions changed "+x.changedPrediction);
@@ -358,6 +399,7 @@ async function main(){
   limitations:"No KEEP gold; provisional AND/BUT mapping. Only formatting is changed, not spelling or author vocabulary. Reusing inspected GUM is diagnostic and does not validate generalisation.",
   frozenTrainingCases:402,
   neuralScoring:semantic,
+  signalDeltas:featureChanges,
   comparisons,
   cases:observed
  };
