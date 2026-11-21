@@ -29,6 +29,17 @@ const indirect = await paragraphTopicFindings(indirectPassage, analyse, async ()
 assert.equal(indirect.length, 1);
 assert.equal(indirect[0].technique.id, "ad_hominem");
 assert.equal(indirect[0].end, indirectPassage.length);
+const delayed = [hook, tail, topic, implied, tail].join(" ");
+const tried = [];
+const later = await paragraphTopicFindings(delayed, analyse, async prompt => {
+ tried.push(prompt);
+ return prompt.includes(implied) ? "implied yes" : "unclear";
+});
+assert.equal(tried.length, 3);
+assert.ok(tried.every(prompt => prompt.includes(hook)));
+assert.equal(later[0].confirmationSentence, 4);
+assert.equal(later[0].end, delayed.length);
+assert.equal(findings[0].confirmationSentence, 2);
 for (const response of ["no", "unclear", "uncertain", "yes and no"]) {
  assert.deepEqual(await paragraphTopicFindings(passage, analyse, async () => response), []);
 }
