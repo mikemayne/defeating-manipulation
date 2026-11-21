@@ -215,11 +215,23 @@ export function trainFusion(train,keys,{balanced=false,classWeights=null}={}){
    weights[k][j]-=rate*(gradient[k][j]+decay);
   }
  }
- return row=>{
+ // Keep the original callable's argmax behaviour EXACTLY the same.
+ // Additional read-only score access is for experimental decision thresholds.
+ // Softmax probabilities are model scores, NOT empirically calibrated
+ // probabilities of correctness.
+ const logits=row=>{
   const x=scale(row);
-  const scores=weights.map(w=>x.reduce((s,v,j)=>s+v*w[j],0));
+  return weights.map(w=>x.reduce((s,v,j)=>s+v*w[j],0));
+ };
+ const predict=row=>{
+  const scores=logits(row);
   return LABELS[scores.indexOf(Math.max(...scores))];
  };
+ predict.probabilities=row=>{
+  const values=softmax(logits(row));
+  return Object.fromEntries(LABELS.map((label,i)=>[label,values[i]]));
+ };
+ return predict;
 }
 export function crossValidate(rows,{folds=5,seed=20261121,balanced=false,keys=GROUPS.fusion,explicit=true}={}){
  const ids=shuffle([...new Set(rows.map(r=>r.id))],seed);
