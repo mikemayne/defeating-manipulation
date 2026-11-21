@@ -21,3 +21,7 @@ _site/
 /evaluation/reader-semantic-pair-scores.json
 /evaluation/reader-semantic-fusion.json
 /evaluation/reader-nonlinear-fusion.json
+/evaluation/reader-holdout-v2.json
+/evaluation/reader-holdout-v2-lm-scores.json
+/evaluation/reader-holdout-v2-semantic-scores.json
+/evaluation/reader-holdout-v2-results.json
