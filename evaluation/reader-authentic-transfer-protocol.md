@@ -113,6 +113,68 @@ exploratory and not independent confirmation. A future new document split
 must be frozen before testing any revised classifier. Without independently
 annotated authentic KEEP cases, three-class performance remains unmeasured.
 
+## Training-only contrast expansion beyond the original 36 documents
+
+We first relaxed the original four-BUT-per-document limit while preserving
+full-sentence GDTB annotation rules. The pinned-source check found only
+**three more eligible BUT examples** in the same 36 training documents.
+Therefore simply raising that cap would not substantially address poor
+contrast recall.
+
+The next training-only source manifest,
+`evaluation/reader-gum-contrast-expanded-documents-v1.json`,
+was frozen **before examining its annotations**. It reserves 118 previously
+unused GUM documents across sixteen genres for training, and a further
+39 documents which **are not read or used** and remain untouched for future
+independent validation. All are disjoint from the original 250-case pilot,
+existing 36 train / 24 test / 12 review documents, and each other.
+
+Build the additional genuine GDTB BUT examples using the same conservative
+requirements (implicit, adjacent full sentences, no leading explicit
+connective). The original corpus and both original test and review data
+remain unchanged:
+
+```powershell
+git pull
+node scripts/build-reader-gum-contrast-expansion.mjs
+node scripts/evaluate-reader-gum-contrast-expansion.mjs --preview
+node scripts/evaluate-reader-gum-contrast-expansion.mjs --max-errors 5
+```
+
+The build records source document SHA-256 checksums, relation subtypes
+(`comparison.contrast`, `comparison.concession`), and selected case hashes;
+all generated GUM source text is **gitignored**. The expansion includes
+only *extra* human-annotated BUT training cases, avoiding original training
+pair duplicates. It never manufactures contrast examples, relaxes annotation
+requirements, or infers missing KEEP labels.
+
+The inference script reuses the 402 previously scored synthetic cases and
+the original 308 training score caches; it scores **only the new BUT
+examples** into isolated, resumable local files:
+
+- `evaluation/reader-gum-contrast-expansion-v1.json` (source cases)
+- `evaluation/reader-gum-contrast-expansion-lm-v1.json`
+- `evaluation/reader-gum-contrast-expansion-sem-v1.json`
+- `evaluation/reader-gum-contrast-expansion-cv-v1.json` (comparison report)
+
+Comparison uses the **identical original five training-document folds**
+as the previous BUT-weight run. All rows from a held-out training document,
+including its new supplements, are excluded from fitting in that fold.
+Both the original and expanded models are evaluated on the same **original
+308 validation examples**, not on newly added examples. Previously reported
+full-fusion and no-period/hyphen baselines for BUT loss weights 1.0, 1.4,
+and 2.0 must be exactly reproduced or the script fails.
+
+Report both AND and BUT recall, balanced recall, paired corrected/regressed
+examples, and the performance breakdown on human-annotated contrast vs
+concession. The previously inspected 217-case test is never scored in this
+run and the 39 reserved future documents remain untouched.
+
+**Interpretation:** this is a training-only diagnostic, not a fresh external
+validation. A rise in recall should still be tested later on the untouched
+reserved documents with independently fixed selection and adequate KEEP gold.
+The implicit-conclusion module is independent and unchanged.
+
 ## Genuine KEEP: blinded two-reviewer procedure
 
 No sentence is automatically labelled KEEP. A pair lacking a GDTB annotation,
