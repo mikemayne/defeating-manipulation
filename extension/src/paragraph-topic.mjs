@@ -1,49 +1,55 @@
 const sentences = new Intl.Segmenter("en", {granularity: "sentence"});
 
-function openingPair(paragraph) {
- const pair = [];
- let pending = "";
- for (const {segment} of sentences.segment(paragraph)) {
-  pending += segment;
-  // ICU can break after a title followed by a capitalised name.
-  if (/\b(?:Mr|Mrs|Ms|Dr|Prof|Sr|Jr|St)\.\s*$/i.test(pending)) continue;
-  pair.push(pending.trim());
-  if (pair.length === 2) return pair;
-  pending = "";
+function endpoints(line) {
+ const lineEnd = line.trimEnd().length;
+ let first, last, start = 0;
+ for (const {segment, index} of sentences.segment(line)) {
+  const end = index + segment.trimEnd().length;
+  if (end < lineEnd && /\b(?:Mr|Mrs|Ms|Dr|Prof|Sr|Jr|St)\.\s*$/i.test(segment)) continue;
+  const raw = line.slice(start, end);
+  const span = {start: start + raw.length - raw.trimStart().length, end, text: raw.trim()};
+  if (span.text) {
+   if (!first) first = span;
+   else last = span;
+  }
+  start = index + segment.length;
  }
- return null;
+ return last ? [first, last] : null;
 }
 
-export async function paragraphTopicFindings(text, matchOpening, generate) {
+function closingCue(text) {
+ if (/\?["'”’»)\]]*$/u.test(text)) return "The closing sentence asks a question.";
+ if (/\b(?:remains? to be seen|(?:is|remains) (?:an |an? entirely )?open question|time will tell|too (?:early|soon) to (?:say|tell)|hard to (?:say|tell) whether)\b/i.test(text) ||
+     /^(?:["'“‘]\s*)?(?:perhaps|maybe|it (?:may|might|could) be that)\b/i.test(text))
+  return "The closing sentence expresses uncertainty.";
+ return "";
+}
+
+export async function paragraphTopicFindings(text, matchSentence) {
  const findings = [];
- // Selection snapshots separate blocks and explicit breaks with a newline.
  for (const line of text.matchAll(/[^\r\n]+/g)) {
-  const paragraph = line[0].trim();
-  const pair = openingPair(paragraph);
+  const pair = endpoints(line[0]);
   if (!pair) continue;
-  const [opening, second] = pair;
-  const hooks = await matchOpening(opening);
+  const [first, last] = pair;
+  const hooks = await matchSentence(first.text);
   if (!hooks.length) continue;
-  const prompt = [
-   "Does the second sentence endorse the judgment or reaction expressed or suggested by the first?",
-   "Answer yes for direct agreement. Answer implied yes if the second sentence takes that judgment for granted or suggests the same conclusion indirectly.",
-   "Answer no if it challenges the judgment, merely adds information, or changes subject.",
-   "If the relationship is ambiguous, answer unclear.",
-   "First: " + opening,
-   "Second: " + second,
-   "Answer:"
-  ].join("\n");
-  let answer;
-  try {
-   answer = await generate(prompt);
-  } catch (error) {
-   console.warn("Local paragraph confirmation check unavailable:", error);
-   break;
-  }
-  if (!/^(?:yes|implied yes)[.!]?$/i.test(answer.trim())) continue;
   const hook = hooks.reduce((best, item) => item.score > best.score ? item : best);
-  const start = line.index + line[0].indexOf(paragraph);
-  findings.push({...hook, kind: "paragraph_topic", start, end: start + paragraph.length});
+  const cue = closingCue(last.text);
+  // A repeated opening-only hit cannot establish a paired match.
+  const left = first.text.replace(/[.!?]+$/u, "");
+  let strongest;
+  for (const join of [" and ", " but "]) {
+   const rightStart = left.length + join.length;
+   const matches = await matchSentence(left + join + last.text);
+   for (const match of matches) {
+    if (match.technique.id !== hook.technique.id || match.start >= left.length || match.end <= rightStart) continue;
+    if (!strongest || match.score > strongest.score) strongest = match;
+   }
+  }
+  if (!cue && !strongest) continue;
+  const detail = [cue, strongest && "The paired sentences also triggered the opening technique."].filter(Boolean).join(" ");
+  for (const span of pair) findings.push({...hook, kind: "paragraph_topic", paragraphCue: detail,
+   start: line.index + span.start, end: line.index + span.end});
  }
  return findings;
 }

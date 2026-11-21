@@ -174,8 +174,7 @@ self.addEventListener("message", async event => {
    console.warn("Optional implied-conclusion analysis unavailable:", error);
   }
   const paragraphMatches = await paragraphTopicFindings(analysedText,
-   opening => matchText(opening, { techniques, rules, prototypes, embed: extractor ? embed : null }),
-   generateImpliedConclusion);
+   opening => matchText(opening, { techniques, rules, prototypes, embed: extractor ? embed : null }));
   const recognised = [...paragraphMatches, ...matches, ...spellingMatches, ...vocabularyMatches, ...punctuationMatches,
    ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues,
    ...implicitFindings];

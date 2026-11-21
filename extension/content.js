@@ -102,13 +102,13 @@
    if (match.paragraph && match.kind !== "paragraph_topic") {
      const context = document.createElement("div");
      context.textContent = "Paragraph cue: " + match.paragraph.technique.title +
-       ". The model reads the second sentence as directly or indirectly affirming the opening judgment or reaction.";
+       ". " + match.paragraph.paragraphCue;
      summary.append(context);
    }
    summary.style.margin = "6px 0 8px";
    const strength = document.createElement("div");
    strength.textContent = match.kind === "paragraph_topic" ?
-     "Paragraph cue: the opening matched this technique and the model reads the next sentence as directly or indirectly affirming its judgment or reaction." :
+     "Paragraph cue: the opening matched this technique. " + match.paragraphCue :
      match.kind === "scrutiny" ? "Review suggested, not a detected pattern" :
      match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
      match.kind === "vocabulary" ? "Nonstandard vocabulary: weak signal, intent unknown" :
