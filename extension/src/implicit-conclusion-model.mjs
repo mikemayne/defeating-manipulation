@@ -5,8 +5,7 @@ export const IMPLICIT_CONCLUSION_MODEL = "Xenova/flan-t5-small";
 let generatorPromise;
 export async function generateImpliedConclusion(prompt) {
  if (!generatorPromise) generatorPromise = pipeline(
-  "text2text-generation", IMPLICIT_CONCLUSION_MODEL, { dtype: "q8" })
-  .catch(error => { generatorPromise = null; throw error; });
+  "text2text-generation", IMPLICIT_CONCLUSION_MODEL, { dtype: "q8" });
  const generator = await generatorPromise;
  const output = await generator(prompt, { max_new_tokens: 54, do_sample: false });
  if (typeof output?.[0]?.generated_text !== "string")
