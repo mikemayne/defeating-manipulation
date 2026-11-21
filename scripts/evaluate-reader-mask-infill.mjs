@@ -210,7 +210,7 @@ function crossValidate(rows,o,filler,useRules){
   all.push(...test.map(r=>({r,predicted:decide(r),fold:i+1})));
  }
  if(all.length!==rows.length)throw Error("Missing CV boundaries");
- const combined=metrics(all,x=>x.predicted);
+ const combined=metrics(all.map(x=>({...x.r,predicted:x.predicted})),x=>x.predicted);
  const errors=all.filter(x=>x.r.gold!==x.predicted).map(x=>({
   id:x.r.id,offset:x.r.offset,gold:x.r.gold,predicted:x.predicted,
   scores:x.r.scores,fold:x.fold,snippet:x.r.source}));
