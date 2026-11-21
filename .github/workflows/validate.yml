@@ -101,6 +101,9 @@ jobs:
           node --check scripts/build-reader-gum-contrast-expansion.mjs
           node --check scripts/evaluate-reader-gum-contrast-expansion.mjs
           node scripts/test-reader-gum-contrast-expansion.mjs
+          node --check scripts/build-reader-gum-and-mixtures.mjs
+          node --check scripts/evaluate-reader-gum-and-mixtures.mjs
+          node scripts/test-reader-gum-and-mixtures.mjs
           node --check scripts/finalize-reader-keep-reviews.mjs
           node scripts/test-reader-keep-reviews.mjs
       - name: Evaluate matching logic on hundreds of labelled examples
