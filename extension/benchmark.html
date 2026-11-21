@@ -37,6 +37,7 @@ progress{width:100%;height:19px;margin-top:13px;accent-color:var(--accent)}
 table{width:100%;border-collapse:collapse;font-size:.92rem}
 th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
 th{background:#f2f7fe}
+td.example{max-width:340px;white-space:pre-wrap;overflow-wrap:anywhere;vertical-align:top}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .tablewrap{overflow:auto}
 #failure-note{margin:9px 0}
@@ -60,14 +61,14 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <h2 id="setup-title">Test setup</h2>
 <div class="controls">
 <label>Matching method
-<select id="mode"><option value="rules">Rules only (fast)</option><option value="ai">Rules + local AI (slower)</option><option value="consistency">Inconsistencies — local NLI</option><option value="argument_paragraph">Arguments — single paragraph (structure + optional NLI)</option><option value="reader_inference">Reader interpretation — local NLI probe (experimental)</option><option value="reader_boundary">Reader punctuation — AND / BUT, default KEEP (2 model scores)</option><option value="reader_compare">Reader strategies — context vs progressive (2-score A/B test)</option><option value="positive_rules">Positive patterns — rules only</option><option value="positive_ai">Positive patterns — rules + local AI</option><option value="concealed_rules">Concealed manipulation — relationships (rules)</option><option value="concealed_ai">Concealed manipulation — local AI + relationships</option></select></label>
+<select id="mode"><option value="rules">Rules only (fast)</option><option value="ai">Rules + local AI (slower)</option><option value="consistency">Inconsistencies — local NLI</option><option value="argument_paragraph">Arguments — single paragraph (structure + optional NLI)</option><option value="implicit_conclusion">Implicit conclusions — local LLM (real examples)</option><option value="reader_inference">Reader interpretation — local NLI probe (experimental)</option><option value="reader_boundary">Reader punctuation — AND / BUT, default KEEP (2 model scores)</option><option value="reader_compare">Reader strategies — context vs progressive (2-score A/B test)</option><option value="positive_rules">Positive patterns — rules only</option><option value="positive_ai">Positive patterns — rules + local AI</option><option value="concealed_rules">Concealed manipulation — relationships (rules)</option><option value="concealed_ai">Concealed manipulation — local AI + relationships</option></select></label>
 <label>Dataset
 <select id="source"><option value="generated">Generate labelled variants</option><option value="uploaded">Upload labelled JSON / JSONL</option></select></label>
 <label id="count-control">Number of tests
 <input id="count" type="number" min="1" max="1000000" step="1" value="25000"></label>
 <label id="seed-control">Reproducible seed
 <input id="seed" type="number" min="0" max="4294967295" step="1" value="2026"></label>
-<label id="file-control" hidden>Local labelled file
+<label id="file-control" hidden>Local JSON / JSONL file
 <input id="file" type="file" accept=".json,.jsonl,application/json"></label>
 <label id="join-score-control" hidden>Minimum AND/BUT log score
 <input id="join-min-score" type="number" min="-20" max="0" step="0.05" value="-3.5"></label>
@@ -95,10 +96,17 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <p class="note">Natural sampling estimates performance on typical passages; challenge sampling focuses on passages selected for their argument. These are different populations and should not be averaged uncritically.</p>
 <div class="tablewrap"><table><thead><tr><th>Sample</th><th class="num">Cases</th><th class="num">Exact</th><th class="num">Precision</th><th class="num">Recall</th></tr></thead><tbody id="real-track-results"></tbody></table></div>
 </section>
+<section id="implicit-results" hidden>
+<h2>Individual implicit-conclusion results</h2>
+<p class="note">Showing up to 100 cases. Copy the complete report or download every prediction, including raw model output, rejection diagnostics, original source offsets and optional reviewer labels.</p>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>Original text</th><th>LLM result</th><th>Status</th><th>Expected (if labelled)</th></tr></thead><tbody id="implicit-rows"></tbody></table></div>
+</section>
+<section id="standard-tables">
 <h2 id="confusion-title">Most frequent classification errors</h2>
 <div class="tablewrap"><table><thead><tr><th id="confusion-column">Expected → Detected</th><th class="num">Cases</th></tr></thead><tbody id="confusion"></tbody></table></div>
 <h2 id="per-technique-title" style="margin-top:28px">Per-technique performance</h2>
 <div class="tablewrap"><table><thead><tr><th>Technique</th><th class="num">Found / Expected</th><th class="num">Missed</th><th class="num">Extra matches</th></tr></thead><tbody id="per-technique"></tbody></table></div>
+</section>
 </section>
 <footer>Local test utility · Uses the extension's matching core; the local AI model may be downloaded once and cached by the browser. The page sends no selected text or test results to a server.</footer>
 </main>
