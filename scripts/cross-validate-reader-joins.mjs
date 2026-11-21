@@ -15,7 +15,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { selectJoin, DEFAULT_JOIN_THRESHOLDS } from '../extension/src/reader-join-thresholds.mjs';
 import { explicitBoundaryConnector } from '../extension/src/reader-connector-normalisation.mjs';
-import { DISCOURSE_SIMPLIFIER_VERSION } from '../extension/src/reader-discourse-simplifier.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LABELS = ['keep', 'and', 'but'];
@@ -27,7 +26,6 @@ const defaults = {
   seed: 20261121,
   maxErrors: 20,
   scoreKeep: false,
-  scoreSimplified: false,
 };
 
 function usage() {
@@ -40,7 +38,6 @@ function usage() {
   --seed N            Reproducible fold shuffle seed (default 20261121)
   --max-errors N      Number of incorrect decisions to print (default 20)
   --score-keep        Also score original punctuation with the local language model
-  --score-simplified  Score simplified discourse inputs (reuse unchanged scores)
   --help              Show this help
 
 The first run with --score-keep calculates KEEP scores for labelled boundaries.
@@ -56,7 +53,6 @@ function parseArgs(args) {
     const a = args[i];
     if (a === '--help' || a === '-h') { usage(); process.exit(0); }
     if (a === '--score-keep') { o.scoreKeep = true; continue; }
-    if (a === '--score-simplified') { o.scoreSimplified = true; continue; }
     if (!ints.has(a) && !paths.has(a)) throw Error(`Unknown option: ${a}`);
     if (++i >= args.length) throw Error(`Missing argument for ${a}`);
     if (ints.has(a)) {
@@ -114,10 +110,6 @@ function extractRows(predictions, texts) {
       matched.add(b.punctuationStart);
       rows.push({ id: item.id, offset: b.punctuationStart,
         gold: label, and: a, but, keep: isScore(b.keepScore) ? b.keepScore : null,
-        simplifiedAnd: b.simplifiedScoreVersion === DISCOURSE_SIMPLIFIER_VERSION ?
-          b.simplifiedCandidates?.find(c=>c.id==='and')?.score : null,
-        simplifiedBut: b.simplifiedScoreVersion === DISCOURSE_SIMPLIFIER_VERSION ?
-          b.simplifiedCandidates?.find(c=>c.id==='but')?.score : null,
         punctuation: b.punctuation, text: source,
         explicitConnector: explicitBoundaryConnector(source,{
           punctuationStart:b.punctuationStart,
@@ -204,7 +196,7 @@ function errorDetails(rows, choose) {
     }];
   });
 }
-function crossValidate(rows, folds, seed, mode, {explicit = false, simplified = false} = {}) {
+function crossValidate(rows, folds, seed, mode, {explicit = false} = {}) {
   const uniqueIDs = shuffle([...new Set(rows.map(x => x.id))], seed);
   if (uniqueIDs.length < folds) throw Error('Not enough distinct cases for number of folds');
   const idsByFold = Array.from({ length: folds }, () => new Set());
@@ -232,8 +224,7 @@ function crossValidate(rows, folds, seed, mode, {explicit = false, simplified = 
   if (all.length !== rows.length) throw Error('Cross-validation omitted rows');
   const combined = measure(all, r => r.predicted);
   const errors = errorDetails(all, r => r.predicted);
-  return { mode, explicit, simplified,
-    explicitMarkerCount:explicit?rows.filter(r=>r.explicitConnector).length:0,
+  return { mode, explicit, explicitMarkerCount:explicit?rows.filter(r=>r.explicitConnector).length:0,
     folds: perFold, combined, errors,
     predictions: all.map(r => ({ id: r.id, offset: r.offset, fold: r.fold, gold: r.gold, predicted: r.predicted })) };
 }
@@ -271,61 +262,6 @@ async function scoreKeepCandidates(predictions, dataset) {
   }
   console.log(`KEEP scores: ${scored} new, ${reused} reused, ${unscorable} unavailable`);
 }
-
-// Re-score only boundaries whose actual model input changes after
-// normalisation; all others reuse their EXACT original model scores.
-async function scoreSimplifiedCandidates(predictions, dataset){
- const {extractBoundaryProbes,buildBoundaryChoices} =
-  await import('../extension/src/reader-boundary-scorer.mjs');
- let scorer=null;
- let scored=0,cacheHits=0,reusedOriginal=0,unscorable=0,changedBoundaries=0;
- for(const item of predictions){
-  const source=dataset.get(item.id);
-  if(!source)throw Error('Missing dataset text: '+item.id);
-  const needed=new Map((item.boundaries||[]).filter(b=>
-   (item.expected_boundaries||[]).some(g=>g.offset===b.punctuationStart))
-   .map(b=>[b.punctuationStart,b]));
-  for(const probe of extractBoundaryProbes(source,{maxPairs:8})){
-   const boundary=needed.get(probe.punctuationStart);
-   if(!boundary)continue;
-   const cached=boundary.simplifiedScoreVersion===DISCOURSE_SIMPLIFIER_VERSION &&
-     ['and','but'].every(id=>isScore(boundary.simplifiedCandidates?.find(c=>c.id===id)?.score));
-   if(cached){cacheHits++;continue;}
-   const original=buildBoundaryChoices(source,probe);
-   const normalised=buildBoundaryChoices(source,probe,{simplifyForModel:true});
-   if(original.length!==2||normalised.length!==2){unscorable++;continue;}
-   const inputsChanged=original.some((c,i)=>c.prefix!==normalised[i].prefix ||
-     c.completion!==normalised[i].completion);
-   const candidates=[];
-   if(inputsChanged)changedBoundaries++;
-   for(let i=0;i<normalised.length;i++){
-    let score;
-    if(!inputsChanged){
-     score=boundary.candidates?.find(c=>c.id===normalised[i].id)?.score;
-     reusedOriginal++;
-    }else{
-     if(!scorer){
-      const {createBoundaryLanguageScorer}=
-       await import('../extension/src/reader-language-model.mjs');
-      scorer=await createBoundaryLanguageScorer({onStatus:m=>console.log(m)});
-     }
-     score=await scorer(normalised[i].prefix,normalised[i].completion);
-     scored++;
-    }
-    if(!isScore(score)){unscorable++;break;}
-    candidates.push({id:normalised[i].id,score});
-   }
-   if(candidates.length===2){
-    boundary.simplifiedCandidates=candidates;
-    boundary.simplifiedScoreVersion=DISCOURSE_SIMPLIFIER_VERSION;
-   }
-  }
- }
- console.log('Simplified scores: '+scored+' new model calls, '+reusedOriginal+
-  ' original scores reused, '+cacheHits+' cached boundaries; '+
-  changedBoundaries+' transformed boundaries; '+unscorable+' unscorable.');
-}
-
 function printMatrix(m) {
   console.log('  gold \\ predicted        keep   and   but');
   for (const g of LABELS) {
@@ -335,7 +271,7 @@ function printMatrix(m) {
   console.log(`  Accuracy ${pct(m.accuracy)}; macro recall ${pct(m.balancedAccuracy)} (class-balanced)`);
 }
 function printCV(cv, maxErrors) {
-  console.log(`\n${cv.mode === 'two' ? 'TWO scores: AND/BUT + KEEP fallback' : 'THREE scores: KEEP/AND/BUT'}${cv.explicit ? ' + explicit connector rules' : ''}${cv.simplified ? ' [simplified LM input]' : ''} — ${cv.folds.length}-fold CV`);
+  console.log(`\n${cv.mode === 'two' ? 'TWO scores: AND/BUT + KEEP fallback' : 'THREE scores: KEEP/AND/BUT'}${cv.explicit ? ' + explicit connector rules' : ''} — ${cv.folds.length}-fold CV`);
   if(cv.explicit)console.log(`  Explicit connectors: ${cv.explicitMarkerCount} boundaries; others use fitted model thresholds.`);
   for (const f of cv.folds)
     console.log(`  Fold ${f.fold}: ${f.testCases} unseen cases, ${f.testBoundaries} boundaries, ` +
@@ -363,10 +299,6 @@ async function main() {
     console.log('Scoring original punctuation as a third model candidate (only uncached boundaries)…');
     await scoreKeepCandidates(predictions, texts);
   }
-  if (o.scoreSimplified) {
-    console.log('Scoring simplified discourse inputs (using model only where input changed)…');
-    await scoreSimplifiedCandidates(predictions, texts);
-  }
   const { rows, unmatched } = extractRows(predictions, texts);
   if (rows.length < o.folds * 2 || new Set(rows.map(r => r.id)).size < o.folds)
     throw Error('Not enough scored and labelled examples for cross-validation');
@@ -388,22 +320,6 @@ async function main() {
   else console.log('\nThree-score CV skipped: rerun with --score-keep to score original punctuation.');
   const threeRules = hasKeep ? crossValidate(rows, o.folds, o.seed, 'three', {explicit:true}) : null;
   if (threeRules) printCV(threeRules, o.maxErrors);
-  // Independently re-fit thresholds on each training fold, not on the
-  // original scores. Never mix original KEEP scores with simplified scores.
-  const hasSimplified=rows.every(r=>isScore(r.simplifiedAnd)&&isScore(r.simplifiedBut));
-  let simplifiedTwo=null,simplifiedTwoRules=null;
-  if(hasSimplified){
-    const simplerRows=rows.map(r=>({...r,and:r.simplifiedAnd,but:r.simplifiedBut}));
-    simplifiedTwo=crossValidate(simplerRows,o.folds,o.seed,'two',{simplified:true});
-    simplifiedTwoRules=crossValidate(simplerRows,o.folds,o.seed,'two',
-     {simplified:true,explicit:true});
-    printCV(simplifiedTwo,o.maxErrors);
-    printCV(simplifiedTwoRules,o.maxErrors);
-    console.log('\nA/B result (rule assisted): original '+
-      pct(twoRules.combined.accuracy)+' vs simplified '+
-      pct(simplifiedTwoRules.combined.accuracy)+
-      ' (both fitted independently on held-out folds).');
-  }else console.log('\nSimplified LM comparison skipped: run with --score-simplified.');
   const summary = {
     description: 'Five-fold case-separated CV. Every reported CV prediction is held out of its fold\'s threshold fitting.',
     caveat: 'Gold choices are developer-authored; NOT human-reader accuracy. Tiny folds have high variance.',
@@ -411,8 +327,6 @@ async function main() {
     caseCount: new Set(rows.map(r => r.id)).size, boundaryCount: rows.length,
     unmatched, twoScore: two, threeScore: three,
     ruleAssistedTwoScore:twoRules, ruleAssistedThreeScore:threeRules,
-    simplifiedModelVersion:DISCOURSE_SIMPLIFIER_VERSION,
-    simplifiedTwoScore:simplifiedTwo,ruleAssistedSimplifiedTwoScore:simplifiedTwoRules,
     ruleCaveat:'Explicit cue rules were designed after looking at synthetic test errors. These results are exploratory and are NOT an independent validation.',
     baselines: { defaults, alwaysKeep: keepBaseline },
     predictions, // Keep model score cache so reruns require no inference.
