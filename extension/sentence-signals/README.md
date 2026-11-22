@@ -12,15 +12,14 @@ Use Node.js 22 and Python 3.11 or 3.12 in an active virtual environment. The
 first setup downloads model weights. All analysis runs on your machine.
 
 ```sh
-npm --prefix extension ci
+npm --prefix extension install --no-package-lock
 python -m pip install "spacy>=3.8,<3.9" "optimum-onnx[onnxruntime]>=0.1,<0.2" "transformers>=4.51,<5" "torch>=2.6"
 python -m spacy download en_core_web_sm
 python extension/sentence-signals/prepare_clickbait.py
 node extension/sentence-signals/analyse.mjs --warm
 ```
 
-Use npm install in the extension directory if you are working from a checkout
-without its lockfile. To use a different Python executable for inference set
+To use a different Python executable for inference set
 SENTENCE_PYTHON. To put model files elsewhere set SENTENCE_MODEL_DIR and pass
 the same directory to prepare_clickbait.py. The Python exporter converts the
 original Valurank weights once. A persistent local Python process runs the
@@ -67,3 +66,4 @@ examples are still open.
 The checked-in cases exercise explicit and vague consequences, contextual
 references, headline scoring and takeaway comparison. The JavaScript tests
 exercise the orchestration with deterministic model adapters.
+
