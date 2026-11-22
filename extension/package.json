@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "node build.mjs && esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js && esbuild src/benchmark-worker.js --bundle --format=esm --platform=browser --outfile=benchmark-worker.js && esbuild src/hybrid-browser-model.mjs --bundle --format=esm --platform=browser --outfile=hybrid-browser-model.js",
+    "build": "node build.mjs && esbuild src/matcher-worker.js --bundle --format=esm --platform=browser --outfile=matcher-worker.js && esbuild src/benchmark-worker.js --bundle --format=esm --platform=browser --outfile=benchmark-worker.js && esbuild src/hybrid-browser-model.mjs --bundle --format=esm --platform=browser --outfile=hybrid-browser-model.js && esbuild src/hybrid-grammar.mjs --bundle --format=esm --platform=browser --outfile=hybrid-grammar.js",
     "dev": "npm run build && web-ext run --source-dir .",
     "evaluate": "node evaluate.mjs --strict",
     "evaluate:ai": "node evaluate.mjs --semantic",
@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@huggingface/transformers": "^3.7.2",
-    "nspell": "^2.1.5"
+    "nspell": "^2.1.5",
+    "wink-eng-lite-web-model": "1.8.1",
+    "wink-nlp": "2.4.0"
   },
   "devDependencies": {
+    "dictionary-en-gb": "^3.0.0",
     "esbuild": "^0.25.0",
-    "web-ext": "^8.9.0",
-    "dictionary-en-gb": "^3.0.0"
+    "web-ext": "^8.9.0"
   }
 }

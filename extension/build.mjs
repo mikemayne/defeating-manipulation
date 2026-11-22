@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
-import { mkdir, readdir, copyFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, copyFile, writeFile } from "node:fs/promises";
 import britishEnglish from "dictionary-en-gb";
 
 const require = createRequire(import.meta.url);
@@ -28,3 +28,8 @@ console.log(`Copied ${files.length} ONNX Runtime assets into extension/ort`);
 await writeFile(resolve("spell-en-gb.aff"), britishEnglish.aff);
 await writeFile(resolve("spell-en-gb.dic"), britishEnglish.dic);
 console.log("Bundled the offline en-GB spelling dictionary");
+
+const grammarPackages = ["wink-nlp", "wink-eng-lite-web-model"];
+const grammarNotices = await Promise.all(grammarPackages.map(async name =>
+ name + "\n\n" + await readFile(join("node_modules", name, "LICENSE"), "utf8")));
+await writeFile(resolve("hybrid-grammar-licenses.txt"), grammarNotices.join("\n\n"));

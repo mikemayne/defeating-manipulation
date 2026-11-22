@@ -14,6 +14,14 @@ const literal = (id, expression, example, counterexample) => ({
 
 export const questions = [
  {
+  id: "prior_activity_assumed", version: 1,
+  predicate: "Does a direct statement or time/reason question about stopping an activity treat that activity as previously occurring?",
+  scope: "sentence", target: "activity", prerequisites: [],
+  states: ["yes", "unknown"], strategy: "javascript",
+  localLimit: "Tagged uses of 'stop' with an activity complement in direct statements or time/reason questions.",
+  examples: { yes: "When did you stop checking the invoices?", no: "She stopped at the office to check." }
+ },
+ {
   id: "verbatim_repeated_sentence", version: 1,
   predicate: "Does a sentence of at least four words repeat verbatim within this paragraph?",
   scope: "paragraph", target: "two sentence positions", prerequisites: [],

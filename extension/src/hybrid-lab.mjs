@@ -37,7 +37,8 @@ form.addEventListener("submit", event => {
   for (const item of supported) {
    const entry = document.createElement("li");
    entry.textContent = item.id + " — " + item.evidence.map(span =>
-    (span.kind === "examined_scope" ? "Examined passage: " : "") + span.quote).join(" / ");
+    span.activity ? "Prior activity implied: " + span.activity.quote :
+     (span.kind === "examined_scope" ? "Examined passage: " : "") + span.quote).join(" / ");
    findings.append(entry);
   }
   trace.textContent = JSON.stringify(result, null, 2);

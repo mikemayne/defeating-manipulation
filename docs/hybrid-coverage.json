@@ -380,18 +380,28 @@
       "kind": "technique",
       "source": "techniques.json",
       "definition": "Embedding an assumption in a sentence so that it is treated as given rather than argued for.",
-      "required": [],
+      "required": [
+        "prior_activity_assumed"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
-      "context": "clause",
+      "questions": [
+        {
+          "id": "prior_activity_assumed",
+          "version": 1,
+          "strategy": "javascript"
+        }
+      ],
+      "context": "sentence",
       "pendingRequired": [
         "assumption treated as already accepted"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
-      "javascript": [],
+      "gap": "Covers prior activity implied by an explicit stop construction when the grammar tagger is available.",
+      "javascript": [
+        "Tagged uses of 'stop' with an activity complement in direct statements or time/reason questions."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],

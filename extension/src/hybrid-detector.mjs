@@ -114,7 +114,8 @@ function evaluatePatterns(answers) {
 }
 
 export async function analyzeHybrid(text, { classify, mode = "selective", variant = "tailored",
- budget = 48, signal, checkedAnswers, questionIds, spellchecker, onCall, scopeEvidence = false } = {}) {
+ budget = 48, signal, checkedAnswers, questionIds, spellchecker, onCall, scopeEvidence = false,
+ findPriorActivities } = {}) {
  if (typeof text !== "string") throw TypeError("Expected text");
  if (!["selective", "complete"].includes(mode) || !["baseline", "tailored"].includes(variant) ||
      !Number.isInteger(budget) || budget < 0 || budget > 256) throw RangeError("Invalid experiment options");
@@ -137,6 +138,13 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
    answer: item.answer, status: item.status, method: item.method, evidence: item.evidence, scope
   }]));
   answers.set("verbatim_repeated_sentence", repetition);
+  if (!questionIds || questionIds.has("prior_activity_assumed")) {
+   const evidence = !scope.truncated && findPriorActivities ? findPriorActivities(passage, scope) : [];
+   answers.set("prior_activity_assumed", {
+    answer: evidence.length ? "yes" : "unknown", status: findPriorActivities && !scope.truncated ? "answered" : "not_asked",
+    method: "javascript", evidence, scope
+   });
+  }
   const semantic = questions.filter(question => question.strategy === "model");
   const priority = question => {
    const uses = Object.values(mappings).filter(mapping => mapping.required.includes(question.id)).length;

@@ -18,8 +18,11 @@ self.addEventListener("message", async ({ data }) => {
  }
  try {
   self.postMessage({ stage: "Analysing locally…" });
+  const grammar = /\bstop(?:s|ped|ping)?\b/i.test(data.text)
+   ? await import("../hybrid-grammar.js").catch(() => null) : null;
   const result = await analyzeHybrid(data.text, {
    classify,
+   findPriorActivities: grammar?.findPriorActivities,
    scopeEvidence: data.model === "browser",
    mode: data.complete ? "complete" : "selective",
    budget: data.complete ? 96 : data.model === "browser" ? 6 : 42,

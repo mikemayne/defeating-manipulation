@@ -1,8 +1,13 @@
 # JavaScript pattern coverage
 
-The hybrid detector can resolve specific explicit constructions for 35 of 79 active catalogue patterns without a model. Rules require a complete matching paragraph and return original evidence spans. Other wording remains open for the semantic pass. These are implementation counts. Real-world accuracy has yet to be measured.
+The hybrid detector can resolve specific explicit constructions for 36 of 79 active catalogue patterns without a generative model. Phrase rules require a complete matching paragraph. The experimental presupposition rule uses a local tagger on individual sentences. Both return original evidence spans. These are implementation counts. Real-world accuracy has yet to be measured.
 
 Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This includes generated construction controls and the earlier synthetic audit passages used to refine three rules. Those reviewed passages are development examples for this experiment.
+
+## Grammar prototype
+
+The hybrid lab loads the bundled winkNLP tagger when the passage contains a form of 'stop'. The JavaScript library accepts the same tagger through `findPriorActivities`. The CLI enables it with `--grammar`. Run `node scripts/test-hybrid-grammar.mjs` after installing the extension dependencies to compare this construction with the existing Firefox phrase rule on a small synthetic set.
+The rule handles direct statements and explicit time or reason questions with a recognisable activity complement. Quoted, conditional, negated and unclear constructions remain unresolved. A prior activity is recorded as an assumption in the wording.
 
 ## Explicit forms JavaScript can resolve
 
@@ -12,6 +17,7 @@ Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This inc
 | False dilemma | A claim of exactly two options alongside a distinct option explicitly named as available. |
 | Bandwagon appeal | An explicit popularity claim linked to the same recommendation. |
 | Repetition and familiarity | Verbatim sentence repetition within a paragraph. |
+| Presupposition | Tagged uses of 'stop' with an activity complement in direct statements or time/reason questions. |
 | Allegation laundering | The same clause first attributed as an allegation and then restated unqualified. |
 | Appeal to guilt | An explicit test of care tying a named person's distress to an instruction. |
 | Moving the goalposts | An explicitly sufficient criterion repeated as fulfilled before an additional requirement is introduced. |
@@ -46,7 +52,7 @@ Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This inc
 
 ## Remaining decisions
 
-These 38 patterns have no new JavaScript resolution in the hybrid detector. An existing Firefox rule can still flag some forms. The last column identifies the judgment or relationship for which a strong rule is still needed. It can be used to propose better lexical cues, structural tests, or examples.
+These 37 patterns have no new JavaScript resolution in the hybrid detector. An existing Firefox rule can still flag some forms. The last column identifies the judgment or relationship for which a strong rule is still needed. It can be used to propose better lexical cues, structural tests, or examples.
 
 | Pattern | Existing Firefox rules | What remains to establish |
 | --- | --- | --- |
@@ -57,7 +63,6 @@ These 38 patterns have no new JavaScript resolution in the hybrid detector. An e
 | Appeal to false authority | — | authority offered as evidence · lack of relevant expertise or established authority |
 | Conspiracy framing | — | hidden coordination asserted · assertion grounded in insinuation or difficult-to-test claims |
 | Priming | — | earlier cue · later material related to the association |
-| Presupposition | Yes | assumption treated as already accepted |
 | Anecdotal evidence | — | Does the speaker offer a specific personal experience recounted as a story as sufficient proof of a general factual claim? A popularity claim or a recommendation on its own does not qualify. |
 | Slippery slope | Yes | Does the speaker present a chain of escalating consequences as inevitable without explaining how the steps lead to each other? |
 | Scapegoating | Yes | complex problem attributed broadly to a target · available other causes omitted or simplified |

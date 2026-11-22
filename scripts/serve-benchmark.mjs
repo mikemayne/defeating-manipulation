@@ -12,6 +12,7 @@ const allowed = new Set([
  "/extension/src/hybrid-lab.mjs",
  "/extension/src/hybrid-lab-worker.mjs",
  "/extension/hybrid-browser-model.js",
+ "/extension/hybrid-grammar.js",
  "/extension/src/hybrid-detector.mjs",
  "/extension/src/hybrid-questions.mjs",
  "/extension/src/hybrid-local-questions.mjs",

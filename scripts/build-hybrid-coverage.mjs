@@ -82,7 +82,8 @@ const records = sources.flatMap(([source, key, kind]) => read(source)[key].map(i
    const { version, strategy } = questions.find(question => question.id === id);
    return { id, version, strategy };
   }),
-  context: outside[item.id] ? "information unavailable from text" : mapping ? "paragraph" : pending[item.id]?.[0],
+  context: outside[item.id] ? "information unavailable from text" :
+   mapping ? questions.find(question => question.id === required[0])?.scope ?? "paragraph" : pending[item.id]?.[0],
   pendingRequired: pending[item.id]?.slice(1) ?? [],
   status: mapping ? "implemented" : outside[item.id] ? "not_inferable" : "inventoried",
   testedBy: [
@@ -91,6 +92,8 @@ const records = sources.flatMap(([source, key, kind]) => read(source)[key].map(i
   ],
   gap: outside[item.id] ?? mapping?.partial ?? (mapping ? null : "Predicate and context mapping pending."),
   javascript: required.flatMap(id => {
+   const limit = questions.find(question => question.id === id)?.localLimit;
+   if (limit) return [limit];
    if (id === "verbatim_repeated_sentence") return ["Verbatim sentence repetition within a paragraph."];
    return Object.hasOwn(localQuestions, id) ? [localQuestions[id].limit] : [];
   }),
@@ -129,8 +132,11 @@ const outsideText = records.filter(row => row.status === "not_inferable");
 const localRuleNames = new Set(questions.map(question => question.id));
 if (Object.keys(localQuestions).some(id => !localRuleNames.has(id))) throw Error("Unregistered JavaScript rule");
 const localReport = ["# JavaScript pattern coverage", "",
- "The hybrid detector can resolve specific explicit constructions for " + explicit.length + " of " + records.length + " active catalogue patterns without a model. Rules require a complete matching paragraph and return original evidence spans. Other wording remains open for the semantic pass. These are implementation counts. Real-world accuracy has yet to be measured.", "",
+ "The hybrid detector can resolve specific explicit constructions for " + explicit.length + " of " + records.length + " active catalogue patterns without a generative model. Phrase rules require a complete matching paragraph. The experimental presupposition rule uses a local tagger on individual sentences. Both return original evidence spans. These are implementation counts. Real-world accuracy has yet to be measured.", "",
  "Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This includes generated construction controls and the earlier synthetic audit passages used to refine three rules. Those reviewed passages are development examples for this experiment.", "",
+ "## Grammar prototype", "",
+ "The hybrid lab loads the bundled winkNLP tagger when the passage contains a form of 'stop'. The JavaScript library accepts the same tagger through `findPriorActivities`. The CLI enables it with `--grammar`. Run `node scripts/test-hybrid-grammar.mjs` after installing the extension dependencies to compare this construction with the existing Firefox phrase rule on a small synthetic set.",
+ "The rule handles direct statements and explicit time or reason questions with a recognisable activity complement. Quoted, conditional, negated and unclear constructions remain unresolved. A prior activity is recorded as an assumption in the wording.", "",
  "## Explicit forms JavaScript can resolve", "",
  "| Pattern | Implemented construction |",
  "| --- | --- |",

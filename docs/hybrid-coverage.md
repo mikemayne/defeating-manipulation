@@ -17,7 +17,7 @@ The published catalogues supply canonical IDs. The extension copy supplies exist
 | conspiracy_framing | technique | inventoried | paragraph | hidden coordination asserted, assertion grounded in insinuation or difficult-to-test claims |  |  | Predicate and context mapping pending. |
 | repetition | technique | implemented | paragraph | verbatim_repeated_sentence |  | deterministic unit test | Covers exact repetition within a paragraph. The reader's response is unknown. |
 | priming | technique | inventoried | article | earlier cue, later material related to the association |  |  | Predicate and context mapping pending. |
-| presupposition | technique | inventoried | clause | assumption treated as already accepted |  |  | Predicate and context mapping pending. |
+| presupposition | technique | implemented | sentence | prior_activity_assumed |  |  | Covers prior activity implied by an explicit stop construction when the grammar tagger is available. |
 | false_balance | technique | not_inferable | information unavailable from text |  |  |  | Relative strength of the available evidence |
 | anecdotal_evidence | technique | implemented | paragraph | story_used_as_general_proof |  | frozen synthetic check | Covers an explicitly supplied individual story. |
 | slippery_slope | technique | implemented | paragraph | claim_chain_missing_links |  |  |  |
