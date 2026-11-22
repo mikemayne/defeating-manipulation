@@ -8,7 +8,7 @@ assert.equal(new Set(articles.map(article => article.url)).size, 100);
 const segmenter = new Intl.Segmenter('en-GB', { granularity: 'sentence' });
 const scoped = articles.map(article => {
   const sentences = article.paragraphs.flatMap(paragraph => [...segmenter.segment(paragraph)]
-    .map(item => item.segment.trim()).filter(Boolean)).slice(0, 10);
+    .map(item => item.segment.trim()).filter(Boolean));
   assert.ok(sentences.length >= 4, 'Insufficient extracted opening text: ' + article.url);
   return { ...article, sentences };
 });
@@ -25,8 +25,10 @@ async function batches(rows, scorer, size = 8) {
 
 const text = scoped.flatMap(article => [article.headline, ...article.sentences]);
 const embedding = await batches(text, engine.embed, 16);
+console.log('Embedded', text.length, 'headlines and body sentences');
 const emotion = await batches(text, engine.emotion);
 const toxicity = await batches(text, engine.toxicity);
+console.log('Scored emotion and toxicity');
 const headlines = await batches(scoped.map(article => article.headline), engine.clickbait);
 let offset = 0;
 for (const [id, article] of scoped.entries()) {
@@ -55,6 +57,7 @@ const leadPairs = scoped.map(article => pair(article, article.headlineId, articl
 const comparisons = [...adjacent, ...sameArticleGap, ...leadPairs];
 const nli = await batches(comparisons, rows => engine.inference(rows.map(row => text[row.first]),
   rows.map(row => text[row.second])));
+console.log('Scored', comparisons.length, 'ordered inference comparisons');
 const emotions = Object.keys(emotion[0]).filter(label => label !== 'neutral');
 for (const [index, row] of comparisons.entries()) row.nli = nli[index];
 
@@ -127,6 +130,8 @@ const report = {
   sameArticleThreeSentenceGap: stats(gapRows),
   differentArticlesMatchedPosition: stats(acrossArticles.map(features)),
   firstBodyTransition: stats(firstTransitions),
+  firstNineBodyTransitions: stats(adjacentRows.filter(row => row.position < 9)),
+  laterThanNinthBodyTransition: stats(adjacentRows.filter(row => row.position >= 9)),
   laterBodyTransitions: stats(adjacentRows.filter(row => row.position > 0)),
   secondSentenceOpensWithContrastMarker: stats(marker),
   secondSentenceWithoutContrastMarker: stats(adjacentRows.filter(row => !row.contrastMarker)),
