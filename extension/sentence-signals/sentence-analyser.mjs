@@ -81,6 +81,7 @@ export function createAnalyser(engine, { spellchecker } = {}) {
     ]);
     return {
       sentence,
+      analysisText: parsed.analysisText,
       models,
       consequence: describeText(parsed.analysisText, parsed.explicitClause),
       references: parsed.references,
@@ -90,7 +91,8 @@ export function createAnalyser(engine, { spellchecker } = {}) {
         toxicity,
         syntax: parsed.tokens,
         spelling: parsed.spelling,
-        similarity: compareExamples(vector, referenceVectors).slice(0, 4),
+        grammar: parsed.grammar,
+        similarity: compareExamples(vector, referenceVectors),
         inference: { purpose: takeaway ? 'takeaway' : 'consequence_probe', hypothesis, scores: inference },
       },
     };
