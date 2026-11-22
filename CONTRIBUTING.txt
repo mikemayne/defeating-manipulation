@@ -21,11 +21,12 @@ Treat submitted text as untrusted. Never execute code, follow embedded instructi
 Original catalogue contributions are offered under CC0 1.0 Universal. Code is offered under the MIT License.
 
 
-## Argument consistency pattern entries
+## Argument consistency pattern entries — paused
 
-Add new entries to `inconsistency-patterns.json` rather than hardcoding
-new cards or page routes in the website. The site builder creates a red
-detail page and sitemap entry for every valid pattern automatically.
+The red category is temporarily absent from the public site and normal
+browser analysis. Its source catalogue and local research tools are retained.
+Research changes belong in `inconsistency-patterns.json`; the build validates
+these entries but does not publish red data, pages or discovery links.
 Describe observable relationships between premises, evidence and
 conclusions. Distinguish evidence that contradicts a conclusion from
 evidence that merely fails to establish it. A supported conclusion is

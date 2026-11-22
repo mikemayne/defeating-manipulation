@@ -6,7 +6,7 @@ execFileSync(process.execPath, ['scripts/build-site.mjs'], {stdio:'inherit'});
 const read = name => fs.readFileSync('_site/'+name,'utf8');
 const catalogue = JSON.parse(read('techniques.json'));
 const positive = JSON.parse(read('positive-patterns.json'));
-const inconsistency = JSON.parse(read('inconsistency-patterns.json'));
+const inconsistency = JSON.parse(fs.readFileSync('inconsistency-patterns.json', 'utf8'));
 
 const schema = JSON.parse(fs.readFileSync('analysis-schema.json','utf8'));
 const homepage = read('index.html');
@@ -17,22 +17,16 @@ assert.ok(homepage.includes('positive-section') && homepage.includes('background
 assert.ok(homepage.includes('id="positive-search"') && homepage.includes('id="positive-catalogue"'), 'Positive library is independently searchable');
 assert.ok(positive.patterns.length >= 10, 'Positive pattern library has an initial set of patterns');
 assert.ok(homepage.includes('id="search"') && homepage.includes('id="catalogue"'), 'Homepage provides searchable catalogue');
-assert.ok(homepage.includes('class="inconsistency-section"') &&
- homepage.includes('background:#991b1b'), 'Inconsistency section has a red background');
-assert.ok(homepage.includes('id="inconsistency-search"') &&
- homepage.includes('id="inconsistency-catalogue"'), 'Inconsistency library is independently searchable');
-assert.ok(homepage.includes("mountLibrary({url:'inconsistency-patterns.json'"),
- 'The red library uses the shared data-driven catalogue renderer');
-assert.ok(inconsistency.patterns.length >= 1, 'Inconsistency library has patterns');
-for (const item of inconsistency.patterns) {
- const page = 'inconsistency-patterns/'+item.id+'.html';
- assert.ok(fs.existsSync('_site/'+page), 'Generated red page exists for '+item.id);
- assert.ok(read(page).includes('background:#991b1b'), 'Individual red pattern page uses a red background: '+item.id);
- assert.ok(read(page).includes('<h2>Recognising the pattern</h2>'), 'Red pattern has observable features: '+item.id);
- assert.ok(read('sitemap.xml').includes(page), 'Sitemap includes red pattern: '+item.id);
-}
-assert.ok(read('sitemap.xml').includes('inconsistency-patterns.json'),
- 'Sitemap includes the red catalogue JSON');
+assert.ok(!homepage.includes('inconsistency-'),
+ 'The paused red category has no homepage section, search or data request');
+assert.ok(!fs.existsSync('_site/inconsistency-patterns.json') &&
+ !fs.existsSync('_site/inconsistency-patterns'),
+ 'The paused red catalogue and detail pages are not published');
+assert.ok(!read('sitemap.xml').includes('inconsistency-patterns') &&
+ !read('llms.txt').includes('inconsistency-patterns'),
+ 'Discovery files do not advertise the paused red category');
+assert.ok(inconsistency.patterns.length >= 1,
+ 'The source inconsistency catalogue remains available for research');
 assert.ok(inconsistency.patterns.some(item =>
  item.id === 'unsupported_conclusion' &&
  /insufficient to support (?:this|the) conclusion/i.test(
@@ -349,7 +343,7 @@ assert.deepEqual(gapErrors, [], 'Four-gap cases avoid new false positives and mi
 console.log('Build, matching-core, benchmark, semantic precision and broad-coverage checks passed.');
 
 
-// Two-pass selected-text analyser: contradiction pairs, offsets and abstention.
+// Retained research analyser: contradiction pairs, offsets and abstention.
 const consistency = await import('../extension/src/consistency.mjs');
 const contradictory = 'The company never collects email addresses. The company collects email addresses from every customer.';
 const claims = consistency.extractClaims(contradictory);
@@ -371,11 +365,11 @@ assert.ok(combined.some(m => m.kind === 'inconsistency'), 'Red contradiction sur
 assert.ok(combined.every(m => m.start >= 0 && m.end <= contradictory.length),
  'Merged two-pass highlights remain in bounds');
 const extensionWorker = fs.readFileSync('extension/src/matcher-worker.js', 'utf8');
-assert.ok(extensionWorker.includes('findInconsistencies(analysedText, memoScore)') &&
+assert.ok(!extensionWorker.includes('findInconsistencies(') &&
  extensionWorker.includes('remapFindings(preprocessing,'),
- 'Firefox worker runs the second local pass on a clean copy and preserves original offsets');
-assert.ok(selectionScript.includes('const BLUE =') && selectionScript.includes('RED = "#dc2626"'),
- 'Firefox highlighter retains the existing colours and adds red');
+ 'Firefox skips the paused contradiction pass and preserves original offsets');
+assert.ok(selectionScript.includes('const BLUE =') && !selectionScript.includes('RED ='),
+ 'Firefox retains its active colours without a red highlighter');
 
  
 // The local inconsistency classifier has its own labelled fixture set.
@@ -426,7 +420,7 @@ assert.ok(benchmarkPage.includes('value="consistency"'),
  'The lab exposes a third independent inconsistency mode');
 assert.ok(benchmarkUI.includes('inconsistency-examples.json') &&
  benchmarkWorker.includes('findInconsistencies(item.text, nliScorer)'),
- 'The browser lab uses the same inference path as the extension');
+ 'The browser lab retains the independent contradiction research path');
 assert.ok(localServer.includes('/evaluation/inconsistency-examples.json'),
  'The local server allows only the explicit inconsistency fixture');
 assert.ok(nliSource.includes('text_pair: hypothesis') &&
@@ -461,7 +455,7 @@ assert.equal(consistency.attributedSource('The manager later said the station cl
 assert.equal(consistency.attributedSource('The manager said the station is open.'),
  'manager', 'Stable attribution of reporting source');
 assert.ok(!catalogue.techniques.some(item => item.id === 'argument_inconsistency'),
- 'Inconsistency patterns belong to the dedicated red library, not the blue one');
+ 'Paused inconsistency patterns stay in their retained catalogue, not the active blue one');
 console.log('Attribution-aware contradiction and insufficient-evidence catalogue checks passed.');
 
 
@@ -514,7 +508,7 @@ assert.ok(selectionScript.includes('match.technique.category === "Positive" ? 1 
 assert.ok(selectionScript.includes('technique.category === "Positive" ? "positive-patterns"'),
  'Green tooltip links to green pattern page rather than blue manipulation page');
 assert.ok(extensionWorker.includes('matchPositiveText(analysedText'),
- 'Firefox worker runs positive matching without replacing blue or red passes');
+ 'Firefox worker retains its independent positive matching pass');
 assert.ok(benchmarkPage.includes('value="positive_rules"') &&
  benchmarkPage.includes('value="positive_ai"') &&
  benchmarkUI.includes('positive-matcher-examples.json') &&
@@ -620,10 +614,10 @@ assert.deepEqual(Object.fromEntries(
  'Argument examples cover supported, unsupported, contradicted and absent inferences');
 assert.deepEqual(argumentEngine.ARGUMENT_LABELS, [
  'contradictory_claims','unsupported_conclusion','supported_conclusion'
-], 'Three argument labels share the public red pattern library');
+], 'Three argument labels share the retained research catalogue');
 for (const label of argumentEngine.ARGUMENT_LABELS)
  assert.ok(inconsistency.patterns.some(p => p.id === label),
-  'The public red library describes each argument outcome: '+label);
+  'The retained red catalogue describes each argument outcome: '+label);
 const mockArgumentScores = {
  supported_conclusion: { contradiction: 0.01, neutral: 0.01, entailment: 0.98 },
  unsupported_conclusion: { contradiction: 0.01, neutral: 0.98, entailment: 0.01 },
@@ -692,19 +686,18 @@ assert.ok(benchmarkPage.includes('value="argument_paragraph"') &&
  benchmarkWorker.includes('validateArgumentParagraphCases(rawSeeds)') &&
  benchmarkUI.includes('expected_argument'),
  'Single paragraph argument lab accepts structure metadata plus optional NLI labels');
-assert.ok(extensionWorker.includes('analyseArguments(analysedText, memoScore') &&
- extensionWorker.includes('argumentFindings(assessed)') &&
- extensionWorker.includes('...argumentIssues'),
- 'Firefox worker performs argument analysis with the existing NLI scorer');
+assert.ok(!extensionWorker.includes('analyseArguments(') &&
+ !extensionWorker.includes('argumentFindings(') &&
+ !extensionWorker.includes('...argumentIssues'),
+ 'Firefox skips the paused premise-to-conclusion red analysis');
 const backgroundSource = fs.readFileSync('extension/background.js', 'utf8');
 assert.ok(backgroundSource.includes('DM_PROGRESS') &&
  selectionScript.includes('dm-pattern-status') &&
  !selectionScript.includes('cursor: wait !important'),
- 'Slower red pass uses a nonblocking progress badge instead of forcing a wait cursor');
-assert.ok(selectionScript.includes('match.kind === "argument_support"') &&
- selectionScript.includes('Premises provided:') &&
- selectionScript.includes('"inconsistency-patterns"'),
- 'New red findings explain their premises and link to the red catalogue');
+ 'Optional local analysis retains a nonblocking progress badge');
+assert.ok(!selectionScript.includes('Premises provided:') &&
+ !selectionScript.includes('inconsistency-patterns'),
+ 'Firefox has no red tooltip or links to unpublished red pages');
 console.log('Argument support: 480 parser/verdict variants, NLI lab and nonblocking Firefox UI validated.');
 
 
@@ -1213,8 +1206,8 @@ for (const item of conservativeScenarios) {
 }
 assert.ok(benchmarkWorker.includes('status: item.status || null') &&
  benchmarkUI.includes('insufficient evidence to judge; no underline') &&
- extensionWorker.includes('argumentFindings(assessed)'),
- 'Experimental uncertainty stays in lab diagnostics; Firefox only underlines true findings');
+ !extensionWorker.includes('argumentFindings('),
+ 'Experimental argument outcomes stay in lab diagnostics while red is paused');
 console.log('Conservative evidence assessment: 5 original real NLI traces and 9 contrasts, with explicit no-underline abstention.');
 
 // Standalone clause parser regression tests (no model download).
