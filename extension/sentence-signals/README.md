@@ -50,9 +50,9 @@ missing weights. The command reports model errors explicitly.
 | GoEmotions | 28 independent scores, suitable for comparing the headline and first sentence label by label |
 | Valurank clickbait | Model label scores. Outputs for body text carry an out-of-domain marker |
 | Unitary Toxic BERT | Six independent scores including threat and insult |
-| Compromise | Part-of-speech tags and rough candidates for third-person subject pronouns |
+| Compromise | Part-of-speech tags, rough pronoun candidates, and source spans for possible nonstandard agreement |
 | nspell / en-GB | Spelling candidates and source spans using the extension’s existing preprocessing |
-| MiniLM | Four closest labelled consequence examples and their cosine similarities |
+| MiniLM | Cosine similarities to all 12 labelled consequence examples, ranked highest first |
 | DeBERTa NLI | Three scores for a proposed takeaway, or an experimental consequence probe if no takeaway is supplied |
 
 The consequence status uses wording cues and parsed grammar. It can return
@@ -88,3 +88,12 @@ examples with remote model loading disabled.
   separate accuracy evaluation.
 
 [Successful verification run](https://github.com/mikemayne/defeating-manipulation/actions/runs/45001432741)
+
+## Vague consequence cases
+
+Grammar flags identify possible engagement cues and preserve the original
+wording. On ten synthetic vague-consequence examples, all text reached the
+models unchanged. The wording rules marked seven cases as underspecified and
+three as unclear. Both deliberately nonstandard agreement spans were flagged.
+
+[Ten-case score run](https://github.com/mikemayne/defeating-manipulation/actions/runs/45001678787)
