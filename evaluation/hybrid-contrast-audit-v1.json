@@ -1,0 +1,22 @@
+{
+ "reason_supports": [
+  ["The pool is closed for a private event, so we'll need somewhere else to swim.", "The pool has a new sign, so there must be a private event today.", "We'll need somewhere else to swim. The sign explains why."],
+  ["The part is too wide to pass through the opening, so it needs a wider opening.", "The part is silver, so it needs a wider opening.", "We'll need a wider opening if the part is the size they said."]
+ ],
+ "conditional_penalty": [
+  ["Stop parking there or I'll cancel your permit.", "Stop parking there. Your permit was already cancelled when it expired.", "Stop parking there. If you carry on, we'll have to speak about the permit."],
+  ["Come help at the stall or you lose your spot on the trip.", "Come help at the stall if you're free. You lost your trip spot when the bus filled up.", "Come help at the stall. Otherwise we'll see what happens to the trip list."]
+ ],
+ "popularity_as_reason": [
+  ["Everybody on our street uses that repair shop, so you should book it too.", "Everybody on our street uses that repair shop. I book elsewhere because they collect the car.", "Everybody on our street uses that repair shop. Something to consider, I suppose."],
+  ["Almost all the parents picked the early slot. That alone should settle which one you pick.", "Almost all the parents picked the early slot, so the organiser recorded twelve early bookings.", "Almost all the parents picked the early slot. I'll leave you to decide what to do with that."]
+ ],
+ "contradiction": [
+  ["The same office line was disconnected all Wednesday, yet it received the call at noon on Wednesday.", "The office line was disconnected all Wednesday. It received the call at noon on Thursday.", "The office line was disconnected all Wednesday. A line in the office received the call at noon."],
+  ["There was no water in that tank all morning. At ten that morning, that same tank was full.", "There was no water in that tank all morning. At ten that morning, a different tank was full.", "There was no water in that tank all morning. Someone said a tank was full at ten."]
+ ],
+ "acknowledged_uncertainty": [
+  ["I'm fairly sure that was a power cut, but I didn't check next door.", "Asha wasn't sure it was a power cut. I checked and I'm certain it was.", "It was a power cut, I think he said."],
+  ["My best guess is that the paint's dry, though I haven't touched it.", "The apprentice wasn't sure if the paint was dry. I tested it and know it is.", "Probably dry. I can't tell whether the voice message was talking about this coat."]
+ ]
+}

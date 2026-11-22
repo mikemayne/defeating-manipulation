@@ -1,0 +1,1091 @@
+{
+  "training_rows": 75,
+  "device": "NVIDIA GeForce RTX 5090",
+  "data_sha256": "e6bb20d4173958b65cf0506790b774aa8fb52a511539e204c8bfdb794e0dae64",
+  "winner": 5,
+  "checkpoint": "MiniLM-L6",
+  "trials": [
+    {
+      "config": [
+        "qwen",
+        0.0002,
+        0.0
+      ],
+      "best_epoch": 0,
+      "development": [
+        {
+          "correct": 7,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 9
+        },
+        {
+          "correct": 7,
+          "false_positives": 4,
+          "positive_misses": 1,
+          "abstentions": 0
+        },
+        {
+          "correct": 7,
+          "false_positives": 2,
+          "positive_misses": 3,
+          "abstentions": 11
+        },
+        {
+          "correct": 4,
+          "false_positives": 4,
+          "positive_misses": 3,
+          "abstentions": 0
+        }
+      ]
+    },
+    {
+      "config": [
+        "qwen",
+        0.0002,
+        0.3
+      ],
+      "best_epoch": 0,
+      "development": [
+        {
+          "correct": 7,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 9
+        },
+        {
+          "correct": 5,
+          "false_positives": 4,
+          "positive_misses": 3,
+          "abstentions": 0
+        },
+        {
+          "correct": 6,
+          "false_positives": 6,
+          "positive_misses": 2,
+          "abstentions": 6
+        },
+        {
+          "correct": 6,
+          "false_positives": 3,
+          "positive_misses": 3,
+          "abstentions": 1
+        }
+      ]
+    },
+    {
+      "config": [
+        "encoder",
+        3e-05,
+        0.0
+      ],
+      "best_epoch": 0,
+      "development": [
+        {
+          "correct": 5,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 1
+        },
+        {
+          "correct": 4,
+          "false_positives": 4,
+          "positive_misses": 3,
+          "abstentions": 3
+        },
+        {
+          "correct": 7,
+          "false_positives": 4,
+          "positive_misses": 2,
+          "abstentions": 8
+        },
+        {
+          "correct": 7,
+          "false_positives": 4,
+          "positive_misses": 2,
+          "abstentions": 8
+        }
+      ]
+    },
+    {
+      "config": [
+        "encoder",
+        3e-05,
+        0.3
+      ],
+      "best_epoch": 0,
+      "development": [
+        {
+          "correct": 5,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 1
+        },
+        {
+          "correct": 5,
+          "false_positives": 1,
+          "positive_misses": 4,
+          "abstentions": 3
+        },
+        {
+          "correct": 7,
+          "false_positives": 4,
+          "positive_misses": 2,
+          "abstentions": 6
+        },
+        {
+          "correct": 6,
+          "false_positives": 4,
+          "positive_misses": 2,
+          "abstentions": 7
+        }
+      ]
+    },
+    {
+      "config": [
+        "qwen",
+        0.0005,
+        0.3
+      ],
+      "best_epoch": 0,
+      "development": [
+        {
+          "correct": 7,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 9
+        },
+        {
+          "correct": 4,
+          "false_positives": 6,
+          "positive_misses": 3,
+          "abstentions": 7
+        },
+        {
+          "correct": 6,
+          "false_positives": 1,
+          "positive_misses": 4,
+          "abstentions": 3
+        },
+        {
+          "correct": 8,
+          "false_positives": 1,
+          "positive_misses": 2,
+          "abstentions": 11
+        }
+      ]
+    },
+    {
+      "config": [
+        "encoder",
+        8e-05,
+        0.3
+      ],
+      "best_epoch": 11,
+      "development": [
+        {
+          "correct": 5,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 1
+        },
+        {
+          "correct": 6,
+          "false_positives": 4,
+          "positive_misses": 2,
+          "abstentions": 7
+        },
+        {
+          "correct": 5,
+          "false_positives": 2,
+          "positive_misses": 4,
+          "abstentions": 11
+        },
+        {
+          "correct": 8,
+          "false_positives": 2,
+          "positive_misses": 3,
+          "abstentions": 6
+        },
+        {
+          "correct": 7,
+          "false_positives": 1,
+          "positive_misses": 4,
+          "abstentions": 8
+        },
+        {
+          "correct": 6,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 14
+        },
+        {
+          "correct": 11,
+          "false_positives": 2,
+          "positive_misses": 1,
+          "abstentions": 7
+        },
+        {
+          "correct": 7,
+          "false_positives": 0,
+          "positive_misses": 5,
+          "abstentions": 11
+        },
+        {
+          "correct": 12,
+          "false_positives": 2,
+          "positive_misses": 1,
+          "abstentions": 6
+        },
+        {
+          "correct": 11,
+          "false_positives": 1,
+          "positive_misses": 2,
+          "abstentions": 7
+        },
+        {
+          "correct": 12,
+          "false_positives": 1,
+          "positive_misses": 1,
+          "abstentions": 7
+        },
+        {
+          "correct": 12,
+          "false_positives": 0,
+          "positive_misses": 2,
+          "abstentions": 7
+        },
+        {
+          "correct": 11,
+          "false_positives": 2,
+          "positive_misses": 1,
+          "abstentions": 7
+        }
+      ]
+    }
+  ],
+  "test": {
+    "variant": [
+      0,
+      "natural",
+      false
+    ],
+    "correct": 10,
+    "total": 15,
+    "false_positives": 0,
+    "positive_misses": 4,
+    "abstentions": 9,
+    "batch_ms": null,
+    "confusion": {
+      "yes->unknown": 3,
+      "no->no": 4,
+      "unknown->unknown": 5,
+      "yes->no": 1,
+      "yes->yes": 1,
+      "no->unknown": 1
+    },
+    "answers": [
+      {
+        "question": "reason_supports",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.2188379764556885,
+          "no": 1.0973259210586548,
+          "unknown": 2.77349591255188
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -3.021686315536499,
+          "no": 2.3423612117767334,
+          "unknown": 0.7208901047706604
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.962634325027466,
+          "no": -1.0946972370147705,
+          "unknown": 4.383002281188965
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": -0.05715622752904892,
+          "no": -1.1122076511383057,
+          "unknown": 0.3503757119178772
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -2.0700597763061523,
+          "no": 3.1517035961151123,
+          "unknown": -0.9774113893508911
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.952291965484619,
+          "no": -0.07057322561740875,
+          "unknown": 3.0318851470947266
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": -1.8452088832855225,
+          "no": -1.806335687637329,
+          "unknown": 3.287734270095825
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -2.7011911869049072,
+          "no": 2.9287118911743164,
+          "unknown": -0.1456862986087799
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.6476001739501953,
+          "no": -1.4136408567428589,
+          "unknown": 4.22374963760376
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "yes",
+        "answer": "no",
+        "logits": {
+          "yes": -2.353193998336792,
+          "no": 2.9752821922302246,
+          "unknown": -0.7035794854164124
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -3.2622785568237305,
+          "no": 2.491375207901001,
+          "unknown": 0.8937973380088806
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.155390501022339,
+          "no": 1.3391876220703125,
+          "unknown": 2.132229804992676
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 0.21068185567855835,
+          "no": -0.28951191902160645,
+          "unknown": 0.0003991890698671341
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "no",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.843900442123413,
+          "no": 1.6085189580917358,
+          "unknown": 1.7668285369873047
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.321277618408203,
+          "no": -1.6782078742980957,
+          "unknown": 4.084043025970459
+        }
+      }
+    ]
+  },
+  "audit": {
+    "variant": [
+      0,
+      "natural",
+      false
+    ],
+    "correct": 19,
+    "total": 30,
+    "false_positives": 0,
+    "positive_misses": 7,
+    "abstentions": 16,
+    "batch_ms": null,
+    "confusion": {
+      "yes->unknown": 4,
+      "no->unknown": 3,
+      "unknown->unknown": 9,
+      "yes->no": 3,
+      "yes->yes": 3,
+      "no->no": 7,
+      "unknown->no": 1
+    },
+    "answers": [
+      {
+        "question": "reason_supports",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.0635571479797363,
+          "no": 1.746791124343872,
+          "unknown": 1.7737512588500977
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "no",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.5220236778259277,
+          "no": 0.5677694082260132,
+          "unknown": 3.3342158794403076
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.2878494262695312,
+          "no": -0.7038589715957642,
+          "unknown": 4.268702983856201
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "yes",
+        "answer": "no",
+        "logits": {
+          "yes": -2.304616689682007,
+          "no": 1.4066200256347656,
+          "unknown": 0.7183139324188232
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "no",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.0844292640686035,
+          "no": 0.38809290528297424,
+          "unknown": 2.9524025917053223
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.0629401206970215,
+          "no": -0.9346149563789368,
+          "unknown": 4.160017013549805
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 1.527451992034912,
+          "no": -2.2763426303863525,
+          "unknown": -0.15553899109363556
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -2.3495633602142334,
+          "no": 3.409459352493286,
+          "unknown": -0.24914279580116272
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.5497567653656006,
+          "no": -0.9351733326911926,
+          "unknown": 3.405066728591919
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": -1.9765619039535522,
+          "no": -0.666418731212616,
+          "unknown": 2.0307376384735107
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -2.982818126678467,
+          "no": 2.4647836685180664,
+          "unknown": 0.7375177145004272
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.541991710662842,
+          "no": -1.1767351627349854,
+          "unknown": 3.5050556659698486
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 2.331418991088867,
+          "no": -0.3630828559398651,
+          "unknown": -2.823730707168579
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -2.302365779876709,
+          "no": 2.353276491165161,
+          "unknown": 0.28835633397102356
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.8544111251831055,
+          "no": 0.12972846627235413,
+          "unknown": 2.971454620361328
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.1725807189941406,
+          "no": -1.0585850477218628,
+          "unknown": 3.1118364334106445
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -1.4121276140213013,
+          "no": 3.1420702934265137,
+          "unknown": -1.7743337154388428
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -0.6775872707366943,
+          "no": -2.209228515625,
+          "unknown": 2.6317570209503174
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "yes",
+        "answer": "no",
+        "logits": {
+          "yes": -1.4941803216934204,
+          "no": 3.068804979324341,
+          "unknown": -1.572123408317566
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -2.920767307281494,
+          "no": 3.3578803539276123,
+          "unknown": -0.21943283081054688
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "unknown",
+        "answer": "no",
+        "logits": {
+          "yes": -3.152865409851074,
+          "no": 2.397622585296631,
+          "unknown": 0.9376878142356873
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.646555185317993,
+          "no": 1.2807916402816772,
+          "unknown": 2.7318618297576904
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "no",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.647611141204834,
+          "no": 1.1989816427230835,
+          "unknown": 2.9893906116485596
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -3.605414628982544,
+          "no": 1.0093474388122559,
+          "unknown": 3.158071279525757
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 2.28429913520813,
+          "no": 0.8535335063934326,
+          "unknown": -3.068686008453369
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -1.3103158473968506,
+          "no": 2.8084757328033447,
+          "unknown": -1.1192069053649902
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.542541980743408,
+          "no": -1.450924038887024,
+          "unknown": 4.297966003417969
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "yes",
+        "answer": "no",
+        "logits": {
+          "yes": -0.3307882845401764,
+          "no": 2.095255136489868,
+          "unknown": -2.0222692489624023
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": -2.863314390182495,
+          "no": 3.4498026371002197,
+          "unknown": -0.21279890835285187
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": -2.98891544342041,
+          "no": 0.42469313740730286,
+          "unknown": 2.7810049057006836
+        }
+      }
+    ]
+  },
+  "int8": {
+    "size_bytes": 23029798,
+    "audit": {
+      "variant": [
+        0,
+        "natural",
+        false
+      ],
+      "correct": 19,
+      "total": 30,
+      "false_positives": 0,
+      "positive_misses": 7,
+      "abstentions": 15,
+      "batch_ms": null,
+      "confusion": {
+        "yes->no": 4,
+        "no->unknown": 3,
+        "unknown->unknown": 9,
+        "yes->yes": 3,
+        "no->no": 7,
+        "yes->unknown": 3,
+        "unknown->no": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": -2.988471031188965,
+            "no": 1.787320613861084,
+            "unknown": 1.600279688835144
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": -3.491889476776123,
+            "no": 0.5102421045303345,
+            "unknown": 3.3027966022491455
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -3.241824150085449,
+            "no": -0.7597797513008118,
+            "unknown": 4.261675834655762
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": -2.152254581451416,
+            "no": 1.0030207633972168,
+            "unknown": 0.8374927043914795
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": -2.973961591720581,
+            "no": 0.6112002730369568,
+            "unknown": 2.587902307510376
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -3.0097429752349854,
+            "no": -1.0790886878967285,
+            "unknown": 4.221465587615967
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 1.4483083486557007,
+            "no": -2.2380428314208984,
+            "unknown": -0.05308714881539345
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": -2.3153555393218994,
+            "no": 3.2621548175811768,
+            "unknown": -0.29012739658355713
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -2.479753017425537,
+            "no": -0.9826676249504089,
+            "unknown": 3.2941579818725586
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": -1.6614893674850464,
+            "no": -0.7375536561012268,
+            "unknown": 1.8054158687591553
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": -2.9921321868896484,
+            "no": 2.614201307296753,
+            "unknown": 0.5683196783065796
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -2.473893165588379,
+            "no": -1.0654560327529907,
+            "unknown": 3.2486979961395264
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 2.713237762451172,
+            "no": -0.771561861038208,
+            "unknown": -2.8491477966308594
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": -2.3548085689544678,
+            "no": 2.4866156578063965,
+            "unknown": 0.20844513177871704
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -2.9019734859466553,
+            "no": 0.09260955452919006,
+            "unknown": 3.0962674617767334
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": -2.416466474533081,
+            "no": -1.131601095199585,
+            "unknown": 3.417044162750244
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": -1.3757256269454956,
+            "no": 2.9261398315429688,
+            "unknown": -1.672720193862915
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -0.8998538255691528,
+            "no": -1.9500658512115479,
+            "unknown": 2.7062976360321045
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": -1.0611293315887451,
+            "no": 2.8082873821258545,
+            "unknown": -1.8253793716430664
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": -2.8972442150115967,
+            "no": 3.267967462539673,
+            "unknown": -0.1852358877658844
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": -2.981605291366577,
+            "no": 2.3063714504241943,
+            "unknown": 0.8187806606292725
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": -3.6195409297943115,
+            "no": 1.1726434230804443,
+            "unknown": 2.8103678226470947
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": -3.6833977699279785,
+            "no": 1.1794493198394775,
+            "unknown": 2.986708164215088
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -3.5697789192199707,
+            "no": 1.0811779499053955,
+            "unknown": 3.0112314224243164
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 2.566948890686035,
+            "no": 0.541417121887207,
+            "unknown": -3.1425321102142334
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": -0.9475208520889282,
+            "no": 2.640054941177368,
+            "unknown": -1.311514973640442
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -2.521103858947754,
+            "no": -1.4442296028137207,
+            "unknown": 4.29298734664917
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": -0.5823224186897278,
+            "no": 2.155179738998413,
+            "unknown": -1.8724507093429565
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": -2.9155807495117188,
+            "no": 3.363635540008545,
+            "unknown": -0.10444136708974838
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": -2.8073134422302246,
+            "no": 0.4539451003074646,
+            "unknown": 2.436947822570801
+          }
+        }
+      ]
+    }
+  }
+}
