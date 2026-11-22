@@ -42,3 +42,22 @@ Both heads and the top two layers of each encoder were trained on a GeForce RTX 
 Edge 158 on an Intel Core i7-8700 desktop used single-threaded CPU WASM. Both models passed tokenizer and logit parity probes. The harness rendered a prediction through the form and made zero requests outside loopback.
 
 MiniLM-L6 reached 90.6% micro precision and 67.4% micro recall on the fictional holdout. The full output label set matched on 30 of 46 rows. The model flagged two of 11 neutral statements, identified three of three insufficient-context cases, and had an F1 of 0.33 for bandwagon. Brier score was 0.036 after calibration and 0.038 before. Real-world accuracy and laptop and mobile performance remain unmeasured.
+
+## Timed comparison with local Qwen
+
+The benchmark reads the [Webis-ConcluGen-21 corpus](https://webis.de/data/webis-conclugen-21.html) base training shard, which combines real r/ChangeMyView and debate arguments. Keep it in the ignored `classifier/private/` directory. Only one excerpt per deduplicated argument is sampled. Each excerpt is 5–40 words and 22–235 characters, drawn from source arguments at least 300 characters long. The seeded sample alternates between ordinary eligible excerpts and an enriched pool selected by wording cues. Cue matches select candidates and supply no evaluation labels.
+
+Both models get the same excerpt without a topic. Ollama runs `qwen3.6:27b` at temperature zero with thinking disabled and a fixed catalogue rubric. Edge runs the default INT8 ONNX model through the harness's WASM inference module. The runner checks Ollama GPU residency and restricts browser requests to loopback. It writes aggregate metrics and a row-level log with hashes and label codes.
+
+Exact agreement requires the same complete label set or the same abstention outcome. Micro precision, recall and F1 pool the eight mechanism labels. These percentages use Qwen as the reference. Evaluation against human-reviewed labels is a separate test.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install pyarrow==26.0.1
+New-Item -ItemType Directory -Force classifier/private
+$dataset = Invoke-RestMethod 'https://datasets-server.huggingface.co/parquet?dataset=webis%2Fconclugen'
+$shard = $dataset.parquet_files | Where-Object { $_.config -eq 'base' -and $_.split -eq 'train' }
+Invoke-WebRequest -Uri $shard.url -OutFile classifier/private/conclugen-base-train.parquet
+.\.venv\Scripts\python.exe classifier/qwen_bench.py classifier/private/conclugen-base-train.parquet --seconds 600 --out classifier/artifacts/qwen-agreement.json
+```
+
+The 601.23-second run on the RTX 5090 completed 3,444 comparisons with full GPU residency and zero invalid batches. The selected MiniLM-L6 browser model matched Qwen's full output on 1,554 excerpts (45.12%). Agreement was 49.19% on randomly sampled eligible excerpts and 41.06% on cue-enriched excerpts. Mechanism-level micro precision was 4.55%, recall 21.03%, and F1 7.48%. A baseline that always returned no match would have matched Qwen on 79.44% of the combined sample. The local run report is saved as `classifier/artifacts/qwen-agreement-strict.json`.
