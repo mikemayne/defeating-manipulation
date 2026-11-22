@@ -1,0 +1,29 @@
+name: Sentence parser verification
+on:
+  pull_request:
+    paths: ["extension/sentence-signals/**", ".github/workflows/sentence-parser-verify.yml"]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: npm --prefix extension install --no-package-lock --no-audit
+      - run: node --test extension/sentence-signals/analyse.test.mjs
+      - run: npx --no-install esbuild sentence-signals/sentence-analyser.mjs --bundle --platform=browser --format=esm --outfile=/tmp/sentence-analyser.mjs
+        working-directory: extension
+      - run: python -m pip install --index-url https://download.pytorch.org/whl/cpu "torch==2.7.1"
+      - run: python -m pip install "optimum-onnx[onnxruntime]>=0.1,<0.2" "transformers>=4.51,<5"
+      - run: python extension/sentence-signals/prepare_clickbait.py
+      - run: node extension/sentence-signals/analyse.mjs --warm > /tmp/warm-result.json
+      - run: node --test extension/sentence-signals/analyse.test.mjs
+        env:
+          SENTENCE_LIVE: "1"
