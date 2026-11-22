@@ -1,0 +1,46 @@
+name: Article engagement vote pilot
+on:
+  pull_request:
+    paths: ['.github/workflows/article-engagement-vote-pilot.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install gdown ijson
+      - name: Select ten articles with signed votes from the Yahoo News release
+        run: |
+          gdown --output "$RUNNER_TEMP/yahoo-release.zip" '1ZJr35rclDBf-oxiIYcg4DChKSKBWgpEi'
+          python extension/sentence-signals/collect-yahoo-engagement.py "$RUNNER_TEMP/yahoo-release.zip" "$RUNNER_TEMP/article-comment-sample.json"
+      - run: npm --prefix extension install --no-package-lock --no-audit
+      - run: node --test extension/sentence-signals/analyse.test.mjs
+      - run: python -m pip install --index-url https://download.pytorch.org/whl/cpu 'torch==2.7.1'
+      - run: python -m pip install 'optimum-onnx[onnxruntime]>=0.1,<0.2' 'transformers>=4.51,<5' 'spacy>=3.8,<4'
+      - run: python -m spacy download en_core_web_sm
+      - run: python extension/sentence-signals/prepare_clickbait.py
+      - run: node extension/sentence-signals/analyse.mjs --warm > "$RUNNER_TEMP/sentence-warm.json"
+      - name: Score article and comment profiles and matched controls
+        run: |
+          export ARTICLE_COMMENT_REPORT="$RUNNER_TEMP/article-comment-report.json"
+          node extension/sentence-signals/audit-article-comments.mjs "$RUNNER_TEMP/article-comment-sample.json" "$RUNNER_TEMP/article-comment-units.json" "$RUNNER_TEMP/article-comment-context.json"
+      - name: Summarise vote totals and vote-weighted profiles
+        run: node extension/sentence-signals/summarise-engagement.mjs "$RUNNER_TEMP/article-comment-sample.json" "$RUNNER_TEMP/article-comment-report.json" "$RUNNER_TEMP/engagement-summary.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: engagement-summary
+          path: ${{ runner.temp }}/engagement-summary.json
+      - name: Remove temporary article and comment text
+        if: always()
+        run: rm -f "$RUNNER_TEMP/yahoo-release.zip" "$RUNNER_TEMP/article-comment-sample.json" "$RUNNER_TEMP/article-comment-units.json" "$RUNNER_TEMP/article-comment-context.json"
