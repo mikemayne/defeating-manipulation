@@ -1,0 +1,152 @@
+{
+  "version": 2,
+  "threshold": 0.07692307692307693,
+  "fear": {
+    "feature": "feature/condition",
+    "yes": {
+      "feature": "act/prediction",
+      "yes": {
+        "feature": "feature/modal",
+        "yes": {
+          "feature": "consequence/listener_condition",
+          "yes": {
+            "count": 19,
+            "positive": 5
+          },
+          "no": {
+            "count": 10,
+            "positive": 4
+          }
+        },
+        "no": {
+          "count": 13,
+          "positive": 0
+        }
+      },
+      "no": {
+        "feature": "multiple_clauses",
+        "yes": {
+          "feature": "kind/main",
+          "yes": {
+            "count": 130,
+            "positive": 10
+          },
+          "no": {
+            "count": 17,
+            "positive": 4
+          }
+        },
+        "no": {
+          "count": 16,
+          "positive": 4
+        }
+      }
+    },
+    "no": {
+      "feature": "act/prediction",
+      "yes": {
+        "feature": "feature/unspecified_actor",
+        "yes": {
+          "count": 12,
+          "positive": 3
+        },
+        "no": {
+          "feature": "multiple_clauses",
+          "yes": {
+            "count": 13,
+            "positive": 0
+          },
+          "no": {
+            "count": 11,
+            "positive": 1
+          }
+        }
+      },
+      "no": {
+        "feature": "feature/uncertainty",
+        "yes": {
+          "count": 41,
+          "positive": 0
+        },
+        "no": {
+          "feature": "feature/unspecified_actor",
+          "yes": {
+            "count": 62,
+            "positive": 3
+          },
+          "no": {
+            "count": 253,
+            "positive": 6
+          }
+        }
+      }
+    }
+  },
+  "doubt": {
+    "feature": "judgement/listener_belief",
+    "yes": {
+      "feature": "feature/unspecified_actor",
+      "yes": {
+        "count": 11,
+        "positive": 0
+      },
+      "no": {
+        "feature": "multiple_clauses",
+        "yes": {
+          "feature": "feature/modal",
+          "yes": {
+            "count": 23,
+            "positive": 6
+          },
+          "no": {
+            "count": 30,
+            "positive": 2
+          }
+        },
+        "no": {
+          "count": 17,
+          "positive": 5
+        }
+      }
+    },
+    "no": {
+      "feature": "judgement/direct_dismissal",
+      "yes": {
+        "feature": "kind/coordinated",
+        "yes": {
+          "count": 13,
+          "positive": 0
+        },
+        "no": {
+          "count": 14,
+          "positive": 6
+        }
+      },
+      "no": {
+        "feature": "act/question",
+        "yes": {
+          "feature": "multiple_clauses",
+          "yes": {
+            "count": 31,
+            "positive": 6
+          },
+          "no": {
+            "count": 13,
+            "positive": 0
+          }
+        },
+        "no": {
+          "feature": "relation/statement_conclusion",
+          "yes": {
+            "count": 15,
+            "positive": 2
+          },
+          "no": {
+            "count": 430,
+            "positive": 14
+          }
+        }
+      }
+    }
+  }
+}

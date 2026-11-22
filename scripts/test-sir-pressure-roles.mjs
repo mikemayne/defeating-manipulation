@@ -1,0 +1,10 @@
+import assert from "node:assert/strict";
+import { analyzeStructure } from "../extension/src/semantic-structure.mjs";
+import { roleFeatures } from "../extension/src/sir-pressure-roles.mjs";
+const features = text => roleFeatures(analyzeStructure(text));
+assert.ok(features("I will cancel your access unless you sign the statement.").fear.has("consequence/speaker_penalty"));
+assert.ok(features("If you want the receipt, I will send it.").fear.has("consequence/offered_help"));
+assert.ok(features("If you miss the deadline, you will lose your place.").fear.has("consequence/listener_loss"));
+assert.ok(features("You imagined that conversation.").doubt.has("judgement/direct_dismissal"));
+assert.ok(!features('The witness said, “You imagined that conversation.”').doubt.has("judgement/direct_dismissal"));
+console.log("Pressure role tests passed");

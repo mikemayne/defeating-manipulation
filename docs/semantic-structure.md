@@ -169,3 +169,21 @@ Run `node scripts/evaluate-sir-pressure.mjs` with the local targeted pressure co
 On the local snapshot (SHA-256 `b7d85caf36f736e39dcb7f8c4979ec8afc5940208f13d229871ad22031987d6d`), 597 real passages trained the tree, 178 calibrated it and 298 tested it. A positive means the existing Qwen annotation includes fear of consequences or pressure to doubt one's judgement. The targeted sampling and machine labels limit generalization. The model stores feature names and aggregate counts.
 
 At the selected threshold of 0.1707, held-out TP/FP/TN/FN were 27/76/173/22. Precision was 26.2%, recall 55.1%, F1 0.355 and false-positive rate 30.5%. Always predicting positive scored F1 0.282. The error rate supports retaining this as an opt-in research output. Evaluation used whole corpus passages. CLI output is per paragraph.
+
+### Separate consequence and judgement trees
+
+Run the CLI with `--pressure-roles` for both decision paths. Reproduce the comparison with `node scripts/evaluate-sir-pressure-roles.mjs`. Both trees use the 597 original training passages and the original depth and minimum leaf size. The larger of their two leaf scores determines the alert. Calibration chooses the highest available threshold meeting the original calibration recall. Discrete leaf scores jump past that target.
+
+An independent transfer evaluation used 2,399 passages from the earlier six-label Qwen corpus, removing overlapping threads, normalized text duplicates and insufficient-context labels. Only fear of consequences and judgement doubt counted as positive. The sampling and annotation prompt differ between corpora. Both use machine annotations.
+
+| Transfer result | Original | Separate trees |
+| --- | ---: | ---: |
+| True positives out of 170 | 95 | 121 |
+| False positives out of 2,229 | 644 | 899 |
+| Precision | 12.9% | 11.9% |
+| Recall | 55.9% | 71.2% |
+| F1 | .209 | .203 |
+
+Interpolating within tied leaf scores to compare at 95 true positives gives about 692 expected false positives for the new trees. This diagnostic is distinct from the actual threshold result. The previous diagnostic set suggested an improvement at matched recall (67 versus 76 false positives) that did not transfer. In training, 132 passages triggered the linked listener condition, but zero triggered the specific speaker penalty, listener loss or offered help cues. Direct judgement dismissal matched 33. Check manually annotated clause boundaries and outcome roles before fitting more splits.
+
+Use `--review` on the evaluator to generate two private blind review queues of the same 60 passages. Each reviewer can independently mark fear and judgement true or false and use context to record ordinary advice, warnings, quoted threats, direct challenges or insufficient context. Existing review files are preserved. No human labels were available for these results.
