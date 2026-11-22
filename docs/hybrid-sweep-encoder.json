@@ -1,0 +1,84 @@
+{
+  "model": "MiniLM-L6 frozen encoder, logistic head",
+  "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+  "device": "NVIDIA GeForce RTX 5090",
+  "answers": [
+    {
+      "question": "reason_supports",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "reason_supports",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "reason_supports",
+      "gold": "unknown",
+      "answer": "unknown"
+    },
+    {
+      "question": "conditional_penalty",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "conditional_penalty",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "conditional_penalty",
+      "gold": "unknown",
+      "answer": "unknown"
+    },
+    {
+      "question": "popularity_as_reason",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "popularity_as_reason",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "popularity_as_reason",
+      "gold": "unknown",
+      "answer": "unknown"
+    },
+    {
+      "question": "contradiction",
+      "gold": "yes",
+      "answer": "no"
+    },
+    {
+      "question": "contradiction",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "contradiction",
+      "gold": "unknown",
+      "answer": "yes"
+    },
+    {
+      "question": "acknowledged_uncertainty",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "acknowledged_uncertainty",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "acknowledged_uncertainty",
+      "gold": "unknown",
+      "answer": "unknown"
+    }
+  ],
+  "correct": 4,
+  "batch_ms": 10
+}

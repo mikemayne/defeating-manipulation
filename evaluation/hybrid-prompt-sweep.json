@@ -1,0 +1,37 @@
+{
+  "reason_supports": {
+    "questions": ["Does the passage supply a reason that genuinely supports a stated conclusion, using only information in the passage?", "Is a stated conclusion backed by a relevant reason in this passage?", "Can you identify a stated claim and a separate stated reason that supports it?"],
+    "examples": ["The bridge is closed for repairs, so we should take the tunnel.", "The bridge is painted green, so it must be closed."],
+    "train": ["The freezer lost power overnight and everything thawed, so we should throw away the melted ice cream.", "The freezer is white, so the ice cream inside must have melted.", "We should throw it away. That thing yesterday tells you why."],
+    "dev": ["The shop shuts at six and it's already half past, so we can't go in today.", "The shop has a large sign, so it must shut at six.", "That proves we're too late, as you can see."],
+    "test": ["You need a permit to park there. Since we don't have one, let's park across the road.", "The car has a permit holder on the windscreen, so we must be allowed to park here.", "Let's leave the car here, given what the attendant said."]
+  },
+  "conditional_penalty": {
+    "questions": ["Does the speaker make an adverse consequence for the addressee depend on refusing a request or instruction?", "Does the speaker say or imply the addressee will face a penalty if they do not comply?", "Is there a request and a downside tied specifically to the addressed person refusing it?"],
+    "examples": ["Sign the form or I'll dock your pay.", "You can decline. Sam's pay was docked last year."],
+    "train": ["Take my shift or I'll stop giving you lifts to work.", "Take my shift if you can. My lift was cancelled yesterday.", "Take my shift. You remember what happened last time."],
+    "dev": ["If you won't take down the post, I'll remove you from the group.", "Would you take down the post? I removed Pete from the group for spamming.", "I'd take down the post if I were you. The usual rule applies."],
+    "test": ["Hand over the cottage key. Refuse and I'll keep your deposit.", "Could you leave the cottage key on the table? The deposit was refunded this morning.", "Leave the key where we agreed. You know what the deposit rules are."]
+  },
+  "popularity_as_reason": {
+    "questions": ["Does the speaker use a claim about popularity as a reason to adopt a belief or course of action?", "Is what other people believe or do offered as evidence that you should agree or do the same?", "Does the argument rely on many people doing or believing something to justify a recommendation or claim?"],
+    "examples": ["Everyone in the office uses it, so you should get it too.", "Everyone in the office uses it. I'm still comparing alternatives."],
+    "train": ["Most of the estate joined this supplier, so you should switch too.", "Most of the estate already switched supplier. The survey closed Friday.", "Everybody on the estate switched. Well, there you go."],
+    "dev": ["Millions of fans can't all be wrong, so buy a ticket.", "A million people bought tickets. The organiser added a second date.", "A million people bought tickets. Think about that."],
+    "test": ["Three quarters of your neighbours backed the plan. That's reason enough for you to vote for it.", "Three quarters of neighbours backed the plan. The council will publish the tally tomorrow.", "Three quarters backed the plan. You can draw your own conclusions."]
+  },
+  "contradiction": {
+    "questions": ["Does the passage assert incompatible things about the same subject, time and circumstances, without marking one as a correction or an opposing speaker's view?", "Do two claims in the passage conflict about the same thing at the same time?", "Are two statements asserted together that cannot both be true under the stated conditions?"],
+    "examples": ["The shop was open at noon. The same shop was closed at noon.", "The shop was open at noon and closed by three."],
+    "train": ["The account had no balance at midnight. At exactly midnight the same account held a hundred pounds.", "The account was empty at midnight and we added a hundred pounds at dawn.", "The account was empty when they checked. There was a hundred pounds in it at some point."],
+    "dev": ["Nobody entered the studio during the show. Pat came into that studio midway through the show.", "Nobody entered the studio during the show. Pat came inside after it finished.", "Nobody entered the studio during the show. Pat dropped in around then."],
+    "test": ["The back gate remained locked all Tuesday. At noon on Tuesday the back gate stood open.", "The back gate was locked Tuesday morning. We opened it at five.", "The back gate was locked for most of Tuesday. I saw a gate wide open around lunch."]
+  },
+  "acknowledged_uncertainty": {
+    "questions": ["Does the speaker acknowledge a limit on their own certainty about a claim they are making?", "Does the speaker make a claim and explicitly allow that they personally may be mistaken?", "Is the speaker qualifying their own knowledge or confidence about what they are saying?"],
+    "examples": ["I think it's broken, but I might be wrong.", "You might be wrong. I'm certain it's broken."],
+    "train": ["I reckon it's a loose cable, though I'm only guessing.", "You are guessing about that cable. I know it is intact.", "It could be the cable, they said. That may be what I heard."],
+    "dev": ["I put the delay down to the weather, but I'm not certain.", "The driver was not sure. I know exactly why we were delayed.", "Possibly the weather. That's how the notice put it, I think."],
+    "test": ["As far as I can tell it was a fox, but I didn't see it clearly.", "Lee wasn't sure whether it was a fox. I saw it clearly and know it was a dog.", "Apparently it was a fox. I don't recall who told me that."]
+  }
+}

@@ -1,0 +1,2637 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "device": "NVIDIA GeForce RTX 5090",
+  "dtype": "bfloat16",
+  "torch": "2.7.1+cu128",
+  "development": [
+    {
+      "variant": [
+        0,
+        "natural",
+        false
+      ],
+      "correct": 6,
+      "total": 15,
+      "false_positives": 5,
+      "positive_misses": 2,
+      "abstentions": 2,
+      "batch_ms": 36,
+      "confusion": {
+        "yes->unknown": 1,
+        "no->yes": 3,
+        "unknown->yes": 2,
+        "yes->yes": 3,
+        "no->no": 2,
+        "unknown->no": 2,
+        "yes->no": 1,
+        "unknown->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.625,
+            "no": 23.5,
+            "unknown": 25.0
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.25,
+            "no": 23.875,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.375,
+            "no": 23.375,
+            "unknown": 23.625
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.125,
+            "no": 23.0,
+            "unknown": 22.5
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 19.875,
+            "no": 23.0,
+            "unknown": 22.875
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 20.125,
+            "no": 23.25,
+            "unknown": 23.0
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.875,
+            "no": 23.875,
+            "unknown": 22.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.25,
+            "no": 24.0,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.875,
+            "no": 23.625,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.375,
+            "no": 23.375,
+            "unknown": 24.75
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.5,
+            "no": 23.625,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 19.125,
+            "no": 23.375,
+            "unknown": 24.75
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": 20.0,
+            "no": 24.0,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 19.0,
+            "no": 23.75,
+            "unknown": 24.625
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.125,
+            "no": 22.375,
+            "unknown": 24.25
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          19.125,
+          23.41666603088379,
+          24.25
+        ],
+        "conditional_penalty": [
+          19.875,
+          22.79166603088379,
+          22.91666603088379
+        ],
+        "popularity_as_reason": [
+          19.79166603088379,
+          23.83333396911621,
+          24.04166603088379
+        ],
+        "contradiction": [
+          19.125,
+          23.33333396911621,
+          25.0
+        ],
+        "acknowledged_uncertainty": [
+          19.16666603088379,
+          23.08333396911621,
+          24.16666603088379
+        ]
+      }
+    },
+    {
+      "variant": [
+        0,
+        "natural",
+        true
+      ],
+      "correct": 6,
+      "total": 15,
+      "false_positives": 6,
+      "positive_misses": 2,
+      "abstentions": 5,
+      "batch_ms": 35,
+      "confusion": {
+        "yes->unknown": 2,
+        "no->yes": 3,
+        "unknown->yes": 3,
+        "yes->yes": 3,
+        "no->no": 1,
+        "unknown->unknown": 2,
+        "no->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.5,
+            "no": 21.125,
+            "unknown": 24.875
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.75,
+            "no": 22.5,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.375,
+            "no": 21.75,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.875,
+            "no": 21.625,
+            "unknown": 22.75
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.0,
+            "no": 21.5,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 18.375,
+            "no": 19.625,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.375,
+            "no": 22.0,
+            "unknown": 23.0
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.0,
+            "no": 21.25,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.5,
+            "no": 21.0,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.75,
+            "no": 21.375,
+            "unknown": 24.625
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 19.375,
+            "no": 21.75,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.75,
+            "no": 21.25,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.125,
+            "no": 20.5,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.375,
+            "no": 19.875,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 17.75,
+            "no": 19.25,
+            "unknown": 23.75
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          18.25,
+          21.08333396911621,
+          24.41666603088379
+        ],
+        "conditional_penalty": [
+          18.66666603088379,
+          20.33333396911621,
+          24.125
+        ],
+        "popularity_as_reason": [
+          18.79166603088379,
+          20.625,
+          24.08333396911621
+        ],
+        "contradiction": [
+          19.45833396911621,
+          21.125,
+          24.04166603088379
+        ],
+        "acknowledged_uncertainty": [
+          18.83333396911621,
+          20.33333396911621,
+          23.75
+        ]
+      }
+    },
+    {
+      "variant": [
+        0,
+        "letters",
+        false
+      ],
+      "correct": 3,
+      "total": 15,
+      "false_positives": 6,
+      "positive_misses": 3,
+      "abstentions": 5,
+      "batch_ms": 40,
+      "confusion": {
+        "yes->unknown": 2,
+        "no->yes": 3,
+        "unknown->yes": 3,
+        "yes->no": 1,
+        "no->unknown": 2,
+        "unknown->no": 1,
+        "yes->yes": 2,
+        "unknown->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.5,
+            "no": 23.25,
+            "unknown": 24.25
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.75,
+            "no": 23.625,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.125,
+            "no": 23.625,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": 20.875,
+            "no": 22.75,
+            "unknown": 22.5
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.5,
+            "no": 22.625,
+            "unknown": 22.625
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 21.0,
+            "no": 23.0,
+            "unknown": 22.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.875,
+            "no": 24.25,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.625,
+            "no": 23.75,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.625,
+            "no": 23.5,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.625,
+            "no": 23.5,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.875,
+            "no": 23.625,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.5,
+            "no": 23.5,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.875,
+            "no": 23.25,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.125,
+            "no": 23.375,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.375,
+            "no": 22.375,
+            "unknown": 23.125
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          20.79166603088379,
+          23.45833396911621,
+          23.875
+        ],
+        "conditional_penalty": [
+          20.79166603088379,
+          22.625,
+          22.54166603088379
+        ],
+        "popularity_as_reason": [
+          21.5,
+          23.625,
+          23.45833396911621
+        ],
+        "contradiction": [
+          21.33333396911621,
+          23.54166603088379,
+          24.04166603088379
+        ],
+        "acknowledged_uncertainty": [
+          20.5,
+          22.83333396911621,
+          23.33333396911621
+        ]
+      }
+    },
+    {
+      "variant": [
+        0,
+        "letters",
+        true
+      ],
+      "correct": 8,
+      "total": 15,
+      "false_positives": 4,
+      "positive_misses": 1,
+      "abstentions": 6,
+      "batch_ms": 36,
+      "confusion": {
+        "yes->yes": 4,
+        "no->yes": 2,
+        "unknown->yes": 2,
+        "unknown->unknown": 3,
+        "no->no": 1,
+        "yes->unknown": 1,
+        "no->unknown": 2
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 23.0,
+            "no": 23.875,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 24.25,
+            "no": 24.75,
+            "unknown": 24.875
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 23.0,
+            "no": 24.375,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 23.0,
+            "no": 23.75,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.625,
+            "no": 23.375,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.25,
+            "no": 22.5,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 23.625,
+            "no": 23.75,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 21.375,
+            "no": 23.0,
+            "unknown": 23.25
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.625,
+            "no": 22.5,
+            "unknown": 22.875
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 22.75,
+            "no": 23.75,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 22.75,
+            "no": 23.75,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 22.125,
+            "no": 23.375,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.375,
+            "no": 22.625,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.0,
+            "no": 22.5,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.875,
+            "no": 21.75,
+            "unknown": 23.125
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          22.41666603088379,
+          23.95833396911621,
+          24.375
+        ],
+        "conditional_penalty": [
+          22.375,
+          23.29166603088379,
+          23.625
+        ],
+        "popularity_as_reason": [
+          21.25,
+          22.79166603088379,
+          23.375
+        ],
+        "contradiction": [
+          22.5,
+          23.5,
+          23.66666603088379
+        ],
+        "acknowledged_uncertainty": [
+          21.25,
+          22.625,
+          23.41666603088379
+        ]
+      }
+    },
+    {
+      "variant": [
+        1,
+        "natural",
+        false
+      ],
+      "correct": 5,
+      "total": 15,
+      "false_positives": 3,
+      "positive_misses": 2,
+      "abstentions": 5,
+      "batch_ms": 36,
+      "confusion": {
+        "yes->unknown": 1,
+        "no->yes": 1,
+        "unknown->yes": 2,
+        "yes->yes": 3,
+        "no->unknown": 3,
+        "unknown->no": 2,
+        "no->no": 1,
+        "yes->no": 1,
+        "unknown->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.25,
+            "no": 23.375,
+            "unknown": 24.75
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.75,
+            "no": 24.125,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.125,
+            "no": 23.625,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.5,
+            "no": 23.625,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.0,
+            "no": 23.25,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 19.75,
+            "no": 23.375,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.875,
+            "no": 23.25,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.0,
+            "no": 23.5,
+            "unknown": 24.25
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.375,
+            "no": 23.125,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 17.875,
+            "no": 21.75,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 18.25,
+            "no": 22.25,
+            "unknown": 24.625
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 17.625,
+            "no": 21.75,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": 20.125,
+            "no": 24.0,
+            "unknown": 24.625
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.0,
+            "no": 23.875,
+            "unknown": 25.0
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.0,
+            "no": 23.0,
+            "unknown": 24.375
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          19.58333396911621,
+          23.5,
+          24.375
+        ],
+        "conditional_penalty": [
+          19.91666603088379,
+          23.20833396911621,
+          23.875
+        ],
+        "popularity_as_reason": [
+          19.0,
+          23.625,
+          24.20833396911621
+        ],
+        "contradiction": [
+          17.75,
+          21.70833396911621,
+          24.95833396911621
+        ],
+        "acknowledged_uncertainty": [
+          20.08333396911621,
+          23.54166603088379,
+          24.20833396911621
+        ]
+      }
+    },
+    {
+      "variant": [
+        1,
+        "natural",
+        true
+      ],
+      "correct": 5,
+      "total": 15,
+      "false_positives": 6,
+      "positive_misses": 2,
+      "abstentions": 3,
+      "batch_ms": 37,
+      "confusion": {
+        "yes->unknown": 1,
+        "no->yes": 3,
+        "unknown->yes": 3,
+        "yes->yes": 3,
+        "yes->no": 1,
+        "no->no": 1,
+        "unknown->no": 1,
+        "no->unknown": 1,
+        "unknown->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.25,
+            "no": 21.0,
+            "unknown": 25.375
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.875,
+            "no": 22.25,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.875,
+            "no": 21.125,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.125,
+            "no": 21.625,
+            "unknown": 22.875
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 18.75,
+            "no": 20.375,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 18.375,
+            "no": 19.375,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.125,
+            "no": 20.75,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 18.875,
+            "no": 20.875,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.0,
+            "no": 20.25,
+            "unknown": 24.25
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": 17.875,
+            "no": 20.0,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 18.5,
+            "no": 20.5,
+            "unknown": 24.25
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 17.875,
+            "no": 20.0,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.375,
+            "no": 21.25,
+            "unknown": 23.0
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.0,
+            "no": 19.875,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.625,
+            "no": 19.875,
+            "unknown": 23.75
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          17.83333396911621,
+          20.70833396911621,
+          24.79166603088379
+        ],
+        "conditional_penalty": [
+          18.29166603088379,
+          20.125,
+          24.45833396911621
+        ],
+        "popularity_as_reason": [
+          18.41666603088379,
+          20.70833396911621,
+          23.875
+        ],
+        "contradiction": [
+          18.375,
+          19.75,
+          23.95833396911621
+        ],
+        "acknowledged_uncertainty": [
+          19.66666603088379,
+          20.83333396911621,
+          23.41666603088379
+        ]
+      }
+    },
+    {
+      "variant": [
+        1,
+        "letters",
+        false
+      ],
+      "correct": 5,
+      "total": 15,
+      "false_positives": 6,
+      "positive_misses": 2,
+      "abstentions": 5,
+      "batch_ms": 35,
+      "confusion": {
+        "yes->unknown": 2,
+        "no->yes": 2,
+        "unknown->yes": 4,
+        "yes->yes": 3,
+        "no->unknown": 2,
+        "no->no": 1,
+        "unknown->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.0,
+            "no": 23.25,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 23.25,
+            "no": 24.0,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.375,
+            "no": 23.875,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.75,
+            "no": 23.625,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.625,
+            "no": 23.125,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.5,
+            "no": 23.75,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.625,
+            "no": 23.5,
+            "unknown": 23.625
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 21.25,
+            "no": 23.625,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.25,
+            "no": 23.375,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.75,
+            "no": 21.875,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.25,
+            "no": 22.125,
+            "unknown": 23.625
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.875,
+            "no": 22.0,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.875,
+            "no": 24.0,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.125,
+            "no": 24.0,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.625,
+            "no": 23.25,
+            "unknown": 23.5
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          21.375,
+          23.75,
+          24.45833396911621
+        ],
+        "conditional_penalty": [
+          21.25,
+          23.54166603088379,
+          23.375
+        ],
+        "popularity_as_reason": [
+          21.5,
+          23.75,
+          24.08333396911621
+        ],
+        "contradiction": [
+          19.29166603088379,
+          21.70833396911621,
+          23.58333396911621
+        ],
+        "acknowledged_uncertainty": [
+          21.83333396911621,
+          23.875,
+          23.79166603088379
+        ]
+      }
+    },
+    {
+      "variant": [
+        1,
+        "letters",
+        true
+      ],
+      "correct": 8,
+      "total": 15,
+      "false_positives": 4,
+      "positive_misses": 0,
+      "abstentions": 5,
+      "batch_ms": 33,
+      "confusion": {
+        "yes->yes": 5,
+        "no->yes": 3,
+        "unknown->yes": 1,
+        "unknown->no": 1,
+        "no->unknown": 2,
+        "unknown->unknown": 3
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.5,
+            "no": 23.25,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 24.25,
+            "no": 24.375,
+            "unknown": 25.0
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.75,
+            "no": 23.875,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 23.25,
+            "no": 23.75,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.75,
+            "no": 23.0,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 20.25,
+            "no": 22.25,
+            "unknown": 23.0
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.875,
+            "no": 23.375,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.375,
+            "no": 23.0,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.25,
+            "no": 22.5,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.875,
+            "no": 22.75,
+            "unknown": 23.625
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.875,
+            "no": 22.75,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.375,
+            "no": 22.5,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.25,
+            "no": 23.375,
+            "unknown": 23.625
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.5,
+            "no": 22.375,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.5,
+            "no": 22.25,
+            "unknown": 23.375
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          22.04166603088379,
+          23.45833396911621,
+          24.45833396911621
+        ],
+        "conditional_penalty": [
+          21.625,
+          23.25,
+          24.0
+        ],
+        "popularity_as_reason": [
+          21.95833396911621,
+          23.29166603088379,
+          23.70833396911621
+        ],
+        "contradiction": [
+          21.58333396911621,
+          22.58333396911621,
+          23.33333396911621
+        ],
+        "acknowledged_uncertainty": [
+          21.75,
+          22.95833396911621,
+          23.625
+        ]
+      }
+    },
+    {
+      "variant": [
+        2,
+        "natural",
+        false
+      ],
+      "correct": 5,
+      "total": 15,
+      "false_positives": 5,
+      "positive_misses": 2,
+      "abstentions": 4,
+      "batch_ms": 39,
+      "confusion": {
+        "yes->unknown": 2,
+        "no->yes": 3,
+        "unknown->yes": 2,
+        "yes->yes": 3,
+        "no->no": 1,
+        "unknown->no": 2,
+        "no->unknown": 1,
+        "unknown->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 19.125,
+            "no": 23.875,
+            "unknown": 24.875
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.75,
+            "no": 24.25,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.875,
+            "no": 23.75,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 18.875,
+            "no": 22.875,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 19.0,
+            "no": 23.125,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 18.625,
+            "no": 23.0,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.75,
+            "no": 23.375,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.5,
+            "no": 23.625,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.75,
+            "no": 23.125,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 17.75,
+            "no": 22.0,
+            "unknown": 25.0
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 18.25,
+            "no": 22.5,
+            "unknown": 24.875
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 17.875,
+            "no": 22.5,
+            "unknown": 25.25
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.75,
+            "no": 23.5,
+            "unknown": 25.0
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.5,
+            "no": 23.375,
+            "unknown": 24.875
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.25,
+            "no": 22.5,
+            "unknown": 24.25
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          19.0,
+          23.70833396911621,
+          24.58333396911621
+        ],
+        "conditional_penalty": [
+          19.0,
+          23.04166603088379,
+          24.08333396911621
+        ],
+        "popularity_as_reason": [
+          19.25,
+          23.54166603088379,
+          24.20833396911621
+        ],
+        "contradiction": [
+          17.58333396911621,
+          22.0,
+          25.54166603088379
+        ],
+        "acknowledged_uncertainty": [
+          19.25,
+          23.08333396911621,
+          24.16666603088379
+        ]
+      }
+    },
+    {
+      "variant": [
+        2,
+        "natural",
+        true
+      ],
+      "correct": 5,
+      "total": 15,
+      "false_positives": 5,
+      "positive_misses": 3,
+      "abstentions": 4,
+      "batch_ms": 35,
+      "confusion": {
+        "yes->no": 1,
+        "no->yes": 2,
+        "unknown->yes": 3,
+        "yes->yes": 2,
+        "no->no": 2,
+        "yes->unknown": 2,
+        "unknown->no": 1,
+        "no->unknown": 1,
+        "unknown->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": 18.625,
+            "no": 21.625,
+            "unknown": 24.875
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.125,
+            "no": 22.875,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.875,
+            "no": 21.375,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.5,
+            "no": 21.125,
+            "unknown": 22.75
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 19.125,
+            "no": 21.0,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 17.875,
+            "no": 19.25,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.125,
+            "no": 21.5,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.375,
+            "no": 20.875,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.5,
+            "no": 20.375,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.375,
+            "no": 20.625,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 18.875,
+            "no": 21.0,
+            "unknown": 24.25
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 18.25,
+            "no": 20.375,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 18.625,
+            "no": 20.125,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 17.875,
+            "no": 19.875,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 17.75,
+            "no": 19.375,
+            "unknown": 23.875
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          18.125,
+          21.08333396911621,
+          24.625
+        ],
+        "conditional_penalty": [
+          18.125,
+          19.95833396911621,
+          24.04166603088379
+        ],
+        "popularity_as_reason": [
+          18.33333396911621,
+          20.58333396911621,
+          24.29166603088379
+        ],
+        "contradiction": [
+          18.79166603088379,
+          20.375,
+          23.95833396911621
+        ],
+        "acknowledged_uncertainty": [
+          18.83333396911621,
+          20.41666603088379,
+          23.83333396911621
+        ]
+      }
+    },
+    {
+      "variant": [
+        2,
+        "letters",
+        false
+      ],
+      "correct": 5,
+      "total": 15,
+      "false_positives": 5,
+      "positive_misses": 3,
+      "abstentions": 6,
+      "batch_ms": 34,
+      "confusion": {
+        "yes->unknown": 2,
+        "no->yes": 2,
+        "unknown->yes": 3,
+        "yes->no": 1,
+        "no->unknown": 2,
+        "unknown->unknown": 2,
+        "yes->yes": 2,
+        "no->no": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.375,
+            "no": 23.375,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.625,
+            "no": 23.875,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.75,
+            "no": 23.5,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "no",
+          "logits": {
+            "yes": 20.625,
+            "no": 23.125,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.75,
+            "no": 23.125,
+            "unknown": 23.625
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.75,
+            "no": 23.375,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.5,
+            "no": 23.75,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "no",
+          "logits": {
+            "yes": 20.625,
+            "no": 23.75,
+            "unknown": 24.25
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.625,
+            "no": 23.25,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.375,
+            "no": 21.875,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 20.0,
+            "no": 22.375,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 19.375,
+            "no": 22.125,
+            "unknown": 24.5
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.25,
+            "no": 23.625,
+            "unknown": 24.125
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.0,
+            "no": 23.75,
+            "unknown": 24.375
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.5,
+            "no": 22.75,
+            "unknown": 23.25
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          20.5,
+          23.625,
+          24.41666603088379
+        ],
+        "conditional_penalty": [
+          21.25,
+          23.25,
+          23.70833396911621
+        ],
+        "popularity_as_reason": [
+          20.95833396911621,
+          23.79166603088379,
+          24.45833396911621
+        ],
+        "contradiction": [
+          18.91666603088379,
+          21.79166603088379,
+          24.375
+        ],
+        "acknowledged_uncertainty": [
+          21.41666603088379,
+          23.33333396911621,
+          23.625
+        ]
+      }
+    },
+    {
+      "variant": [
+        2,
+        "letters",
+        true
+      ],
+      "correct": 6,
+      "total": 15,
+      "false_positives": 6,
+      "positive_misses": 1,
+      "abstentions": 4,
+      "batch_ms": 41,
+      "confusion": {
+        "yes->yes": 4,
+        "no->yes": 4,
+        "unknown->yes": 2,
+        "unknown->no": 1,
+        "unknown->unknown": 2,
+        "yes->unknown": 1,
+        "no->unknown": 1
+      },
+      "answers": [
+        {
+          "question": "reason_supports",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.625,
+            "no": 23.375,
+            "unknown": 24.25
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 24.25,
+            "no": 24.5,
+            "unknown": 24.625
+          }
+        },
+        {
+          "question": "reason_supports",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.625,
+            "no": 23.625,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.5,
+            "no": 23.375,
+            "unknown": 23.5
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.875,
+            "no": 22.875,
+            "unknown": 23.375
+          }
+        },
+        {
+          "question": "conditional_penalty",
+          "gold": "unknown",
+          "answer": "no",
+          "logits": {
+            "yes": 20.25,
+            "no": 21.875,
+            "unknown": 22.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 23.125,
+            "no": 23.625,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.0,
+            "no": 22.625,
+            "unknown": 23.25
+          }
+        },
+        {
+          "question": "popularity_as_reason",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.75,
+            "no": 22.25,
+            "unknown": 23.125
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "yes",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.125,
+            "no": 22.875,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "no",
+          "answer": "yes",
+          "logits": {
+            "yes": 22.375,
+            "no": 22.875,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "contradiction",
+          "gold": "unknown",
+          "answer": "yes",
+          "logits": {
+            "yes": 21.875,
+            "no": 22.75,
+            "unknown": 23.75
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "yes",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.5,
+            "no": 22.875,
+            "unknown": 23.875
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "no",
+          "answer": "unknown",
+          "logits": {
+            "yes": 21.625,
+            "no": 22.875,
+            "unknown": 24.0
+          }
+        },
+        {
+          "question": "acknowledged_uncertainty",
+          "gold": "unknown",
+          "answer": "unknown",
+          "logits": {
+            "yes": 20.625,
+            "no": 22.25,
+            "unknown": 23.5
+          }
+        }
+      ],
+      "label_offsets": {
+        "reason_supports": [
+          22.0,
+          23.41666603088379,
+          24.25
+        ],
+        "conditional_penalty": [
+          21.08333396911621,
+          22.58333396911621,
+          23.70833396911621
+        ],
+        "popularity_as_reason": [
+          21.29166603088379,
+          22.91666603088379,
+          23.625
+        ],
+        "contradiction": [
+          21.58333396911621,
+          22.54166603088379,
+          23.54166603088379
+        ],
+        "acknowledged_uncertainty": [
+          22.08333396911621,
+          23.125,
+          23.83333396911621
+        ]
+      }
+    }
+  ],
+  "selected": [
+    1,
+    "letters",
+    true
+  ],
+  "center_scores": true,
+  "stock_test": {
+    "variant": [
+      1,
+      "letters",
+      true
+    ],
+    "correct": 9,
+    "total": 15,
+    "false_positives": 4,
+    "positive_misses": 1,
+    "abstentions": 6,
+    "batch_ms": 36,
+    "confusion": {
+      "yes->yes": 4,
+      "no->yes": 3,
+      "unknown->yes": 1,
+      "no->unknown": 1,
+      "unknown->unknown": 4,
+      "yes->unknown": 1,
+      "no->no": 1
+    },
+    "answers": [
+      {
+        "question": "reason_supports",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 21.875,
+          "no": 23.125,
+          "unknown": 23.875
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "no",
+        "answer": "yes",
+        "logits": {
+          "yes": 24.0,
+          "no": 23.375,
+          "unknown": 24.125
+        }
+      },
+      {
+        "question": "reason_supports",
+        "gold": "unknown",
+        "answer": "yes",
+        "logits": {
+          "yes": 21.75,
+          "no": 22.875,
+          "unknown": 24.0
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 22.5,
+          "no": 23.875,
+          "unknown": 24.125
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "no",
+        "answer": "unknown",
+        "logits": {
+          "yes": 20.5,
+          "no": 22.5,
+          "unknown": 23.625
+        }
+      },
+      {
+        "question": "conditional_penalty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": 20.375,
+          "no": 22.625,
+          "unknown": 23.875
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 22.375,
+          "no": 23.5,
+          "unknown": 23.5
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "no",
+        "answer": "yes",
+        "logits": {
+          "yes": 22.5,
+          "no": 23.375,
+          "unknown": 23.625
+        }
+      },
+      {
+        "question": "popularity_as_reason",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": 21.375,
+          "no": 23.25,
+          "unknown": 23.875
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "yes",
+        "answer": "yes",
+        "logits": {
+          "yes": 22.5,
+          "no": 22.75,
+          "unknown": 22.875
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "no",
+        "answer": "yes",
+        "logits": {
+          "yes": 22.375,
+          "no": 23.0,
+          "unknown": 23.875
+        }
+      },
+      {
+        "question": "contradiction",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": 21.0,
+          "no": 22.0,
+          "unknown": 23.25
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "yes",
+        "answer": "unknown",
+        "logits": {
+          "yes": 20.875,
+          "no": 22.25,
+          "unknown": 24.0
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "no",
+        "answer": "no",
+        "logits": {
+          "yes": 21.375,
+          "no": 23.0,
+          "unknown": 23.5
+        }
+      },
+      {
+        "question": "acknowledged_uncertainty",
+        "gold": "unknown",
+        "answer": "unknown",
+        "logits": {
+          "yes": 19.125,
+          "no": 21.0,
+          "unknown": 24.5
+        }
+      }
+    ],
+    "label_offsets": {
+      "reason_supports": [
+        22.04166603088379,
+        23.45833396911621,
+        24.45833396911621
+      ],
+      "conditional_penalty": [
+        21.625,
+        23.25,
+        24.0
+      ],
+      "popularity_as_reason": [
+        21.95833396911621,
+        23.29166603088379,
+        23.70833396911621
+      ],
+      "contradiction": [
+        21.58333396911621,
+        22.58333396911621,
+        23.33333396911621
+      ],
+      "acknowledged_uncertainty": [
+        21.75,
+        22.95833396911621,
+        23.625
+      ]
+    }
+  }
+}

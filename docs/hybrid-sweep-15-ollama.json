@@ -1,0 +1,82 @@
+{
+  "model": "qwen2.5:1.5b",
+  "answers": [
+    {
+      "question": "reason_supports",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "reason_supports",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "reason_supports",
+      "gold": "unknown",
+      "answer": "unknown"
+    },
+    {
+      "question": "conditional_penalty",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "conditional_penalty",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "conditional_penalty",
+      "gold": "unknown",
+      "answer": "unknown"
+    },
+    {
+      "question": "popularity_as_reason",
+      "gold": "yes",
+      "answer": "yes"
+    },
+    {
+      "question": "popularity_as_reason",
+      "gold": "no",
+      "answer": "no"
+    },
+    {
+      "question": "popularity_as_reason",
+      "gold": "unknown",
+      "answer": "unknown"
+    },
+    {
+      "question": "contradiction",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "contradiction",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "contradiction",
+      "gold": "unknown",
+      "answer": "unknown"
+    },
+    {
+      "question": "acknowledged_uncertainty",
+      "gold": "yes",
+      "answer": "unknown"
+    },
+    {
+      "question": "acknowledged_uncertainty",
+      "gold": "no",
+      "answer": "unknown"
+    },
+    {
+      "question": "acknowledged_uncertainty",
+      "gold": "unknown",
+      "answer": "unknown"
+    }
+  ],
+  "correct": 7,
+  "wall_ms": 11256
+}
