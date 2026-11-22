@@ -104,3 +104,17 @@ The pilot retained 2,400 evidence-checked excerpts. The thread-separated partiti
 | Large L12 | 41.18% | 18.75% | 25.77% | 124 ms |
 
 The simple cue baseline scored 28.80% micro F1 on this holdout. The medium model scored 18.60% on the 250 ordinary candidates. Qwen returned one insufficient-context example across the collection, so learned context detection was disabled for this pilot. The detailed local report is `classifier/artifacts/pressure/browser.json`.
+
+## Compare context and reader concern in Qwen
+
+The context experiment re-rates the pressure holdout using local Qwen. It presents the same target in three conditions. The first supplies the excerpt alone. The second adds text around the target in the original post and the end of its parent reply, when available. The third adds the reader's stated concern to the same context. The rubric stays fixed, and condition order is shuffled per batch.
+
+The experiment replays the original archive sampler to recover the exact source post for each excerpt. Every retained label must quote the target precisely. When Qwen says surrounding material was essential, it must also quote that material exactly. These checks establish that the words are present. The test reports changes in agreement and flags without independent human adjudication.
+
+```powershell
+.\.venv\Scripts\python.exe classifier/pressure_context.py
+```
+
+The local report and resumable ratings are under `classifier/artifacts/pressure/context_experiment/`. No training step is needed.
+
+The run recovered all 508 targets and retained 498 matched ratings after quote validation. Qwen flagged pressure on 79 excerpts alone, 74 with context, and 80 with context plus concern. Context changed 58 label sets, turning 21 no-match cases into flags and removing all flags in 26 cases. Qwen cited surrounding wording for five of the 32 newly assigned labels. The reader-concern prompt changed 22 label sets with the surrounding text held fixed. On 59 comparable complete misses from the preceding browser test, the neutral context prompt added flags to eight and cleared flags from seven. No model was retrained.

@@ -56,7 +56,7 @@ PATTERNS = [re.compile(cue, re.I) for cue in CUES]
 BOUNDARY = re.compile(r"(?<=[.!?])\s+")
 PII = re.compile(r"https?://|www\.|/?u/[\w-]+|[\w.+-]+@[\w.-]+\.\w+", re.I)
 
-def candidates():
+def candidates(include_source=False):
     pools = defaultdict(list)
     seen = set()
     rng = random.Random(SEED)
@@ -92,8 +92,11 @@ def candidates():
                 if identifier in seen:
                     continue
                 seen.add(identifier)
-                pools[track].append({"id": identifier, "thread": thread, "text": text,
-                                     "track": "natural" if track < 0 else KEYS[track]})
+                row = {"id": identifier, "thread": thread, "text": text,
+                       "track": "natural" if track < 0 else KEYS[track]}
+                if include_source:
+                    row["source_post"] = post["id"]
+                pools[track].append(row)
     for items in pools.values():
         rng.shuffle(items)
     # Rotate between ordinary and cue-based candidates while each pool has material.
