@@ -50,6 +50,8 @@ jobs:
           node --check extension/src/implicit-conclusion-reconstruction.mjs
           node --check extension/src/matcher-worker.js
           node scripts/test-implicit-conclusion-reconstruction.mjs
+      - name: Test experimental structured language analysis
+        run: node scripts/test-semantic-structure.mjs
       - name: Test advisory orange scrutiny signals
         run: node scripts/test-scrutiny-signals.mjs
       - name: Test explicit connector normalisation

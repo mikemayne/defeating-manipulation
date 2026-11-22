@@ -4,6 +4,9 @@ import { questions } from "./hybrid-questions.mjs";
 import { mappings } from "./hybrid-mappings.mjs";
 import { localAnswer } from "./hybrid-local-questions.mjs";
 
+import { analyzeStructure } from "./semantic-structure.mjs";
+import { structureSignals } from "./semantic-structure-adapter.mjs";
+
 const MAX_INPUT = 4800;
 const MAX_SCOPE = 1800;
 const MAX_SCOPES = 8;
@@ -115,7 +118,7 @@ function evaluatePatterns(answers) {
 
 export async function analyzeHybrid(text, { classify, mode = "selective", variant = "tailored",
  budget = 48, signal, checkedAnswers, questionIds, spellchecker, onCall, scopeEvidence = false,
- findPriorActivities } = {}) {
+ findPriorActivities, structured = false, structureOptions } = {}) {
  if (typeof text !== "string") throw TypeError("Expected text");
  if (!["selective", "complete"].includes(mode) || !["baseline", "tailored"].includes(variant) ||
      !Number.isInteger(budget) || budget < 0 || budget > 256) throw RangeError("Invalid experiment options");
@@ -131,6 +134,8 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
  const results = [];
  for (const scope of scopes.slice(0, MAX_SCOPES)) {
   const passage = text.slice(scope.start, scope.end);
+  const structure = structured ? analyzeStructure(passage, { offset: scope.start, spellchecker }) : null;
+  const structural = structure && !scope.truncated ? structureSignals(structure, scope, structureOptions) : null;
   const literal = observationsFor(passage, scope);
   const repetition = sentenceRepetition(passage, scope);
   const observations = [...literal.flatMap(item => item.evidence), ...repetition.evidence];
@@ -148,7 +153,7 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
   const semantic = questions.filter(question => question.strategy === "model");
   const priority = question => {
    const uses = Object.values(mappings).filter(mapping => mapping.required.includes(question.id)).length;
-   return 3 * uses + question.cues.filter(cue => answers.get(cue)?.answer === "yes").length;
+   return 3 * uses + (uses && structural?.priorities.has(question.id) ? 4 : 0) + question.cues.filter(cue => answers.get(cue)?.answer === "yes").length;
   };
   if (mode === "selective") semantic.sort((a, b) => priority(b) - priority(a));
   const trace = [];
@@ -162,6 +167,8 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
    } else if (local) {
     result = local;
     result.reason = "explicit_construction";
+   } else if (structural?.answers.has(question.id)) {
+    result = { ...structural.answers.get(question.id), reason: "explicit_structure" };
    } else if (!classify || calls >= budget || signal?.aborted ||
               (mode === "selective" && priority(question) < 3)) {
     result.reason = !classify ? "model_unavailable" : signal?.aborted ? "cancelled" :
@@ -174,7 +181,7 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
      onCall?.(calls, budget);
      let raw;
      try {
-      raw = await classify(messages, { signal });
+      raw = await classify(messages, { signal, ...(structure ? { structure } : {}) });
      } catch (error) {
       const namedStatus = { TimeoutError: "timeout", OutputLimitError: "output_truncated", AbortError: "cancelled" };
       result.status = Object.hasOwn(namedStatus, error?.name) ? namedStatus[error.name] : "runtime_failure";
@@ -196,7 +203,7 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
    answers.set(question.id, { ...result, scope });
    if (trace.at(-1)?.id !== question.id) trace.push({ id: question.id, status: result.status, method: result.method, reason: result.reason });
   }
-  results.push({ scope, observations, answers: Object.fromEntries(answers), patterns: evaluatePatterns(answers), trace });
+  results.push({ scope, observations, answers: Object.fromEntries(answers), patterns: evaluatePatterns(answers), trace, ...(structure ? { structure } : {}) });
  }
  const { flags } = preprocessText(prefix, { spellchecker, correctSpelling: false });
  return { mode, variant, calls, flags, truncated: prefix.length < text.length || scopes.length > MAX_SCOPES ||

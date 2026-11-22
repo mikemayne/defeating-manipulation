@@ -22,6 +22,7 @@ self.addEventListener("message", async ({ data }) => {
    ? await import("../hybrid-grammar.js").catch(() => null) : null;
   const result = await analyzeHybrid(data.text, {
    classify,
+   structured: data.structured === true,
    findPriorActivities: grammar?.findPriorActivities,
    scopeEvidence: data.model === "browser",
    mode: data.complete ? "complete" : "selective",

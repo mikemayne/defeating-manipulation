@@ -53,6 +53,7 @@ form.addEventListener("submit", event => {
  worker.postMessage({
   text: document.querySelector("#passage").value,
   model: document.querySelector("#model").value,
-  complete: document.querySelector("#complete").checked
+  complete: document.querySelector("#complete").checked,
+  structured: document.querySelector("#structured").checked
  });
 });
