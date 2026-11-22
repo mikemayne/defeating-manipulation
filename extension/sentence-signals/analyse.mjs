@@ -20,7 +20,7 @@ function scores(labels, logits, activate) {
   return Object.fromEntries(activate(logits).map((value, index) => [labels[index], value]));
 }
 
-async function loadEngine({ download }) {
+export async function loadEngine({ download }) {
   const hf = await import('@huggingface/transformers');
   const modelDir = resolve(process.env.SENTENCE_MODEL_DIR || beside('.models'));
   await mkdir(modelDir, { recursive: true });
@@ -36,9 +36,12 @@ async function loadEngine({ download }) {
     const model = await hf.AutoModelForSequenceClassification.from_pretrained(id, settings);
     const labels = fixedLabels ?? Object.values(model.config.id2label);
     return async (text, pair = null) => {
-      const inputs = tokenizer(text, { text_pair: pair, truncation: true, max_length: 256 });
+      const inputs = tokenizer(text, { text_pair: pair, padding: Array.isArray(text), truncation: true, max_length: 256 });
       const { logits } = await model(inputs);
-      return scores(labels, Array.from(logits.data), activate);
+      const values = Array.from(logits.data);
+      if (!Array.isArray(text)) return scores(labels, values, activate);
+      return text.map((_, index) => scores(labels,
+        values.slice(index * labels.length, (index + 1) * labels.length), activate));
     };
   }
 
