@@ -3,16 +3,17 @@ import argparse
 import shutil
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 
 from prepare import ARTIFACTS, ROOT
 
 WEB = ARTIFACTS / "web"
 
-def stage():
-    if not (WEB / "manifest.json").is_file():
+def stage(web=WEB):
+    if not (web / "manifest.json").is_file():
         raise RuntimeError("Train and export the classifier first.")
     for asset in ("index.html", "style.css", "inference.js", "app.js"):
-        shutil.copyfile(ROOT / asset, WEB / asset)
+        shutil.copyfile(ROOT / asset, web / asset)
 
 class Handler(SimpleHTTPRequestHandler):
     extensions_map = {**SimpleHTTPRequestHandler.extensions_map,
@@ -25,13 +26,15 @@ class Handler(SimpleHTTPRequestHandler):
                          "object-src 'none'; frame-ancestors 'none'; connect-src 'self'")
         super().end_headers()
 
-def create_server(port):
-    stage()
-    return ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, directory=WEB))
+def create_server(port, web=WEB):
+    stage(web)
+    return ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, directory=web))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8173)
-    with create_server(parser.parse_args().port) as server:
+    parser.add_argument("--web-dir", type=Path, default=WEB)
+    args = parser.parse_args()
+    with create_server(args.port, args.web_dir) as server:
         print(f"Offline classifier at http://127.0.0.1:{server.server_port}", flush=True)
         server.serve_forever()

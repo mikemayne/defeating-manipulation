@@ -57,7 +57,22 @@ New-Item -ItemType Directory -Force classifier/private
 $dataset = Invoke-RestMethod 'https://datasets-server.huggingface.co/parquet?dataset=webis%2Fconclugen'
 $shard = $dataset.parquet_files | Where-Object { $_.config -eq 'base' -and $_.split -eq 'train' }
 Invoke-WebRequest -Uri $shard.url -OutFile classifier/private/conclugen-base-train.parquet
-.\.venv\Scripts\python.exe classifier/qwen_bench.py classifier/private/conclugen-base-train.parquet --seconds 600 --out classifier/artifacts/qwen-agreement.json
+.\.venv\Scripts\python.exe classifier/qwen_bench.py classifier/private/conclugen-base-train.parquet --seconds 600 --out classifier/artifacts/qwen-agreement-strict.json
 ```
 
 The 601.23-second run on the RTX 5090 completed 3,444 comparisons with full GPU residency and zero invalid batches. The selected MiniLM-L6 browser model matched Qwen's full output on 1,554 excerpts (45.12%). Agreement was 49.19% on randomly sampled eligible excerpts and 41.06% on cue-enriched excerpts. Mechanism-level micro precision was 4.55%, recall 21.03%, and F1 7.48%. A baseline that always returned no match would have matched Qwen on 79.44% of the combined sample. The local run report is saved as `classifier/artifacts/qwen-agreement-strict.json`.
+
+## Distil labels from the timed Qwen comparison
+
+Run the timed comparison first and retain the resulting `qwen-agreement-strict.jsonl` and its corpus shard. The distillation runner reconstructs excerpts by hash and groups near-duplicate wording before a seeded 60/20/20 split. It uses Qwen positives, no-match examples, and insufficient-context labels. It compares the original browser predictions, a calibration-only control, a retrained six-layer MiniLM, and a retrained [twelve-layer MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2). Thresholds are fitted on the calibration partition, with detection disabled for labels with fewer than three calibration positives.
+
+```powershell
+.\.venv\Scripts\python.exe classifier/prepare.py --with-l12
+.\.venv\Scripts\python.exe classifier/distill.py
+.\.venv\Scripts\python.exe classifier/distill_bench.py
+.\.venv\Scripts\python.exe classifier/serve.py --web-dir classifier/artifacts/distillation/web
+```
+
+The browser benchmark runs the candidate ONNX models on the same reserved excerpts in Edge and writes agreement, model size and latency to `classifier/artifacts/distillation/browser.json`. The latency comparison uses twice the earlier baseline warm p95 on this desktop. Use the model selector in the experimental bundle to try the larger candidate.
+
+The run used 2,066 training excerpts, 689 calibration excerpts and 689 reserved test excerpts. On mechanism labels, the retrained six-layer model reached 29.41% precision, 25.86% recall and 27.52% micro F1 against Qwen at 56.5 ms warm p95. The twelve-layer model reached 37.84% precision, 24.14% recall and 29.47% micro F1 at 112.9 ms warm p95. The original and calibration-only controls scored 7.92% and 14.97% micro F1, respectively. These scores measure agreement with the same Qwen labeler. The calibration split had zero guilt-appeal positives, so that label's detections were disabled for the experimental models.

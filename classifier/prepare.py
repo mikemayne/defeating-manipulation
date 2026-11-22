@@ -1,4 +1,5 @@
 """Fetch pinned public encoder files and bundle an offline browser runtime."""
+import argparse
 import shutil
 import tarfile
 import urllib.request
@@ -13,6 +14,8 @@ CANDIDATES = {
                  "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"),
 }
 PACKAGES = {"@huggingface/transformers": "3.7.2", "onnxruntime-web": "1.22.0"}
+DEEP_ENCODER = ("sentence-transformers/all-MiniLM-L12-v2",
+                "a50ef00143b4d5391434df20ae11632588ac25be")
 
 def download(url, target):
     if target.exists():
@@ -22,8 +25,11 @@ def download(url, target):
     urllib.request.urlretrieve(url, partial)
     partial.replace(target)
 
-def prepare():
-    for name, (repo, revision) in CANDIDATES.items():
+def prepare(with_l12=False):
+    encoders = dict(CANDIDATES)
+    if with_l12:
+        encoders["MiniLM-L12"] = DEEP_ENCODER
+    for name, (repo, revision) in encoders.items():
         target = ARTIFACTS / "encoders" / name
         revision_file = target / "revision.txt"
         if revision_file.exists() and revision_file.read_text(encoding="utf8") != revision:
@@ -60,4 +66,6 @@ def prepare():
     download("https://www.apache.org/licenses/LICENSE-2.0.txt", vendor / "apache-2.0.txt")
 
 if __name__ == "__main__":
-    prepare()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--with-l12", action="store_true")
+    prepare(parser.parse_args().with_l12)
