@@ -1,6 +1,6 @@
 # JavaScript pattern coverage
 
-The hybrid detector can resolve specific explicit constructions for 34 of 79 active catalogue patterns without a model. Rules require a complete matching paragraph and return original evidence spans. Other wording remains open for the semantic pass. These are implementation counts. Real-world accuracy has yet to be measured.
+The hybrid detector can resolve specific explicit constructions for 35 of 79 active catalogue patterns without a model. Rules require a complete matching paragraph and return original evidence spans. Other wording remains open for the semantic pass. These are implementation counts. Real-world accuracy has yet to be measured.
 
 Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This includes generated construction controls and the earlier synthetic audit passages used to refine three rules. Those reviewed passages are development examples for this experiment.
 
@@ -15,6 +15,7 @@ Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This inc
 | Allegation laundering | The same clause first attributed as an allegation and then restated unqualified. |
 | Appeal to guilt | An explicit test of care tying a named person's distress to an instruction. |
 | Moving the goalposts | An explicitly sufficient criterion repeated as fulfilled before an additional requirement is introduced. |
+| Appearance-based personal attack | An appearance insult explicitly used to dismiss the same person's stated position. |
 | Threat framing | An explicit adverse consequence imposed by the speaker for refusing to act. |
 | Firsthand evidence requirement | Other evidence explicitly rejected because the addressee did not witness the event. |
 | Hasty generalisation | One or two observations explicitly generalized to all members of the same named group. |
@@ -45,7 +46,7 @@ Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This inc
 
 ## Remaining decisions
 
-These 39 patterns have no new JavaScript resolution in the hybrid detector. An existing Firefox rule can still flag some forms. The last column identifies the judgment or relationship for which a strong rule is still needed. It can be used to propose better lexical cues, structural tests, or examples.
+These 38 patterns have no new JavaScript resolution in the hybrid detector. An existing Firefox rule can still flag some forms. The last column identifies the judgment or relationship for which a strong rule is still needed. It can be used to propose better lexical cues, structural tests, or examples.
 
 | Pattern | Existing Firefox rules | What remains to establish |
 | --- | --- | --- |
@@ -71,7 +72,6 @@ These 39 patterns have no new JavaScript resolution in the hybrid detector. An e
 | Double standards | Yes | comparable cases · inconsistent criteria or evidentiary thresholds |
 | Poisoning the well | Yes | prior attack on a source · later claims discounted on that basis |
 | Criminalising dissent | — | dissent or criticism · criminal label unsupported by the conduct described |
-| Appearance-based personal attack | — | physical trait or manner · ridicule replaces engagement with relevant conduct or claims |
 | Appeal to disgust | — | revulsion-related description · description used to influence a judgement |
 | Premature closure | — | issue declared settled · acknowledged or otherwise visible unresolved evidence |
 | Narrative reframing | — | selected sequence, roles or causal links · comparison context for the inferred shift |

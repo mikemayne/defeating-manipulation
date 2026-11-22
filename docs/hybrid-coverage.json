@@ -909,19 +909,29 @@
       "kind": "technique",
       "source": "techniques.json",
       "definition": "The text directs ridicule or contempt at appearance rather than engaging with the person's claims or conduct relevant to the issue.",
-      "required": [],
+      "required": [
+        "appearance_as_rebuttal"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
+      "questions": [
+        {
+          "id": "appearance_as_rebuttal",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
       "context": "paragraph",
       "pendingRequired": [
         "physical trait or manner",
         "ridicule replaces engagement with relevant conduct or claims"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
-      "javascript": [],
+      "gap": "Covers explicit appearance insults tied to dismissal of the same person's position.",
+      "javascript": [
+        "An appearance insult explicitly used to dismiss the same person's stated position."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],

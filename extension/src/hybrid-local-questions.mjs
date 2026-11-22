@@ -9,9 +9,34 @@ const bandwagon = new RegExp([
  ")[.!]?$"
 ].join(""), "i");
 
+const position = /(?:argument|claim|case|proposal|point|reasoning)/.source;
+const insult = /(?:ridiculous|absurd|silly|pathetic|hideous|stupid|like (?:an? )?(?:clown|idiot|fool))/.source;
+const appearanceSubject = name => "(?<" + name + ">he|she|they|you) looks? ";
+const appearanceDismissal = new RegExp([
+ "^", "(?:",
+ "(?:don't listen to|ignore|dismiss) (?<owner>his|her|their|your) ", position,
+ "(?: because ", appearanceSubject("becauseSubject"), insult,
+ "|[.!] look how (?:ridiculous|absurd|silly|pathetic|hideous|stupid) (?<directSubject>he|she|they|you) looks?)",
+ "|(?<claimOwner>his|her|their|your) ", position,
+ " is (?:a joke|rubbish|worthless) because ", appearanceSubject("claimSubject"), insult,
+ "|", appearanceSubject("subject"), insult, "(?:, so|[.!] (?:so|that's why)) ",
+ "(?:don't listen to|ignore|dismiss) (?<laterOwner>his|her|their|your) ", position,
+ ")[.!]?$"
+].join(""), "i");
+const possessive = { he: "his", she: "her", they: "their", you: "your" };
+
 // Allowlisted constructions over one bounded paragraph. A non-match leaves
 // the broader predicate open. Anchors keep attributed examples out of this pass.
 export const localQuestions = {
+ appearance_as_rebuttal: {
+  limit: "An appearance insult explicitly used to dismiss the same person's stated position.",
+  expression: appearanceDismissal,
+  accept: ({ groups }) => {
+   const subject = groups.becauseSubject ?? groups.directSubject ?? groups.claimSubject ?? groups.subject;
+   const owner = groups.owner ?? groups.claimOwner ?? groups.laterOwner;
+   return possessive[subject.toLowerCase()] === owner.toLowerCase();
+  }
+ },
  popularity_as_reason: {
   limit: "An explicit popularity claim linked to the same recommendation.",
   expression: bandwagon

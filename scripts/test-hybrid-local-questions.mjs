@@ -4,6 +4,7 @@ import { analyzeHybrid } from "../extension/src/hybrid-detector.mjs";
 import { localQuestions } from "../extension/src/hybrid-local-questions.mjs";
 
 const contrasts = {
+ appearance_as_rebuttal: ["Don't listen to her argument. Look how ridiculous she looks.", "Don't listen to her argument. Look how ridiculous he looks."],
  popularity_as_reason: ["Everyone’s buying one, so you should too.", "Everyone’s buying one, so you should check the delivery date."],
  personal_attack_as_rebuttal: ["Dismiss your argument because you’re an idiot.", "Dismiss your argument because the figures don't add up."],
  critic_inconsistency_as_rebuttal: ["You do it too, so your complaint doesn't count.", "You do it too, but your complaint is valid."],
@@ -38,6 +39,26 @@ const contrasts = {
  two_options_as_exhaustive: ["Your only options are to pay or to leave. You can also appeal.", "Your only options are to pay or to leave. You can also leave."],
  disproportionate_reward_offer: ["Send £5 now and you'll get £500 tomorrow, guaranteed.", "Send £5 now and you'll get £6 tomorrow, guaranteed."]
 };
+for (const text of [
+ "His proposal is a joke because he looks like a clown.",
+ "She looks ridiculous. So ignore her argument.",
+ "He looks like an idiot, so dismiss his claim."
+]) {
+ const result = await analyzeHybrid(text);
+ assert.equal(result.scopes[0].patterns.find(item => item.id === "appearance_based_attack").state, "supported");
+}
+for (const text of [
+ "She wears a blue jacket.",
+ "She looks ridiculous.",
+ "She looks ridiculous. Ignore her argument.",
+ "Her proposal is a joke because he looks like a clown.",
+ "I disagree with her proposal because it costs too much. I also hate her jacket."
+]) {
+ const result = await analyzeHybrid(text);
+ assert.equal(result.scopes[0].patterns.find(item => item.id === "appearance_based_attack").state, "unresolved");
+}
+const plainAppearance = await analyzeHybrid("She wore a blue jacket.");
+assert.equal(plainAppearance.scopes[0].answers.appearance_wording.answer, "yes");
 assert.deepEqual(Object.keys(contrasts).sort(), Object.keys(localQuestions).sort());
 for (const [id, [positive, negative]] of Object.entries(contrasts)) {
  const options = { questionIds: new Set([id]) };

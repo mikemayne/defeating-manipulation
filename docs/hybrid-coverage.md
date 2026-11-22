@@ -36,7 +36,7 @@ The published catalogues supply canonical IDs. The extension copy supplies exist
 | double_standards | technique | inventoried | article | comparable cases, inconsistent criteria or evidentiary thresholds |  |  | Predicate and context mapping pending. |
 | poisoning_the_well | technique | inventoried | paragraph | prior attack on a source, later claims discounted on that basis |  |  | Predicate and context mapping pending. |
 | criminalising_dissent | technique | inventoried | paragraph | dissent or criticism, criminal label unsupported by the conduct described |  |  | Predicate and context mapping pending. |
-| appearance_based_attack | technique | inventoried | paragraph | physical trait or manner, ridicule replaces engagement with relevant conduct or claims |  |  | Predicate and context mapping pending. |
+| appearance_based_attack | technique | implemented | paragraph | appearance_as_rebuttal |  |  | Covers explicit appearance insults tied to dismissal of the same person's position. |
 | disgust_appeal | technique | inventoried | paragraph | revulsion-related description, description used to influence a judgement |  |  | Predicate and context mapping pending. |
 | threat_framing | technique | implemented | paragraph | unfavourable_future | addressee_lacks_knowledge, unspecified_future_event, conditional_penalty | synthetic pilot |  |
 | premature_closure | technique | inventoried | paragraph | issue declared settled, acknowledged or otherwise visible unresolved evidence |  |  | Predicate and context mapping pending. |

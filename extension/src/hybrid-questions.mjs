@@ -21,6 +21,7 @@ export const questions = [
   examples: { yes: "We can do this together. We can do this together.",
    no: "We can do this together. It will take a week." }
  },
+ literal("appearance_wording", /\b(?:(?:he|she|they|you)\s+(?:looks?|looked|wears?|wore)|(?:his|her|their|your)\s+(?:appearance|looks|outfit|clothes|hair|face))\b/gi, "She wore a blue jacket.", "The argument is detailed."),
  literal("first_person", /\b(?:i|me|my|we|us|our)\b/gi, "We saw it.", "They saw it."),
  literal("second_person", /\b(?:you|your|yours)\b/gi, "Are you ready?", "Is Sam ready?"),
  literal("third_person", /\b(?:he|she|they|him|her|them|their|his)\b/gi, "They left.", "We left."),
@@ -33,6 +34,7 @@ export const questions = [
  literal("urgency_wording", /\b(?:right now|immediately|last chance|by tonight|hurry)\b/gi, "Call right now.", "Call sometime."),
  literal("reason_wording", /\b(?:because|therefore|since|so that)\b/gi, "Go because it's late.", "Go now."),
  literal("uncertainty_wording", /\b(?:possibly|maybe|might|not sure|don't know)\b/gi, "Maybe later.", "Definitely later."),
+ semantic("appearance_as_rebuttal", "Does the speaker use someone's appearance as a reason to dismiss that same person's argument, claim, or proposal?", "Don't listen to her argument. Look how ridiculous she looks.", "Her outfit is ugly, but her argument is sound.", ["appearance_wording", "reason_wording"]),
  semantic("addressee_lacks_knowledge", "Does the passage attribute a specific lack of knowledge to the person being addressed?", "You haven't got a clue what's next.", "I have no idea when you arrive.", ["missing_knowledge", "second_person"]),
  semantic("unspecified_future_event", "Does the passage refer to a future event whose nature it leaves unspecified?", "Just wait till you see what happens.", "You don't know when the bus will arrive.", ["future_wording"]),
  semantic("unfavourable_future", "Does the speaker explicitly or implicitly present a future outcome as bad for the person being addressed? A report of someone else's warning does not count as the speaker's own warning.", "You'll regret messing with me.", "You'll be pleased with what's coming.", ["future_wording", "second_person"]),

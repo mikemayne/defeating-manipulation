@@ -1,4 +1,5 @@
 export const mappings = {
+ appearance_based_attack: { required: ["appearance_as_rebuttal"], partial: "Covers explicit appearance insults tied to dismissal of the same person's position." },
  repetition: { required: ["verbatim_repeated_sentence"], partial: "Covers exact repetition within a paragraph. The reader's response is unknown." },
  threat_framing: { required: ["unfavourable_future"], supporting: ["addressee_lacks_knowledge", "unspecified_future_event", "conditional_penalty"] },
  ad_hominem: { required: ["personal_attack_as_rebuttal"] },
