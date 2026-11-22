@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import runpy
 import sys
-from urllib.parse import urlsplit
+from urllib.parse import urljoin, urlsplit
 
 from bs4 import BeautifulSoup
 import requests
@@ -16,13 +16,30 @@ import requests
 
 shared = runpy.run_path(str(Path(__file__).with_name('collect-article-comments.py')))
 fetch = shared['fetch']
-section_links = shared['section_links']
 discussion_candidates = shared['discussion_candidates']
 recommended = shared['recommended']
+SITE = shared['SITE']
 
 
 def article_date(url):
     return datetime.strptime('/'.join(urlsplit(url).path.split('/')[2:5]), '%Y/%b/%d').date()
+
+
+def links_for_day(day):
+    prefix = day.strftime('/commentisfree/%Y/%b/%d/').lower()
+    try:
+        response = fetch(SITE + prefix + 'all')
+    except requests.RequestException:
+        return []
+    soup = BeautifulSoup(response.text, 'html.parser')
+    urls = []
+    for anchor in soup.select('a[href]'):
+        parts = urlsplit(urljoin(SITE, anchor['href']))
+        if parts.netloc == 'www.theguardian.com' and parts.path.startswith(prefix):
+            slug = parts.path[len(prefix):]
+            if slug and slug != 'all' and '/' not in slug:
+                urls.append(SITE + parts.path)
+    return list(dict.fromkeys(urls))
 
 
 def collect(url):
@@ -51,11 +68,13 @@ def collect(url):
 
 def main(output):
     cutoff = datetime.now(timezone.utc).date() - timedelta(days=4)
-    urls = dict.fromkeys(url for url in section_links('commentisfree', pages=24) if article_date(url) <= cutoff)
+    dates = [cutoff - timedelta(days=offset) for offset in range(112)]
     weeks = Counter()
     sample = []
-    pending = (url for url in urls if weeks[article_date(url).isocalendar()[:2]] < 14)
     with ThreadPoolExecutor(max_workers=12) as pool:
+        urls = dict.fromkeys(url for group in pool.map(links_for_day, dates) for url in group)
+        print(f'Found {len(urls)} candidates in dated opinion archives', flush=True)
+        pending = (url for url in urls if weeks[article_date(url).isocalendar()[:2]] < 14)
         while len(sample) < 125 and (batch := list(islice(pending, 30))):
             for row in pool.map(collect, batch):
                 if row is None:
