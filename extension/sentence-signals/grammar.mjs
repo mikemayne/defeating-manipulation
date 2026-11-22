@@ -35,6 +35,24 @@ function subjectCandidates(sentences, text) {
   });
 }
 
+// Narrow standard-English agreement cues. Keep dialect and quoted speech in mind.
+const agreementRules = [
+  /\b(?:you|we|they)\s+(?:was|is|has|doesn't|doesn’t)\b/gi,
+  /\b(?:he|she|it)\s+(?:are|have|don't|don’t)\b/gi,
+  /\bI\s+(?:is|are|has|does)\b/gi,
+];
+
+function grammarFlags(source) {
+  return agreementRules.flatMap(rule => [...source.matchAll(rule)].map(match => ({
+    kind: 'subject_verb_agreement',
+    start: match.index,
+    end: match.index + match[0].length,
+    original: match[0],
+    attentionSignal: true,
+    reason: 'Possible nonstandard agreement and engagement cue',
+  }))).sort((a, b) => a.start - b.start);
+}
+
 export function parseSentence(sentence, context, spellchecker) {
   const working = preprocessText(sentence, { spellchecker });
   const preceding = preprocessText(context, { spellchecker });
@@ -69,5 +87,6 @@ export function parseSentence(sentence, context, spellchecker) {
   }));
   const spelling = working.flags.filter(flag =>
     flag.kind === 'spelling_candidate' || flag.kind === 'nonstandard_vocabulary');
-  return { analysisText, contextText: preceding.analysisText, tokens, references, explicitClause, spelling };
+  return { analysisText, contextText: preceding.analysisText, tokens, references, explicitClause, spelling,
+    grammar: grammarFlags(sentence) };
 }
