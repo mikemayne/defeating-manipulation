@@ -28,7 +28,8 @@ export const questions = [
  literal("missing_knowledge", /\b(?:no idea|no clue|don'?t know|doesn'?t know|haven't got a clue)\b/gi, "I've no clue.", "I know."),
  literal("future_wording", /\b(?:will|gonna|going to|what's coming|won't)\b/gi, "See what's coming.", "It happened."),
  literal("conditional_wording", /\b(?:if|unless|otherwise)\b/gi, "If it rains, stay in.", "I wonder whether it rained."),
- literal("obligation_wording", /\b(?:must|have to|need to|should)\b/gi, "You must go.", "You could go."),
+ literal("modal_wording", /\b(?:can't|couldn't|mightn't|mustn't|shouldn't|won't|wouldn't|can|could|may|might|must|shall|should|will|would)\b/gi, "You could go.", "You went."),
+ literal("obligation_wording", /\b(?:must|have to|has to|need to|needs to|should|ought to|supposed to)\b/gi, "You must go.", "You could go."),
  literal("urgency_wording", /\b(?:right now|immediately|last chance|by tonight|hurry)\b/gi, "Call right now.", "Call sometime."),
  literal("reason_wording", /\b(?:because|therefore|since|so that)\b/gi, "Go because it's late.", "Go now."),
  literal("uncertainty_wording", /\b(?:possibly|maybe|might|not sure|don't know)\b/gi, "Maybe later.", "Definitely later."),
@@ -65,5 +66,11 @@ export const questions = [
  semantic("offered_attention_exit", "Does the speaker give the addressee permission to stop reading or disengage without a penalty?", "Skip the rest if you've got what you needed.", "If you stop reading here, you're part of the problem."),
  semantic("rebuttal_as_wider_attack", "Does the speaker portray criticism of a specific claim or error as an attack on the entire argument, its author, or everyone who agrees?", "You corrected one figure, so clearly you're attacking everyone who believes this.", "That figure is wrong, but the rest of your argument may stand."),
  semantic("freedom_to_speak_redirect", "Does the speaker respond to a challenge about whether a claim is sound by treating it as a challenge to their right to say the claim?", "You said my maths was wrong. So I'm not allowed to speak now?", "You said my maths was wrong. Let's check it."),
- semantic("disproportionate_reward_offer", "Does the speaker promise an unusually large reward for a small payment, simple action or personal information without a credible basis in the passage?", "Send a pound now and you'll get a guaranteed thousand tomorrow.", "A pound buys one raffle ticket for a possible prize.")
+ semantic("disproportionate_reward_offer", "Does the speaker promise an unusually large reward for a small payment, simple action or personal information without a credible basis in the passage?", "Send a pound now and you'll get a guaranteed thousand tomorrow.", "A pound buys one raffle ticket for a possible prize."),
+ semantic("tautology_as_necessity", "Does the passage use an identical label or the mere existence of a decision as its reason that the decision cannot be changed or challenged?", "A rule is a rule, so it can't be changed.", "The rule can't be changed without a two-thirds vote."),
+ semantic("disagreement_with_penalty", "Does the speaker invite the addressee to disagree, then attach a penalty to that same act of disagreement?", "You can disagree, but if you do I'll remove you from the group.", "You can disagree. Sam was removed for spamming."),
+ semantic("empathy_with_linked_guilt", "Does the speaker acknowledge the addressee's feelings, then make a demand of that same person as a test of care or loyalty?", "I know you're tired, but if you really cared about me, you'd stay.", "I know you're tired. Would you like to go home?"),
+ semantic("independence_with_demand", "Does the speaker invite the addressee to decide independently, then expressly require that person to agree with the speaker?", "Think for yourself, but you must agree with me.", "Think for yourself. Here's why I disagree."),
+ semantic("changed_requirement", "Does someone add or replace a criterion after the original stated sufficient criterion was met without giving a justification for the change?", "You said all I needed was a receipt. I provided a receipt. Now you say I also need a photo.", "The policy required a receipt and a photo from the start."),
+ semantic("allegation_loses_attribution", "Does the passage first attribute an allegation and then repeat the same claim as an unqualified fact without presenting confirmation?", "The report alleged that the manager took the funds. The manager took the funds.", "The report alleged that the manager took the funds. Bank records later confirmed the transfer.")
 ];

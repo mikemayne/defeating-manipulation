@@ -29,5 +29,11 @@ export const mappings = {
  respecting_attention: { required: ["offered_attention_exit"], partial: "Covers an explicit option to disengage." },
  attack_conflation: { required: ["rebuttal_as_wider_attack"] },
  turning_disagreement_into_freedom_conflict: { required: ["freedom_to_speak_redirect"] },
- too_good_to_be_true: { required: ["disproportionate_reward_offer"] }
+ too_good_to_be_true: { required: ["disproportionate_reward_offer"] },
+ manufactured_inevitability: { required: ["tautology_as_necessity"], partial: "Covers explicit claims of necessity based on an identical label or mere existence." },
+ respect_with_penalty: { required: ["disagreement_with_penalty"] },
+ empathy_with_guilt: { required: ["empathy_with_linked_guilt"] },
+ independence_with_control: { required: ["independence_with_demand"] },
+ moving_goalposts: { required: ["changed_requirement"] },
+ allegation_laundering: { required: ["allegation_loses_attribution"] }
 };

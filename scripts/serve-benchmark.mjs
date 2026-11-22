@@ -14,6 +14,7 @@ const allowed = new Set([
  "/extension/hybrid-browser-model.js",
  "/extension/src/hybrid-detector.mjs",
  "/extension/src/hybrid-questions.mjs",
+ "/extension/src/hybrid-local-questions.mjs",
  "/extension/src/hybrid-mappings.mjs",
  "/extension/src/hybrid-ollama.mjs",
  "/extension/src/text-preprocessing.mjs",

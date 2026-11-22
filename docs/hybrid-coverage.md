@@ -24,7 +24,7 @@ The published catalogues supply canonical IDs. The extension copy supplies exist
 | scapegoating | technique | inventoried | paragraph | complex problem attributed broadly to a target, available other causes omitted or simplified |  |  | Predicate and context mapping pending. |
 | motte_bailey | technique | inventoried | article | broad and narrower versions of a claim, shift in response to criticism |  |  | Predicate and context mapping pending. |
 | gish_gallop | technique | inventoried | article | volume of claims, limited opportunity for meaningful response |  |  | Predicate and context mapping pending. |
-| allegation_laundering | technique | inventoried | article | attributed or uncertain allegation, later restatement as fact without new evidence |  |  | Predicate and context mapping pending. |
+| allegation_laundering | technique | implemented | paragraph | allegation_loses_attribution |  |  |  |
 | insinuation_by_juxtaposition | technique | inventoried | paragraph | proximate details, implied connection unsupported by the details |  |  | Predicate and context mapping pending. |
 | blame_reversal | technique | inventoried | paragraph | original conduct or complaint, focus shifted to the complainant's response |  |  | Predicate and context mapping pending. |
 | retaliatory_discrediting | technique | inventoried | paragraph | report or complaint, source credibility attacked because of the act of reporting |  |  | Predicate and context mapping pending. |
@@ -32,7 +32,7 @@ The published catalogues supply canonical IDs. The extension copy supplies exist
 | guilt_appeal | technique | implemented | paragraph | guilt_as_leverage |  |  |  |
 | obfuscation | technique | inventoried | paragraph | identifiable missing actor, action, evidence or certainty, wording obscures that information |  |  | Predicate and context mapping pending. |
 | semantic_diversion | technique | inventoried | paragraph | available original claim, minor wording dispute used in place of a response |  |  | Predicate and context mapping pending. |
-| moving_goalposts | technique | inventoried | article | initial criterion met, replacement criterion introduced without justification |  |  | Predicate and context mapping pending. |
+| moving_goalposts | technique | implemented | paragraph | changed_requirement |  |  |  |
 | double_standards | technique | inventoried | article | comparable cases, inconsistent criteria or evidentiary thresholds |  |  | Predicate and context mapping pending. |
 | poisoning_the_well | technique | inventoried | paragraph | prior attack on a source, later claims discounted on that basis |  |  | Predicate and context mapping pending. |
 | criminalising_dissent | technique | inventoried | paragraph | dissent or criticism, criminal label unsupported by the conduct described |  |  | Predicate and context mapping pending. |
@@ -64,7 +64,7 @@ The published catalogues supply canonical IDs. The extension copy supplies exist
 | moral_authority_instead_of_argument | technique | inventoried | paragraph | moral principle, principle used to delegitimise questioning rather than address a claim |  |  | Predicate and context mapping pending. |
 | provoking_backlash | technique | inventoried | paragraph | defensible principle coupled to disproportionate pressure, actual reaction or intent requires other evidence |  |  | Predicate and context mapping pending. |
 | turning_disagreement_into_freedom_conflict | technique | implemented | paragraph | freedom_to_speak_redirect |  |  |  |
-| manufactured_inevitability | technique | inventoried | paragraph | outcome presented as inevitable, repeated naming or existence offered as its own justification |  |  | Predicate and context mapping pending. |
+| manufactured_inevitability | technique | implemented | paragraph | tautology_as_necessity |  |  | Covers explicit claims of necessity based on an identical label or mere existence. |
 | attack_conflation | technique | implemented | paragraph | rebuttal_as_wider_attack |  |  |  |
 | restoring_agency | positive | implemented | paragraph | free_choice |  |  | Covers freely offered choices. |
 | welcoming_disagreement | positive | implemented | paragraph | disagreement_welcome |  | frozen synthetic check |  |
@@ -80,9 +80,9 @@ The published catalogues supply canonical IDs. The extension copy supplies exist
 | respecting_attention | positive | implemented | paragraph | offered_attention_exit |  |  | Covers an explicit option to disengage. |
 | supported_conclusion | inconsistency | implemented | paragraph | reason_supports |  | synthetic pilot |  |
 | choice_with_coercion | concealed | implemented | paragraph | choice_with_linked_penalty | choice, conditional_penalty | frozen synthetic check | Covers a penalty tied to declining the stated choice. |
-| respect_with_penalty | concealed | inventoried | paragraph | permission to disagree, penalty tied to the same person's disagreement |  |  | Predicate and context mapping pending. |
-| empathy_with_guilt | concealed | inventoried | paragraph | acknowledgement of feelings, connected demand framed as loyalty or care |  |  | Predicate and context mapping pending. |
-| independence_with_control | concealed | inventoried | paragraph | invitation to judge independently, same person's decision restricted to the speaker's view |  |  | Predicate and context mapping pending. |
+| respect_with_penalty | concealed | implemented | paragraph | disagreement_with_penalty |  |  |  |
+| empathy_with_guilt | concealed | implemented | paragraph | empathy_with_linked_guilt |  |  |  |
+| independence_with_control | concealed | implemented | paragraph | independence_with_demand |  |  |  |
 
 ## Extension copy reconciliation
 

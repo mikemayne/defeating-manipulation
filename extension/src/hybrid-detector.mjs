@@ -2,6 +2,7 @@ import { preprocessText } from "./text-preprocessing.mjs";
 import { windows } from "./text-windows.mjs";
 import { questions } from "./hybrid-questions.mjs";
 import { mappings } from "./hybrid-mappings.mjs";
+import { localAnswer } from "./hybrid-local-questions.mjs";
 
 const MAX_INPUT = 4800;
 const MAX_SCOPE = 1800;
@@ -145,10 +146,14 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
   const trace = [];
   for (const question of semantic) {
    let result = { answer: "unknown", status: "not_asked", evidence: [] };
+   const local = scope.truncated ? null : localAnswer(question.id, passage, scope);
    if (scope.truncated || (questionIds && !questionIds.has(question.id))) {
     result.reason = scope.truncated ? "truncated_scope" : "outside_experiment";
    } else if (checkedAnswers?.has(question.id)) {
     result = { ...validateAnswer(checkedAnswers.get(question.id), question, passage, scope), method: "checked" };
+   } else if (local) {
+    result = local;
+    result.reason = "explicit_construction";
    } else if (!classify || calls >= budget || signal?.aborted ||
               (mode === "selective" && priority(question) < 3)) {
     result.reason = !classify ? "model_unavailable" : signal?.aborted ? "cancelled" :
@@ -181,7 +186,7 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
       .map(({ id, reason }) => ({ id, reason })) });
    }
    answers.set(question.id, { ...result, scope });
-   if (trace.at(-1)?.id !== question.id) trace.push({ id: question.id, status: result.status, reason: result.reason });
+   if (trace.at(-1)?.id !== question.id) trace.push({ id: question.id, status: result.status, method: result.method, reason: result.reason });
   }
   results.push({ scope, observations, answers: Object.fromEntries(answers), patterns: evaluatePatterns(answers), trace });
  }

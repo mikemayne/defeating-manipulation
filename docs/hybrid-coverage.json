@@ -19,6 +19,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -51,6 +52,9 @@
         "synthetic pilot"
       ],
       "gap": null,
+      "javascript": [
+        "A personal insult given as grounds to reject the addressee's argument."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -81,6 +85,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": "Requires evidence of another option in the passage.",
+      "javascript": [
+        "A claim of exactly two options alongside a distinct option explicitly named as available."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -106,6 +113,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -131,6 +139,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -163,6 +172,9 @@
         "synthetic pilot"
       ],
       "gap": null,
+      "javascript": [
+        "An explicit popularity claim linked to the same recommendation."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -185,6 +197,7 @@
       "status": "not_inferable",
       "testedBy": [],
       "gap": "Relevant omitted evidence",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -207,6 +220,7 @@
       "status": "not_inferable",
       "testedBy": [],
       "gap": "Original surrounding quotation",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -239,6 +253,7 @@
         "frozen synthetic check"
       ],
       "gap": null,
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -264,6 +279,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -289,6 +305,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -321,6 +338,9 @@
         "deterministic unit test"
       ],
       "gap": "Covers exact repetition within a paragraph. The reader's response is unknown.",
+      "javascript": [
+        "Verbatim sentence repetition within a paragraph."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -346,6 +366,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -370,6 +391,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -392,6 +414,7 @@
       "status": "not_inferable",
       "testedBy": [],
       "gap": "Relative strength of the available evidence",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -424,6 +447,7 @@
         "frozen synthetic check"
       ],
       "gap": "Covers an explicitly supplied individual story.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -454,6 +478,7 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -479,6 +504,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -504,6 +530,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -529,6 +556,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -542,18 +570,29 @@
       "kind": "technique",
       "source": "techniques.json",
       "definition": "An allegation is first reported as a claim, suspicion or accusation. Later references restate it as though the underlying event has been established. The wording changes the status of the information without adding independent evidence.",
-      "required": [],
+      "required": [
+        "allegation_loses_attribution"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
-      "context": "article",
+      "questions": [
+        {
+          "id": "allegation_loses_attribution",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
       "pendingRequired": [
         "attributed or uncertain allegation",
         "later restatement as fact without new evidence"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
+      "gap": null,
+      "javascript": [
+        "The same clause first attributed as an allegation and then restated unqualified."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -579,6 +618,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -604,6 +644,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -629,6 +670,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -654,6 +696,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -684,6 +727,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "An explicit test of care tying a named person's distress to an instruction."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -709,6 +755,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -734,6 +781,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -747,18 +795,29 @@
       "kind": "technique",
       "source": "techniques.json",
       "definition": "The article or argument introduces a criterion, receives evidence meeting it, and then replaces it with a more demanding or different criterion without explaining why the change is justified.",
-      "required": [],
+      "required": [
+        "changed_requirement"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
-      "context": "article",
+      "questions": [
+        {
+          "id": "changed_requirement",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
       "pendingRequired": [
         "initial criterion met",
         "replacement criterion introduced without justification"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
+      "gap": null,
+      "javascript": [
+        "An explicitly sufficient criterion repeated as fulfilled before an additional requirement is introduced."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -784,6 +843,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -809,6 +869,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -834,6 +895,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -859,6 +921,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -884,6 +947,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -935,6 +999,9 @@
         "synthetic pilot"
       ],
       "gap": null,
+      "javascript": [
+        "An explicit adverse consequence imposed by the speaker for refusing to act."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -960,6 +1027,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -985,6 +1053,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1007,6 +1076,7 @@
       "status": "not_inferable",
       "testedBy": [],
       "gap": "Original and subsequent context",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1032,6 +1102,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1057,6 +1128,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1082,6 +1154,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1107,6 +1180,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1137,6 +1211,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "Other evidence explicitly rejected because the addressee did not witness the event."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1162,6 +1239,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1194,6 +1272,9 @@
         "frozen synthetic check"
       ],
       "gap": null,
+      "javascript": [
+        "One or two observations explicitly generalized to all members of the same named group."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1224,6 +1305,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "An exact restatement or an allowlisted synonymous restatement used as the reason."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1254,6 +1338,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": "Evidence of an appeal alone cannot establish whether reliance on the authority is justified.",
+      "javascript": [
+        "A credential explicitly treated as sufficient reason to accept a claim."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1284,6 +1371,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "The order of two explicitly matched events offered as the entire basis for causation."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1309,6 +1399,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1334,6 +1425,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1364,6 +1456,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "The addressee's alleged inconsistency explicitly used to dismiss a criticism."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1396,6 +1491,9 @@
         "frozen synthetic check"
       ],
       "gap": null,
+      "javascript": [
+        "A lack of disproof explicitly declared sufficient proof."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1421,6 +1519,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1443,6 +1542,7 @@
       "status": "not_inferable",
       "testedBy": [],
       "gap": "Relevant omitted evidence",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1468,6 +1568,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1498,6 +1599,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "An immediate guaranteed cash return of at least 100 times the requested payment in the same currency."
+      ],
       "existing": {
         "extensionCopy": false,
         "changedCopyFields": [],
@@ -1520,6 +1624,7 @@
       "status": "not_inferable",
       "testedBy": [],
       "gap": "Intent cannot be established from a spelling observation",
+      "javascript": [],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1545,6 +1650,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": false,
         "changedCopyFields": [],
@@ -1570,6 +1676,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": false,
         "changedCopyFields": [],
@@ -1600,6 +1707,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "A direct objection to the claim recast as a denial of permission to speak."
+      ],
       "existing": {
         "extensionCopy": false,
         "changedCopyFields": [],
@@ -1613,18 +1723,29 @@
       "kind": "technique",
       "source": "techniques.json",
       "definition": "A decision, rule or outcome is presented as though it cannot be changed, challenged or interpreted differently simply because it has already been named or declared. Repeating a term in an identity statement (X is X, or X means X) adds no premise that establishes necessity, yet can rhetorically suggest that alternatives are impossible or questioning is illegitimate. The pattern concerns the gap between this logically empty assertion and the stronger conclusion the reader is invited to accept. Genuine legal, technical or practical constraints are separate evidence and must be assessed on their merits.",
-      "required": [],
+      "required": [
+        "tautology_as_necessity"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
+      "questions": [
+        {
+          "id": "tautology_as_necessity",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
       "context": "paragraph",
       "pendingRequired": [
         "outcome presented as inevitable",
         "repeated naming or existence offered as its own justification"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
+      "gap": "Covers explicit claims of necessity based on an identical label or mere existence.",
+      "javascript": [
+        "An identical label offered as the stated reason an outcome cannot change."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1655,6 +1776,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "A correction of one item explicitly recast as an attack on a wider group or argument."
+      ],
       "existing": {
         "extensionCopy": true,
         "changedCopyFields": [],
@@ -1685,6 +1809,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": "Covers freely offered choices.",
+      "javascript": [
+        "Explicit permission to decide paired with explicit acceptance of either choice."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1717,6 +1844,9 @@
         "frozen synthetic check"
       ],
       "gap": null,
+      "javascript": [
+        "An explicit invitation to identify an error or disagree."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1747,6 +1877,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "An explicitly identified observation followed by an expressly uncertain interpretation."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1779,6 +1912,9 @@
         "synthetic pilot"
       ],
       "gap": null,
+      "javascript": [
+        "The speaker explicitly qualifies their own first-person claim."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1811,6 +1947,9 @@
         "frozen synthetic check"
       ],
       "gap": "Covers explicit acceptance of a stated boundary.",
+      "javascript": [
+        "A request for space or no calls followed by a directly related commitment."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1836,6 +1975,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1868,6 +2008,9 @@
         "synthetic pilot"
       ],
       "gap": "Covers invitations to verify evidence.",
+      "javascript": [
+        "An explicit invitation to check figures, evidence or sources independently."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1898,6 +2041,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "Explicit acknowledgement that the other person's feeling makes sense."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1937,6 +2083,9 @@
         "synthetic pilot"
       ],
       "gap": "Covers a reason that supports a stated conclusion.",
+      "javascript": [
+        "A conclusion restating the explicitly universal property of an explicitly named member."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1962,6 +2111,7 @@
       "status": "inventoried",
       "testedBy": [],
       "gap": "Predicate and context mapping pending.",
+      "javascript": [],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -1992,6 +2142,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": null,
+      "javascript": [
+        "An admission of a specific mistake followed by acceptance of responsibility."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -2022,6 +2175,9 @@
       "status": "implemented",
       "testedBy": [],
       "gap": "Covers an explicit option to disengage.",
+      "javascript": [
+        "Explicit permission to skip the rest or stop reading."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -2054,6 +2210,9 @@
         "synthetic pilot"
       ],
       "gap": null,
+      "javascript": [
+        "A conclusion restating the explicitly universal property of an explicitly named member."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -2099,6 +2258,9 @@
         "frozen synthetic check"
       ],
       "gap": "Covers a penalty tied to declining the stated choice.",
+      "javascript": [
+        "Explicit permission to refuse followed by a penalty explicitly tied to refusal."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -2122,18 +2284,29 @@
       "kind": "concealed",
       "source": "extension/src/concealed-patterns.json",
       "definition": "An invitation to disagree is immediately reversed by a rule or consequence punishing disagreement.",
-      "required": [],
+      "required": [
+        "disagreement_with_penalty"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
+      "questions": [
+        {
+          "id": "disagreement_with_penalty",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
       "context": "paragraph",
       "pendingRequired": [
         "permission to disagree",
         "penalty tied to the same person's disagreement"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
+      "gap": null,
+      "javascript": [
+        "Permission to disagree directly followed by a sanction for the same disagreement."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -2156,18 +2329,29 @@
       "kind": "concealed",
       "source": "extension/src/concealed-patterns.json",
       "definition": "Acknowledging someone's feelings is immediately followed by guilt or a demand presented as a test of loyalty or care.",
-      "required": [],
+      "required": [
+        "empathy_with_linked_guilt"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
+      "questions": [
+        {
+          "id": "empathy_with_linked_guilt",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
       "context": "paragraph",
       "pendingRequired": [
         "acknowledgement of feelings",
         "connected demand framed as loyalty or care"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
+      "gap": null,
+      "javascript": [
+        "Acknowledgement of an expressed feeling followed by a demand framed as a test of loyalty."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],
@@ -2189,18 +2373,29 @@
       "kind": "concealed",
       "source": "extension/src/concealed-patterns.json",
       "definition": "An invitation to make up your own mind is followed by a demand that the reader accept the speaker's view.",
-      "required": [],
+      "required": [
+        "independence_with_demand"
+      ],
       "supporting": [],
       "incompatible": [],
-      "questions": [],
+      "questions": [
+        {
+          "id": "independence_with_demand",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
       "context": "paragraph",
       "pendingRequired": [
         "invitation to judge independently",
         "same person's decision restricted to the speaker's view"
       ],
-      "status": "inventoried",
+      "status": "implemented",
       "testedBy": [],
-      "gap": "Predicate and context mapping pending.",
+      "gap": null,
+      "javascript": [
+        "An invitation to decide independently directly reversed by a demand to agree."
+      ],
       "existing": {
         "extensionCopy": null,
         "changedCopyFields": [],

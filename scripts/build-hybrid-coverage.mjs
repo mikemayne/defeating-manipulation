@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { mappings } from "../extension/src/hybrid-mappings.mjs";
 import { questions } from "../extension/src/hybrid-questions.mjs";
+import { localQuestions } from "../extension/src/hybrid-local-questions.mjs";
 
 const read = path => JSON.parse(fs.readFileSync(new URL("../" + path, import.meta.url), "utf8"));
 const sources = [
@@ -89,6 +90,10 @@ const records = sources.flatMap(([source, key, kind]) => read(source)[key].map(i
    ...(item.id === "repetition" ? ["deterministic unit test"] : [])
   ],
   gap: outside[item.id] ?? mapping?.partial ?? (mapping ? null : "Predicate and context mapping pending."),
+  javascript: required.flatMap(id => {
+   if (id === "verbatim_repeated_sentence") return ["Verbatim sentence repetition within a paragraph."];
+   return Object.hasOwn(localQuestions, id) ? [localQuestions[id].limit] : [];
+  }),
   existing: { extensionCopy: kind === "technique" ? Boolean(copy) : null,
    changedCopyFields: copy ? ["title", "category", "summary"].filter(key => copy[key] !== item[key]) : [],
    regex: regex.has(item.id) || positiveRules.has(item.id),
@@ -118,7 +123,35 @@ const markdown = ["# Hybrid catalogue coverage", "",
  "", "The questionnaire reads the published techniques catalogue. Existing positive rules and concealed component IDs are recorded in the JSON matrix.",
  "", "## Runtime-only identifiers", "",
  ...runtimeOnly.map(row => "- " + row.id + " · " + row.kind + " · " + row.source), ""].join("\n");
+const explicit = records.filter(row => row.javascript.length);
+const remaining = records.filter(row => !row.javascript.length && row.status !== "not_inferable");
+const outsideText = records.filter(row => row.status === "not_inferable");
+const localRuleNames = new Set(questions.map(question => question.id));
+if (Object.keys(localQuestions).some(id => !localRuleNames.has(id))) throw Error("Unregistered JavaScript rule");
+const localReport = ["# JavaScript pattern coverage", "",
+ "The hybrid detector can resolve specific explicit constructions for " + explicit.length + " of " + records.length + " active catalogue patterns without a model. Rules require a complete matching paragraph and return original evidence spans. Other wording remains open for the semantic pass. These are implementation counts. Real-world accuracy has yet to be measured.", "",
+ "Run the rule tests with `node scripts/test-hybrid-local-questions.mjs`. This includes generated construction controls and the earlier synthetic audit passages used to refine three rules. Those reviewed passages are development examples for this experiment.", "",
+ "## Explicit forms JavaScript can resolve", "",
+ "| Pattern | Implemented construction |",
+ "| --- | --- |",
+ ...explicit.map(row => "| " + row.title + " | " + row.javascript.join(" ") + " |"), "",
+ "## Remaining decisions", "",
+ "These " + remaining.length + " patterns have no new JavaScript resolution in the hybrid detector. An existing Firefox rule can still flag some forms. The last column identifies the judgment or relationship for which a strong rule is still needed. It can be used to propose better lexical cues, structural tests, or examples.", "",
+ "| Pattern | Existing Firefox rules | What remains to establish |",
+ "| --- | --- | --- |",
+ ...remaining.map(row => "| " + row.title + " | " +
+  (row.existing.regex ? "Yes" : row.kind === "concealed" ? "Relationship cues" : "—") + " | " +
+  (row.pendingRequired.length ? row.pendingRequired.join(" · ") :
+   row.required.map(id => questions.find(question => question.id === id).predicate).join(" ")) + " |"), "",
+ "## Outside evidence, context, or intent", "",
+ ...outsideText.map(row => "- **" + row.title + "** requires " + row.gap.charAt(0).toLowerCase() + row.gap.slice(1) + "."), "",
+ "## Good candidates for additional rules", "",
+ "- **Moving the goalposts** may suit a checker that can identify the first criterion, evidence that it was met, and a replacement criterion in the next turn.",
+ "- **Allegation laundering** may suit repeated claim matching with a test for whether attribution or uncertainty disappears.",
+ "- **Supporting informed choice** may suit explicit option markers followed by trade-offs for each option. Establishing what was omitted still requires context.",
+ "- **False dilemma** may suit cases where the same passage names a third feasible option and explicitly claims there are only two.", ""].join("\n");
 for (const [name, content] of [
  ["hybrid-coverage.json", JSON.stringify({ records, runtimeOnly }, null, 2) + "\n"],
- ["hybrid-coverage.md", markdown]
+ ["hybrid-coverage.md", markdown],
+ ["javascript-pattern-coverage.md", localReport]
 ]) fs.writeFileSync(new URL("../docs/" + name, import.meta.url), content);
