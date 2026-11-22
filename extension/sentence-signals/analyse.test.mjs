@@ -23,6 +23,8 @@ test('consequence wording stays independent of hostility and time', () => {
   for (const text of ['Tomorrow you will have a lovely cake.', 'Tomorrow I will hit you.']) {
     assert.equal(describeText(text, future, []).consequence.status, 'specified');
   }
+  const contracted = future.map(item => item.lower === 'will' ? { ...item, lower: '’ll' } : item);
+  assert.equal(describeText('Tomorrow you’ll have a lovely cake.', contracted, []).consequence.status, 'specified');
   assert.equal(describeText('The meeting ended at noon.', [], []).consequence.status, 'unclear');
   assert.equal(describeText('Will you have a cake?', future, []).consequence.status, 'unclear');
   assert.equal(describeText('You have no idea what is coming, but you will have a cake.', future, [])
@@ -91,12 +93,14 @@ test('all six models score the fixture set with remote loading disabled',
     const raw = execFileSync(process.execPath, [beside('analyse.mjs'), '--file', beside('cases.json')],
       { encoding: 'utf8', timeout: 175_000 });
     const results = JSON.parse(raw);
-    assert.equal(results.length, 10);
+    assert.equal(results.length, 12);
     assert.deepEqual(results.slice(0, 4).map(item => item.consequence.status),
       ['underspecified', 'specified', 'specified', 'underspecified']);
     assert.equal(results[4].references[0].status, 'no_candidate_found');
     assert.equal(results[5].references[0].status, 'one_candidate');
     assert.equal(results[6].references[0].status, 'multiple_candidates');
+    assert.equal(results[10].consequence.status, 'underspecified');
+    assert.equal(results[11].consequence.status, 'unclear');
 
     for (const { signals } of results) {
       assert.equal(Object.keys(signals.emotion).length, 28);
@@ -112,4 +116,5 @@ test('all six models score the fixture set with remote loading disabled',
       inference: signals.inference.scores,
     })), null, 2));
   });
+
 
