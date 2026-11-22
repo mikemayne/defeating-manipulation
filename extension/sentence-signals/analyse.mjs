@@ -85,7 +85,7 @@ export function describeText(text, tokens, preceding) {
     /\b(?:no idea|don't know|do not know)\s+(?:who|whom)\s+you(?:'re| are)\s+(?:\w+\s+)?(?:dealing|messing|fucking)\s+with\b/,
   ].some(pattern => pattern.test(words));
   const explicitClause = tokens.some(token => token.pos === 'AUX' &&
-    ["will", "'ll", 'shall'].includes(token.lower) &&
+    ["will", "'ll", 'shall'].includes(token.lower.replace(/[’‘]/g, "'")) &&
     ['VERB', 'ADJ', 'NOUN'].includes(tokens[token.head]?.pos) &&
     !['be', 'happen', 'know', 'see', 'find', 'come', 'regret'].includes(tokens[token.head].lemma));
   const timeAnchor = /\b(?:tomorrow|tonight|next week|later today|this evening)\b/.test(words);
@@ -238,3 +238,4 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     process.exitCode = 1;
   });
 }
+
