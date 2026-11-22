@@ -27,9 +27,9 @@ def fetch(url, **kwargs):
     return response
 
 
-def section_links(section):
+def section_links(section, pages=4):
     urls = set()
-    for page in range(1, 5):
+    for page in range(1, pages + 1):
         try:
             response = fetch(f"{SITE}/{section}/all", params={"page": page})
         except requests.RequestException:
@@ -62,7 +62,7 @@ def article_body(soup):
             and (text := p.get_text(" ", strip=True))]
 
 
-def recommended(short_id, expected_path):
+def recommended(short_id, expected_path, minimum_comments=MIN_COMMENTS):
     url = DISCUSSION + "p/" + short_id
     params = {"api-key": "discussion-rendering", "orderBy": "mostRecommended", "pageSize": 20,
               "displayThreaded": "false", "page": 1}
@@ -72,7 +72,7 @@ def recommended(short_id, expected_path):
     if canonical and ARTICLE.fullmatch(urlsplit(canonical).path) and urlsplit(canonical).path != expected_path:
         return None
     count = discussion.get("commentCount", response.get("commentCount", 0))
-    if not isinstance(count, int) or count < MIN_COMMENTS:
+    if not isinstance(count, int) or count < minimum_comments:
         return None
     comments = []
     for row in discussion.get("comments", []):

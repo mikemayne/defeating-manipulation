@@ -1,0 +1,36 @@
+name: Headline response prediction pilot
+on:
+  pull_request:
+    paths: ['.github/workflows/headline-response-pilot.yml', 'extension/sentence-signals/*headline-response*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install requests beautifulsoup4 scikit-learn
+      - name: Sample mature discussion threads
+        run: python extension/sentence-signals/collect-headline-responses.py "$RUNNER_TEMP/headline-sample.json"
+      - run: npm --prefix extension install --no-audit --no-package-lock
+      - name: Score headline and comment emotion and embed headlines
+        run: node extension/sentence-signals/score-headline-responses.mjs "$RUNNER_TEMP/headline-sample.json" "$RUNNER_TEMP/headline-features.json"
+      - name: Compare models on held-out weeks and report only scores
+        run: python extension/sentence-signals/evaluate-headline-responses.py "$RUNNER_TEMP/headline-features.json" "$RUNNER_TEMP/headline-response-report.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: headline-response-report
+          path: ${{ runner.temp }}/headline-response-report.json
+      - name: Remove temporary article and comment text
+        if: always()
+        run: rm -f "$RUNNER_TEMP/headline-sample.json" "$RUNNER_TEMP/headline-features.json"
