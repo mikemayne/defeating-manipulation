@@ -21,14 +21,18 @@ function modelRequest(question, passage, observations, variant) {
  ];
 }
 
-export function validateAnswer(raw, question, passage, scope) {
- if (typeof raw !== "string" || raw.length > 2400) throw Error("output size");
+export function validateAnswer(raw, question, passage, scope, scopeEvidence = false) {
+ if (typeof raw !== "string" || raw.length > (scopeEvidence ? 12000 : 2400)) throw Error("output size");
  const value = JSON.parse(raw);
  if (!value || typeof value !== "object" || Object.keys(value).length !== 3 ||
      value.question_id !== question.id || !states.has(value.answer) ||
      !Array.isArray(value.evidence) || value.evidence.length > 3 ||
      (value.answer === "yes" && !value.evidence.length)) throw Error("answer schema");
  const evidence = value.evidence.map(quote => {
+  if (scopeEvidence) {
+   if (quote !== passage) throw Error("Expected the examined passage");
+   return { start: scope.start, end: scope.end, quote, kind: "examined_scope" };
+  }
   if (typeof quote !== "string" || !quote.trim() || quote.length > 300) throw Error("quote size");
   const index = passage.indexOf(quote);
   if (index < 0 || passage.indexOf(quote, index + 1) >= 0) throw Error("quote missing or ambiguous");
@@ -97,7 +101,8 @@ function evaluatePatterns(answers) {
   const reinforcing = (mapping.supporting ?? []).some(key => {
    const answer = answers.get(key);
    return answer?.answer === "yes" && answer.evidence.some(span =>
-    evidence.some(requiredSpan => requiredSpan.start < span.end && span.start < requiredSpan.end));
+    span.kind !== "examined_scope" && evidence.some(requiredSpan => requiredSpan.kind !== "examined_scope" &&
+     requiredSpan.start < span.end && span.start < requiredSpan.end));
   });
   return { id, state: supported ? "supported" : exact ? "excluded" : "unresolved",
    supportScore: supported ? 1 + Number(reinforcing) : 0,
@@ -108,7 +113,7 @@ function evaluatePatterns(answers) {
 }
 
 export async function analyzeHybrid(text, { classify, mode = "selective", variant = "tailored",
- budget = 48, signal, checkedAnswers, questionIds, spellchecker, onCall } = {}) {
+ budget = 48, signal, checkedAnswers, questionIds, spellchecker, onCall, scopeEvidence = false } = {}) {
  if (typeof text !== "string") throw TypeError("Expected text");
  if (!["selective", "complete"].includes(mode) || !["baseline", "tailored"].includes(variant) ||
      !Number.isInteger(budget) || budget < 0 || budget > 256) throw RangeError("Invalid experiment options");
@@ -163,7 +168,7 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
       break;
      }
      try {
-      result = validateAnswer(raw, question, passage, scope);
+      result = validateAnswer(raw, question, passage, scope, scopeEvidence);
       break;
      } catch {
       result.status = "malformed_output";

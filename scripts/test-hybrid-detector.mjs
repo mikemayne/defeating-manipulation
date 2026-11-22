@@ -61,6 +61,17 @@ const shared = await analyzeHybrid("It is cold, so bring a coat.", {
  }
 });
 assert.equal(shared.calls, 1);
+const wholePassage = "Keep pushing me and see how that works out for you.";
+const scoped = await probe(wholePassage, {
+ scopeEvidence: true, classify: async () =>
+  JSON.stringify({ question_id: "unfavourable_future", answer: "yes", evidence: [wholePassage] })
+});
+assert.equal(scoped.scopes[0].answers.unfavourable_future.evidence[0].kind, "examined_scope");
+const fabricated = await probe(wholePassage, {
+ scopeEvidence: true, classify: async () =>
+  '{"question_id":"unfavourable_future","answer":"yes","evidence":["Keep pushing me"]}'
+});
+assert.equal(fabricated.scopes[0].answers.unfavourable_future.status, "malformed_output");
 assert.deepEqual(shared.scopes[0].patterns.filter(row => row.state === "supported").map(row => row.id),
  ["transparent_reasoning", "supported_conclusion"]);
 console.log("Hybrid routing, original offsets, untrusted input, strict answers and limits passed.");

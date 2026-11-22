@@ -1,6 +1,6 @@
 export const browserModel = {
- id: "onnx-community/SmolLM2-135M-Instruct-ONNX-MHA",
- revision: "37bbe7146c8153dea2e8dbaa85184461ce8124a3",
+ id: "onnx-community/Qwen2.5-0.5B-Instruct",
+ revision: "516c8d04add8a80c5228f32102b57953b8d421a9",
  dtype: "q4",
- weightsSha256: "dc846d8aa41f67480f4b3f94b71ab78d5b229bb6da576d7d90b7510924eda615"
+ weightsSha256: "09235a3b1c135cd04ef570e5053b5c079e028078a2cc5f76ba6a251e91bf3296"
 };

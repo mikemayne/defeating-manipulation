@@ -20,8 +20,9 @@ self.addEventListener("message", async ({ data }) => {
   self.postMessage({ stage: "Analysing locally…" });
   const result = await analyzeHybrid(data.text, {
    classify,
+   scopeEvidence: data.model === "browser",
    mode: data.complete ? "complete" : "selective",
-   budget: data.complete ? 96 : data.model === "browser" ? 12 : 42,
+   budget: data.complete ? 96 : data.model === "browser" ? 6 : 42,
    onCall: (calls, budget) => self.postMessage({ stage: "Analysing locally. Model call " + calls + " of up to " + budget + "…" })
   });
   self.postMessage({ result, milliseconds: Math.round(performance.now() - started) });

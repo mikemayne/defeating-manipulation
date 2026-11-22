@@ -36,12 +36,17 @@ form.addEventListener("submit", event => {
   supported.sort((a, b) => b.supportScore - a.supportScore);
   for (const item of supported) {
    const entry = document.createElement("li");
-   entry.textContent = item.id + " — " + item.evidence.map(span => span.quote).join(" / ");
+   entry.textContent = item.id + " — " + item.evidence.map(span =>
+    (span.kind === "examined_scope" ? "Examined passage: " : "") + span.quote).join(" / ");
    findings.append(entry);
   }
   trace.textContent = JSON.stringify(result, null, 2);
+  const unresolved = result.scopes.reduce((count, scope) => count +
+   scope.trace.filter(item => item.status !== "not_asked" &&
+    !["yes", "no", "not_applicable"].includes(scope.answers[item.id].answer)).length, 0);
   finish((supported.length ? "Provisional findings shown." : "No supported match in this run.") +
    " Model calls: " + result.calls + ". Elapsed: " + (data.milliseconds / 1000).toFixed(1) + " s." +
+   (unresolved ? " Unresolved questions attempted: " + unresolved + "." : "") +
    (result.truncated ? " Input was truncated." : ""));
  });
  worker.postMessage({
