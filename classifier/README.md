@@ -118,3 +118,23 @@ The experiment replays the original archive sampler to recover the exact source 
 The local report and resumable ratings are under `classifier/artifacts/pressure/context_experiment/`. No training step is needed.
 
 The run recovered all 508 targets and retained 498 matched ratings after quote validation. Qwen flagged pressure on 79 excerpts alone, 74 with context, and 80 with context plus concern. Context changed 58 label sets, turning 21 no-match cases into flags and removing all flags in 26 cases. Qwen cited surrounding wording for five of the 32 newly assigned labels. The reader-concern prompt changed 22 label sets with the surrounding text held fixed. On 59 comparable complete misses from the preceding browser test, the neutral context prompt added flags to eight and cleared flags from seven. No model was retrained.
+
+## Score directed and overheard wording
+
+Use [the delivery-aware Qwen prompt](pressure_delivery_prompt.txt) as the system prompt and pass a JSON array of objects with `target`, `context` and `delivery_mode`. The mode values are `directed`, `overheard_known` and `overheard_unknown`. They distinguish whether speech addressed the listener or whether the speaker knew an unaddressed listener could hear. Provide speaker and listener roles as context when they are known.
+
+```powershell
+.\.venv\Scripts\python.exe classifier/pressure_delivery_bench.py
+.\.venv\Scripts\python.exe classifier/pressure_delivery_bench.py --baseline
+```
+
+The benchmark holds wording fixed across delivery modes. It uses original fictional controls for five pressure labels, ordinary no-match cases, and ambiguity. It measures label detection and exact outcomes on that test suite. The design does not test inferred speaker awareness or real-world accuracy.
+
+The delivery-aware prompt matched 77 of 90 expected outcomes on 30 fictional statements repeated across the three modes. The earlier neutral prompt matched 80 of 90. The delivery-aware prompt detected 44 of 45 explicit pressure cases, including eight of nine shame/guilt cases and nine of nine for each other mechanism. It correctly left all 36 ordinary examples unflagged, and it missed the intended insufficient-context outcome on all nine ambiguous trials.
+
+Use the optional `reported_emotion` field only for a self-reported reaction. The instruction tested was to use it to understand the listener's account or consider competing interpretations, and to require separate textual evidence before assigning a pressure label. The matched emotion test ran 36 trials per condition. Exact outcomes were 29/36 without disclosure and 30/36 with disclosure. The difference came from one invalid response in the control. Neither condition flagged any of the 15 ordinary cases.
+
+```powershell
+.\.venv\Scripts\python.exe classifier/pressure_delivery_bench.py --emotion-control
+.\.venv\Scripts\python.exe classifier/pressure_delivery_bench.py --emotion
+```
