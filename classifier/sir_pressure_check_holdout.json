@@ -1,0 +1,18 @@
+[
+ {"pair":"fitness","text":"If you lift again before resting your wrist, it could get worse. Take a break and get it checked.","fear":"absent","doubt":"absent"},
+ {"pair":"fitness","text":"Let me use your gym pass or I'll post the video of you hurting your wrist for everyone to laugh at.","fear":"present","doubt":"absent"},
+ {"pair":"electricity","text":"The power outage has left the lift stuck. If you can't take the stairs, a crew can bring you down later.","fear":"absent","doubt":"absent"},
+ {"pair":"electricity","text":"You can hand me the access code, or you can stay stuck upstairs during the outage. I won't call the crew unless you give me the code.","fear":"present","doubt":"absent"},
+ {"pair":"association","text":"People have described being removed from the group after asking for accounts to be audited.","fear":"absent","doubt":"absent"},
+ {"pair":"association","text":"Drop your request for an audit. Keep asking and I'll make sure the committee takes your name off the membership list.","fear":"present","doubt":"absent"},
+ {"pair":"clock","text":"You read the clock as six because it was stopped. The last transmission has a timestamp of nine.","fear":"absent","doubt":"absent"},
+ {"pair":"clock","text":"Your mind invents details every time you see something I disagree with. Stop relying on your own eyes and let me tell you what the clock said.","fear":"absent","doubt":"present"},
+ {"pair":"bank","text":"You say you paid, but the payment identifier you sent belongs to another invoice. Can you look up this one?","fear":"absent","doubt":"absent"},
+ {"pair":"bank","text":"You only think you saw the payment go through because your mind plays tricks. Don't trust your memory of the screen. Trust what I tell you happened.","fear":"absent","doubt":"present"},
+ {"pair":"memory","text":"You keep changing this account. Could we compare it against your original note?","fear":"absent","doubt":"absent"},
+ {"pair":"memory","text":"I keep telling you that your recollection of the trip is imaginary. The fact you feel sure is proof you can't trust yourself.","fear":"absent","doubt":"present"},
+ {"pair":"delivery","text":"Keep your complaint to yourself or everyone will find out what you said.","before":"The witness read this line from a message she received last Thursday.","fear":"absent","doubt":"absent"},
+ {"pair":"delivery","text":"Keep your complaint to yourself or everyone will find out what you said.","before":"The supervisor called the complainant into his office and said this to her directly.","fear":"present","doubt":"absent"},
+ {"pair":"reference","text":"You couldn't have seen that. You always misread what happens. Just go with my account.","fear":"absent","doubt":"present"},
+ {"pair":"reference","text":"You couldn't have seen that from the back seat. The delivery van was between you and the crossing.","fear":"absent","doubt":"absent"}
+]

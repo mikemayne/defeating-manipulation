@@ -81,6 +81,35 @@ def metrics(y, flags):
     return dict(tp=tp, fp=fp, fn=fn, tn=tn, f1=round(2*tp/(2*tp+fp+fn), 4))
 
 
+def linked_embeddings(texts, pairs):
+    vectors = encode([*texts, *(t for group in pairs for pair in group for t in pair)])
+    passage = csr_matrix(np.stack([vectors[t] for t in texts]))
+    zero = np.zeros(passage.shape[1])
+    links = csr_matrix(np.stack([np.concatenate([
+        np.mean([vectors[p[i]] for p in group], axis=0) if group else zero for i in (0, 1)
+    ]) for group in pairs]))
+    return passage, links
+
+
+def linked_scores(rows):
+    """Score rows using the linked-span arm and its prior calibration split."""
+    data = dataset()
+    train, cal = data["train"], data["calibration"]
+    combined = train + cal + rows
+    sir = structures(combined)
+    terms = [{"cue/"+cue: 1 for cue in entry["cues"]} for entry in sir]
+    cue = normalize(DictVectorizer().fit(terms[:len(train)]).transform(terms))
+    passage, links = linked_embeddings([r["text"] for r in combined], [s["links"] for s in sir])
+    x = hstack([passage, cue, links]).tocsr()
+    y = np.array([bool(TARGETS.intersection(row["labels"])) for row in train + cal])
+    split = len(train)
+    end = split + len(cal)
+    model = LogisticRegression(C=1, class_weight="balanced", max_iter=1000)
+    scores = model.fit(x[:split], y[:split]).decision_function(x[split:])
+    cal_gold = y[split:end]
+    detected = sum(label and row["baseline"] for label, row in zip(cal_gold, sir[split:end]))
+    return scores[len(cal):], np.sort(scores[:len(cal)][cal_gold])[::-1][detected-1]
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--refine", action="store_true",
@@ -104,12 +133,7 @@ def main():
     sir = structures(rows)
     features = [{"cue/"+cue: 1 for cue in s["cues"]} for s in sir]
     pairs = [s["links"] for s in sir]
-    vectors = encode([*texts, *(t for group in pairs for pair in group for t in pair)])
-    passage = csr_matrix(np.stack([vectors[t] for t in texts]))
-    zero = np.zeros(passage.shape[1])
-    links = csr_matrix(np.stack([np.concatenate([
-        np.mean([vectors[p[i]] for p in group], axis=0) if group else zero for i in (0, 1)
-    ]) for group in pairs]))
+    passage, links = linked_embeddings(texts, pairs)
     train = np.arange(len(data["train"]))
     folds = list(StratifiedGroupKFold(5, shuffle=True, random_state=191).split(
         train, y[train], [r["thread"] for r in data["train"]]))

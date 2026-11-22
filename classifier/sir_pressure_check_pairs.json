@@ -1,0 +1,22 @@
+[
+ {"pair":"safety","text":"If you use the east gate, you could be hit by falling tiles. Please take the west gate while the roof is repaired.","fear":"absent","doubt":"absent"},
+ {"pair":"safety","text":"Sign the waiver or I will send you through the east gate where the tiles are falling.","fear":"present","doubt":"absent"},
+ {"pair":"external danger","text":"Weather is getting worse. Take the marked trail so rescuers can find you if you get stuck.","fear":"absent","doubt":"absent"},
+ {"pair":"external danger","text":"The forecast says a blizzard is coming. Say you agree with me or I'll leave you out here to face it alone.","fear":"present","doubt":"absent"},
+ {"pair":"quoted","text":"Sign my statement or I will leak your emails.","before":"The investigator read aloud the words the complainant alleged her manager used.","fear":"absent","doubt":"absent"},
+ {"pair":"quoted","text":"Sign my statement or I will leak your emails.","before":"Her manager opened his email drafts and gave her his pen.","fear":"present","doubt":"absent"},
+ {"pair":"mention","text":"Silent treatment is sometimes used when someone refuses to back down.","fear":"absent","doubt":"absent"},
+ {"pair":"mention","text":"Take back your objection or I will stop speaking to you until you do.","fear":"present","doubt":"absent"},
+ {"pair":"game","text":"If you refuse the guard's quest, you will lose your access to the castle for the next level.","before":"Here is how the game handles this choice.","fear":"absent","doubt":"absent"},
+ {"pair":"game","text":"If you refuse to sign the new agreement, I will remove your access to the group dashboard.","fear":"present","doubt":"absent"},
+ {"pair":"memory","text":"I remember the meeting starting at eight. The calendar says eight. Could we check the recording for when people actually arrived?","fear":"absent","doubt":"absent"},
+ {"pair":"memory","text":"You imagined the meeting starting early. Your memory keeps making things up. From now on, trust what I remember.","fear":"absent","doubt":"present"},
+ {"pair":"feedback","text":"This answer skips two of the requested examples. Add one example for each of the missing categories.","fear":"absent","doubt":"absent"},
+ {"pair":"feedback","text":"You say you read two examples in the handout. You always think you see things that aren't there. Stop trusting your reading and ask me what it says.","fear":"absent","doubt":"present"},
+ {"pair":"sincerity","text":"You said you wanted their input, but you ignored their suggestion. That makes your claim hard to believe.","fear":"absent","doubt":"absent"},
+ {"pair":"sincerity","text":"You only believe you saw them ignore the suggestion because your mind fills in things that aren't there. You should rely on my account.","fear":"absent","doubt":"present"},
+ {"pair":"hazard context","text":"Leave this room before it's too late.","before":"The fire officer could see smoke spreading from the nearby storage room.","fear":"absent","doubt":"absent"},
+ {"pair":"hazard context","text":"Leave this room before it's too late.","fear":"uncertain","doubt":"absent"},
+ {"pair":"perception context","text":"It's all in your head.","before":"After she described hearing the alarm, her partner insisted it had never happened and said her account of any noise was unreliable.","fear":"absent","doubt":"present"},
+ {"pair":"perception context","text":"It's all in your head.","fear":"absent","doubt":"uncertain"}
+]

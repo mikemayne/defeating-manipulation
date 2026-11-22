@@ -205,3 +205,80 @@ Five-fold thread-grouped out-of-fold average precision on the 597 training passa
 The last column adjusts the threshold on each evaluated split solely to describe ranking. The deployable calibration threshold lost recall on both tests. Transfer F1 increased from .209 to .231. These are machine-labelled, previously evaluated corpora. Browser deployment costs and genuine out-of-sample human agreement are unmeasured.
 
 A second development-only sweep (`--refine`) tested adding words (.280 AP), stronger regularization (.281) and weaker regularization (.250). None cleared the .01 AP practical margin over .275, and none was selected using transfer performance. Further tuning of this small sample has diminishing returns. Blind adjudication of ambiguous warnings and implicit pressure, followed by a new thread-separated test, would address a different source of uncertainty.
+
+### Local evidence check after the linked-span encoder
+
+Run `python classifier/sir_pressure_check.py` with a passage on stdin. Optional
+`--before` and `--after` parameters supply adjacent context. The existing
+linked-span arm supplies the candidate score and calibration threshold. For
+candidates, local Qwen 3.6 27B returns one of present, absent, or uncertain for
+each mechanism. Consequence pressure requires verbatim evidence for the
+choice, outcome, and use of the outcome as leverage. Judgement pressure
+requires the disputed judgement and its dismissal. The disputed judgement
+can be quoted from adjacent context if the target identifies it indirectly.
+The dismissal must be in the target. Invalid evidence is retried once in
+a single-item request. A second validation failure produces an uncertain
+overall decision. The validator checks the source of each quote. Its
+semantic role is still a model judgement.
+
+The first prompt required all evidence in the target. It removed two of
+three false alarms in the original 20 authored cases, losing one of the
+encoder's six true alerts. In its first run on 82 fresh discussion passages,
+frozen Codex review marked 75 negative, six uncertain and one positive.
+Confirmation reduced false alarms from 19 to three and retained the one
+positive. The initial matched pairs exposed three weaknesses in this
+prompt. The check confused reading a threat aloud with making it, treated
+an urgent safety instruction as leverage, and could not quote a disputed
+perception that appeared only in the preceding sentence. The revised prompt
+clarifies attribution and urgency and allows that specific context citation.
+
+The fresh discussion sample used a cue-enriched search of the local archive
+and held out threads from the two existing labelled corpora. Reviews were
+frozen before scoring. The sample gives little evidence about recall,
+especially for threat pressure. Matched pairs provide a deliberate stress
+test of that behaviour, and their counts describe how the selected cases
+behaved. The reviewed samples, labels and model evidence stay in the local
+ignored artifacts directory.
+
+Run authored cases with `python classifier/sir_pressure_check_bench.py`.
+Use `--pairs classifier/sir_pressure_check_holdout.json` for the 16 new
+authored cases written after the prompt revision was fixed. To repeat the
+fresh discussion run, use `--skip-pairs` and pass each queue and its labels
+with `--review QUEUE LABELS`. The three local pairs of files under
+`classifier/artifacts/pressure/evidence_check` are `blind-v1.jsonl` and
+`review-v1.jsonl`, with analogous names for v2 and v3. The benchmark
+reports fixed-threshold confirmation and an offline matched-recall
+comparison that sends every item to the checker and sorts by its
+three-way decision before the encoder score. The latter can recover
+positives below the encoder threshold and requires more calls.
+
+| Authored set | Encoder TP / FP | Confirmed candidates TP / FP | Check every item TP / FP |
+| --- | ---: | ---: | ---: |
+| Original 20 passages, revised checker | 6 / 3 | 6 / 0 | 9 / 0 |
+| New 16 passages, revised checker | 2 / 1 | 2 / 0 | 8 / 0 |
+
+On the new cases, checking all 16 preserved the original recall at zero
+false alarms in the offline ranking and found the six positives that the
+candidate gate missed. It assigned the wrong additional mechanism once,
+counting a judgement-pressure passage as both types. Seven of eight pairs
+had both family decisions correct on both sides. The original cases
+served as prompt development examples. One output in that set still failed
+verbatim evidence validation after the retry and counted as uncertain.
+
+The final check on the frozen review of 82 discussion passages retained
+the sole clear positive and reduced false alarms from 19 to two. It
+also suppressed the encoder's alert on an uncertain case. Both remaining
+false alarms treated a description of legal or financial consequences as
+leverage. Checking all 82 yielded seven false alarms. At the encoder's
+recall, the offline ordering reached the sole positive after two false
+alarms. These comparisons use AI-reviewed labels and a sample with only
+one clear positive. The fixed threshold conclusion is about false alarms
+on this sample.
+
+The singleton retry recovered that positive after its original batched
+response failed evidence validation. The retry totals were obtained by
+resubmitting only invalid rows with the same prompt and retaining valid
+batch predictions. The 82-item verifier run and retries took about 164
+seconds on the local RTX 5090. This was an all-item benchmark with batches
+of up to eight. The CLI rebuilds the encoder fit from local caches and
+only sends encoder candidates to Ollama.
