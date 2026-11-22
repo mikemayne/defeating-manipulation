@@ -163,3 +163,27 @@ The experiment retained 1,073 fresh Reddit excerpts, with 597 for training, 178 
 | Targeted, with matched-pair loss | 32.97% | 10.20% | 36.87% | 28.33% | 65 ms |
 
 The recall-at-precision column is a retrospective ranking diagnostic. Neither replacement improved on the original overall. The classification-only variant improved fear ranking but lost ground on judgement doubt. The full local report is `classifier/artifacts/pressure/targeted/browser.json`.
+
+## PsychBERT comparison
+
+This run initializes the classification head used in the L6 experiment on the original [PsychBERT encoder](https://huggingface.co/mnaylor/psychbert-cased). The original Flax weights are converted locally to PyTorch safetensors. A [BERT-base-cased control](https://huggingface.co/google-bert/bert-base-cased) uses the same architecture, data and fine-tuning schedule. Both update the final two encoder layers on the RTX GPU and use the 959 examples from the targeted L6 experiment. The test reuses its calibration set and 298 held-out Reddit excerpts. Qwen references and prior L6 Edge scores come from that experiment.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install 'jax[cpu]==0.4.35' flax==0.10.2 optax==0.2.5 orbax-checkpoint==0.11.5
+.\.venv\Scripts\python.exe classifier/pressure_psychbert.py prepare
+.\.venv\Scripts\python.exe classifier/pressure_psychbert.py train
+.\.venv\Scripts\python.exe classifier/pressure_psychbert.py benchmark
+.\.venv\Scripts\python.exe classifier/serve.py --web-dir classifier/artifacts/pressure/targeted/psychbert/web
+```
+
+The two new INT8 exports run in Edge through CPU WASM. The local report compares their agreement with Qwen, model size and warm latency. The experiment covers fear of consequences and doubt about one's own judgement.
+
+The pinned original PsychBERT checkpoint matches all 197 encoder tensors in the BERT-base-cased control exactly after conversion. The two training runs produced byte-identical INT8 exports. The comparison also separately tests the authors' [mental-health-classification checkpoint](https://huggingface.co/mnaylor/psychbert-finetuned-mentalhealth). Its classifier head is replaced before training on the two pressure labels.
+
+```powershell
+.\.venv\Scripts\python.exe classifier/pressure_psychbert.py prepare --mentalhealth
+.\.venv\Scripts\python.exe classifier/pressure_psychbert.py train --mentalhealth
+.\.venv\Scripts\python.exe classifier/pressure_psychbert.py benchmark --mentalhealth
+```
+
+On the shared 298-excerpt holdout, configured-threshold F1 against Qwen was 36.73% for the original L6, 42.86% for the identical original PsychBERT and BERT-base exports, and 23.53% for the separately released mental-health checkpoint. Pooled average precision was 35.15%, 46.77%, and 37.27%, respectively. The 109 MB BERT-family exports ran at 423–496 ms warm p95 on the test desktop, versus 67 ms for the original 23 MB L6. The local results are in `classifier/artifacts/pressure/targeted/psychbert/browser.json`.
