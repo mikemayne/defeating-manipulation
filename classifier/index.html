@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wording classifier</title>
+<link rel="stylesheet" href="style.css">
+<main>
+  <h1>Wording classifier</h1>
+  <p>Estimate which rhetorical patterns appear in a short English statement.</p>
+  <form>
+    <label for="phrase">Statement</label>
+    <textarea id="phrase" rows="4" maxlength="1200" required></textarea>
+    <label for="topic">Topic (optional)</label>
+    <input id="topic" maxlength="240">
+    <label for="model">Encoder</label>
+    <select id="model"></select>
+    <button id="analyse" disabled>Analyse wording</button>
+  </form>
+  <section aria-live="polite">
+    <h2 id="status">Loading classifier…</h2>
+    <p id="timing"></p>
+    <ul id="scores"></ul>
+  </section>
+</main>
+<script type="module" src="app.js"></script>
+</html>

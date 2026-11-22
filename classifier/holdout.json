@@ -1,0 +1,60 @@
+{
+  "bandwagon": [
+    "The neighbourhood is mostly on board with the change. As far as I'm concerned that makes any objections invalid.",
+    "Just look at how many households have switched providers. Surely the sheer number tells you which service is better.",
+    "Nine out of ten shops stock this brand, so choosing any other brand would be a mistake."
+  ],
+  "ad_hominem": [
+    "Rui's analysis of the accounts deserves no consideration. The man's an insufferable bore.",
+    "Why should a nobody like Freya get a hearing on the drainage question?",
+    "I reject her figures because she is a dreadful person."
+  ],
+  "false_dilemma": [
+    "Your only choices are to sign the agreement unaltered or throw away any chance of a settlement.",
+    "There is no way to fix transit except by approving my exact plan. Declining it means giving up entirely.",
+    "Cut the entire training budget or admit that saving money doesn't matter. There isn't another possibility."
+  ],
+  "straw_man": [
+    "You think we should add captions to these films. Why are you trying to stop anyone from hearing the original dialogue?",
+    "Her request was for one more nurse on weekends. Her absurd answer to the problem is to replace all the doctors.",
+    "I said the red bike needed a new chain, and you replied that throwing out every bicycle was a stupid idea."
+  ],
+  "slippery_slope": [
+    "Let one family hang laundry outside and the whole street will do it. Standards will plummet and in the end every house will be abandoned.",
+    "Drop a single form from the application today, and tomorrow the staff will skip every check. The next step is the collapse of the entire programme.",
+    "Move this one meeting online and soon we'll lose the meeting rooms, then the office, and eventually the whole organisation."
+  ],
+  "post_hoc": [
+    "It wasn't until I cleaned the mirrors that the bus arrived. Clearly cleaning them brought the bus.",
+    "The dog stopped barking moments after I turned on the radio. The radio must be what made it stop.",
+    "Sales dipped the morning after we changed the doormat. That new mat is why customers left."
+  ],
+  "appeal_to_authority": [
+    "This belt can withstand two tonnes. A television presenter says so, which proves it.",
+    "The orchestra's star soloist vouched for the allergy treatment. The lab results are superfluous.",
+    "It's obvious the lock is secure because the club president called it secure."
+  ],
+  "guilt_appeal": [
+    "What sort of friend lets me pay for dinner myself after I helped them through a bad year?",
+    "You're really going to turn me down, knowing how much I sacrificed to get you here?",
+    "I suppose I was wrong to believe you'd repay my kindness by backing the proposal."
+  ],
+  "no_match": [
+    "Four out of five riders said they preferred the earlier departure. The operator will check staffing before making a decision.",
+    "Applicants can submit the same form either in person or by mail.",
+    "The signal changed a second after the driver waved. Its controller runs on a timer.",
+    "Her account of the meeting differs from the signed minutes on two dates.",
+    "The committee's proposal would remove the charge from one route. I oppose it because the other routes would still charge.",
+    "The engine maker tested the belt to two tonnes before publishing the result.",
+    "I wish you could join me for dinner. It's fine if you have plans.",
+    "If the books aren't returned by Monday, the library will send a reminder on Wednesday.",
+    "The leaflet included an endorsement from a runner and a chart of the shoes' measured weight.",
+    "The gallery shifted Friday's opening to noon because the electrical work ends in the morning.",
+    "Almost everyone in the class submitted a form. Two people were absent."
+  ],
+  "insufficient_context": [
+    "On those grounds, yes.",
+    "Only because she did that.",
+    "No, the earlier one."
+  ]
+}

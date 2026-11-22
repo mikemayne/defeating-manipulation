@@ -1,0 +1,42 @@
+{
+  "train": [
+    "All six participants selected the Tuesday slot, which was entered in the minutes.",
+    "The principal forwarded the laboratory's validated results for review.",
+    "At 3 p.m. a cloud passed over the field. The team scored in the next minute.",
+    "The prototype can be powered from either its battery or the mains input.",
+    "That is incorrect because the width was measured from the outer edge.",
+    "Dev suggested moving the cabinet. Their suggestion was sent to the facilities manager.",
+    "I'm disappointed you won't be there, but I hope you enjoy your trip.",
+    "If the temperature falls below zero for several hours, exposed water can freeze."
+  ],
+  "calibration": [
+    "The most popular colour in the survey was teal. The product team asked for further testing.",
+    "The insurer will accept either an uploaded PDF or a paper copy under the current policy.",
+    "The film began shortly after we arrived, as scheduled.",
+    "She proposed a smaller budget. I disagree because the estimate omits the cost of installation.",
+    "He gave you extra childcare last week. Please ask him what dates he needs covered.",
+    "The inspector cited the pressure reading and the manufacturer's threshold.",
+    "The forecast lists a sequence of possible effects if the pump stops, with estimated likelihoods.",
+    "I think the bill total is wrong. Each of the three items costs twelve pounds."
+  ],
+  "validation": [
+    "Nearly everyone in the class chose the same activity on the form.",
+    "The venue's only ticket types are adult and child. The terms list which ages each covers.",
+    "I opened the door at noon. The kettle finished boiling at two minutes past.",
+    "The accountant's calculation uses last year's rate, which the new schedule supersedes.",
+    "Sam plans to end one bus route. His proposal keeps all the other routes.",
+    "The director can sign the letter after the panel completes its review.",
+    "My sister helped me move. I thanked her and offered to return the favour if she needs it.",
+    "A loose hose could leak. A second sensor would shut off the supply if it did."
+  ],
+  "pilot_review": [
+    "The most downloaded game last month was a puzzle game, according to the store's chart.",
+    "The freezer works only when attached to one of these two approved outlets.",
+    "Rain fell two hours after the bell rang. The forecast had shown a 90 percent chance of rain.",
+    "I dispute the consultant's recommendation because the calculation assumes a level floor.",
+    "You proposed reducing parking by five spaces. I oppose that reduction because the nearby clinic remains open late.",
+    "A well-known climber endorsed the fundraiser. The organiser recorded the endorsement separately from the accounts.",
+    "I was sad when you turned it down. If you're still interested next month, let me know.",
+    "If the battery reaches five percent, the screen dims, and if it empties the device switches off."
+  ]
+}

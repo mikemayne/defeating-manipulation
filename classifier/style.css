@@ -1,0 +1,11 @@
+* { box-sizing: border-box; }
+body { margin: 0; font: 1rem/1.55 system-ui, sans-serif; background: #f5f7fa; color: #182630; }
+main { max-width: 45rem; margin: auto; padding: 1.5rem; }
+h1, h2 { line-height: 1.2; }
+form { display: grid; gap: .5rem; }
+label { font-weight: 650; }
+input, select, textarea, button { font: inherit; padding: .55rem; border: 1px solid #748592; border-radius: .4rem; }
+textarea { resize: vertical; }
+button { justify-self: start; margin-top: .65rem; background: #173e63; color: white; cursor: pointer; }
+button:disabled { opacity: .6; }
+li { margin-bottom: .4rem; }

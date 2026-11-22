@@ -1,0 +1,122 @@
+{
+  "bandwagon": [
+    "Nearly everyone in our choir chose the blue robes, so you should choose them too.",
+    "The whole office uses that app. You'd be wrong to pick another one.",
+    "That cereal tops the sales chart, which proves it is the healthiest.",
+    "Most tenants signed the petition, so any sensible tenant should sign.",
+    "All the other galleries display this style. That alone makes it the right choice.",
+    "Thousands have adopted the schedule, so it must be more efficient.",
+    "Everybody at camp says the lake is safe, so there is no need to check.",
+    "This is the most downloaded language course, therefore it must teach best.",
+    "The vast majority of hikers buy that boot, which shows it is the safest.",
+    "Every vendor chose the same payment service. Their popularity proves you ought to use it."
+  ],
+  "ad_hominem": [
+    "Why listen to her proposal for new bus routes? She's an idiot.",
+    "His design calculations are worthless because he's a slob.",
+    "Ignore what Dani said about the rota. He's a miserable person.",
+    "She's a snob, so her reasoning about the price is rubbish.",
+    "Only a buffoon like the treasurer would raise that objection. Dismiss it.",
+    "The writer is a loser, which makes their case for reform worthless.",
+    "No need to consider the mechanic's argument about the brakes. He's a lazy fool.",
+    "You're arrogant, and that's enough to show your forecast is wrong.",
+    "The librarian is a creep. That settles whether her recommendation has merit.",
+    "The gardener is a pathetic person, so the evidence she submitted about drainage can be ignored."
+  ],
+  "false_dilemma": [
+    "Either endorse the renovation exactly as proposed or admit you want the library to rot.",
+    "Accept my entire schedule or concede that you don't care about safety.",
+    "We have only two choices: ban all bicycles or give up on road safety.",
+    "You can back this fee without changes or let the club go bankrupt. There is no third choice.",
+    "Either take the unlimited plan today or accept that you'll never be reachable.",
+    "Approve my map as drawn or abandon the search entirely. There are no other options.",
+    "Choose our supplier or give up on the whole workshop. Nothing in between is possible.",
+    "Either agree to build the tallest tower or admit you oppose all new housing.",
+    "We must buy this particular oven or close the bakery forever. Those are our only options.",
+    "Support this uniform or side with chaos. There is no middle ground."
+  ],
+  "straw_man": [
+    "You asked to lower the music after ten. So you want nobody to enjoy a party ever again.",
+    "She suggested inspecting the footbridge. Her plan to stop everyone from crossing is absurd.",
+    "You asked for fewer notifications. Forcing everyone to throw away their phones would be ridiculous.",
+    "He proposed limiting parking on one lane. His idea to ban all cars is unworkable.",
+    "You said the repair could wait until Tuesday. Your demand that we never fix anything is indefensible.",
+    "They asked for a smaller sign. Once again someone wants to forbid all advertising.",
+    "Your suggestion to shorten one rehearsal is really a demand to cancel the entire play.",
+    "She asked for a vegetarian option. Her plan to prohibit every meat dish makes no sense.",
+    "You proposed moving one practice indoors. Abolishing outdoor sport is a ridiculous policy.",
+    "He asked to review one invoice. Accusing the entire staff of stealing is outrageous."
+  ],
+  "slippery_slope": [
+    "If we let one cyclist use the path, next it'll be motorbikes, then trucks, and the park will vanish.",
+    "Let one rehearsal start late and soon nobody will turn up, the cast will quit, and the theatre will fold.",
+    "Give one stall an extra metre, then every shop will take over the pavement and pedestrians will lose the whole street.",
+    "If they change one rule, the others will collapse one by one until the league ceases to exist.",
+    "Allow a single delayed form and every deadline will unravel until the whole permit office shuts down.",
+    "Reduce one maintenance visit and soon nobody will inspect anything, all the machines will break, and the factory will close.",
+    "Move one plant off the balcony and then they'll insist every garden is cleared until the city has no green space.",
+    "Let a class use calculators once and they'll stop learning arithmetic, then maths itself will disappear from schools.",
+    "Extend one shop's opening hours and soon every shop will stay open all night, neighbours will leave, and there'll be no town left.",
+    "If we waive one booking deposit, next nobody will pay for anything, revenue will disappear, and every venue will shut."
+  ],
+  "post_hoc": [
+    "I switched tea brands and got a promotion the next day. That tea earned me the promotion.",
+    "The router stopped after I opened a window. Opening it broke the router.",
+    "Rain started right after we rang the bell, so the bell must have brought the rain.",
+    "The team won the first week we served pears. The pears caused the win.",
+    "The flowers wilted after I painted the mailbox. The new colour must have killed them.",
+    "The café filled up just after the clock struck two, so the chime drew people in.",
+    "I changed my shoelaces before the interview and got the job. The new laces got me hired.",
+    "The car started right after I whistled. Whistling fixed the engine.",
+    "The lights went out just after I set my bag down. Putting it down caused the outage.",
+    "The pond cleared a day after we replaced the gate. The new gate must have cleaned the water."
+  ],
+  "appeal_to_authority": [
+    "A famous actor endorses the bridge design, which proves its calculations are correct.",
+    "The mayor says my formula is valid, so there is no need for anyone to check the maths.",
+    "An award-winning chef says the wiring is safe. That settles the electrical inspection.",
+    "The principal says this medicine works, so we can disregard the clinical trials.",
+    "The champion swimmer says that tax estimate is right. Who needs the figures?",
+    "A celebrity dancer says this seed resists disease, so the field trial is unnecessary.",
+    "The conductor says the insulation cannot burn. His reputation is enough proof.",
+    "A celebrated poet backs that engine redesign, so it must pass the stress test.",
+    "The museum director insists the soil is clean. Her standing settles it without lab work.",
+    "The best footballer in the league says the investment is sound, which is all the evidence anyone needs."
+  ],
+  "guilt_appeal": [
+    "After all the evenings I covered for you, how could you leave without taking my shift?",
+    "If you cared about your grandparents at all, you'd buy the ticket.",
+    "I gave up my weekend for you. You owe me your agreement.",
+    "A decent daughter would cancel her plans to help after everything we sacrificed.",
+    "If you don't host this year, think how much you'll hurt everyone who ever welcomed you.",
+    "Refusing to lend me the car shows how little our friendship ever meant to you.",
+    "How can you even consider taking a holiday after your brother worked so hard to help you?",
+    "It would break your mother's heart if you used the money for yourself after all she did.",
+    "If you decline the invitation, every hour we spent helping you will have been wasted.",
+    "Go ahead and keep the spare room empty if you can live with being that ungrateful."
+  ],
+  "no_match": [
+    "The weather station reported four millimetres of rain yesterday.",
+    "Two supervisors signed the delivery slip this morning.",
+    "The cover has a cedar frame and a canvas panel.",
+    "Would you prefer to discuss the proposal this week or next week?",
+    "Most residents who replied chose Tuesday. The survey closed on 3 April.",
+    "The lights went out after the film ended. The engineer is still looking for the cause.",
+    "The technical review includes the inspector's opinion and the measurements it relies on.",
+    "I disagree with the first recommendation because it relies on last year's budget.",
+    "The sign says the path to the left is closed for repairs until Friday.",
+    "Renovating the roof could reduce leaks. The estimate includes a range of costs."
+  ],
+  "insufficient_context": [
+    "That proves it.",
+    "And then they said it again.",
+    "What about the other one?",
+    "It was the usual thing.",
+    "Only if they did.",
+    "She told him so.",
+    "The same as before.",
+    "That's what I meant.",
+    "Because of what happened there.",
+    "Maybe that explains those words."
+  ]
+}

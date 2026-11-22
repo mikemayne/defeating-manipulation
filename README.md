@@ -44,6 +44,7 @@ A planned browser extension will perform analysis locally in the reader's browse
 - `docs/` — design and implementation notes.
 - [Potential analyser signals](docs/potential-signals.md) — research ideas and pilot results.
 - `extension/` — browser-extension planning and prototype.
+- [Offline wording classifier](classifier/README.md) — MiniLM training, held-out evaluation and a browser harness for short statements.
 - `analysis-schema.json` — structured format for analysis findings.
 - `evaluation/` — test examples and evaluation guidance.
 - `scripts/` — site generation and validation.
