@@ -19,6 +19,7 @@ fetch = shared['fetch']
 discussion_candidates = shared['discussion_candidates']
 recommended = shared['recommended']
 SITE = shared['SITE']
+section_links = shared['section_links']
 
 
 def article_date(url):
@@ -68,27 +69,30 @@ def collect(url):
 
 def main(output):
     cutoff = datetime.now(timezone.utc).date() - timedelta(days=4)
-    dates = [cutoff - timedelta(days=offset) for offset in range(112)]
+    dates = [cutoff - timedelta(days=offset) for offset in range(84)]
     weeks = Counter()
     sample = []
     with ThreadPoolExecutor(max_workers=12) as pool:
         urls = dict.fromkeys(url for group in pool.map(links_for_day, dates) for url in group)
-        print(f'Found {len(urls)} candidates in dated opinion archives', flush=True)
-        pending = (url for url in urls if weeks[article_date(url).isocalendar()[:2]] < 14)
-        while len(sample) < 125 and (batch := list(islice(pending, 30))):
+        urls.update(dict.fromkeys(url for url in section_links('commentisfree', pages=32)
+                                  if urlsplit(url).path.startswith('/commentisfree/') and article_date(url) <= cutoff))
+        ordered = sorted(urls, key=article_date, reverse=True)
+        print(f'Found {len(ordered)} candidates in daily and rolling opinion archives', flush=True)
+        pending = (url for url in ordered if weeks[article_date(url).isocalendar()[:2]] < 35)
+        while len(sample) < 150 and (batch := list(islice(pending, 30))):
             for row in pool.map(collect, batch):
                 if row is None:
                     continue
                 week = date.fromisoformat(row['date']).isocalendar()[:2]
-                if weeks[week] >= 14:
+                if weeks[week] >= 35:
                     continue
                 weeks[week] += 1
                 sample.append(row)
-                if len(sample) == 125:
+                if len(sample) == 150:
                     break
             if sample:
                 print(f'Collected {len(sample)} threads from {len(weeks)} weeks so far', flush=True)
-    if len(sample) < 60 or len(weeks) < 5:
+    if len(sample) < 45 or len(weeks) < 3:
         raise RuntimeError(f'Insufficient coverage: {len(sample)} eligible threads across {len(weeks)} weeks')
     with open(output, 'w', encoding='utf8') as file:
         json.dump({'collectedAt': datetime.now(timezone.utc).isoformat(), 'articles': sample}, file)

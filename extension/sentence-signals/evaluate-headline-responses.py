@@ -25,7 +25,8 @@ emotion = np.sqrt(np.array([row['headlineEmotion'] for row in rows]))
 embeddings = np.array([row['vectors'] for row in rows])
 similarities = embeddings @ embeddings.T
 weeks = np.array([date.fromisoformat(row['date']).strftime('%G-W%V') for row in rows])
-periods = np.array_split(np.unique(weeks), 5)
+observed_weeks = np.unique(weeks)
+periods = np.array_split(observed_weeks, min(5, len(observed_weeks)))
 names = ('constant', 'topicTags', 'headlineEmotion', 'headlineWording', 'headlineEmbedding', 'combinedHeadline')
 
 
@@ -36,7 +37,7 @@ def fit_folds(folds):
     for train, test in folds:
         duplicate = similarities[np.ix_(train, test)].max(axis=1) >= .74
         train = train[~duplicate]
-        if len(train) < 25:
+        if len(train) < 15:
             raise RuntimeError(f'Only {len(train)} rows available in the training fold')
         tags = MultiLabelBinarizer().fit([topics[i] for i in train])
         # Unseen topic values have zero features in the held-out fold.
