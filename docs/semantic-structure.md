@@ -187,3 +187,21 @@ An independent transfer evaluation used 2,399 passages from the earlier six-labe
 Interpolating within tied leaf scores to compare at 95 true positives gives about 692 expected false positives for the new trees. This diagnostic is distinct from the actual threshold result. The previous diagnostic set suggested an improvement at matched recall (67 versus 76 false positives) that did not transfer. In training, 132 passages triggered the linked listener condition, but zero triggered the specific speaker penalty, listener loss or offered help cues. Direct judgement dismissal matched 33. Check manually annotated clause boundaries and outcome roles before fitting more splits.
 
 Use `--review` on the evaluator to generate two private blind review queues of the same 60 passages. Each reviewer can independently mark fear and judgement true or false and use context to record ordinary advice, warnings, quoted threats, direct challenges or insufficient context. Existing review files are preserved. No human labels were available for these results.
+
+### Frozen encoder follow-up
+
+Only 27 of 40 fear-labelled training passages had an extracted condition and 21 had a condition–consequence edge. The training cases included hypothetical harm to third parties and foreseeable practical costs. A short list of first-person penalty verbs provided poor coverage.
+
+Run `python classifier/sir_pressure_sweep.py` with the existing local MiniLM-L6 checkpoint, pressure caches and Node on PATH (or set NODE to the executable). The frozen encoder uses CUDA when available. A class-balanced logistic regression combines mean-pooled normalized passage embeddings, normalized SIR feature indicators and separate averages of linked condition and outcome embeddings. Missing links have zero vectors. No source passages or private weights are published. Use `--stdin` to score one passage locally, rebuilding the research classifier from the caches.
+
+Five-fold thread-grouped out-of-fold average precision on the 597 training passages was .248 for word TF-IDF, .235 for words plus SIR, .234 for MiniLM alone, .243 for MiniLM plus SIR indicators, and .275 after adding the linked spans. Candidate selection favored the simpler representation within .01 AP of the best. All supervised fits and vocabulary fits excluded evaluation rows. The 178 calibration rows selected a threshold matching the original tree's 17 positive detections.
+
+| Split | Original TP / FP | Linked encoder TP / FP at calibration threshold | Linked encoder FP at original recall |
+| --- | --- | --- | --- |
+| Calibration | 17 / 40 | 17 / 18 | 18 |
+| Prior diagnostic test | 27 / 76 | 19 / 39 | 65 |
+| Prior transfer corpus | 95 / 644 | 74 / 398 | 548 |
+
+The last column adjusts the threshold on each evaluated split solely to describe ranking. The deployable calibration threshold lost recall on both tests. Transfer F1 increased from .209 to .231. These are machine-labelled, previously evaluated corpora. Browser deployment costs and genuine out-of-sample human agreement are unmeasured.
+
+A second development-only sweep (`--refine`) tested adding words (.280 AP), stronger regularization (.281) and weaker regularization (.250). None cleared the .01 AP practical margin over .275, and none was selected using transfer performance. Further tuning of this small sample has diminishing returns. Blind adjudication of ambiguous warnings and implicit pressure, followed by a new thread-separated test, would address a different source of uncertainty.
