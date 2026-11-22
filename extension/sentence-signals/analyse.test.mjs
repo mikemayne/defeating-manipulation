@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { createAnalyser, describeText } from './analyse.mjs';
 
 const token = (text, index, props = {}) => ({
@@ -82,3 +84,32 @@ test('a failed adapter cannot masquerade as a negative classification', async ()
   });
   await assert.rejects(analyse({ sentence: 'Hello.' }), /missing model/);
 });
+
+test('all six models score the fixture set with remote loading disabled',
+  { skip: process.env.SENTENCE_LIVE !== '1', timeout: 180_000 }, () => {
+    const beside = name => fileURLToPath(new URL(name, import.meta.url));
+    const raw = execFileSync(process.execPath, [beside('analyse.mjs'), '--file', beside('cases.json')],
+      { encoding: 'utf8', timeout: 175_000 });
+    const results = JSON.parse(raw);
+    assert.equal(results.length, 10);
+    assert.deepEqual(results.slice(0, 4).map(item => item.consequence.status),
+      ['underspecified', 'specified', 'specified', 'underspecified']);
+    assert.equal(results[4].references[0].status, 'no_candidate_found');
+    assert.equal(results[5].references[0].status, 'one_candidate');
+    assert.equal(results[6].references[0].status, 'multiple_candidates');
+
+    for (const { signals } of results) {
+      assert.equal(Object.keys(signals.emotion).length, 28);
+      assert.equal(Object.keys(signals.clickbait.scores).length, 2);
+      assert.equal(Object.keys(signals.toxicity).length, 6);
+      assert.ok(signals.syntax.length > 2);
+      assert.equal(signals.similarity.length, 4);
+      assert.equal(Object.keys(signals.inference.scores).length, 3);
+    }
+    console.log(JSON.stringify(results.map(({ sentence, consequence, signals }) => ({
+      sentence, consequence: consequence.status, threat: signals.toxicity.threat,
+      clickbait: signals.clickbait.scores, nearest: signals.similarity[0].label,
+      inference: signals.inference.scores,
+    })), null, 2));
+  });
+
