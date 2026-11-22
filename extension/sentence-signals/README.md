@@ -68,3 +68,23 @@ exercise the orchestration with deterministic model adapters.
 
 Set SENTENCE_LIVE=1 to include the test that loads the five prepared models
 and scores the synthetic fixtures with remote model loading disabled.
+
+## Smoke-test results
+
+The analyser bundled successfully for a browser target. All six tests passed,
+including a run of the five models and JavaScript checks on 12 synthetic
+examples with remote model loading disabled.
+
+- The wording check marked both the cake and the direct threat as specified,
+  and marked both the friendly surprise and the vague warning as
+  underspecified. Toxic BERT scored the direct threat about 0.65 and the
+  vague warning about 0.00012.
+- The DeBERTa takeaway comparison supported the park-closure paraphrase.
+  The generic consequence probe returned neutral for both explicit outcomes
+  and entailment for “The report is on the table.” It stays experimental.
+- Valurank gave a low clickbait score to the synthetic “You won’t believe”
+  headline. Across four export checks, quantization moved the model's output
+  probabilities by at most 0.0112. The headline classifier still needs
+  separate accuracy evaluation.
+
+[Successful verification run](https://github.com/mikemayne/defeating-manipulation/actions/runs/45001432741)
