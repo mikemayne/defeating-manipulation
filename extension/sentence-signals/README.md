@@ -67,3 +67,22 @@ The checked-in cases exercise explicit and vague consequences, contextual
 references, headline scoring and takeaway comparison. The JavaScript tests
 exercise the orchestration with deterministic model adapters.
 
+## Smoke-test results
+
+All six models scored 12 synthetic examples with remote model loading
+disabled. Set SENTENCE_LIVE=1 in your shell before running the JavaScript
+tests to repeat the live check with the prepared weights.
+
+- The wording check marked both the cake and the direct threat as specified,
+  and marked both the friendly surprise and the vague warning as
+  underspecified. Toxic BERT scored the direct threat about 0.65 and the
+  vague warning about 0.00012.
+- The DeBERTa takeaway comparison supported the park-closure paraphrase.
+  The generic consequence probe returned neutral for both explicit outcomes
+  and entailment for “The report is on the table.” It stays experimental.
+- Valurank gave a low clickbait score to the synthetic “You won’t believe”
+  headline. Across four export checks, quantization moved the model's output
+  probabilities by at most 0.0112. The headline classifier still needs
+  separate accuracy evaluation.
+
+[Successful verification run](https://github.com/mikemayne/defeating-manipulation/actions/runs/44980074552)
