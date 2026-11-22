@@ -76,3 +76,31 @@ Run the timed comparison first and retain the resulting `qwen-agreement-strict.j
 The browser benchmark runs the candidate ONNX models on the same reserved excerpts in Edge and writes agreement, model size and latency to `classifier/artifacts/distillation/browser.json`. The latency comparison uses twice the earlier baseline warm p95 on this desktop. Use the model selector in the experimental bundle to try the larger candidate.
 
 The run used 2,066 training excerpts, 689 calibration excerpts and 689 reserved test excerpts. On mechanism labels, the retrained six-layer model reached 29.41% precision, 25.86% recall and 27.52% micro F1 against Qwen at 56.5 ms warm p95. The twelve-layer model reached 37.84% precision, 24.14% recall and 29.47% micro F1 at 112.9 ms warm p95. The original and calibration-only controls scored 7.92% and 14.97% micro F1, respectively. These scores measure agreement with the same Qwen labeler. The calibration split had zero guilt-appeal positives, so that label's detections were disabled for the experimental models.
+
+## Detect five kinds of psychological pressure
+
+The [Surviving a Psyop framework](https://mikemayne.github.io/surviving-a-psyop/nine_influence_mechanisms.txt) motivates five labels for wording that can be assessed in a short excerpt. They are shame or guilt, fear of consequences, doubt about your own judgement, identity or credibility pressure, and loss of agency. The detector scores the presence of cues and can report several kinds at once. It can also report no match or insufficient context.
+
+The collector uses [ConvoKit's Winning Arguments archive](https://convokit.cornell.edu/documentation/winning.html), historical r/ChangeMyView posts and comments, and sends only short excerpts to local Qwen3.6 27B. Candidate cues guide sampling. Qwen supplies labels and a verbatim evidence string per label. The collector rejects labels that omit evidence or give a non-matching quote. Ordinary candidates and cue-matched negatives enter the same pool. Corpus text and annotations stay in ignored local directories.
+
+```powershell
+New-Item -ItemType Directory -Force classifier/private
+curl.exe --fail --location 'https://zissou.infosci.cornell.edu/convokit/datasets/winning-args-corpus/winning-args-corpus.zip' --output classifier/private/winning-args-corpus.zip
+.\.venv\Scripts\python.exe classifier/prepare.py --with-l12
+.\.venv\Scripts\python.exe classifier/pressure_collect.py --rows 2400
+.\.venv\Scripts\python.exe classifier/pressure_train.py train
+.\.venv\Scripts\python.exe classifier/pressure_train.py benchmark
+.\.venv\Scripts\python.exe classifier/serve.py --web-dir classifier/artifacts/pressure/web
+```
+
+Training, calibration, and testing use disjoint Reddit threads and groups of near-duplicate excerpts. The three browser choices are the small, medium, and large INT8 MiniLM-L3, L6, and L12 models. They share the same data partitions and label rubric. The benchmark measures agreement with Qwen on the reserved excerpts, as well as actual Edge WASM latency. The corpus is cue-enriched, and the report includes a separate ordinary sample; neither labels nor prevalence estimates have human validation. Benchmark latency compares to twice the warm p95 measured by the original browser benchmark at `classifier/artifacts/browser.json`.
+
+The pilot retained 2,400 evidence-checked excerpts. The thread-separated partitions contain 1,412 training, 480 calibration and 508 test excerpts. Qwen ran fully on the RTX 5090. All three classifiers trained on CUDA and were evaluated using Edge's CPU WASM backend.
+
+| INT8 model | Precision vs Qwen | Recall vs Qwen | Micro F1 vs Qwen | Warm p95 |
+| --- | ---: | ---: | ---: | ---: |
+| Small L3 | 27.27% | 16.07% | 20.22% | 36 ms |
+| Medium L6 | 34.04% | 28.57% | 31.07% | 59 ms |
+| Large L12 | 41.18% | 18.75% | 25.77% | 124 ms |
+
+The simple cue baseline scored 28.80% micro F1 on this holdout. The medium model scored 18.60% on the 250 ordinary candidates. Qwen returned one insufficient-context example across the collection, so learned context detection was disabled for this pilot. The detailed local report is `classifier/artifacts/pressure/browser.json`.

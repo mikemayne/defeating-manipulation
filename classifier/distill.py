@@ -33,7 +33,7 @@ def load_rows():
         rows.append({**ref, "text": text, "labels": [KEYS[i] for i in ref["qwen"]]})
     return rows
 
-def split(rows):
+def split(rows, seed=SEED):
     features = TfidfVectorizer(analyzer="char", ngram_range=(3, 5), min_df=2).fit_transform(
         [row["text"] for row in rows])
     # Union wording near-duplicates transitively so they cannot cross partitions.
@@ -46,17 +46,23 @@ def split(rows):
             index = parent[index]
         return index
 
-    for i, matches in enumerate(adjacent):
+    def join(i, j):
+        left, right = root(i), root(j)
+        if left != right:
+            parent[max(left, right)] = min(left, right)
+
+    threads = {}
+    for i, (row, matches) in enumerate(zip(rows, adjacent)):
+        if "thread" in row:
+            join(i, threads.setdefault(row["thread"], i))
         for j in matches:
-            left, right = root(i), root(int(j))
-            if left != right:
-                parent[max(left, right)] = min(left, right)
+            join(i, int(j))
 
     groups = np.array([root(i) for i in range(len(rows))])
     indices = np.arange(len(rows))
-    reserve = GroupShuffleSplit(n_splits=1, test_size=0.20, random_state=SEED)
+    reserve = GroupShuffleSplit(n_splits=1, test_size=0.20, random_state=seed)
     work, test = next(reserve.split(indices, groups=groups))
-    prepare = GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=SEED + 1)
+    prepare = GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=seed + 1)
     tr, ca = next(prepare.split(work, groups=groups[work]))
     return [[rows[i] for i in part] for part in (work[tr], work[ca], test)]
 

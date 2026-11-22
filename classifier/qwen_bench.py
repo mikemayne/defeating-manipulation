@@ -115,9 +115,10 @@ def gpu_info():
         raise RuntimeError("Qwen GPU offload below 99%")
     return {key: proc[key] for key in ("name", "digest", "size", "size_vram", "details")}
 
-def metrics(rows):
+def metrics(rows, keys=KEYS):
     pairs = [(set(row["qwen"]), set(row["browser"])) for row in rows]
-    mechanisms = [(a - {8}, b - {8}) for a, b in pairs]
+    context = keys.index("insufficient_context")
+    mechanisms = [(a - {context}, b - {context}) for a, b in pairs]
     tp = sum(len(a & b) for a, b in mechanisms)
     fp = sum(len(b - a) for a, b in mechanisms)
     fn = sum(len(a - b) for a, b in mechanisms)
@@ -131,11 +132,11 @@ def metrics(rows):
                 browser_agreed_no_match=sum(not a and not b for a, b in pairs),
                 qwen_mechanism_rows=sum(bool(a) for a, b in mechanisms),
                 positive_overlap_rows=sum(bool(a & b) for a, b in mechanisms),
-                qwen_context_rows=sum(8 in a for a, b in pairs),
+                qwen_context_rows=sum(context in a for a, b in pairs),
                 per_label={key: dict(qwen=sum(i in a for a, b in pairs),
                                      browser=sum(i in b for a, b in pairs),
                                      both=sum(i in a and i in b for a, b in pairs))
-                           for i, key in enumerate(KEYS)})
+                           for i, key in enumerate(keys)})
 
 def main():
     parser = argparse.ArgumentParser(description="Compare Edge WASM and local Qwen on Reddit excerpts")
