@@ -54,6 +54,20 @@ test('British dictionary correction preserves the original wording and span', as
     .spelling.some(flag => flag.original === 'recieved'), true);
 });
 
+test('possible grammar errors are highlighted without rewriting model input', async () => {
+  const sentence = 'They was told that something will happen.';
+  const calls = [];
+  const analyser = createAnalyser({ ...fakeModels, emotion: async text => { calls.push(text); return {}; } });
+  const result = await analyser({ sentence });
+  assert.deepEqual(calls, [sentence]);
+  assert.equal(result.analysisText, sentence);
+  const [flag] = result.signals.grammar;
+  assert.equal(flag.kind, 'subject_verb_agreement');
+  assert.equal(flag.attentionSignal, true);
+  assert.equal(sentence.slice(flag.start, flag.end), 'They was');
+  assert.deepEqual(parseSentence('They were told.', '').grammar, []);
+});
+
 test('all model and linguistic signals run on one sentence and NLI can compare a contextual takeaway', async () => {
   const calls = [];
   const engine = {
@@ -71,7 +85,7 @@ test('all model and linguistic signals run on one sentence and NLI can compare a
   };
   const analyse = createAnalyser(engine);
   const first = await analyse({ sentence: 'You will have cake.' });
-  assert.deepEqual(Object.keys(first.signals), ['emotion', 'clickbait', 'toxicity', 'syntax', 'spelling', 'similarity', 'inference']);
+  assert.deepEqual(Object.keys(first.signals), ['emotion', 'clickbait', 'toxicity', 'syntax', 'spelling', 'grammar', 'similarity', 'inference']);
   assert.equal(first.signals.clickbait.scope, 'out_of_domain');
   assert.equal(first.signals.inference.purpose, 'consequence_probe');
   assert.equal(first.signals.similarity[0].similarity, 1);
@@ -119,7 +133,7 @@ test('all five models and JavaScript linguistic checks score the fixture set wit
       assert.equal(Object.keys(signals.clickbait.scores).length, 2);
       assert.equal(Object.keys(signals.toxicity).length, 6);
       assert.ok(signals.syntax.length > 2);
-      assert.equal(signals.similarity.length, 4);
+      assert.equal(signals.similarity.length, 12);
       assert.equal(Object.keys(signals.inference.scores).length, 3);
     }
     console.log(JSON.stringify(results.map(({ sentence, consequence, signals }) => ({
