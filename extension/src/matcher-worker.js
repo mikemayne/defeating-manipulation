@@ -4,8 +4,7 @@ import {preprocessText,remapFindings,punctuationHookFindings,
  analysisRangeForOriginal} from "./text-preprocessing.mjs";
 import { compilePatternRules, prototypeEntries, matchText } from "./matching-core.mjs";
 import { embeddingRows } from "./embedding-rows.mjs";
-import { findInconsistencies } from "./consistency.mjs";
-import { analyseArguments, argumentFindings, combineArgumentEvidence } from "./argument-analysis.mjs";
+import { combineArgumentEvidence } from "./argument-analysis.mjs";
 import { extractArgumentStatements } from "./argument-clauses.mjs";
 import { findImplicitConclusionQuestions, reconstructImplicitConclusions,
  checkImpliedConclusions, implicitConclusionFindings } from "./implicit-conclusion-reconstruction.mjs";
@@ -28,7 +27,7 @@ async function scorePair(premise, hypothesis) {
  // Keep the existing pairwise local NLI scorer independent of text generation.
  if (!inferenceModelPromise) inferenceModelPromise = createNliScorer()
   .catch(error => {
-   console.warn("Local consistency model unavailable:", error);
+   console.warn("Local inference model unavailable:", error);
    return null;
   });
  const score = await inferenceModelPromise;
@@ -122,8 +121,9 @@ self.addEventListener("message", async event => {
   const concealedMatches = findConcealedPatterns(analysedText, {
    positiveMatches, negativeMatches: matches
   });
-  // Use one memoised local NLI scorer for both red analyses.
-  // The same selected text can require many pairwise inferences.
+  // The red inconsistency category is paused. Its algorithms remain available
+  // in the test lab, but do not run in normal selected-text analysis.
+  // Keep NLI lazy: only the optional orange implied-conclusion pass uses it.
   const cache = new Map();
   const memoScore = (premise, hypothesis) => {
    const key = JSON.stringify([premise, hypothesis]);
@@ -131,25 +131,7 @@ self.addEventListener("message", async event => {
    return cache.get(key);
   };
   const stage = message => self.postMessage({ id: data.id, type: "stage", message });
-  let inconsistencies = [], argumentIssues = [], argumentDiagnostics = [], implicitFindings = [];
-  try {
-   stage("Checking statements for contradictions…");
-   inconsistencies = await findInconsistencies(analysedText, memoScore);
-   stage("Checking whether conclusions follow from the evidence…");
-   const assessed = await analyseArguments(analysedText, memoScore, {
-    includeImplicit:true,
-    includeModelDiscovery:true,
-    onDiagnostic: info => argumentDiagnostics.push(info),
-    onProgress: ({ completed, total }) => {
-     if (total) stage("Checking conclusion " + Math.min(completed + 1, total) +
-      " of " + total + "…");
-    }
-   });
-   argumentIssues = argumentFindings(assessed);
-  } catch (error) {
-   // A broken NLI model cannot erase successful blue, green or turquoise matches.
-   console.warn("Local argument analysis unavailable:", error);
-  }
+  let implicitFindings = [];
   // Only invoke the optional text-generation model on a bounded number of
   // question-shaped candidates. Its output can only create an orange review
   // cue, never red evidence or a statement about the author's intention.
@@ -177,13 +159,12 @@ self.addEventListener("message", async event => {
    opening => matchText(opening, { techniques, rules, prototypes, embed: extractor ? embed : null }),
    generateImpliedConclusion);
   const recognised = [...paragraphMatches, ...matches, ...spellingMatches, ...vocabularyMatches, ...punctuationMatches,
-   ...positiveMatches, ...concealedMatches, ...inconsistencies, ...argumentIssues,
+   ...positiveMatches, ...concealedMatches,
    ...implicitFindings];
   const scrutiny = findScrutinyWarnings(analysedText, {
    // Orthographic flags are weak signals, not confirmed techniques.
-   findings: [...matches,...positiveMatches,...concealedMatches,
-    ...inconsistencies,...argumentIssues,...implicitFindings],
-   nearMisses, argumentDiagnostics,
+   findings: [...matches,...positiveMatches,...concealedMatches,...implicitFindings],
+   nearMisses,
    preprocessingFlags: preprocessing.flags
   });
   const mapped = remapFindings(preprocessing,[...recognised,...scrutiny]);

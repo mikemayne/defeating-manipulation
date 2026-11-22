@@ -1,5 +1,12 @@
 # Local semantic Firefox highlighter
 
+**Current status:** the red argument inconsistency category is paused. Normal
+selected-text analysis no longer runs either red check or displays red findings.
+Blue, green, turquoise and orange analysis remains available. The source
+catalogue, algorithms, fixtures and local benchmark modes are retained for
+research and later restoration. Red-analysis notes below describe those
+retained experiments, not an active extension feature.
+
 From this directory run:
 
 ```powershell
@@ -45,13 +52,14 @@ Firefox extension, shows raw model results and abstentions, and exports all
 cases as JSON. See [the implicit-conclusion lab guide](../evaluation/README-implicit-conclusion-lab.md)
 for input schema, score limitations and model-download notes.
 
-## Second-pass inconsistency benchmark
+## Retained inconsistency benchmark
 
 Open the same local Matcher Test Lab and choose **Inconsistencies — local NLI**.
-The extension and test lab share the exact same `findInconsistencies` algorithm,
-with bidirectional contradiction checks. Both now use the same tokenizer and
-quantised `Xenova/distilbert-base-uncased-mnli` model to encode a **pair of
-statements**, rather than analysing each statement separately.
+The test lab retains the `findInconsistencies` algorithm with bidirectional
+contradiction checks, using the tokenizer and quantised
+`Xenova/distilbert-base-uncased-mnli` model to encode a **pair of statements**,
+rather than analysing each statement separately. This pass is paused in
+normal extension analysis.
 
 The model downloads on first use from Hugging Face, then runs on your own
 computer with browser model caching. Firefox does not upload the selected
@@ -95,8 +103,8 @@ The Firefox selected-text analyser now recognises the 12 positive communication
 patterns from the published `positive-patterns.json` using a separate
 conservative rule matcher and the same local MiniLM model. Green matches link
 to the public `positive-patterns/<id>.html` detail pages. The existing
-negative matcher, its strict thresholds, and red inconsistency pass remain
-independent. Blue takes priority if blue and green matches overlap.
+negative matcher and its strict thresholds remain independent.
+Blue takes priority if blue and green matches overlap.
 
 The local Matcher Test Lab also offers **Positive patterns — rules only** and
 **Positive patterns — rules + local AI**. Both test only green labels; the AI
@@ -164,8 +172,8 @@ match these observable mechanisms need further development and testing.
 
 ## Whole-paragraph argument support analysis (experimental)
 
-The Firefox extension now runs two **different red NLI checks** on the same
-selected text:
+The retained research code provides two **different red NLI checks**. Both
+are paused in normal Firefox selection analysis:
 
 1. The existing sentence-pair contradiction detector (unchanged).
 2. A new paragraph-level analysis that identifies an **explicit conclusion**
@@ -186,11 +194,10 @@ not attempt unrestricted logical proof, causal inference or author-intent
 detection, and sentences without a clear conclusion signal are not
 classified by this version.
 
-The Firefox selection remains editable and browsable during the longer
-analysis. A small **non-blocking status badge** reports the active stage,
-with an indeterminate progress bar rather than a bogus percentage or busy
-mouse cursor. The hover popup shows the premises for each flagged
-conclusion, and links to its red pattern entry.
+The Firefox selection remains editable and browsable during analysis. A small
+**non-blocking status badge** reports active stages, with an indeterminate
+progress bar. Red tooltips and links are removed while this category is paused;
+the local lab retains premise and conclusion diagnostics for experiments.
 
 ### Single-paragraph argument benchmark
 
