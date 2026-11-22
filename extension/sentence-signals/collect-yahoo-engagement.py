@@ -46,11 +46,17 @@ def parse(row, source_id, shapes):
     if isinstance(category, str) and "sport" in category.lower():
         return None
     headline = pick(fields, "title", "headline", "newstitle")
-    content = pick(fields, "paragraphs", "body", "articletext", "abstract", "content", "text", "newstext", "articlecontent", "newsbody")
+    content = pick(fields, "paragraphs", "paras", "body", "articletext", "abstract", "content", "text", "newstext", "articlecontent", "newsbody")
     if content is None:
         content = news
     paragraphs = blocks(content)
-    comments = pick(fields, "comments", "commentlist", "replies")
+    comments = pick(fields, "comments", "cmts", "commentlist", "replies")
+    if isinstance(content, list) and content:
+        unit = content[0]
+        shapes.update(["paragraph:" + (",".join(sorted(keys(unit))) if isinstance(unit, dict) else type(unit).__name__)])
+    if isinstance(comments, list) and comments:
+        unit = comments[0]
+        shapes.update(["comment structure:" + (",".join(sorted(keys(unit))) if isinstance(unit, dict) else type(unit).__name__)])
     if not isinstance(headline, str) or sum(len(p.split()) for p in paragraphs) < 150 or not isinstance(comments, list) or len(comments) < 20:
         return None
     out = []
@@ -60,10 +66,12 @@ def parse(row, source_id, shapes):
         raw = keys(raw)
         shapes.update(["comment:" + ",".join(sorted(raw))])
         vote_fields = pick(raw, "vote", "votes", "ratings")
+        if isinstance(vote_fields, dict):
+            shapes.update(["vote structure:" + ",".join(sorted(keys(vote_fields)))])
         counts = keys(vote_fields) | raw if isinstance(vote_fields, dict) else raw
-        up = vote(pick(counts, "upvote", "upvotes", "positivevotes", "posvotes", "likes", "thumbsup"))
-        down = vote(pick(counts, "downvote", "downvotes", "negativevotes", "negvotes", "dislikes", "thumbsdown"))
-        body = "\n".join(blocks(pick(raw, "text", "content", "body", "comment", "commenttext")))
+        up = vote(pick(counts, "upvote", "upvotes", "positivevotes", "posvotes", "up", "likes", "thumbsup"))
+        down = vote(pick(counts, "downvote", "downvotes", "negativevotes", "negvotes", "down", "dislikes", "thumbsdown"))
+        body = "\n".join(blocks(pick(raw, "text", "content", "body", "comment", "commenttext", "cmt")))
         if up is None or down is None or not body:
             continue
         out.append(dict(id=i, upvotes=up, downvotes=down, recommendations=up + down, body=body))

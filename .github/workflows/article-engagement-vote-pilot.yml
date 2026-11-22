@@ -1,7 +1,7 @@
 name: Article engagement vote pilot
 on:
   pull_request:
-    paths: ['.github/workflows/article-engagement-vote-pilot.yml']
+    paths: ['.github/workflows/article-engagement-vote-pilot.yml', 'extension/sentence-signals/collect-yahoo-engagement.py', 'extension/sentence-signals/summarise-engagement.mjs', 'extension/sentence-signals/audit-article-comments.mjs']
   workflow_dispatch:
 permissions:
   contents: read
