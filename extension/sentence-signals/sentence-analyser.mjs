@@ -68,12 +68,11 @@ export function createAnalyser(engine, { spellchecker } = {}) {
   let referenceVectors;
   return async function analyse(input) {
     const { sentence, context, takeaway, role } = validate(input);
-    referenceVectors ??= engine.embed(examples.map(([, text]) => text));
     const parsed = parseSentence(sentence, context, spellchecker);
+    referenceVectors ??= await engine.embed(examples.map(([, text]) => text));
     const premise = [parsed.contextText, parsed.analysisText].filter(Boolean).join(' ');
     const hypothesis = takeaway || 'The text states what specific action or event is expected to happen.';
-    const [referenceEmbeddings, [vector], emotion, clickbait, toxicity, inference] = await Promise.all([
-      referenceVectors,
+    const [[vector], emotion, clickbait, toxicity, inference] = await Promise.all([
       engine.embed([parsed.analysisText]),
       engine.emotion(parsed.analysisText),
       engine.clickbait(parsed.analysisText),
@@ -91,9 +90,10 @@ export function createAnalyser(engine, { spellchecker } = {}) {
         toxicity,
         syntax: parsed.tokens,
         spelling: parsed.spelling,
-        similarity: compareExamples(vector, referenceEmbeddings).slice(0, 4),
+        similarity: compareExamples(vector, referenceVectors).slice(0, 4),
         inference: { purpose: takeaway ? 'takeaway' : 'consequence_probe', hypothesis, scores: inference },
       },
     };
   };
 }
+
