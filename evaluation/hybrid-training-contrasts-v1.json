@@ -1,0 +1,161 @@
+{
+  "provenance": "Directly authored synthetic examples; labels not independently adjudicated.",
+  "split": "training_only",
+  "label_order": [
+    "yes",
+    "no",
+    "unknown"
+  ],
+  "questions": {
+    "reason_supports": [
+      {
+        "id": "library-access",
+        "yes": "The library is closed for rewiring this week, so we can't study inside it today.",
+        "no": "The library is closed for rewiring this week, so its books must all be overdue.",
+        "unknown": "We can't study inside the library today because of what they announced.",
+        "rationale": "Closure supports an access claim, gives no information about overdue books, and an unstated announcement leaves the reason unresolved."
+      },
+      {
+        "id": "cake-allergy",
+        "yes": "This cake contains walnuts and Nia is allergic to walnuts, so this cake isn't suitable for her.",
+        "no": "This cake comes in a round tin and Nia is allergic to walnuts, so it isn't suitable for her.",
+        "unknown": "This cake isn't suitable for Nia because it contains the ingredient we discussed.",
+        "rationale": "The matching allergen supports the conclusion. Tin shape is irrelevant. The unnamed ingredient leaves the link unresolved."
+      },
+      {
+        "id": "invoice-payment",
+        "yes": "The invoice shows a £40 balance and we've paid £40 against that balance, so there's nothing left to pay on it.",
+        "no": "The invoice has a blue border and we've paid £40 on another account, so there's nothing left to pay on it.",
+        "unknown": "There's nothing left to pay on this invoice because of that message from accounts.",
+        "rationale": "A matching payment covers the balance. Payment on another account doesn't cover it. The contents of the accounting message are missing."
+      },
+      {
+        "id": "bus-route",
+        "yes": "The timetable says the 52 doesn't stop at the hospital, so we shouldn't take it if that's where we're going.",
+        "no": "The timetable lists the 52 on the first page, so it must stop at the hospital.",
+        "unknown": "The timetable explains why we shouldn't take the 52 to the hospital.",
+        "rationale": "A missing stop supports the advice. Page order doesn't establish a stop. The last case refers to a reason without supplying it."
+      }
+    ],
+    "conditional_penalty": [
+      {
+        "id": "choir-solo",
+        "yes": "Please cover the solo. If you say no, I'll take you off the choir's next concert.",
+        "no": "Please cover the solo if you can. I took Chris off the choir's next concert because Chris can't make rehearsals.",
+        "unknown": "Please cover the solo. If you say no, we'll have to revisit your place in the next concert.",
+        "rationale": "The first speaker explicitly links exclusion to refusal. The second consequence concerns somebody else. Reconsideration leaves the actual outcome unspecified."
+      },
+      {
+        "id": "garage-remotes",
+        "yes": "Bring back the spare remote. If you keep it, I'll cancel your garage access.",
+        "no": "Bring back the spare remote when you can. Your garage access is being cancelled anyway because the lease ended.",
+        "unknown": "Bring back the spare remote. If you keep it, the garage access rules will come into play.",
+        "rationale": "The first consequence depends on noncompliance. The second is independent. The last leaves the rule and result unspecified."
+      },
+      {
+        "id": "team-kit",
+        "yes": "Wear the new kit on Saturday. Keep wearing the old one and I'll bench you.",
+        "no": "Wear the new kit on Saturday if it fits. You'll be benched either way while your ankle heals.",
+        "unknown": "Wear the new kit on Saturday. If you stick with the old one, selection will be discussed.",
+        "rationale": "Benching is contingent in the first and independent in the second. Discussion doesn't settle whether there will be a penalty."
+      },
+      {
+        "id": "flatmate-cleaning",
+        "yes": "Clean up your dishes tonight or I'll stop lending you my bike.",
+        "no": "Clean up your dishes tonight. My bike is at the repair shop, so nobody can borrow it.",
+        "unknown": "Clean up your dishes tonight. If you don't, we may need a new arrangement about the bike.",
+        "rationale": "The first ties loss of a benefit to refusal. The second gives a separate cause. A new arrangement could be adverse or neutral."
+      }
+    ],
+    "popularity_as_reason": [
+      {
+        "id": "gym-membership",
+        "yes": "Nearly everyone in my building signed up for this gym. That's why you should sign up too.",
+        "no": "Nearly everyone in my building signed up for this gym. I signed up because it's the only one open after my shift.",
+        "unknown": "Nearly everyone in my building signed up for this gym. Keep that in mind when you decide.",
+        "rationale": "Popularity is explicit grounds in the first. The second gives opening hours as the reason. The third suggests relevance without specifying how it should count."
+      },
+      {
+        "id": "restaurant-app",
+        "yes": "This app is the most downloaded in town, so it's the one you should use.",
+        "no": "This app is the most downloaded in town, but use the other one because it lists allergens.",
+        "unknown": "This app is the most downloaded in town. That's something to weigh up.",
+        "rationale": "The first relies on downloads as justification. The second gives a different reason for the opposite recommendation. The third leaves any endorsement unclear."
+      },
+      {
+        "id": "local-council",
+        "yes": "Most people at the meeting backed the library plan, so you should back it too.",
+        "no": "Most people at the meeting backed the library plan. The clerk put the count in the minutes.",
+        "unknown": "Most people at the meeting backed the library plan. Make of that what you will.",
+        "rationale": "The first turns agreement into a recommendation. The second reports the tally. The last leaves the intended inference unstated."
+      },
+      {
+        "id": "school-campaign",
+        "yes": "All the other classes are wearing green, so ours should wear it too.",
+        "no": "All the other classes are wearing green. Ours is wearing blue because that's the colour we were assigned.",
+        "unknown": "All the other classes are wearing green. Well, ours can still change its mind.",
+        "rationale": "Peer conduct is the stated basis only in the first. In the third it might be a reason to reconsider, but the speaker stops short of endorsing it."
+      }
+    ],
+    "contradiction": [
+      {
+        "id": "bike-lock",
+        "yes": "Nobody moved the red bike at any point this morning. I moved that same red bike at nine this morning.",
+        "no": "Nobody moved the red bike at any point this morning. I moved that same red bike after lunch.",
+        "unknown": "Nobody moved the red bike this morning. I moved a red bike at nine this morning.",
+        "rationale": "The first claims share bike and time. The second changes the time. The third leaves the bike's identity unresolved."
+      },
+      {
+        "id": "ticket-scan",
+        "yes": "The ticket machine accepted no cards between two and three. It accepted my card at half past two.",
+        "no": "The ticket machine accepted no cards between two and three. It accepted my card at half past three.",
+        "unknown": "The ticket machine accepted no cards between two and three. A machine accepted my card at half past two.",
+        "rationale": "The first asserts both outcomes for the same machine within the interval. The second is outside it. The third might be a different machine."
+      },
+      {
+        "id": "dashboard-count",
+        "yes": "The dashboard recorded zero sign-ups on Monday. The same dashboard recorded six Monday sign-ups.",
+        "no": "The dashboard recorded zero sign-ups on Monday. Correction: it recorded six Monday sign-ups.",
+        "unknown": "The dashboard recorded zero sign-ups on Monday. We saw six in another report.",
+        "rationale": "The first asserts incompatible counts together. The second explicitly replaces the earlier claim. The third lacks enough detail about which sign-ups were counted."
+      },
+      {
+        "id": "kitchen-power",
+        "yes": "The kitchen lights were off throughout the meeting. Those same lights came on halfway through it.",
+        "no": "The kitchen lights were off throughout the meeting. Those same lights came on just after it.",
+        "unknown": "The kitchen lights were off throughout the meeting. I remember the lights coming on around that time.",
+        "rationale": "Same lights and overlapping times conflict. After the meeting is compatible. Around that time doesn't settle the overlap."
+      }
+    ],
+    "acknowledged_uncertainty": [
+      {
+        "id": "laundry-noise",
+        "yes": "I think that rattling is the washing machine, but I haven't checked.",
+        "no": "Maya thinks that rattling is the washing machine, but she hasn't checked. I know it's the dryer.",
+        "unknown": "That rattling is the washing machine, I think she said.",
+        "rationale": "The first qualifies the speaker's diagnosis. The second reports Maya's uncertainty while the speaker states a definite answer. The third hedge may concern attribution."
+      },
+      {
+        "id": "kayak-photo",
+        "yes": "That looks like our yellow kayak in the photo, though I can't make out the sticker.",
+        "no": "Ella couldn't make out the sticker, but I can. That's definitely our yellow kayak.",
+        "unknown": "Apparently that's our yellow kayak in the photo. That's what the caption says, anyway.",
+        "rationale": "The first admits a limit to personal identification. The second assigns the limitation to Ella. The last may be reporting a caption or hedging the speaker's own identification."
+      },
+      {
+        "id": "package-delivery",
+        "yes": "I'm leaning towards it arriving on Thursday, but the tracking hasn't updated.",
+        "no": "The sender isn't sure when it'll arrive. I just got confirmation that it'll arrive on Thursday.",
+        "unknown": "Thursday, presumably. That's the date in the last message.",
+        "rationale": "The first qualifies a personal prediction. The second separates another person's uncertainty from the speaker's confirmation. The last leaves whether the hedge concerns delivery or what the message means unclear."
+      },
+      {
+        "id": "market-stall",
+        "yes": "I reckon the stall takes cash only, but I didn't actually ask.",
+        "no": "They weren't sure if the stall takes cards. I asked the owner and know it takes cash only.",
+        "unknown": "Cash only, I think that's what the sign said, or maybe that was for the stall next door.",
+        "rationale": "The first qualifies the payment claim. The second attributes uncertainty to other people. In the last, both which stall the sign applies to and whether the speaker is advancing a claim about this stall are unresolved."
+      }
+    ]
+  }
+}
