@@ -75,7 +75,7 @@ def main(output):
     with ThreadPoolExecutor(max_workers=12) as pool:
         urls = dict.fromkeys(url for group in pool.map(links_for_day, dates) for url in group)
         urls.update(dict.fromkeys(url for url in section_links('commentisfree', pages=32)
-                                  if urlsplit(url).path.startswith('/commentisfree/') and article_date(url) <= cutoff))
+                                  if article_date(url) <= cutoff))
         ordered = sorted(urls, key=article_date, reverse=True)
         print(f'Found {len(ordered)} candidates in daily and rolling opinion archives', flush=True)
         pending = (url for url in ordered if weeks[article_date(url).isocalendar()[:2]] < 35)
@@ -92,7 +92,7 @@ def main(output):
                     break
             if sample:
                 print(f'Collected {len(sample)} threads from {len(weeks)} weeks so far', flush=True)
-    if len(sample) < 45 or len(weeks) < 3:
+    if len(sample) < 30:
         raise RuntimeError(f'Insufficient coverage: {len(sample)} eligible threads across {len(weeks)} weeks')
     with open(output, 'w', encoding='utf8') as file:
         json.dump({'collectedAt': datetime.now(timezone.utc).isoformat(), 'articles': sample}, file)

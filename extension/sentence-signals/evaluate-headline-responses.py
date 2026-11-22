@@ -26,7 +26,9 @@ embeddings = np.array([row['vectors'] for row in rows])
 similarities = embeddings @ embeddings.T
 weeks = np.array([date.fromisoformat(row['date']).strftime('%G-W%V') for row in rows])
 observed_weeks = np.unique(weeks)
-periods = np.array_split(observed_weeks, min(5, len(observed_weeks)))
+block_type = 'week' if len(observed_weeks) >= 4 else 'day'
+blocks = weeks if block_type == 'week' else np.array([row['date'] for row in rows])
+periods = np.array_split(np.unique(blocks), min(5, len(np.unique(blocks))))
 names = ('constant', 'topicTags', 'headlineEmotion', 'headlineWording', 'headlineEmbedding', 'combinedHeadline')
 
 
@@ -62,14 +64,14 @@ def fit_folds(folds):
             predictions[name][test] = average + kernel[np.ix_(test, train)] @ weights
             predictions[name][test, :len(labels)] = np.clip(predictions[name][test, :len(labels)], 0, 1)
         diagnostics.append({'train': len(train), 'test': len(test), 'nearDuplicateTrainingRowsRemoved': int(sum(duplicate)),
-                            'weeks': sorted(set(weeks[test]))})
+                            'periods': sorted(set(blocks[test]))})
     return predictions, native_baseline, diagnostics
 
 
 def groups(periods, chronological=False):
     for period in periods:
-        test = np.flatnonzero(np.isin(weeks, period))
-        train = np.flatnonzero(weeks < period[0]) if chronological else np.flatnonzero(~np.isin(weeks, period))
+        test = np.flatnonzero(np.isin(blocks, period))
+        train = np.flatnonzero(blocks < period[0]) if chronological else np.flatnonzero(~np.isin(blocks, period))
         yield train, test
 
 
@@ -106,7 +108,7 @@ def metrics(predictions, baseline, indexes):
 predictions, baseline, folds = fit_folds(groups(periods))
 future_predictions, future_baseline, future_folds = fit_folds(groups([periods[-1]], chronological=True))
 all_indexes = np.arange(len(rows))
-latest = np.flatnonzero(np.isin(weeks, periods[-1]))
+latest = np.flatnonzero(np.isin(blocks, periods[-1]))
 busy = np.flatnonzero(counts >= 200)
 per_label = {name: {label: {'mae': float(np.abs(predictions[name][:, i] - Y[:, i]).mean()),
                            'spearman': rho(predictions[name][:, i], Y[:, i]), 'meanTarget': float(Y[:, i].mean())}
@@ -114,10 +116,11 @@ per_label = {name: {label: {'mae': float(np.abs(predictions[name][:, i] - Y[:, i
 report = {
     'collectedAt': data['collectedAt'], 'sample': len(rows), 'topComments': 5 * len(rows),
     'dateRange': [rows[0]['date'], rows[-1]['date']], 'articlesWithTopicTags': sum(bool(tags) for tags in topics),
+    'sections': {name: sum(row['url'].split('/')[3] == name for row in rows) for name in sorted({row['url'].split('/')[3] for row in rows})},
     'highEngagementArticles': len(busy), 'threadCountRange': [int(np.min(counts)), int(np.max(counts))],
     'topFiveRecommendationsRange': [int(np.min(votes)), int(np.max(votes))],
     'models': {'emotion': data['emotionId'], 'embedding': data['embeddingId']},
-    'validation': {'folds': folds, 'chronologicalHoldout': future_folds, 'nearDuplicateCosine': .74},
+    'validation': {'blockType': block_type, 'folds': folds, 'chronologicalHoldout': future_folds, 'nearDuplicateCosine': .74},
     'fullSample': metrics(predictions, baseline, all_indexes),
     'highEngagementSubset': metrics(predictions, baseline, busy) if len(busy) else {},
     'latestWeeksHoldout': metrics(future_predictions, future_baseline, latest),
