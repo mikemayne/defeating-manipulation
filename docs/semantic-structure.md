@@ -159,3 +159,13 @@ The strict existing rules benchmark passed all 290 expanded cases. Two
 existing tests failed on both the starting commit and this branch
 (`test-build.mjs` on the frozen corpus hash and
 `test-implicit-discourse-passes.mjs` on its bridge example).
+
+## Experimental binary pressure tree
+
+Run `node scripts/analyze-hybrid.mjs --pressure-tree` with a passage on stdin to inspect each paragraph's yes/no path, leaf score and experimental flag. The score is the fraction of positive training passages in the reached leaf. This research output is separate from ranked catalogue findings.
+
+Run `node scripts/evaluate-sir-pressure.mjs` with the local targeted pressure corpus from `classifier/pressure_target_collect.py` to reproduce fitting and verify the shipped model. The evaluator checks thread separation and removes repeated normalized passages. It uses depth four, at least ten training passages per leaf and binary Gini splits over SIR categories. The threshold maximizes calibration F1, with ties favoring the higher threshold. The root asks whether a clause has a condition feature.
+
+On the local snapshot (SHA-256 `b7d85caf36f736e39dcb7f8c4979ec8afc5940208f13d229871ad22031987d6d`), 597 real passages trained the tree, 178 calibrated it and 298 tested it. A positive means the existing Qwen annotation includes fear of consequences or pressure to doubt one's judgement. The targeted sampling and machine labels limit generalization. The model stores feature names and aggregate counts.
+
+At the selected threshold of 0.1707, held-out TP/FP/TN/FN were 27/76/173/22. Precision was 26.2%, recall 55.1%, F1 0.355 and false-positive rate 30.5%. Always predicting positive scored F1 0.282. The error rate supports retaining this as an opt-in research output. Evaluation used whole corpus passages. CLI output is per paragraph.
