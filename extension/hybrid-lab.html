@@ -7,7 +7,13 @@
 <form>
  <p><label for="passage">Passage</label></p>
  <textarea id="passage" rows="8" cols="68" maxlength="4800" required></textarea>
- <p><label><input id="ollama" type="checkbox"> Ask local Ollama (Qwen 3.6 27B)</label></p>
+ <p><label for="model">Model</label>
+  <select id="model">
+   <option value="none">Deterministic rules only</option>
+   <option value="ollama">Local Ollama · Qwen 3.6 27B</option>
+   <option value="browser">In browser · SmolLM2 135M</option>
+  </select>
+ </p>
  <p><label><input id="complete" type="checkbox"> Run complete question bank</label></p>
  <button id="run">Analyse</button>
  <button id="cancel" type="button" disabled>Cancel</button>

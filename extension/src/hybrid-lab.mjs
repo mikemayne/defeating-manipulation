@@ -27,8 +27,13 @@ form.addEventListener("submit", event => {
  worker.addEventListener("error", () => finish("Analysis worker failed."));
  worker.addEventListener("message", ({ data }) => {
   if (data.error) return finish(data.error);
+  if (data.stage) {
+   status.textContent = data.stage;
+   return;
+  }
   const result = data.result;
   const supported = result.scopes.flatMap(scope => scope.patterns.filter(pattern => pattern.state === "supported"));
+  supported.sort((a, b) => b.supportScore - a.supportScore);
   for (const item of supported) {
    const entry = document.createElement("li");
    entry.textContent = item.id + " — " + item.evidence.map(span => span.quote).join(" / ");
@@ -36,11 +41,12 @@ form.addEventListener("submit", event => {
   }
   trace.textContent = JSON.stringify(result, null, 2);
   finish((supported.length ? "Provisional findings shown." : "No supported match in this run.") +
-   " Model calls: " + result.calls + "." + (result.truncated ? " Input was truncated." : ""));
+   " Model calls: " + result.calls + ". Elapsed: " + (data.milliseconds / 1000).toFixed(1) + " s." +
+   (result.truncated ? " Input was truncated." : ""));
  });
  worker.postMessage({
   text: document.querySelector("#passage").value,
-  useOllama: document.querySelector("#ollama").checked,
+  model: document.querySelector("#model").value,
   complete: document.querySelector("#complete").checked
  });
 });

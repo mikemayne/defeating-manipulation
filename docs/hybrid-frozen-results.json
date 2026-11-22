@@ -1,0 +1,1106 @@
+{
+  "stockModel": {
+    "checkpoint": "qwen3.6:27b",
+    "digest": "a50eda8ed977",
+    "quantization": "Q4_K_M",
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 4096,
+      "num_predict": 220
+    }
+  },
+  "full": false,
+  "evaluatedIds": [
+    "hasty_generalisation",
+    "appeal_to_ignorance",
+    "welcoming_disagreement",
+    "choice_with_coercion",
+    "contradictory_claims",
+    "whataboutism",
+    "anecdotal_evidence",
+    "respecting_boundaries"
+  ],
+  "summary": {
+    "A": {
+      "cases": 12,
+      "calls": 0,
+      "milliseconds": 38,
+      "micro": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 8,
+        "precision": null,
+        "recall": 0,
+        "f1": 0
+      },
+      "macroF1": 0,
+      "perPattern": {
+        "hasty_generalisation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 2
+        },
+        "appeal_to_ignorance": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "welcoming_disagreement": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "choice_with_coercion": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "contradictory_claims": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "samples": 12,
+          "positives": 0
+        },
+        "whataboutism": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "anecdotal_evidence": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "respecting_boundaries": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        }
+      },
+      "questions": {
+        "limited_sample_to_group": {
+          "samples": 3,
+          "answered": 0,
+          "correct": 0
+        },
+        "story_used_as_general_proof": {
+          "samples": 3,
+          "answered": 0,
+          "correct": 0
+        },
+        "choice_with_linked_penalty": {
+          "samples": 2,
+          "answered": 0,
+          "correct": 0
+        },
+        "plain_boundary_respect": {
+          "samples": 2,
+          "answered": 0,
+          "correct": 0
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "absence_as_proof": {
+          "samples": 2,
+          "answered": 0,
+          "correct": 0
+        },
+        "disagreement_welcome": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "criticism_redirected_to_other_wrong": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        }
+      }
+    },
+    "D": {
+      "cases": 12,
+      "calls": 96,
+      "milliseconds": 73758,
+      "micro": {
+        "tp": 8,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.7272727272727273,
+        "recall": 1,
+        "f1": 0.8421052631578947
+      },
+      "macroF1": 0.8761904761904763,
+      "perPattern": {
+        "hasty_generalisation": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6666666666666666,
+          "recall": 1,
+          "f1": 0.8,
+          "samples": 12,
+          "positives": 2
+        },
+        "appeal_to_ignorance": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.6666666666666666,
+          "samples": 12,
+          "positives": 1
+        },
+        "welcoming_disagreement": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "choice_with_coercion": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "contradictory_claims": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "samples": 12,
+          "positives": 0
+        },
+        "whataboutism": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "anecdotal_evidence": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.6666666666666666,
+          "samples": 12,
+          "positives": 1
+        },
+        "respecting_boundaries": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        }
+      },
+      "questions": {
+        "limited_sample_to_group": {
+          "samples": 3,
+          "answered": 3,
+          "correct": 3
+        },
+        "story_used_as_general_proof": {
+          "samples": 3,
+          "answered": 3,
+          "correct": 2
+        },
+        "choice_with_linked_penalty": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "plain_boundary_respect": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "absence_as_proof": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "disagreement_welcome": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "criticism_redirected_to_other_wrong": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        }
+      }
+    },
+    "F": {
+      "cases": 12,
+      "calls": 0,
+      "milliseconds": 11,
+      "micro": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1
+      },
+      "macroF1": 1,
+      "perPattern": {
+        "hasty_generalisation": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 2
+        },
+        "appeal_to_ignorance": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "welcoming_disagreement": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "choice_with_coercion": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "contradictory_claims": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "samples": 12,
+          "positives": 0
+        },
+        "whataboutism": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "anecdotal_evidence": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "respecting_boundaries": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        }
+      },
+      "questions": {
+        "limited_sample_to_group": {
+          "samples": 3,
+          "answered": 3,
+          "correct": 3
+        },
+        "story_used_as_general_proof": {
+          "samples": 3,
+          "answered": 3,
+          "correct": 3
+        },
+        "choice_with_linked_penalty": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "plain_boundary_respect": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "absence_as_proof": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "disagreement_welcome": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "criticism_redirected_to_other_wrong": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        }
+      }
+    }
+  },
+  "routingDifferences": [],
+  "rows": [
+    {
+      "id": "small-sample",
+      "arm": "A",
+      "expected": [
+        "hasty_generalisation"
+      ],
+      "predicted": [],
+      "labels": {
+        "limited_sample_to_group": "yes",
+        "story_used_as_general_proof": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 35
+    },
+    {
+      "id": "small-sample",
+      "arm": "D",
+      "expected": [
+        "hasty_generalisation"
+      ],
+      "predicted": [
+        "hasty_generalisation",
+        "anecdotal_evidence"
+      ],
+      "labels": {
+        "limited_sample_to_group": "yes",
+        "story_used_as_general_proof": "no"
+      },
+      "answers": {
+        "limited_sample_to_group": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "story_used_as_general_proof": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 6623
+    },
+    {
+      "id": "small-sample",
+      "arm": "F",
+      "expected": [
+        "hasty_generalisation"
+      ],
+      "predicted": [
+        "hasty_generalisation"
+      ],
+      "labels": {
+        "limited_sample_to_group": "yes",
+        "story_used_as_general_proof": "no"
+      },
+      "answers": {
+        "limited_sample_to_group": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "story_used_as_general_proof": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 2
+    },
+    {
+      "id": "local-claim",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "limited_sample_to_group": "no",
+        "story_used_as_general_proof": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 2
+    },
+    {
+      "id": "local-claim",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "limited_sample_to_group": "no",
+        "story_used_as_general_proof": "no"
+      },
+      "answers": {
+        "limited_sample_to_group": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "story_used_as_general_proof": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 5853
+    },
+    {
+      "id": "local-claim",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "limited_sample_to_group": "no",
+        "story_used_as_general_proof": "no"
+      },
+      "answers": {
+        "limited_sample_to_group": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "story_used_as_general_proof": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 2
+    },
+    {
+      "id": "story",
+      "arm": "A",
+      "expected": [
+        "anecdotal_evidence",
+        "hasty_generalisation"
+      ],
+      "predicted": [],
+      "labels": {
+        "story_used_as_general_proof": "yes",
+        "limited_sample_to_group": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "story",
+      "arm": "D",
+      "expected": [
+        "anecdotal_evidence",
+        "hasty_generalisation"
+      ],
+      "predicted": [
+        "hasty_generalisation",
+        "appeal_to_ignorance",
+        "anecdotal_evidence"
+      ],
+      "labels": {
+        "story_used_as_general_proof": "yes",
+        "limited_sample_to_group": "yes"
+      },
+      "answers": {
+        "story_used_as_general_proof": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "limited_sample_to_group": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 6747
+    },
+    {
+      "id": "story",
+      "arm": "F",
+      "expected": [
+        "anecdotal_evidence",
+        "hasty_generalisation"
+      ],
+      "predicted": [
+        "hasty_generalisation",
+        "anecdotal_evidence"
+      ],
+      "labels": {
+        "story_used_as_general_proof": "yes",
+        "limited_sample_to_group": "yes"
+      },
+      "answers": {
+        "story_used_as_general_proof": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "limited_sample_to_group": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "different-choices",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "choice_with_linked_penalty": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "different-choices",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "choice_with_linked_penalty": "no"
+      },
+      "answers": {
+        "choice_with_linked_penalty": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 6000
+    },
+    {
+      "id": "different-choices",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "choice_with_linked_penalty": "no"
+      },
+      "answers": {
+        "choice_with_linked_penalty": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "linked-choice",
+      "arm": "A",
+      "expected": [
+        "choice_with_coercion"
+      ],
+      "predicted": [],
+      "labels": {
+        "choice_with_linked_penalty": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "linked-choice",
+      "arm": "D",
+      "expected": [
+        "choice_with_coercion"
+      ],
+      "predicted": [
+        "choice_with_coercion"
+      ],
+      "labels": {
+        "choice_with_linked_penalty": "yes"
+      },
+      "answers": {
+        "choice_with_linked_penalty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 6536
+    },
+    {
+      "id": "linked-choice",
+      "arm": "F",
+      "expected": [
+        "choice_with_coercion"
+      ],
+      "predicted": [
+        "choice_with_coercion"
+      ],
+      "labels": {
+        "choice_with_linked_penalty": "yes"
+      },
+      "answers": {
+        "choice_with_linked_penalty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "agreed-boundary",
+      "arm": "A",
+      "expected": [
+        "respecting_boundaries"
+      ],
+      "predicted": [],
+      "labels": {
+        "plain_boundary_respect": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "agreed-boundary",
+      "arm": "D",
+      "expected": [
+        "respecting_boundaries"
+      ],
+      "predicted": [
+        "respecting_boundaries"
+      ],
+      "labels": {
+        "plain_boundary_respect": "yes"
+      },
+      "answers": {
+        "plain_boundary_respect": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 6352
+    },
+    {
+      "id": "agreed-boundary",
+      "arm": "F",
+      "expected": [
+        "respecting_boundaries"
+      ],
+      "predicted": [
+        "respecting_boundaries"
+      ],
+      "labels": {
+        "plain_boundary_respect": "yes"
+      },
+      "answers": {
+        "plain_boundary_respect": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "boundary-overridden",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "plain_boundary_respect": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "boundary-overridden",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "plain_boundary_respect": "no"
+      },
+      "answers": {
+        "plain_boundary_respect": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 5644
+    },
+    {
+      "id": "boundary-overridden",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "plain_boundary_respect": "no"
+      },
+      "answers": {
+        "plain_boundary_respect": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "corrected-time",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "contradiction": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "corrected-time",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "contradiction": "no"
+      },
+      "answers": {
+        "contradiction": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 5979
+    },
+    {
+      "id": "corrected-time",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "contradiction": "no"
+      },
+      "answers": {
+        "contradiction": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "open-question",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "absence_as_proof": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "open-question",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "absence_as_proof": "no"
+      },
+      "answers": {
+        "absence_as_proof": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 5975
+    },
+    {
+      "id": "open-question",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "absence_as_proof": "no"
+      },
+      "answers": {
+        "absence_as_proof": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "absence-proof",
+      "arm": "A",
+      "expected": [
+        "appeal_to_ignorance"
+      ],
+      "predicted": [],
+      "labels": {
+        "absence_as_proof": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "absence-proof",
+      "arm": "D",
+      "expected": [
+        "appeal_to_ignorance"
+      ],
+      "predicted": [
+        "hasty_generalisation",
+        "appeal_to_ignorance"
+      ],
+      "labels": {
+        "absence_as_proof": "yes"
+      },
+      "answers": {
+        "absence_as_proof": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 6476
+    },
+    {
+      "id": "absence-proof",
+      "arm": "F",
+      "expected": [
+        "appeal_to_ignorance"
+      ],
+      "predicted": [
+        "appeal_to_ignorance"
+      ],
+      "labels": {
+        "absence_as_proof": "yes"
+      },
+      "answers": {
+        "absence_as_proof": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "self-critique",
+      "arm": "A",
+      "expected": [
+        "welcoming_disagreement"
+      ],
+      "predicted": [],
+      "labels": {
+        "disagreement_welcome": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "self-critique",
+      "arm": "D",
+      "expected": [
+        "welcoming_disagreement"
+      ],
+      "predicted": [
+        "welcoming_disagreement"
+      ],
+      "labels": {
+        "disagreement_welcome": "yes"
+      },
+      "answers": {
+        "disagreement_welcome": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 5550
+    },
+    {
+      "id": "self-critique",
+      "arm": "F",
+      "expected": [
+        "welcoming_disagreement"
+      ],
+      "predicted": [
+        "welcoming_disagreement"
+      ],
+      "labels": {
+        "disagreement_welcome": "yes"
+      },
+      "answers": {
+        "disagreement_welcome": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "trivial-distraction",
+      "arm": "A",
+      "expected": [
+        "whataboutism"
+      ],
+      "predicted": [],
+      "labels": {
+        "criticism_redirected_to_other_wrong": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "trivial-distraction",
+      "arm": "D",
+      "expected": [
+        "whataboutism"
+      ],
+      "predicted": [
+        "whataboutism"
+      ],
+      "labels": {
+        "criticism_redirected_to_other_wrong": "yes"
+      },
+      "answers": {
+        "criticism_redirected_to_other_wrong": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 6023
+    },
+    {
+      "id": "trivial-distraction",
+      "arm": "F",
+      "expected": [
+        "whataboutism"
+      ],
+      "predicted": [
+        "whataboutism"
+      ],
+      "labels": {
+        "criticism_redirected_to_other_wrong": "yes"
+      },
+      "answers": {
+        "criticism_redirected_to_other_wrong": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    }
+  ]
+}

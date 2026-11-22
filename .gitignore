@@ -6,6 +6,8 @@ _site/
 /extension/ort/
 /extension/matcher-worker.js
 /extension/benchmark-worker.js
+/extension/hybrid-browser-model.js
+/extension/models/
 
 /extension/spell-en-gb.aff
 /extension/spell-en-gb.dic

@@ -2,6 +2,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { browserModel } from "../extension/src/hybrid-browser-config.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = "127.0.0.1", port = 4173;
@@ -10,6 +11,7 @@ const allowed = new Set([
  "/extension/hybrid-lab.html",
  "/extension/src/hybrid-lab.mjs",
  "/extension/src/hybrid-lab-worker.mjs",
+ "/extension/hybrid-browser-model.js",
  "/extension/src/hybrid-detector.mjs",
  "/extension/src/hybrid-questions.mjs",
  "/extension/src/hybrid-mappings.mjs",
@@ -32,6 +34,9 @@ const allowed = new Set([
  "/evaluation/positive-matcher-examples.json",
  "/evaluation/concealed-pattern-examples.json"
 ]);
+const modelRoot = "/extension/models/" + browserModel.id + "/";
+for (const file of ["config.json", "generation_config.json", "tokenizer.json",
+ "tokenizer_config.json", "onnx/model_q4.onnx"]) allowed.add(modelRoot + file);
 const mime = file => {
  if (file.endsWith(".html")) return "text/html; charset=utf-8";
  if (file.endsWith(".mjs") || file.endsWith(".js")) return "text/javascript; charset=utf-8";

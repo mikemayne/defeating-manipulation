@@ -1,7 +1,8 @@
 const semantic = (id, predicate, example, counterexample, cues = []) => ({
  id, version: 1, predicate, scope: "paragraph", target: "relationship within the supplied passage",
  prerequisites: [], states: ["yes", "no", "unknown", "not_applicable"],
- strategy: "model", examples: { yes: example, no: counterexample }, cues
+ strategy: "model", promptVariants: ["baseline", "tailored"],
+ examples: { yes: example, no: counterexample }, cues
 });
 
 const literal = (id, expression, example, counterexample) => ({

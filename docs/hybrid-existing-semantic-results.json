@@ -1,0 +1,350 @@
+{
+  "stockModel": {
+    "checkpoint": "qwen3.6:27b",
+    "digest": "a50eda8ed977",
+    "quantization": "Q4_K_M",
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 4096,
+      "num_predict": 220
+    }
+  },
+  "full": false,
+  "existingSemantic": true,
+  "existingSetupMilliseconds": 1089,
+  "evaluatedIds": [
+    "threat_framing",
+    "ad_hominem",
+    "bandwagon",
+    "acknowledging_uncertainty",
+    "encouraging_independent_thought",
+    "transparent_reasoning",
+    "contradictory_claims",
+    "supported_conclusion"
+  ],
+  "summary": {
+    "A": {
+      "cases": 12,
+      "calls": 0,
+      "milliseconds": 197,
+      "micro": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 7,
+        "precision": 1,
+        "recall": 0.125,
+        "f1": 0.2222222222222222
+      },
+      "macroF1": 0.125,
+      "perPattern": {
+        "threat_framing": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "ad_hominem": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "bandwagon": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "acknowledging_uncertainty": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "samples": 12,
+          "positives": 1
+        },
+        "encouraging_independent_thought": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "transparent_reasoning": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "contradictory_claims": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        },
+        "supported_conclusion": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0,
+          "samples": 12,
+          "positives": 1
+        }
+      },
+      "questions": {
+        "unfavourable_future": {
+          "samples": 6,
+          "answered": 0,
+          "correct": 0
+        },
+        "addressee_lacks_knowledge": {
+          "samples": 2,
+          "answered": 0,
+          "correct": 0
+        },
+        "unspecified_future_event": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "conditional_penalty": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "popularity_as_reason": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "personal_attack_as_rebuttal": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "acknowledged_uncertainty": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "independent_check": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "reason_supports": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "reason_given": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        }
+      }
+    }
+  },
+  "routingDifferences": [],
+  "rows": [
+    {
+      "id": "implied",
+      "arm": "A",
+      "expected": [
+        "threat_framing"
+      ],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 33
+    },
+    {
+      "id": "benign-future",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "addressee_lacks_knowledge": "yes",
+        "unspecified_future_event": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 18
+    },
+    {
+      "id": "reported",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "conditional_penalty": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 25
+    },
+    {
+      "id": "wrong-person",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "addressee_lacks_knowledge": "no",
+        "unfavourable_future": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 9
+    },
+    {
+      "id": "popular",
+      "arm": "A",
+      "expected": [
+        "bandwagon"
+      ],
+      "predicted": [],
+      "labels": {
+        "popularity_as_reason": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 8
+    },
+    {
+      "id": "rebuttal",
+      "arm": "A",
+      "expected": [
+        "ad_hominem"
+      ],
+      "predicted": [],
+      "labels": {
+        "personal_attack_as_rebuttal": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 9
+    },
+    {
+      "id": "uncertainty",
+      "arm": "A",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "predicted": [
+        "acknowledging_uncertainty"
+      ],
+      "labels": {
+        "acknowledged_uncertainty": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 4
+    },
+    {
+      "id": "verifiable",
+      "arm": "A",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "predicted": [],
+      "labels": {
+        "independent_check": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 8
+    },
+    {
+      "id": "contrary",
+      "arm": "A",
+      "expected": [
+        "contradictory_claims"
+      ],
+      "predicted": [],
+      "labels": {
+        "contradiction": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 14
+    },
+    {
+      "id": "overlap",
+      "arm": "A",
+      "expected": [
+        "supported_conclusion",
+        "transparent_reasoning"
+      ],
+      "predicted": [],
+      "labels": {
+        "reason_supports": "yes",
+        "reason_given": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 14
+    },
+    {
+      "id": "fake-role",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 23
+    },
+    {
+      "id": "override",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 32
+    }
+  ]
+}

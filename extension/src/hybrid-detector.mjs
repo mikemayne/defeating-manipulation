@@ -56,7 +56,8 @@ function observationsFor(passage, scope) {
     scope, limit: "Literal wording only" });
    if (evidence.length === 20) break;
   }
-  return [{ question, evidence, answer: evidence.length ? "yes" : "no", status: "answered", method: "regex", scope }];
+  return [{ question, evidence, answer: evidence.length ? "yes" : scope.truncated ? "unknown" : "no",
+   status: "answered", method: "regex", scope }];
  });
 }
 
@@ -93,7 +94,13 @@ function evaluatePatterns(answers) {
   const supported = required.every(item => item?.answer === "yes") &&
    incompatible.every(item => item?.answer === "no");
   const evidence = supported ? required.flatMap(item => item.evidence) : [];
+  const reinforcing = (mapping.supporting ?? []).some(key => {
+   const answer = answers.get(key);
+   return answer?.answer === "yes" && answer.evidence.some(span =>
+    evidence.some(requiredSpan => requiredSpan.start < span.end && span.start < requiredSpan.end));
+  });
   return { id, state: supported ? "supported" : exact ? "excluded" : "unresolved",
+   supportScore: supported ? 1 + Number(reinforcing) : 0,
    modelContradiction: contradictions.some(item => item.method === "model"), evidence,
    reason: supported ? "required evidence present" : exact ? "required answer was contrary" :
     contradictions.length ? "model reported contrary evidence" : "required evidence unresolved" };
@@ -101,7 +108,7 @@ function evaluatePatterns(answers) {
 }
 
 export async function analyzeHybrid(text, { classify, mode = "selective", variant = "tailored",
- budget = 48, signal, checkedAnswers, questionIds, spellchecker } = {}) {
+ budget = 48, signal, checkedAnswers, questionIds, spellchecker, onCall } = {}) {
  if (typeof text !== "string") throw TypeError("Expected text");
  if (!["selective", "complete"].includes(mode) || !["baseline", "tailored"].includes(variant) ||
      !Number.isInteger(budget) || budget < 0 || budget > 256) throw RangeError("Invalid experiment options");
@@ -146,11 +153,13 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
     const before = evaluatePatterns(answers);
     for (let attempt = 0; attempt < 2 && calls < budget && !signal?.aborted; attempt++) {
      calls++;
+     onCall?.(calls, budget);
      let raw;
      try {
       raw = await classify(messages, { signal });
      } catch (error) {
-      result.status = error?.name === "TimeoutError" ? "timeout" : "runtime_failure";
+      const namedStatus = { TimeoutError: "timeout", OutputLimitError: "output_truncated", AbortError: "cancelled" };
+      result.status = Object.hasOwn(namedStatus, error?.name) ? namedStatus[error.name] : "runtime_failure";
       break;
      }
      try {
@@ -172,7 +181,6 @@ export async function analyzeHybrid(text, { classify, mode = "selective", varian
   results.push({ scope, observations, answers: Object.fromEntries(answers), patterns: evaluatePatterns(answers), trace });
  }
  const { flags } = preprocessText(prefix, { spellchecker, correctSpelling: false });
- return { calls, flags, truncated: prefix.length < text.length || scopes.length > MAX_SCOPES ||
+ return { mode, variant, calls, flags, truncated: prefix.length < text.length || scopes.length > MAX_SCOPES ||
   scopes.some(scope => scope.truncated), scopes: results };
 }
-

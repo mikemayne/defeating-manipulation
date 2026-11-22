@@ -1,0 +1,2299 @@
+{
+  "stockModel": {
+    "checkpoint": "qwen3.6:27b",
+    "digest": "a50eda8ed977",
+    "quantization": "Q4_K_M",
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_ctx": 4096,
+      "num_predict": 220
+    }
+  },
+  "full": false,
+  "evaluatedIds": [
+    "threat_framing",
+    "ad_hominem",
+    "bandwagon",
+    "acknowledging_uncertainty",
+    "encouraging_independent_thought",
+    "transparent_reasoning",
+    "contradictory_claims",
+    "supported_conclusion"
+  ],
+  "summary": {
+    "A": {
+      "cases": 12,
+      "calls": 0,
+      "milliseconds": 60,
+      "micro": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 7,
+        "precision": 1,
+        "recall": 0.125,
+        "f1": 0.2222222222222222
+      },
+      "macroF1": 0.125,
+      "perPattern": {
+        "threat_framing": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "ad_hominem": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "bandwagon": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "acknowledging_uncertainty": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "encouraging_independent_thought": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "transparent_reasoning": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "contradictory_claims": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "supported_conclusion": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        }
+      },
+      "questions": {
+        "unfavourable_future": {
+          "samples": 6,
+          "answered": 0,
+          "correct": 0
+        },
+        "addressee_lacks_knowledge": {
+          "samples": 2,
+          "answered": 0,
+          "correct": 0
+        },
+        "unspecified_future_event": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "conditional_penalty": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "popularity_as_reason": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "personal_attack_as_rebuttal": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "acknowledged_uncertainty": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "independent_check": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "reason_supports": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "reason_given": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        }
+      }
+    },
+    "B": {
+      "cases": 12,
+      "calls": 0,
+      "milliseconds": 12,
+      "micro": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 8,
+        "precision": null,
+        "recall": 0,
+        "f1": 0
+      },
+      "macroF1": 0,
+      "perPattern": {
+        "threat_framing": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "ad_hominem": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "bandwagon": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "acknowledging_uncertainty": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "encouraging_independent_thought": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "transparent_reasoning": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "contradictory_claims": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        },
+        "supported_conclusion": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": null,
+          "recall": 0,
+          "f1": 0
+        }
+      },
+      "questions": {
+        "unfavourable_future": {
+          "samples": 6,
+          "answered": 0,
+          "correct": 0
+        },
+        "addressee_lacks_knowledge": {
+          "samples": 2,
+          "answered": 0,
+          "correct": 0
+        },
+        "unspecified_future_event": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "conditional_penalty": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "popularity_as_reason": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "personal_attack_as_rebuttal": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "acknowledged_uncertainty": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "independent_check": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "reason_supports": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "reason_given": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        }
+      }
+    },
+    "C": {
+      "cases": 12,
+      "calls": 133,
+      "milliseconds": 214713,
+      "micro": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1
+      },
+      "macroF1": 1,
+      "perPattern": {
+        "threat_framing": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "ad_hominem": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "bandwagon": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "acknowledging_uncertainty": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "encouraging_independent_thought": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "transparent_reasoning": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "contradictory_claims": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "supported_conclusion": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      },
+      "questions": {
+        "unfavourable_future": {
+          "samples": 6,
+          "answered": 6,
+          "correct": 6
+        },
+        "addressee_lacks_knowledge": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "unspecified_future_event": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "conditional_penalty": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 0
+        },
+        "popularity_as_reason": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "personal_attack_as_rebuttal": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "acknowledged_uncertainty": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "independent_check": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_supports": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_given": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        }
+      }
+    },
+    "D": {
+      "cases": 12,
+      "calls": 85,
+      "milliseconds": 132615,
+      "micro": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1
+      },
+      "macroF1": 1,
+      "perPattern": {
+        "threat_framing": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "ad_hominem": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "bandwagon": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "acknowledging_uncertainty": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "encouraging_independent_thought": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "transparent_reasoning": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "contradictory_claims": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "supported_conclusion": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      },
+      "questions": {
+        "unfavourable_future": {
+          "samples": 6,
+          "answered": 6,
+          "correct": 6
+        },
+        "addressee_lacks_knowledge": {
+          "samples": 2,
+          "answered": 0,
+          "correct": 0
+        },
+        "unspecified_future_event": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "conditional_penalty": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        },
+        "popularity_as_reason": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "personal_attack_as_rebuttal": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "acknowledged_uncertainty": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "independent_check": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_supports": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_given": {
+          "samples": 1,
+          "answered": 0,
+          "correct": 0
+        }
+      }
+    },
+    "E": {
+      "cases": 12,
+      "calls": 132,
+      "milliseconds": 208504,
+      "micro": {
+        "tp": 8,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8,
+        "recall": 1,
+        "f1": 0.8888888888888888
+      },
+      "macroF1": 0.9166666666666666,
+      "perPattern": {
+        "threat_framing": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.6666666666666666
+        },
+        "ad_hominem": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "bandwagon": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "acknowledging_uncertainty": {
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1,
+          "f1": 0.6666666666666666
+        },
+        "encouraging_independent_thought": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "transparent_reasoning": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "contradictory_claims": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "supported_conclusion": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      },
+      "questions": {
+        "unfavourable_future": {
+          "samples": 6,
+          "answered": 6,
+          "correct": 6
+        },
+        "addressee_lacks_knowledge": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 1
+        },
+        "unspecified_future_event": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 0
+        },
+        "conditional_penalty": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 0
+        },
+        "popularity_as_reason": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "personal_attack_as_rebuttal": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "acknowledged_uncertainty": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "independent_check": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_supports": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_given": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        }
+      }
+    },
+    "F": {
+      "cases": 12,
+      "calls": 0,
+      "milliseconds": 3,
+      "micro": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1
+      },
+      "macroF1": 1,
+      "perPattern": {
+        "threat_framing": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "ad_hominem": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "bandwagon": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "acknowledging_uncertainty": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "encouraging_independent_thought": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "transparent_reasoning": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "contradictory_claims": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "supported_conclusion": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      },
+      "questions": {
+        "unfavourable_future": {
+          "samples": 6,
+          "answered": 6,
+          "correct": 6
+        },
+        "addressee_lacks_knowledge": {
+          "samples": 2,
+          "answered": 2,
+          "correct": 2
+        },
+        "unspecified_future_event": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "conditional_penalty": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "popularity_as_reason": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "personal_attack_as_rebuttal": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "acknowledged_uncertainty": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "independent_check": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "contradiction": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_supports": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        },
+        "reason_given": {
+          "samples": 1,
+          "answered": 1,
+          "correct": 1
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "implied",
+      "arm": "A",
+      "expected": [
+        "threat_framing"
+      ],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 34
+    },
+    {
+      "id": "implied",
+      "arm": "B",
+      "expected": [
+        "threat_framing"
+      ],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "yes"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 6
+    },
+    {
+      "id": "implied",
+      "arm": "C",
+      "expected": [
+        "threat_framing"
+      ],
+      "predicted": [
+        "threat_framing"
+      ],
+      "labels": {
+        "unfavourable_future": "yes"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 17050
+    },
+    {
+      "id": "implied",
+      "arm": "D",
+      "expected": [
+        "threat_framing"
+      ],
+      "predicted": [
+        "threat_framing"
+      ],
+      "labels": {
+        "unfavourable_future": "yes"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 10749
+    },
+    {
+      "id": "implied",
+      "arm": "E",
+      "expected": [
+        "threat_framing"
+      ],
+      "predicted": [
+        "threat_framing"
+      ],
+      "labels": {
+        "unfavourable_future": "yes"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 18241
+    },
+    {
+      "id": "implied",
+      "arm": "F",
+      "expected": [
+        "threat_framing"
+      ],
+      "predicted": [
+        "threat_framing"
+      ],
+      "labels": {
+        "unfavourable_future": "yes"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "benign-future",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "addressee_lacks_knowledge": "yes",
+        "unspecified_future_event": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 9
+    },
+    {
+      "id": "benign-future",
+      "arm": "B",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "addressee_lacks_knowledge": "yes",
+        "unspecified_future_event": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "unknown",
+          "status": "not_asked"
+        },
+        "addressee_lacks_knowledge": {
+          "answer": "unknown",
+          "status": "not_asked"
+        },
+        "unspecified_future_event": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "benign-future",
+      "arm": "C",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "addressee_lacks_knowledge": "yes",
+        "unspecified_future_event": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "addressee_lacks_knowledge": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "unspecified_future_event": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 18650
+    },
+    {
+      "id": "benign-future",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "addressee_lacks_knowledge": "yes",
+        "unspecified_future_event": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "addressee_lacks_knowledge": {
+          "answer": "unknown",
+          "status": "not_asked"
+        },
+        "unspecified_future_event": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 11100
+    },
+    {
+      "id": "benign-future",
+      "arm": "E",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "addressee_lacks_knowledge": "yes",
+        "unspecified_future_event": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "addressee_lacks_knowledge": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "unspecified_future_event": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 16676
+    },
+    {
+      "id": "benign-future",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "addressee_lacks_knowledge": "yes",
+        "unspecified_future_event": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "addressee_lacks_knowledge": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "unspecified_future_event": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "reported",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "conditional_penalty": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 12
+    },
+    {
+      "id": "reported",
+      "arm": "B",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "conditional_penalty": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "unknown",
+          "status": "not_asked"
+        },
+        "conditional_penalty": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 2
+    },
+    {
+      "id": "reported",
+      "arm": "C",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "conditional_penalty": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "conditional_penalty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 12,
+      "milliseconds": 19677
+    },
+    {
+      "id": "reported",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "conditional_penalty": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "conditional_penalty": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 8,
+      "milliseconds": 13180
+    },
+    {
+      "id": "reported",
+      "arm": "E",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "conditional_penalty": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "conditional_penalty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 16333
+    },
+    {
+      "id": "reported",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no",
+        "conditional_penalty": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "conditional_penalty": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "wrong-person",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "addressee_lacks_knowledge": "no",
+        "unfavourable_future": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "wrong-person",
+      "arm": "B",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "addressee_lacks_knowledge": "no",
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "addressee_lacks_knowledge": {
+          "answer": "unknown",
+          "status": "not_asked"
+        },
+        "unfavourable_future": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "wrong-person",
+      "arm": "C",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "addressee_lacks_knowledge": "no",
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "addressee_lacks_knowledge": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 17096
+    },
+    {
+      "id": "wrong-person",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "addressee_lacks_knowledge": "no",
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "addressee_lacks_knowledge": {
+          "answer": "unknown",
+          "status": "not_asked"
+        },
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 10981
+    },
+    {
+      "id": "wrong-person",
+      "arm": "E",
+      "expected": [],
+      "predicted": [
+        "acknowledging_uncertainty"
+      ],
+      "labels": {
+        "addressee_lacks_knowledge": "no",
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "addressee_lacks_knowledge": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 17112
+    },
+    {
+      "id": "wrong-person",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "addressee_lacks_knowledge": "no",
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "addressee_lacks_knowledge": {
+          "answer": "no",
+          "status": "answered"
+        },
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "popular",
+      "arm": "A",
+      "expected": [
+        "bandwagon"
+      ],
+      "predicted": [],
+      "labels": {
+        "popularity_as_reason": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "popular",
+      "arm": "B",
+      "expected": [
+        "bandwagon"
+      ],
+      "predicted": [],
+      "labels": {
+        "popularity_as_reason": "yes"
+      },
+      "answers": {
+        "popularity_as_reason": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "popular",
+      "arm": "C",
+      "expected": [
+        "bandwagon"
+      ],
+      "predicted": [
+        "bandwagon"
+      ],
+      "labels": {
+        "popularity_as_reason": "yes"
+      },
+      "answers": {
+        "popularity_as_reason": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 18375
+    },
+    {
+      "id": "popular",
+      "arm": "D",
+      "expected": [
+        "bandwagon"
+      ],
+      "predicted": [
+        "bandwagon"
+      ],
+      "labels": {
+        "popularity_as_reason": "yes"
+      },
+      "answers": {
+        "popularity_as_reason": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 12052
+    },
+    {
+      "id": "popular",
+      "arm": "E",
+      "expected": [
+        "bandwagon"
+      ],
+      "predicted": [
+        "bandwagon"
+      ],
+      "labels": {
+        "popularity_as_reason": "yes"
+      },
+      "answers": {
+        "popularity_as_reason": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 19644
+    },
+    {
+      "id": "popular",
+      "arm": "F",
+      "expected": [
+        "bandwagon"
+      ],
+      "predicted": [
+        "bandwagon"
+      ],
+      "labels": {
+        "popularity_as_reason": "yes"
+      },
+      "answers": {
+        "popularity_as_reason": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "rebuttal",
+      "arm": "A",
+      "expected": [
+        "ad_hominem"
+      ],
+      "predicted": [],
+      "labels": {
+        "personal_attack_as_rebuttal": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "rebuttal",
+      "arm": "B",
+      "expected": [
+        "ad_hominem"
+      ],
+      "predicted": [],
+      "labels": {
+        "personal_attack_as_rebuttal": "yes"
+      },
+      "answers": {
+        "personal_attack_as_rebuttal": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "rebuttal",
+      "arm": "C",
+      "expected": [
+        "ad_hominem"
+      ],
+      "predicted": [
+        "ad_hominem"
+      ],
+      "labels": {
+        "personal_attack_as_rebuttal": "yes"
+      },
+      "answers": {
+        "personal_attack_as_rebuttal": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 16634
+    },
+    {
+      "id": "rebuttal",
+      "arm": "D",
+      "expected": [
+        "ad_hominem"
+      ],
+      "predicted": [
+        "ad_hominem"
+      ],
+      "labels": {
+        "personal_attack_as_rebuttal": "yes"
+      },
+      "answers": {
+        "personal_attack_as_rebuttal": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 10820
+    },
+    {
+      "id": "rebuttal",
+      "arm": "E",
+      "expected": [
+        "ad_hominem"
+      ],
+      "predicted": [
+        "ad_hominem"
+      ],
+      "labels": {
+        "personal_attack_as_rebuttal": "yes"
+      },
+      "answers": {
+        "personal_attack_as_rebuttal": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 16302
+    },
+    {
+      "id": "rebuttal",
+      "arm": "F",
+      "expected": [
+        "ad_hominem"
+      ],
+      "predicted": [
+        "ad_hominem"
+      ],
+      "labels": {
+        "personal_attack_as_rebuttal": "yes"
+      },
+      "answers": {
+        "personal_attack_as_rebuttal": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "uncertainty",
+      "arm": "A",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "predicted": [
+        "acknowledging_uncertainty"
+      ],
+      "labels": {
+        "acknowledged_uncertainty": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "uncertainty",
+      "arm": "B",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "predicted": [],
+      "labels": {
+        "acknowledged_uncertainty": "yes"
+      },
+      "answers": {
+        "acknowledged_uncertainty": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "uncertainty",
+      "arm": "C",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "predicted": [
+        "acknowledging_uncertainty"
+      ],
+      "labels": {
+        "acknowledged_uncertainty": "yes"
+      },
+      "answers": {
+        "acknowledged_uncertainty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 17239
+    },
+    {
+      "id": "uncertainty",
+      "arm": "D",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "predicted": [
+        "acknowledging_uncertainty"
+      ],
+      "labels": {
+        "acknowledged_uncertainty": "yes"
+      },
+      "answers": {
+        "acknowledged_uncertainty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 10097
+    },
+    {
+      "id": "uncertainty",
+      "arm": "E",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "predicted": [
+        "acknowledging_uncertainty"
+      ],
+      "labels": {
+        "acknowledged_uncertainty": "yes"
+      },
+      "answers": {
+        "acknowledged_uncertainty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 15287
+    },
+    {
+      "id": "uncertainty",
+      "arm": "F",
+      "expected": [
+        "acknowledging_uncertainty"
+      ],
+      "predicted": [
+        "acknowledging_uncertainty"
+      ],
+      "labels": {
+        "acknowledged_uncertainty": "yes"
+      },
+      "answers": {
+        "acknowledged_uncertainty": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "verifiable",
+      "arm": "A",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "predicted": [],
+      "labels": {
+        "independent_check": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "verifiable",
+      "arm": "B",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "predicted": [],
+      "labels": {
+        "independent_check": "yes"
+      },
+      "answers": {
+        "independent_check": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "verifiable",
+      "arm": "C",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "predicted": [
+        "encouraging_independent_thought"
+      ],
+      "labels": {
+        "independent_check": "yes"
+      },
+      "answers": {
+        "independent_check": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 24136
+    },
+    {
+      "id": "verifiable",
+      "arm": "D",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "predicted": [
+        "encouraging_independent_thought"
+      ],
+      "labels": {
+        "independent_check": "yes"
+      },
+      "answers": {
+        "independent_check": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 15744
+    },
+    {
+      "id": "verifiable",
+      "arm": "E",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "predicted": [
+        "encouraging_independent_thought"
+      ],
+      "labels": {
+        "independent_check": "yes"
+      },
+      "answers": {
+        "independent_check": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 31376
+    },
+    {
+      "id": "verifiable",
+      "arm": "F",
+      "expected": [
+        "encouraging_independent_thought"
+      ],
+      "predicted": [
+        "encouraging_independent_thought"
+      ],
+      "labels": {
+        "independent_check": "yes"
+      },
+      "answers": {
+        "independent_check": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "contrary",
+      "arm": "A",
+      "expected": [
+        "contradictory_claims"
+      ],
+      "predicted": [],
+      "labels": {
+        "contradiction": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "contrary",
+      "arm": "B",
+      "expected": [
+        "contradictory_claims"
+      ],
+      "predicted": [],
+      "labels": {
+        "contradiction": "yes"
+      },
+      "answers": {
+        "contradiction": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "contrary",
+      "arm": "C",
+      "expected": [
+        "contradictory_claims"
+      ],
+      "predicted": [
+        "contradictory_claims"
+      ],
+      "labels": {
+        "contradiction": "yes"
+      },
+      "answers": {
+        "contradiction": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 14420
+    },
+    {
+      "id": "contrary",
+      "arm": "D",
+      "expected": [
+        "contradictory_claims"
+      ],
+      "predicted": [
+        "contradictory_claims"
+      ],
+      "labels": {
+        "contradiction": "yes"
+      },
+      "answers": {
+        "contradiction": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 5343
+    },
+    {
+      "id": "contrary",
+      "arm": "E",
+      "expected": [
+        "contradictory_claims"
+      ],
+      "predicted": [
+        "contradictory_claims"
+      ],
+      "labels": {
+        "contradiction": "yes"
+      },
+      "answers": {
+        "contradiction": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 8018
+    },
+    {
+      "id": "contrary",
+      "arm": "F",
+      "expected": [
+        "contradictory_claims"
+      ],
+      "predicted": [
+        "contradictory_claims"
+      ],
+      "labels": {
+        "contradiction": "yes"
+      },
+      "answers": {
+        "contradiction": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "overlap",
+      "arm": "A",
+      "expected": [
+        "supported_conclusion",
+        "transparent_reasoning"
+      ],
+      "predicted": [],
+      "labels": {
+        "reason_supports": "yes",
+        "reason_given": "yes"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 1
+    },
+    {
+      "id": "overlap",
+      "arm": "B",
+      "expected": [
+        "supported_conclusion",
+        "transparent_reasoning"
+      ],
+      "predicted": [],
+      "labels": {
+        "reason_supports": "yes",
+        "reason_given": "yes"
+      },
+      "answers": {
+        "reason_supports": {
+          "answer": "unknown",
+          "status": "not_asked"
+        },
+        "reason_given": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "overlap",
+      "arm": "C",
+      "expected": [
+        "supported_conclusion",
+        "transparent_reasoning"
+      ],
+      "predicted": [
+        "transparent_reasoning",
+        "supported_conclusion"
+      ],
+      "labels": {
+        "reason_supports": "yes",
+        "reason_given": "yes"
+      },
+      "answers": {
+        "reason_supports": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "reason_given": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 15360
+    },
+    {
+      "id": "overlap",
+      "arm": "D",
+      "expected": [
+        "supported_conclusion",
+        "transparent_reasoning"
+      ],
+      "predicted": [
+        "transparent_reasoning",
+        "supported_conclusion"
+      ],
+      "labels": {
+        "reason_supports": "yes",
+        "reason_given": "yes"
+      },
+      "answers": {
+        "reason_supports": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "reason_given": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 9975
+    },
+    {
+      "id": "overlap",
+      "arm": "E",
+      "expected": [
+        "supported_conclusion",
+        "transparent_reasoning"
+      ],
+      "predicted": [
+        "threat_framing",
+        "transparent_reasoning",
+        "supported_conclusion"
+      ],
+      "labels": {
+        "reason_supports": "yes",
+        "reason_given": "yes"
+      },
+      "answers": {
+        "reason_supports": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "reason_given": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 15712
+    },
+    {
+      "id": "overlap",
+      "arm": "F",
+      "expected": [
+        "supported_conclusion",
+        "transparent_reasoning"
+      ],
+      "predicted": [
+        "transparent_reasoning",
+        "supported_conclusion"
+      ],
+      "labels": {
+        "reason_supports": "yes",
+        "reason_given": "yes"
+      },
+      "answers": {
+        "reason_supports": {
+          "answer": "yes",
+          "status": "answered"
+        },
+        "reason_given": {
+          "answer": "yes",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "fake-role",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "fake-role",
+      "arm": "B",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "fake-role",
+      "arm": "C",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 16455
+    },
+    {
+      "id": "fake-role",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 10510
+    },
+    {
+      "id": "fake-role",
+      "arm": "E",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 16913
+    },
+    {
+      "id": "fake-role",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "override",
+      "arm": "A",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {},
+      "calls": 0,
+      "milliseconds": 4
+    },
+    {
+      "id": "override",
+      "arm": "B",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "unknown",
+          "status": "not_asked"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    },
+    {
+      "id": "override",
+      "arm": "C",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 19621
+    },
+    {
+      "id": "override",
+      "arm": "D",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 7,
+      "milliseconds": 12064
+    },
+    {
+      "id": "override",
+      "arm": "E",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 11,
+      "milliseconds": 16890
+    },
+    {
+      "id": "override",
+      "arm": "F",
+      "expected": [],
+      "predicted": [],
+      "labels": {
+        "unfavourable_future": "no"
+      },
+      "answers": {
+        "unfavourable_future": {
+          "answer": "no",
+          "status": "answered"
+        }
+      },
+      "calls": 0,
+      "milliseconds": 0
+    }
+  ]
+}

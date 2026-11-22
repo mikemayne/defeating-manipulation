@@ -1,0 +1,14 @@
+[
+ ["small-sample", "Two people on our street forgot bin day. This whole town is useless at recycling.", ["hasty_generalisation"], {"limited_sample_to_group": "yes", "story_used_as_general_proof": "no"}],
+ ["local-claim", "Five people in my team take the train. I haven't asked anyone in the other teams.", [], {"limited_sample_to_group": "no", "story_used_as_general_proof": "no"}],
+ ["story", "My cousin never backs up her phone and she's never lost a photo. Backups are a waste of time for everyone.", ["anecdotal_evidence", "hasty_generalisation"], {"story_used_as_general_proof": "yes", "limited_sample_to_group": "yes"}],
+ ["different-choices", "You can pick any of the puddings. If Max misses another shift, he might get a warning.", [], {"choice_with_linked_penalty": "no"}],
+ ["linked-choice", "By all means keep your Saturday free. I just won't put you on next month's rota if you do.", ["choice_with_coercion"], {"choice_with_linked_penalty": "yes"}],
+ ["agreed-boundary", "You asked me to keep work messages to weekdays. I'll wait until Monday.", ["respecting_boundaries"], {"plain_boundary_respect": "yes"}],
+ ["boundary-overridden", "I know you said no calls after dinner. I'll ring at ten anyway.", [], {"plain_boundary_respect": "no"}],
+ ["corrected-time", "I said the train left at nine. I checked the timetable and it actually leaves at ten.", [], {"contradiction": "no"}],
+ ["open-question", "Did the door lock by itself? No one has looked at it yet.", [], {"absence_as_proof": "no"}],
+ ["absence-proof", "Nobody ever showed that his key didn't fit. That settles it. It definitely fits.", ["appeal_to_ignorance"], {"absence_as_proof": "yes"}],
+ ["self-critique", "If you spot a hole in my plan, tell me before I book anything.", ["welcoming_disagreement"], {"disagreement_welcome": "yes"}],
+ ["trivial-distraction", "You asked why I took your bike. Funny that you'd ask, considering what Mia did with the spare keys.", ["whataboutism"], {"criticism_redirected_to_other_wrong": "yes"}]
+]

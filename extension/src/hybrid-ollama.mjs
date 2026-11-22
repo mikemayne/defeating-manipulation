@@ -38,8 +38,11 @@ export function createOllamaClassifier() {
    await reader.cancel();
   }
   const output = JSON.parse(body + decoder.decode());
-  if (output.done_reason === "length") return null;
+  if (output.done_reason === "length") {
+   const error = Error("Local inference reached its output limit");
+   error.name = "OutputLimitError";
+   throw error;
+  }
   return output.message?.content;
  };
 }
-

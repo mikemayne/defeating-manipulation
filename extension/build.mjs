@@ -8,9 +8,7 @@ let entry;
 try {
  entry = require.resolve("onnxruntime-web");
 } catch {
- entry = require.resolve("onnxruntime-web", {
-  paths: [resolve("node_modules/@huggingface/transformers")]
- });
+ entry = createRequire(require.resolve("@huggingface/transformers")).resolve("onnxruntime-web");
 }
 const dist = dirname(entry);
 const destination = resolve("ort");

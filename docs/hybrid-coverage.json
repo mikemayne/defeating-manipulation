@@ -11,8 +11,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "clause",
+      "pendingRequired": [
+        "evaluative wording",
+        "evaluation exceeds literal description"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -40,7 +45,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -68,7 +77,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": "Requires evidence of another option in the passage.",
       "existing": {
         "extensionCopy": true,
@@ -87,8 +98,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "opposing claim and alleged reformulation",
+        "material change followed by rebuttal"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -107,8 +123,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "frightening possibility",
+        "fear used to support a decision or claim"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -136,7 +157,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -156,7 +181,9 @@
       "incompatible": [],
       "questions": [],
       "context": "information unavailable from text",
+      "pendingRequired": [],
       "status": "not_inferable",
+      "testedBy": [],
       "gap": "Relevant omitted evidence",
       "existing": {
         "extensionCopy": true,
@@ -176,7 +203,9 @@
       "incompatible": [],
       "questions": [],
       "context": "information unavailable from text",
+      "pendingRequired": [],
       "status": "not_inferable",
+      "testedBy": [],
       "gap": "Original surrounding quotation",
       "existing": {
         "extensionCopy": true,
@@ -204,7 +233,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "frozen synthetic check"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -223,8 +256,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "authority offered as evidence",
+        "lack of relevant expertise or established authority"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -243,8 +281,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "hidden coordination asserted",
+        "assertion grounded in insinuation or difficult-to-test claims"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -272,7 +315,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "deterministic unit test"
+      ],
       "gap": "Covers exact repetition within a paragraph. The reader's response is unknown.",
       "existing": {
         "extensionCopy": true,
@@ -291,8 +338,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "earlier cue",
+        "later material related to the association"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -311,8 +363,12 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "clause",
+      "pendingRequired": [
+        "assumption treated as already accepted"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -332,7 +388,9 @@
       "incompatible": [],
       "questions": [],
       "context": "information unavailable from text",
+      "pendingRequired": [],
       "status": "not_inferable",
+      "testedBy": [],
       "gap": "Relative strength of the available evidence",
       "existing": {
         "extensionCopy": true,
@@ -360,7 +418,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "frozen synthetic check"
+      ],
       "gap": "Covers an explicitly supplied individual story.",
       "existing": {
         "extensionCopy": true,
@@ -388,7 +450,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -407,8 +471,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "complex problem attributed broadly to a target",
+        "available other causes omitted or simplified"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -427,8 +496,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "broad and narrower versions of a claim",
+        "shift in response to criticism"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -447,8 +521,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "volume of claims",
+        "limited opportunity for meaningful response"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -467,8 +546,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "attributed or uncertain allegation",
+        "later restatement as fact without new evidence"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -487,8 +571,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "proximate details",
+        "implied connection unsupported by the details"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -507,8 +596,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "original conduct or complaint",
+        "focus shifted to the complainant's response"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -527,8 +621,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "report or complaint",
+        "source credibility attacked because of the act of reporting"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -547,8 +646,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "asserted widespread agreement",
+        "weak or unrepresentative support"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -576,7 +680,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -595,8 +701,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "identifiable missing actor, action, evidence or certainty",
+        "wording obscures that information"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -615,8 +726,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "available original claim",
+        "minor wording dispute used in place of a response"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -635,8 +751,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "initial criterion met",
+        "replacement criterion introduced without justification"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -655,8 +776,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "comparable cases",
+        "inconsistent criteria or evidentiary thresholds"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -675,8 +801,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "prior attack on a source",
+        "later claims discounted on that basis"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -695,8 +826,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "dissent or criticism",
+        "criminal label unsupported by the conduct described"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -715,8 +851,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "physical trait or manner",
+        "ridicule replaces engagement with relevant conduct or claims"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -735,8 +876,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "revulsion-related description",
+        "description used to influence a judgement"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -783,7 +929,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -802,8 +952,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "issue declared settled",
+        "acknowledged or otherwise visible unresolved evidence"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -822,8 +977,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "article",
+      "pendingRequired": [
+        "selected sequence, roles or causal links",
+        "comparison context for the inferred shift"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -843,7 +1003,9 @@
       "incompatible": [],
       "questions": [],
       "context": "information unavailable from text",
+      "pendingRequired": [],
       "status": "not_inferable",
+      "testedBy": [],
       "gap": "Original and subsequent context",
       "existing": {
         "extensionCopy": true,
@@ -862,8 +1024,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "identifiable target",
+        "invitation to ridicule or condemn in public"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -882,8 +1049,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "restriction or coercive demand",
+        "justification as care for the affected person"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -902,8 +1074,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "encouragement or endorsement of violence",
+        "target identifiable by person, group or category"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -922,8 +1099,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "representation of magnitude or importance",
+        "comparison evidence supporting a material discrepancy"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -951,7 +1133,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -970,8 +1154,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "absent audience's reaction asserted or predicted",
+        "reaction used as pressure or implied opposition"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -999,7 +1188,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "frozen synthetic check"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -1027,7 +1220,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -1055,7 +1250,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": "Evidence of an appeal alone cannot establish whether reliance on the authority is justified.",
       "existing": {
         "extensionCopy": true,
@@ -1083,7 +1280,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -1102,8 +1301,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "question under discussion",
+        "irrelevant issue used to divert attention"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -1122,8 +1326,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "emotion invoked",
+        "emotion offered as a reason to accept a claim"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -1151,7 +1360,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -1179,7 +1390,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "frozen synthetic check"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -1198,8 +1413,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "assertion of equivalence",
+        "material difference relevant to the comparison"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -1219,7 +1439,9 @@
       "incompatible": [],
       "questions": [],
       "context": "information unavailable from text",
+      "pendingRequired": [],
       "status": "not_inferable",
+      "testedBy": [],
       "gap": "Relevant omitted evidence",
       "existing": {
         "extensionCopy": true,
@@ -1238,8 +1460,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "personal preference",
+        "unsupported obligation and condemnation of noncompliance"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -1267,7 +1494,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": false,
@@ -1287,7 +1516,9 @@
       "incompatible": [],
       "questions": [],
       "context": "information unavailable from text",
+      "pendingRequired": [],
       "status": "not_inferable",
+      "testedBy": [],
       "gap": "Intent cannot be established from a spelling observation",
       "existing": {
         "extensionCopy": true,
@@ -1306,8 +1537,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "moral principle",
+        "principle used to delegitimise questioning rather than address a claim"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": false,
@@ -1326,8 +1562,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "defensible principle coupled to disproportionate pressure",
+        "actual reaction or intent requires other evidence"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": false,
@@ -1355,7 +1596,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": false,
@@ -1374,8 +1617,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "outcome presented as inevitable",
+        "repeated naming or existence offered as its own justification"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": true,
@@ -1403,7 +1651,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": true,
@@ -1431,7 +1681,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": "Covers freely offered choices.",
       "existing": {
         "extensionCopy": null,
@@ -1459,7 +1711,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "frozen synthetic check"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": null,
@@ -1487,7 +1743,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": null,
@@ -1515,7 +1773,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": null,
@@ -1543,7 +1805,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "frozen synthetic check"
+      ],
       "gap": "Covers explicit acceptance of a stated boundary.",
       "existing": {
         "extensionCopy": null,
@@ -1562,8 +1828,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "stated impact",
+        "response matches the described scale"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": null,
@@ -1591,7 +1862,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot"
+      ],
       "gap": "Covers invitations to verify evidence.",
       "existing": {
         "extensionCopy": null,
@@ -1619,7 +1894,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": null,
@@ -1654,7 +1931,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot"
+      ],
       "gap": "Covers a reason that supports a stated conclusion.",
       "existing": {
         "extensionCopy": null,
@@ -1673,8 +1954,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "meaningful alternatives",
+        "material trade-offs presented"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": null,
@@ -1702,7 +1988,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": null,
       "existing": {
         "extensionCopy": null,
@@ -1730,7 +2018,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": "Covers an explicit option to disengage.",
       "existing": {
         "extensionCopy": null,
@@ -1758,7 +2048,12 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot",
+        "frozen synthetic check"
+      ],
       "gap": "Checks relationships within a paragraph.",
       "existing": {
         "extensionCopy": null,
@@ -1786,7 +2081,9 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [],
       "gap": "Covers an offered but insufficient reason.",
       "existing": {
         "extensionCopy": null,
@@ -1814,7 +2111,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "synthetic pilot"
+      ],
       "gap": null,
       "existing": {
         "extensionCopy": null,
@@ -1855,7 +2156,11 @@
         }
       ],
       "context": "paragraph",
+      "pendingRequired": [],
       "status": "implemented",
+      "testedBy": [
+        "frozen synthetic check"
+      ],
       "gap": "Covers a penalty tied to declining the stated choice.",
       "existing": {
         "extensionCopy": null,
@@ -1884,8 +2189,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "permission to disagree",
+        "penalty tied to the same person's disagreement"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": null,
@@ -1913,8 +2223,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "acknowledgement of feelings",
+        "connected demand framed as loyalty or care"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": null,
@@ -1941,8 +2256,13 @@
       "supporting": [],
       "incompatible": [],
       "questions": [],
-      "context": null,
+      "context": "paragraph",
+      "pendingRequired": [
+        "invitation to judge independently",
+        "same person's decision restricted to the speaker's view"
+      ],
       "status": "inventoried",
+      "testedBy": [],
       "gap": "Predicate and context mapping pending.",
       "existing": {
         "extensionCopy": null,

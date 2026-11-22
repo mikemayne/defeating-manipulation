@@ -34,6 +34,10 @@ for (const invalid of [
 }
 const failed = await probe("Rain is expected.", { classify: async () => { throw Error("offline"); } });
 assert.equal(failed.scopes[0].answers.unfavourable_future.status, "runtime_failure");
+for (const [name, expected] of [["TimeoutError", "timeout"], ["OutputLimitError", "output_truncated"]]) {
+ const result = await probe("Rain is expected.", { classify: async () => { throw Object.assign(Error(name), { name }); } });
+ assert.equal(result.scopes[0].answers.unfavourable_future.status, expected);
+}
 assert.equal((await probe("A".repeat(100000), { classify })).truncated, true);
 assert.equal((await probe("A".repeat(100000), { classify })).calls, 0);
 assert.equal((await probe("One.\n\nTwo.")).scopes.length, 2);
@@ -50,4 +54,13 @@ const inapplicable = await probe("Cloudy.", { classify: async () =>
  '{"question_id":"unfavourable_future","answer":"not_applicable","evidence":[]}' });
 assert.equal(inapplicable.scopes[0].answers.unfavourable_future.answer, "not_applicable");
 assert.equal(inapplicable.scopes[0].patterns.find(row => row.id === "threat_framing").state, "unresolved");
+const shared = await analyzeHybrid("It is cold, so bring a coat.", {
+ questionIds: new Set(["reason_supports"]), classify: async messages => {
+  assert.equal(JSON.parse(messages[1].content).question_id, "reason_supports");
+  return '{"question_id":"reason_supports","answer":"yes","evidence":["It is cold, so bring a coat."]}';
+ }
+});
+assert.equal(shared.calls, 1);
+assert.deepEqual(shared.scopes[0].patterns.filter(row => row.state === "supported").map(row => row.id),
+ ["transparent_reasoning", "supported_conclusion"]);
 console.log("Hybrid routing, original offsets, untrusted input, strict answers and limits passed.");
