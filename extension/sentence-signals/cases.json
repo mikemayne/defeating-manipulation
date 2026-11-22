@@ -1,0 +1,39 @@
+[
+  {
+    "sentence": "You have no idea what’s coming."
+  },
+  {
+    "sentence": "Tomorrow you’ll have a lovely cake."
+  },
+  {
+    "sentence": "Tomorrow I will hit you."
+  },
+  {
+    "sentence": "You have no idea who you’re fucking with."
+  },
+  {
+    "sentence": "They voted to close the park."
+  },
+  {
+    "context": "The councillors met on Friday.",
+    "sentence": "They voted to close the park.",
+    "takeaway": "The councillors voted to close the park."
+  },
+  {
+    "context": "The councillors and campaigners met on Friday.",
+    "sentence": "They objected to the plans."
+  },
+  {
+    "sentence": "You won’t believe what happened when the council opened the park!",
+    "role": "headline"
+  },
+  {
+    "sentence": "Council opens new park on Friday",
+    "takeaway": "The park is already open to the public.",
+    "role": "headline"
+  },
+  {
+    "sentence": "The council said the library is open.",
+    "takeaway": "The library is closed."
+  }
+]
