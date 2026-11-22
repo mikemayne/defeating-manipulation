@@ -42,6 +42,7 @@ A planned browser extension will perform analysis locally in the reader's browse
 - `techniques/` — generated explanations for individual techniques.
 - `references.json` — bibliography and source metadata.
 - `docs/` — design and implementation notes.
+- [Potential analyser signals](docs/potential-signals.md) — research ideas and pilot results.
 - `extension/` — browser-extension planning and prototype.
 - `analysis-schema.json` — structured format for analysis findings.
 - `evaluation/` — test examples and evaluation guidance.
