@@ -37,22 +37,24 @@ test('pronoun candidates depend on the supplied context', () => {
 });
 
 test('British dictionary correction preserves the original wording and span', async () => {
-  const sentence = 'The Muslamic group met.';
+  const sentence = 'The Muslamic law was debated.';
   const spellchecker = nspell(britishEnglish);
   const calls = [];
   const analyser = createAnalyser({ ...fakeModels, emotion: async text => { calls.push(text); return {}; } },
     { spellchecker });
   const result = await analyser({ sentence });
   assert.equal(result.sentence, sentence);
-  assert.deepEqual(calls, ['The Islamic group met.']);
+  assert.deepEqual(calls, ['The Islamic law was debated.']);
   const [flag] = result.signals.spelling;
   assert.equal(sentence.slice(flag.start, flag.end), 'Muslamic');
   assert.equal(flag.attentionSignal, true);
+  assert.equal(parseSentence('The Muslamic group met.', '', spellchecker).analysisText,
+    'The Muslamic group met.');
   assert.equal(parseSentence('The committee recieved a letter.', '', spellchecker)
     .spelling.some(flag => flag.original === 'recieved'), true);
 });
 
-test('all six signals run on one sentence and NLI can compare a contextual takeaway', async () => {
+test('all model and linguistic signals run on one sentence and NLI can compare a contextual takeaway', async () => {
   const calls = [];
   const engine = {
     embed: async texts => {
@@ -126,5 +128,6 @@ test('all five models and JavaScript linguistic checks score the fixture set wit
       inference: signals.inference.scores,
     })), null, 2));
   });
+
 
 
