@@ -124,7 +124,7 @@ class Classifier(nn.Module):
     def forward(self, input_ids, attention_mask, token_type_ids):
         return self.head(self.features(input_ids, attention_mask, token_type_ids))
 
-def fit(directory, rows, labels):
+def fit(directory, rows, labels, pairs=None):
     tokenizer = AutoTokenizer.from_pretrained(directory, local_files_only=True)
     encoder = AutoModel.from_pretrained(directory, local_files_only=True,
                                         attn_implementation="eager")
@@ -136,6 +136,7 @@ def fit(directory, rows, labels):
     inputs = {name: tensor.cuda() for name, tensor in tokens(tokenizer, rows).items()}
     truth = torch.from_numpy(targets(rows, labels)).cuda()
     positive_weight = ((len(rows) - truth.sum(0)) / truth.sum(0)).sqrt().clamp(max=6)
+    pair_tensor = torch.as_tensor(pairs, dtype=torch.long, device="cuda") if pairs else None
     optimizer = torch.optim.AdamW([
         {"params": model.head.parameters(), "lr": 0.003},
         {"params": trainable.parameters(), "lr": 0.0001},
@@ -146,6 +147,14 @@ def fit(directory, rows, labels):
             predictions = model(**{name: tensor[batch] for name, tensor in inputs.items()})
             loss = nn.functional.binary_cross_entropy_with_logits(
                 predictions, truth[batch], pos_weight=positive_weight)
+            if pair_tensor is not None:
+                selected = pair_tensor[torch.randint(len(pair_tensor), (8,), device="cuda")]
+                examples = selected[:, :2].flatten()
+                pair_logits = model(**{name: tensor[examples] for name, tensor in inputs.items()})
+                pair_logits = pair_logits.reshape(-1, 2, len(labels))
+                positive, negative = pair_logits.gather(
+                    2, selected[:, 2, None, None].expand(-1, 2, 1)).squeeze(2).unbind(1)
+                loss = loss + 0.35 * nn.functional.softplus(1.0 - (positive - negative)).mean()
             loss.backward()
             optimizer.step()
     torch.cuda.synchronize()

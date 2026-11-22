@@ -138,3 +138,28 @@ Use the optional `reported_emotion` field only for a self-reported reaction. The
 .\.venv\Scripts\python.exe classifier/pressure_delivery_bench.py --emotion-control
 .\.venv\Scripts\python.exe classifier/pressure_delivery_bench.py --emotion
 ```
+
+## Targeted L6 experiment for fear pressure and judgement doubt
+
+This experiment keeps the L6 browser encoder and inference path fixed. The collector excludes every thread in the original pressure benchmark, sets train, calibration and test partitions by thread, and rates short authentic excerpts with Qwen. The trainer gets a second Qwen rating for selected large disagreements between the original browser detector and Qwen on the fresh training split. It keeps disagreements in the review log and excludes those rows from both training variants. Historical labels and authored matched pairs supplement the accepted fresh training rows.
+
+The two variants share all labelled examples. The first uses the usual classification loss. The second adds a matched-pair ranking loss that rewards placing a positive above a similar negative for the same pressure label. The Edge benchmark excludes near-duplicate test excerpts and uses the same test rows for the original and both retrained models. It reports deployed thresholds, thresholds chosen on calibration at a 50% precision goal, and a holdout PR-curve diagnostic at 50% precision. The latter estimates ranking performance and is unsuitable for choosing a deployment threshold on this holdout.
+
+```powershell
+.\.venv\Scripts\python.exe classifier/pressure_target_collect.py
+.\.venv\Scripts\python.exe classifier/pressure_target_train.py
+.\.venv\Scripts\python.exe classifier/pressure_target_bench.py
+.\.venv\Scripts\python.exe classifier/serve.py --web-dir classifier/artifacts/pressure/targeted/web
+```
+
+Labels, Reddit excerpts and review evidence are stored only in the ignored local artifacts folder. Reported performance measures agreement with Qwen and the sampling intentionally enriches for hard cases.
+
+The experiment retained 1,073 fresh Reddit excerpts, with 597 for training, 178 for calibration and 298 for testing. The second Qwen rating led to the exclusion of 18 of the 60 difficult training excerpts it reviewed. Both models trained on the same 959 examples, and the matched-pair variant used 84 pairs. No test excerpts were removed by the near-duplicate check.
+
+| L6 variant | F1 at deployed thresholds | Holdout recall at at least 50% precision | Fear average precision | Judgement-doubt average precision | Warm p95 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Original | 36.73% | 34.69% | 32.88% | 40.02% | 67 ms |
+| Targeted, classification loss only | 27.16% | 16.33% | 40.00% | 22.66% | 68 ms |
+| Targeted, with matched-pair loss | 32.97% | 10.20% | 36.87% | 28.33% | 65 ms |
+
+The recall-at-precision column is a retrospective ranking diagnostic. Neither replacement improved on the original overall. The classification-only variant improved fear ranking but lost ground on judgement doubt. The full local report is `classifier/artifacts/pressure/targeted/browser.json`.
