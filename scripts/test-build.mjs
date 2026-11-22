@@ -17,27 +17,26 @@ assert.ok(homepage.includes('positive-section') && homepage.includes('background
 assert.ok(homepage.includes('id="positive-search"') && homepage.includes('id="positive-catalogue"'), 'Positive library is independently searchable');
 assert.ok(positive.patterns.length >= 10, 'Positive pattern library has an initial set of patterns');
 assert.ok(homepage.includes('id="search"') && homepage.includes('id="catalogue"'), 'Homepage provides searchable catalogue');
-assert.ok(homepage.includes('class="inconsistency-section"') &&
- homepage.includes('background:#991b1b'), 'Inconsistency section has a red background');
+assert.ok(homepage.includes('Supported reasoning') && !homepage.includes('class="inconsistency-section"'),
+ 'Supported reasoning has no retired red section');
 assert.ok(homepage.includes('id="inconsistency-search"') &&
  homepage.includes('id="inconsistency-catalogue"'), 'Inconsistency library is independently searchable');
 assert.ok(homepage.includes("mountLibrary({url:'inconsistency-patterns.json'"),
  'The red library uses the shared data-driven catalogue renderer');
-assert.ok(inconsistency.patterns.length >= 1, 'Inconsistency library has patterns');
+assert.deepEqual(inconsistency.patterns.map(item => item.id), ['supported_conclusion']);
+for (const id of ['contradictory_claims', 'unsupported_conclusion']) {
+ assert.ok(!fs.existsSync('_site/inconsistency-patterns/' + id + '.html'));
+ assert.ok(!read('sitemap.xml').includes(id));
+}
 for (const item of inconsistency.patterns) {
  const page = 'inconsistency-patterns/'+item.id+'.html';
  assert.ok(fs.existsSync('_site/'+page), 'Generated red page exists for '+item.id);
- assert.ok(read(page).includes('background:#991b1b'), 'Individual red pattern page uses a red background: '+item.id);
+ assert.ok(!read(page).includes('background:#991b1b'), 'Supported reasoning page has no red background');
  assert.ok(read(page).includes('<h2>Recognising the pattern</h2>'), 'Red pattern has observable features: '+item.id);
  assert.ok(read('sitemap.xml').includes(page), 'Sitemap includes red pattern: '+item.id);
 }
 assert.ok(read('sitemap.xml').includes('inconsistency-patterns.json'),
  'Sitemap includes the red catalogue JSON');
-assert.ok(inconsistency.patterns.some(item =>
- item.id === 'unsupported_conclusion' &&
- /insufficient to support (?:this|the) conclusion/i.test(
-  [item.definition,...item.observable_features].join(' '))),
- 'Unsupported-conclusion pattern explains the limits of the evidence supplied');
 assert.ok(inconsistency.patterns.some(item => item.id === 'supported_conclusion'),
  'A supported conclusion is represented without being called a contradiction');
 
@@ -371,11 +370,11 @@ assert.ok(combined.some(m => m.kind === 'inconsistency'), 'Red contradiction sur
 assert.ok(combined.every(m => m.start >= 0 && m.end <= contradictory.length),
  'Merged two-pass highlights remain in bounds');
 const extensionWorker = fs.readFileSync('extension/src/matcher-worker.js', 'utf8');
-assert.ok(extensionWorker.includes('findInconsistencies(analysedText, memoScore)') &&
+assert.ok(!extensionWorker.includes('findInconsistencies(') &&
  extensionWorker.includes('remapFindings(preprocessing,'),
- 'Firefox worker runs the second local pass on a clean copy and preserves original offsets');
-assert.ok(selectionScript.includes('const BLUE =') && selectionScript.includes('RED = "#dc2626"'),
- 'Firefox highlighter retains the existing colours and adds red');
+ 'Firefox preserves original offsets with the red pass retired');
+assert.ok(selectionScript.includes('const BLUE =') && !selectionScript.includes('RED = "#dc2626"'),
+ 'Firefox retains the non-red pattern colours');
 
  
 // The local inconsistency classifier has its own labelled fixture set.
@@ -422,13 +421,11 @@ const benchmarkUI = fs.readFileSync('extension/src/benchmark-ui.mjs', 'utf8');
 const benchmarkWorker = fs.readFileSync('extension/src/benchmark-worker.js', 'utf8');
 const localServer = fs.readFileSync('scripts/serve-benchmark.mjs', 'utf8');
 const nliSource = fs.readFileSync('extension/src/nli-inference.mjs', 'utf8');
-assert.ok(benchmarkPage.includes('value="consistency"'),
- 'The lab exposes a third independent inconsistency mode');
-assert.ok(benchmarkUI.includes('inconsistency-examples.json') &&
- benchmarkWorker.includes('findInconsistencies(item.text, nliScorer)'),
- 'The browser lab uses the same inference path as the extension');
-assert.ok(localServer.includes('/evaluation/inconsistency-examples.json'),
- 'The local server allows only the explicit inconsistency fixture');
+assert.ok(!benchmarkPage.includes('value="consistency"') &&
+ !benchmarkUI.includes('inconsistency-examples.json') &&
+ !benchmarkWorker.includes('findInconsistencies(') &&
+ !localServer.includes('/evaluation/inconsistency-examples.json'),
+ 'The browser lab does not expose or run retired inconsistency findings');
 assert.ok(nliSource.includes('text_pair: hypothesis') &&
  extensionWorker.includes('createNliScorer()'),
  'Firefox and lab use correctly tokenised NLI text pairs from one scoring module');
@@ -461,7 +458,7 @@ assert.equal(consistency.attributedSource('The manager later said the station cl
 assert.equal(consistency.attributedSource('The manager said the station is open.'),
  'manager', 'Stable attribution of reporting source');
 assert.ok(!catalogue.techniques.some(item => item.id === 'argument_inconsistency'),
- 'Inconsistency patterns belong to the dedicated red library, not the blue one');
+ 'Inconsistency patterns belong to the legacy research fixtures');
 console.log('Attribution-aware contradiction and insufficient-evidence catalogue checks passed.');
 
 
@@ -620,10 +617,8 @@ assert.deepEqual(Object.fromEntries(
  'Argument examples cover supported, unsupported, contradicted and absent inferences');
 assert.deepEqual(argumentEngine.ARGUMENT_LABELS, [
  'contradictory_claims','unsupported_conclusion','supported_conclusion'
-], 'Three argument labels share the public red pattern library');
-for (const label of argumentEngine.ARGUMENT_LABELS)
- assert.ok(inconsistency.patterns.some(p => p.id === label),
-  'The public red library describes each argument outcome: '+label);
+], 'Legacy research retains three outcome labels');
+assert.ok(inconsistency.patterns.some(p => p.id === 'supported_conclusion'));
 const mockArgumentScores = {
  supported_conclusion: { contradiction: 0.01, neutral: 0.01, entailment: 0.98 },
  unsupported_conclusion: { contradiction: 0.01, neutral: 0.98, entailment: 0.01 },
@@ -685,26 +680,17 @@ const headingsAndNoInference = [
 for (const text of headingsAndNoInference)
  assert.deepEqual(argumentEngine.extractArguments(text), [],
   'Reports, missing premises, and advice do not become factual conclusions');
-assert.ok(benchmarkPage.includes('value="argument_paragraph"') &&
- !benchmarkPage.includes('value="argument_support"') &&
- !benchmarkPage.includes('value="argument_structure"') &&
- benchmarkWorker.includes('analyseArguments(item.text, nliScorer,') &&
- benchmarkWorker.includes('validateArgumentParagraphCases(rawSeeds)') &&
- benchmarkUI.includes('expected_argument'),
- 'Single paragraph argument lab accepts structure metadata plus optional NLI labels');
-assert.ok(extensionWorker.includes('analyseArguments(analysedText, memoScore') &&
- extensionWorker.includes('argumentFindings(assessed)') &&
- extensionWorker.includes('...argumentIssues'),
- 'Firefox worker performs argument analysis with the existing NLI scorer');
+assert.ok(!benchmarkPage.includes('value="argument_paragraph"') &&
+ !benchmarkPage.includes('value="consistency"'), 'Retired research modes are hidden');
+assert.ok(!extensionWorker.includes('findInconsistencies') &&
+ !extensionWorker.includes('argumentFindings'), 'Firefox does not run retired finding passes');
 const backgroundSource = fs.readFileSync('extension/background.js', 'utf8');
 assert.ok(backgroundSource.includes('DM_PROGRESS') &&
  selectionScript.includes('dm-pattern-status') &&
  !selectionScript.includes('cursor: wait !important'),
  'Slower red pass uses a nonblocking progress badge instead of forcing a wait cursor');
-assert.ok(selectionScript.includes('match.kind === "argument_support"') &&
- selectionScript.includes('Premises provided:') &&
- selectionScript.includes('"inconsistency-patterns"'),
- 'New red findings explain their premises and link to the red catalogue');
+assert.ok(!selectionScript.includes('match.kind === "argument_support"') &&
+ !selectionScript.includes('match.kind === "inconsistency"'), 'Firefox does not render retired findings');
 console.log('Argument support: 480 parser/verdict variants, NLI lab and nonblocking Firefox UI validated.');
 
 
@@ -803,10 +789,7 @@ assert.equal(argumentEngine.combineArgumentEvidence([
  {kind:'combined',text:'x and y',forward:evidenceNli.ambiguous},
  {kind:'premise_1',text:'x',forward:evidenceNli.ambiguous}
 ]),null,'Low-confidence evidence does not fabricate an unsupported conclusion');
-assert.ok(benchmarkWorker.includes('onDiagnostic: diagnostic => argumentDiagnostics.push(diagnostic)') &&
- benchmarkUI.includes('NLI evidence diagnostics') &&
- benchmarkUI.includes('Reverse C'),
- 'Every failed real-model argument exposes all combined and individual NLI scores');
+assert.ok(!benchmarkWorker.includes('analyseArguments(item.text'), 'Retired reasoning findings do not run in the lab');
 console.log('Argument evidence fusion: combined vs individual, contradiction priority, exact repetition and diagnostics passed.');
 
 
@@ -962,7 +945,7 @@ assert.ok(realPage.includes('source-url') && realPage.includes('rationale') &&
  realPage.includes('value="challenge"'),
  'Real-world annotation page preserves sources, manual labels and uncertain cases');
 assert.ok(realClient.includes('localStorage') &&
- realClient.includes('toRealBenchmark(annotations)') &&
+ realClient.includes('toRealBenchmark(activeAnnotations())') &&
  realClient.includes('real-argument-annotations-backup.json') &&
  realPage.includes('id="backup"') &&
  realClient.includes('source-list') &&
@@ -976,11 +959,7 @@ assert.ok(localServer.includes('/extension/real-data.html') &&
  localServer.includes('/evaluation/real-corpus.mjs') &&
  localServer.includes('/evaluation/real-source-shortlist.json'),
  'Local server exposes only explicit real-corpus assets');
-assert.ok(benchmarkWorker.includes('item.track === "natural"') &&
- benchmarkWorker.includes('item.track === "challenge"') &&
- benchmarkWorker.includes('realTracks: Object.entries(data.realTracks)') &&
- benchmarkWorker.includes('sourceUrl: source === "uploaded"'),
- 'Real data metrics separate natural vs challenge and preserve source provenance');
+assert.ok(!benchmarkWorker.includes('argumentMode'), 'Retired analysis has no dispatch path');
 assert.ok(benchmarkUI.includes('data.realTracks') &&
  benchmarkUI.includes('Human rationale (assigned before testing):'),
  'Real result view displays separate performance and human-grounded failure details');
@@ -1064,9 +1043,6 @@ assert.equal(inlineDiagnostics[0]?.inline,true,
  'In-sentence findings identify their parsing mode in failure diagnostics');
 assert.match(inlineDiagnostics[0]?.inferenceMarker||'', /which means/,
  'Failed real text includes the original connective for diagnosis');
-assert.ok(benchmarkWorker.includes('inferenceMarker: assessment.conclusion.marker') &&
- benchmarkUI.includes('Marker: '),
- 'The test lab explains where each real-world conclusion was extracted');
 console.log('Authentic in-sentence arguments: extraction, offsets, no-argument controls and NLI separation passed.');
 
 
@@ -1081,15 +1057,11 @@ assert.ok(!benchmarkPage.includes('value="argument_reasoning"') &&
  'Unsupported browser instruction-model path is completely disabled');
 assert.ok(!fs.existsSync('extension/src/argument-reasoner.mjs'),
  'Retired Qwen model module is not shipped to the extension');
-assert.ok(benchmarkPage.includes('value="argument_paragraph"') &&
- benchmarkWorker.includes('analyseArguments(item.text, nliScorer') &&
- benchmarkWorker.includes('initialiseConsistencyModel()') &&
- benchmarkWorker.includes('Object.hasOwn(item, "expected")'),
- 'Fast local NLI argument analyser is preserved for explicitly labelled rows');
-assert.ok(benchmarkPage.includes('value="consistency"') &&
+assert.ok(!benchmarkPage.includes('value="argument_paragraph"') &&
+ !benchmarkPage.includes('value="consistency"') &&
  benchmarkPage.includes('value="positive_ai"') &&
  benchmarkPage.includes('value="concealed_ai"'),
- 'Other matching and consistency modes remain available');
+ 'Retained matcher modes remain available');
 console.log('Resource-intensive Qwen mode retired; fast NLI and other detectors preserved.');
 
 
@@ -1211,10 +1183,7 @@ for (const item of conservativeScenarios) {
  if (item.expected === null) assert.equal(diagnostics[0]?.status,
   'evidential_support_uncertain','Neutral non-overclaim must explicitly abstain');
 }
-assert.ok(benchmarkWorker.includes('status: item.status || null') &&
- benchmarkUI.includes('insufficient evidence to judge; no underline') &&
- extensionWorker.includes('argumentFindings(assessed)'),
- 'Experimental uncertainty stays in lab diagnostics; Firefox only underlines true findings');
+assert.ok(!extensionWorker.includes('argumentFindings(assessed)'));
 console.log('Conservative evidence assessment: 5 original real NLI traces and 9 contrasts, with explicit no-underline abstention.');
 
 // Standalone clause parser regression tests (no model download).

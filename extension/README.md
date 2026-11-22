@@ -1,3 +1,7 @@
+# Current release scope
+
+The Firefox highlighter and test lab have retired the red contradiction and unsupported-conclusion patterns. The argument experiments and test results below document earlier research.
+
 # Local semantic Firefox highlighter
 
 From this directory run:

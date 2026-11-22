@@ -1,5 +1,7 @@
 # Contrast training results
 
+These results document the configuration before retirement of the red patterns. The current training and benchmark inputs omit the retired questions.
+
 The training pool contains 75 passages. The 60 new passages stay grouped into 20 triples with a yes, no and unknown answer for the same question and scenario. The 15 original training passages make five more triples. Prompt examples and evaluation passages are excluded from training. The 15 development passages select checkpoints by exact labels minus false positives, breaking ties by fewer false positives and then fewer missed positives. Tests are scored after selection. There are 15 historical test passages and 30 new synthetic audit passages, authored separately from the training batch and without independent adjudication.
 
 ## Results

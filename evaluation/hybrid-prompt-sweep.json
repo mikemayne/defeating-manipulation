@@ -20,13 +20,7 @@
     "dev": ["Millions of fans can't all be wrong, so buy a ticket.", "A million people bought tickets. The organiser added a second date.", "A million people bought tickets. Think about that."],
     "test": ["Three quarters of your neighbours backed the plan. That's reason enough for you to vote for it.", "Three quarters of neighbours backed the plan. The council will publish the tally tomorrow.", "Three quarters backed the plan. You can draw your own conclusions."]
   },
-  "contradiction": {
-    "questions": ["Does the passage assert incompatible things about the same subject, time and circumstances, without marking one as a correction or an opposing speaker's view?", "Do two claims in the passage conflict about the same thing at the same time?", "Are two statements asserted together that cannot both be true under the stated conditions?"],
-    "examples": ["The shop was open at noon. The same shop was closed at noon.", "The shop was open at noon and closed by three."],
-    "train": ["The account had no balance at midnight. At exactly midnight the same account held a hundred pounds.", "The account was empty at midnight and we added a hundred pounds at dawn.", "The account was empty when they checked. There was a hundred pounds in it at some point."],
-    "dev": ["Nobody entered the studio during the show. Pat came into that studio midway through the show.", "Nobody entered the studio during the show. Pat came inside after it finished.", "Nobody entered the studio during the show. Pat dropped in around then."],
-    "test": ["The back gate remained locked all Tuesday. At noon on Tuesday the back gate stood open.", "The back gate was locked Tuesday morning. We opened it at five.", "The back gate was locked for most of Tuesday. I saw a gate wide open around lunch."]
-  },
+
   "acknowledged_uncertainty": {
     "questions": ["Does the speaker acknowledge a limit on their own certainty about a claim they are making?", "Does the speaker make a claim and explicitly allow that they personally may be mistaken?", "Is the speaker qualifying their own knowledge or confidence about what they are saying?"],
     "examples": ["I think it's broken, but I might be wrong.", "You might be wrong. I'm certain it's broken."],

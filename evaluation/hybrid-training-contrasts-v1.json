@@ -97,36 +97,7 @@
         "rationale": "Peer conduct is the stated basis only in the first. In the third it might be a reason to reconsider, but the speaker stops short of endorsing it."
       }
     ],
-    "contradiction": [
-      {
-        "id": "bike-lock",
-        "yes": "Nobody moved the red bike at any point this morning. I moved that same red bike at nine this morning.",
-        "no": "Nobody moved the red bike at any point this morning. I moved that same red bike after lunch.",
-        "unknown": "Nobody moved the red bike this morning. I moved a red bike at nine this morning.",
-        "rationale": "The first claims share bike and time. The second changes the time. The third leaves the bike's identity unresolved."
-      },
-      {
-        "id": "ticket-scan",
-        "yes": "The ticket machine accepted no cards between two and three. It accepted my card at half past two.",
-        "no": "The ticket machine accepted no cards between two and three. It accepted my card at half past three.",
-        "unknown": "The ticket machine accepted no cards between two and three. A machine accepted my card at half past two.",
-        "rationale": "The first asserts both outcomes for the same machine within the interval. The second is outside it. The third might be a different machine."
-      },
-      {
-        "id": "dashboard-count",
-        "yes": "The dashboard recorded zero sign-ups on Monday. The same dashboard recorded six Monday sign-ups.",
-        "no": "The dashboard recorded zero sign-ups on Monday. Correction: it recorded six Monday sign-ups.",
-        "unknown": "The dashboard recorded zero sign-ups on Monday. We saw six in another report.",
-        "rationale": "The first asserts incompatible counts together. The second explicitly replaces the earlier claim. The third lacks enough detail about which sign-ups were counted."
-      },
-      {
-        "id": "kitchen-power",
-        "yes": "The kitchen lights were off throughout the meeting. Those same lights came on halfway through it.",
-        "no": "The kitchen lights were off throughout the meeting. Those same lights came on just after it.",
-        "unknown": "The kitchen lights were off throughout the meeting. I remember the lights coming on around that time.",
-        "rationale": "Same lights and overlapping times conflict. After the meeting is compatible. Around that time doesn't settle the overlap."
-      }
-    ],
+
     "acknowledged_uncertainty": [
       {
         "id": "laundry-noise",

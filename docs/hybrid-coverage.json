@@ -2029,69 +2029,6 @@
       }
     },
     {
-      "id": "contradictory_claims",
-      "title": "Contradictory claims",
-      "category": "Inconsistency",
-      "kind": "inconsistency",
-      "source": "inconsistency-patterns.json",
-      "definition": "An argument is internally inconsistent when it asserts incompatible things under the same relevant conditions. Before identifying a contradiction, check that the claims concern the same subject and period and are made by the same source, rather than merely reporting that different people disagree.",
-      "required": [
-        "contradiction"
-      ],
-      "supporting": [],
-      "incompatible": [],
-      "questions": [
-        {
-          "id": "contradiction",
-          "version": 1,
-          "strategy": "model"
-        }
-      ],
-      "context": "paragraph",
-      "pendingRequired": [],
-      "status": "implemented",
-      "testedBy": [
-        "synthetic pilot",
-        "frozen synthetic check"
-      ],
-      "gap": "Checks relationships within a paragraph.",
-      "existing": {
-        "extensionCopy": null,
-        "changedCopyFields": [],
-        "regex": false
-      }
-    },
-    {
-      "id": "unsupported_conclusion",
-      "title": "Insufficient evidence for a conclusion",
-      "category": "Inconsistency",
-      "kind": "inconsistency",
-      "source": "inconsistency-patterns.json",
-      "definition": "A conclusion can be plausible or even true without being sufficiently supported by the evidence provided in the passage. The issue is the gap in the argument, not proof that the conclusion is false. The reader should be able to identify the premises and ask whether they justify the conclusion at the strength claimed.",
-      "required": [
-        "reason_fails"
-      ],
-      "supporting": [],
-      "incompatible": [],
-      "questions": [
-        {
-          "id": "reason_fails",
-          "version": 1,
-          "strategy": "model"
-        }
-      ],
-      "context": "paragraph",
-      "pendingRequired": [],
-      "status": "implemented",
-      "testedBy": [],
-      "gap": "Covers an offered but insufficient reason.",
-      "existing": {
-        "extensionCopy": null,
-        "changedCopyFields": [],
-        "regex": false
-      }
-    },
-    {
       "id": "supported_conclusion",
       "title": "Conclusion supported by the premises",
       "category": "Consistent reasoning",
@@ -2281,14 +2218,6 @@
     }
   ],
   "runtimeOnly": [
-    {
-      "id": "argument_inconsistency",
-      "source": "extension/src/consistency.mjs",
-      "kind": "legacy_runtime_alias",
-      "canonical": "contradictory_claims",
-      "context": "article",
-      "status": "inventoried"
-    },
     {
       "id": "orthographic_attention_hook",
       "source": "extension/src/text-preprocessing.mjs",

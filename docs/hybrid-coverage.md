@@ -78,8 +78,6 @@ The published catalogues supply canonical IDs. The extension copy supplies exist
 | supporting_informed_choice | positive | inventoried | paragraph | meaningful alternatives, material trade-offs presented |  |  | Predicate and context mapping pending. |
 | taking_responsibility | positive | implemented | paragraph | ownership_of_harm |  |  |  |
 | respecting_attention | positive | implemented | paragraph | offered_attention_exit |  |  | Covers an explicit option to disengage. |
-| contradictory_claims | inconsistency | implemented | paragraph | contradiction |  | synthetic pilot, frozen synthetic check | Checks relationships within a paragraph. |
-| unsupported_conclusion | inconsistency | implemented | paragraph | reason_fails |  |  | Covers an offered but insufficient reason. |
 | supported_conclusion | inconsistency | implemented | paragraph | reason_supports |  | synthetic pilot |  |
 | choice_with_coercion | concealed | implemented | paragraph | choice_with_linked_penalty | choice, conditional_penalty | frozen synthetic check | Covers a penalty tied to declining the stated choice. |
 | respect_with_penalty | concealed | inventoried | paragraph | permission to disagree, penalty tied to the same person's disagreement |  |  | Predicate and context mapping pending. |
@@ -97,6 +95,5 @@ The questionnaire reads the published techniques catalogue. Existing positive ru
 
 ## Runtime-only identifiers
 
-- argument_inconsistency · legacy_runtime_alias · extension/src/consistency.mjs
 - orthographic_attention_hook · preprocessing_diagnostic · extension/src/text-preprocessing.mjs
 - nonstandard_vocabulary · preprocessing_diagnostic · extension/src/matcher-worker.js

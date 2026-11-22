@@ -38,17 +38,14 @@
  }
 
  let tooltip;
- const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", RED = "#dc2626", ORANGE = "#f59e0b";
+ const BLUE = "#2563eb", GREEN = "#16a34a", TURQUOISE = "#12B6CF", ORANGE = "#f59e0b";
  const colour = technique => technique.category === "Scrutiny" ? ORANGE :
-   technique.category === "Inconsistency" ? RED :
    technique.category === "Positive" ? GREEN :
    technique.category === "Concealed manipulation" ? TURQUOISE : BLUE;
  // A positive phrase must never visually cover an overlapping negative
  // finding; this is not yet a concealed-manipulation judgement.
  const priority = match => match.kind === "scrutiny" ? 0 :
    match.kind === "paragraph_topic" ? 1.5 :
-   match.kind === "argument_support" ? 5 :
-   match.kind === "inconsistency" ? 4 :
    (match.kind === "spelling" || match.kind === "vocabulary") ? 3.5 :
    match.technique.category === "Concealed manipulation" ? 3 :
    match.technique.category === "Positive" ? 1 : 2;
@@ -71,17 +68,7 @@
      match.kind === "punctuation" ?
      "Unusual or repeated punctuation may draw attention. It can be accidental or expressive; no intent is inferred." :
      technique.summary || "";
-   if (match.kind === "inconsistency") {
-     const other = document.createElement("div");
-     other.textContent = "Conflicting passage: “" + match.otherText + "”";
-     other.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
-     summary.append(other);
-   } else if (match.kind === "argument_support") {
-     const evidence = document.createElement("div");
-     evidence.textContent = "Premises provided: “" + match.otherText + "”";
-     evidence.style.cssText = "margin-top:8px;padding:7px;border-left:3px solid #f87171;";
-     summary.append(evidence);
-   } else if (match.kind === "concealed") {
+   if (match.kind === "concealed") {
      const opening = document.createElement("div");
      opening.textContent = "Positive opening: “" + match.positiveText + "”";
      opening.style.cssText = `margin-top:8px;padding:7px;border-left:3px solid ${TURQUOISE};`;
@@ -113,21 +100,19 @@
      match.kind === "spelling" ? "Spelling: possible error, intent unknown" :
      match.kind === "vocabulary" ? "Nonstandard vocabulary: weak signal, intent unknown" :
      match.kind === "punctuation" ? "Punctuation: weak attention signal, intent unknown" :
-     match.kind === "inconsistency" ? "Inference: possible contradiction" :
      match.kind === "concealed" ? "Relationship: positive wording followed by pressure (check context)" :
-     match.kind === "argument_support" ? "Inference: premise-to-conclusion support (check context)" :
      match.method === "pattern" ? "Match: Rule" :
      "Match strength: " + (match.strength || "Low");
    strength.style.cssText = "margin:0 0 8px;font-size:12px;color:#b5d0e5;";
    strength.title = "Match strength is an experimental estimate, not the probability that the text is manipulative.";
    const link = document.createElement("a");
    link.textContent = "Read the full explanation";
-   link.href = `https://mikemayne.github.io/defeating-manipulation/${technique.category === "Positive" ? "positive-patterns" : technique.category === "Inconsistency" ? "inconsistency-patterns" : "techniques"}/${encodeURIComponent(technique.id)}.html`;
+   link.href = `https://mikemayne.github.io/defeating-manipulation/${technique.category === "Positive" ? "positive-patterns" : "techniques"}/${encodeURIComponent(technique.id)}.html`;
    link.target = "_blank";
    link.rel = "noopener noreferrer";
    link.style.color = "#7ee4e7";
    tooltip.append(title, summary, strength);
-   if (match.kind !== "inconsistency" && match.kind !== "concealed" &&
+   if (match.kind !== "concealed" &&
        match.kind !== "scrutiny" && match.kind !== "vocabulary") tooltip.append(link);
    const r = mark.getBoundingClientRect();
    tooltip.style.display = "block";

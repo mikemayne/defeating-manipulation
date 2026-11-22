@@ -6,11 +6,10 @@ const STORAGE_KEY = "defeating-manipulation/real-world-annotations/v1";
 let annotations = [], editing = null, storageAvailable = true;
 const labelNames = {
  supported_conclusion: "Supported",
- unsupported_conclusion: "Insufficient support",
- contradictory_claims: "Contradicted",
  none: "No assessable argument",
  uncertain: "Uncertain / excluded"
 };
+const activeAnnotations = () => annotations.filter(item => Object.hasOwn(labelNames, item.label));
 function notice(message, error = false) {
  $("message").textContent = message;
  $("message").style.color = error ? "#b91c1c" : "";
@@ -98,7 +97,8 @@ function remove(item) {
  notice("Annotation deleted.");
 }
 function render() {
- const counts = tallyRealAnnotations(annotations);
+ const records = activeAnnotations();
+ const counts = tallyRealAnnotations(records);
  $("counts").replaceChildren();
  for (const [label,number] of [
   ["Collected",counts.total],["Natural",counts.natural],
@@ -110,11 +110,11 @@ function render() {
  $("export").disabled = counts.total === counts.excluded;
  const list = $("case-list");
  list.replaceChildren();
- if (!annotations.length) {
+ if (!records.length) {
   list.append(make("p", "No passages added yet. Choose genuine source text, label it, and save above."));
   return;
  }
- for (const item of annotations.slice().reverse()) {
+ for (const item of records.reverse()) {
   const wrap = document.createElement("article");
   wrap.className = "case";
   const head = make("strong", labelNames[item.label] + " · " + item.track);
@@ -153,7 +153,7 @@ function download(filename, data) {
 }
 $("export").addEventListener("click", () => {
  try {
-  const data = toRealBenchmark(annotations);
+  const data = toRealBenchmark(activeAnnotations());
   if (!data.cases.length) throw Error("No independently labelled cases to export");
   download("real-argument-benchmark.json", data);
   notice("Exported " + data.cases.length + " scored cases. Upload this file in the Matcher Test Lab.");

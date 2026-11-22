@@ -1,5 +1,7 @@
 # Hybrid detector experiment
 
+These results document the configuration before retirement of the red patterns. The current training and benchmark inputs omit the retired questions.
+
 The experiment inventories 81 catalogue entries and three runtime identifiers. It implements at least one textual construction for 33 entries: 19 techniques, 10 positive patterns, one concealed combination and three inconsistency patterns. The matrix records another 42 entries awaiting feature mapping and six whose relevant claim can require outside evidence or an inference about intent. Some implemented entries also have explicit gaps. See [readable coverage](hybrid-coverage.md) and the [machine-readable matrix](hybrid-coverage.json).
 
 ## Run locally

@@ -15,8 +15,6 @@ export const mappings = {
  encouraging_independent_thought: { required: ["independent_check"], partial: "Covers invitations to verify evidence." },
  transparent_reasoning: { required: ["reason_supports"], supporting: ["reason_given"], partial: "Covers a reason that supports a stated conclusion." },
  choice_with_coercion: { required: ["choice_with_linked_penalty"], supporting: ["choice", "conditional_penalty"], partial: "Covers a penalty tied to declining the stated choice." },
- contradictory_claims: { required: ["contradiction"], partial: "Checks relationships within a paragraph." },
- unsupported_conclusion: { required: ["reason_fails"], partial: "Covers an offered but insufficient reason." },
  supported_conclusion: { required: ["reason_supports"] },
  whataboutism: { required: ["criticism_redirected_to_other_wrong"] },
  tu_quoque: { required: ["critic_inconsistency_as_rebuttal"] },

@@ -86,27 +86,9 @@ The project uses CC0 1.0 for original written catalogue content and the MIT Lice
 The repository contains an initial catalogue and supporting project scaffolding. Definitions, examples and references are a starting point for collaborative development, not a completed or definitive taxonomy.
 
 
-## Argument inconsistency patterns
+## Supported reasoning
 
-The website has three searchable, colour-coded catalogue areas: manipulation
-techniques (blue), positive communication (green), and argument consistency
-patterns (red). The red library is defined entirely in
-`inconsistency-patterns.json`, with generated detail pages at
-`inconsistency-patterns/<id>.html`.
-
-To extend it, add a new object to that JSON file using a unique `id`, a
-`title`, `category`, `summary`, `definition`, `observable_features`,
-`tags` and an illustrative `example`. The shared homepage renderer
-automatically displays every entry and supports searching it; the site
-generator automatically publishes its individual red page and sitemap URL.
-Run `node scripts/test-build.mjs` to validate the catalogue.
-
-The initial patterns are contradictory claims, a conclusion insufficiently
-supported by the evidence **provided**, and a conclusion appropriately
-supported by its premises. The supported-conclusion entry is a reference
-pattern, not an error simply because it is displayed in the red library.
-The current local second-stage model detects potential contradictions;
-paragraph-level conclusion support remains a planned classifier enhancement.
+The catalogue describes conclusions supported by the premises. See `inconsistency-patterns.json` for the supported reasoning entry.
 
 ## Orange: deserves scrutiny
 
@@ -121,7 +103,7 @@ advisory without a local model.
 Orange is **not a manipulation finding** and says nothing about the author's
 intent or the truth of the statement. It means *check the wording, context and
 supporting argument*. Individual signals (including emotional language) do not
-trigger it. Known blue, red, turquoise and green matches take precedence.
+trigger it. Known blue, turquoise and green matches take precedence.
 This is experimental; thresholds should be validated against independently
 labelled, real-world positive and negative examples before interpreting its
 accuracy. Test the fallback with `node scripts/test-scrutiny-signals.mjs`.

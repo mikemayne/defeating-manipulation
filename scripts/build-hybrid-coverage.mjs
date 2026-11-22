@@ -101,8 +101,6 @@ if (canonicalIds.size !== records.length || Object.keys(mappings).some(id => !ca
  throw Error("Duplicate catalogue ID or orphan hybrid mapping");
 }
 const runtimeOnly = [
- { id: "argument_inconsistency", source: "extension/src/consistency.mjs", kind: "legacy_runtime_alias",
-  canonical: "contradictory_claims", context: "article", status: "inventoried" },
  { id: "orthographic_attention_hook", source: "extension/src/text-preprocessing.mjs", kind: "preprocessing_diagnostic",
   context: "sentence", status: "implemented" },
  { id: "nonstandard_vocabulary", source: "extension/src/matcher-worker.js", kind: "preprocessing_diagnostic",

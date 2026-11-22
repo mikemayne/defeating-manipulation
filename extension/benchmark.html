@@ -56,12 +56,11 @@ button{background:#276aa8;color:white;border-color:#276aa8}button.secondary{back
 <p><a href="../">Defeating Manipulation</a> / Local development</p>
 <h1>Matcher Test Lab</h1>
 <p>Test the same JavaScript matching engine used by the Firefox extension against a large, reproducible labelled dataset. All analysis happens on this computer.</p>
-<p>Use a locally prepared JSON/JSONL file to test argument extraction, with optional separately labelled reasoning checks. No paragraph data is sent to a server.</p>
 <section class="panel" aria-labelledby="setup-title">
 <h2 id="setup-title">Test setup</h2>
 <div class="controls">
 <label>Matching method
-<select id="mode"><option value="rules">Rules only (fast)</option><option value="ai">Rules + local AI (slower)</option><option value="consistency">Inconsistencies — local NLI</option><option value="argument_paragraph">Arguments — single paragraph (structure + optional NLI)</option><option value="implicit_conclusion">Implicit conclusions — local LLM (real examples)</option><option value="reader_inference">Reader interpretation — local NLI probe (experimental)</option><option value="reader_boundary">Reader punctuation — AND / BUT, default KEEP (2 model scores)</option><option value="reader_compare">Reader strategies — context vs progressive (2-score A/B test)</option><option value="positive_rules">Positive patterns — rules only</option><option value="positive_ai">Positive patterns — rules + local AI</option><option value="concealed_rules">Concealed manipulation — relationships (rules)</option><option value="concealed_ai">Concealed manipulation — local AI + relationships</option></select></label>
+<select id="mode"><option value="rules">Rules only (fast)</option><option value="ai">Rules + local AI (slower)</option><option value="implicit_conclusion">Implicit conclusions — local LLM (real examples)</option><option value="reader_inference">Reader interpretation — local NLI probe (experimental)</option><option value="reader_boundary">Reader punctuation — AND / BUT, default KEEP (2 model scores)</option><option value="reader_compare">Reader strategies — context vs progressive (2-score A/B test)</option><option value="positive_rules">Positive patterns — rules only</option><option value="positive_ai">Positive patterns — rules + local AI</option><option value="concealed_rules">Concealed manipulation — relationships (rules)</option><option value="concealed_ai">Concealed manipulation — local AI + relationships</option></select></label>
 <label>Dataset
 <select id="source"><option value="generated">Generate labelled variants</option><option value="uploaded">Upload labelled JSON / JSONL</option></select></label>
 <label id="count-control">Number of tests

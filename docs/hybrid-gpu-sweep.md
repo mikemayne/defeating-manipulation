@@ -1,5 +1,7 @@
 # GPU question sweep
 
+These results document the configuration before retirement of the red patterns. The current training and benchmark inputs omit the retired questions.
+
 This pilot measures three-way question answering for five detector features. The 45 synthetic passages are split into 15 training, 15 development and 15 held-out passages, with a positive, a hard negative and an uncertain case per question and split. Related contrast passages stay together. The development examples, model prompt demonstrations and held-out scenarios are separate. Labels are authored, without independent adjudication. This is a feasibility test, with five positives in the held-out set.
 
 ## Run

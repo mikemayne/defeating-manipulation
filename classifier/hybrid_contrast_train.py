@@ -183,6 +183,8 @@ def main():
         if not text or len(text) > 1800:
             parser.error("Supply a non-empty passage of up to 1,800 characters")
         report = json.loads(args.reuse_report.read_text(encoding="utf-8"))
+        if report["data_sha256"] != hashlib.sha256(CONTRASTS.read_bytes()).hexdigest():
+            parser.error("This checkpoint covers a retired question set. Train on the current corpus first.")
         family = report["trials"][report["winner"]]["config"][0]
         if family == "qwen15" and not args.gguf:
             parser.error("The selected checkpoint requires --gguf")
@@ -205,6 +207,8 @@ def main():
         if not args.export_encoder or not args.audit:
             parser.error("--reuse-report requires --export-encoder and --audit")
         report = json.loads(args.reuse_report.read_text(encoding="utf-8"))
+        if report["data_sha256"] != hashlib.sha256(CONTRASTS.read_bytes()).hexdigest():
+            parser.error("This checkpoint covers a retired question set. Train on the current corpus first.")
         if report["trials"][report["winner"]]["config"][0] != "encoder":
             raise ValueError("The selected checkpoint is not an encoder")
         model, tokenizer, _ = make_model("encoder")

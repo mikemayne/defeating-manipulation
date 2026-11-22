@@ -27,7 +27,6 @@ function updateSource() {
  source.options[0].disabled = implicitMode || argumentMode || readerMode || boundaryMode || compareMode;
  if ((implicitMode || argumentMode || readerMode || boundaryMode || compareMode) && source.value !== "uploaded") source.value = "uploaded";
  const upload = source.value === "uploaded";
- const consistency = mode.value === "consistency";
  const positive = mode.value.startsWith("positive_");
  const concealed = mode.value.startsWith("concealed_");
  $("count-control").hidden = upload;
@@ -35,8 +34,8 @@ function updateSource() {
  $("file-control").hidden = !upload;
  $("join-score-control").hidden=!(boundaryMode||compareMode);
  $("join-margin-control").hidden=!(boundaryMode||compareMode);
- count.max = consistency || argumentMode || readerMode || boundaryMode || compareMode || concealed ? 10000 : 1000000;
- if (!count.dataset.edited) count.value = consistency ? 200 : argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
+ count.max = argumentMode || readerMode || boundaryMode || compareMode || concealed ? 10000 : 1000000;
+ if (!count.dataset.edited) count.value = argumentMode ? 96 : concealed ? 96 : positive ? 72 : 25000;
  $("dataset-note").textContent = upload
   ? implicitMode
    ? 'Upload JSON/JSONL with {id,text}, optionally expected_implicit:true/false and expected_conclusion. Uses the local FLAN-T5 generator; review each reconstructed conclusion and rejected output. Only annotated presence gets precision/recall; wording quality requires manual review. Maximum 2,000 cases.'
@@ -48,15 +47,11 @@ function updateSource() {
    ? 'Upload the same 1,000-example JSON/JSONL with {id, text}. This runs an experimental local NLI probe for seven possible reader interpretations, including no implied connection; all model scores are uncalibrated, not percentages of readers or accuracy.'
    : argumentMode
    ? 'Upload JSON/JSONL with {id, text}. For unlabelled real-world scans, add analyse_reasoning:true to run local NLI; these runs report predictions, never accuracy. To score a labelled benchmark, provide expected_argument:true/false and optional expected:[reasoning label]. No text leaves this computer.'
-   : consistency
-   ? 'Upload JSON/JSONL containing {id, text, expected}, where expected is [] or ["argument_inconsistency"]. All analysis stays in this browser.'
    : concealed
    ? "Upload JSON/JSONL with {id, text, expected}, where expected contains a concealed-pattern ID (e.g. choice_with_coercion) or []. No uploads leave this browser."
    : positive
    ? "Upload JSON/JSONL containing {id, text, expected}. Expected IDs must be from the positive-pattern library. All analysis stays in this browser."
    : "Upload JSON/JSONL containing {id, text, expected} using manipulation technique IDs. All analysis stays in this browser."
-  : consistency
-   ? "200 labelled fictional cases: direct contradictions, paraphrases, consistent claims, different speakers/dates and hypotheticals. Generated variations test robustness, not independent accuracy."
    : concealed
    ? "96 fictional cases: 48 positive openings undermined by targeted pressure and 48 hard negatives. Tests relationships, not just green/blue co-occurrence; no intent inferred."
    : positive
@@ -414,7 +409,7 @@ function renderResults(data) {
    ? "Argument extraction always runs. Rows with the optional expected array also run local NLI and receive a separate reasoning score. The combined score mixes both stages. "
    : "") +
   "Evaluated " + number(data.total) + " cases, including " + number(data.negativeCount) +
-  (lastMode === "consistency" ? " cases with no expected inconsistency." :
+  (
    lastMode.startsWith("positive_") ? " cases with no expected positive pattern." :
    lastMode.startsWith("concealed_") ? " cases with no expected concealed relationship." :
    lastMode === "argument_paragraph" ? " cases without an expected positive structural or reasoning label." :
@@ -837,10 +832,6 @@ function catalogues() {
    if (!response.ok) throw Error("Cannot load the labelled examples");
    return response.json();
   }),
-  fetch(new URL("../../evaluation/inconsistency-examples.json", import.meta.url)).then(response => {
-   if (!response.ok) throw Error("Cannot load the inconsistency examples");
-   return response.json();
-  }),
   fetch(new URL("../../evaluation/positive-matcher-examples.json", import.meta.url)).then(response => {
    if (!response.ok) throw Error("Cannot load the positive-pattern examples");
    return response.json();
@@ -866,7 +857,7 @@ runButton.addEventListener("click", async () => {
   setError("Minimum score must be between -20 and 0; margin between 0 and 5.");
   return;
  }
- const maximum = mode.value === "consistency" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare" || mode.value.startsWith("concealed_")
+ const maximum = mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare" || mode.value.startsWith("concealed_")
   ? 10000 : 1000000;
  if (source.value === "generated" && (!Number.isSafeInteger(amount) || amount < 1 || amount > maximum)) {
   setError("Choose a test count between 1 and " + number(maximum) + ".");
@@ -890,9 +881,9 @@ runButton.addEventListener("click", async () => {
  results.hidden = true;
  setError("");
  try {
-  const [catalogue, patterns, manipulationFixture, consistencyFixture,
+  const [catalogue, patterns, manipulationFixture,
    positiveFixture, concealedFixture] = await catalogues();
-  const fixture = mode.value === "consistency" ? consistencyFixture :
+  const fixture =
    (mode.value === "implicit_conclusion" || mode.value === "argument_paragraph" || mode.value === "reader_inference" || mode.value === "reader_boundary" || mode.value === "reader_compare") ? {cases:[]} :
    mode.value.startsWith("positive_") ? positiveFixture :
    mode.value.startsWith("concealed_") ? concealedFixture : manipulationFixture;

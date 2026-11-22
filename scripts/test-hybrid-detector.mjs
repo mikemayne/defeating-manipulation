@@ -9,6 +9,11 @@ const scope = literal.scopes[0];
 assert.equal(scope.answers.missing_knowledge.evidence[0].quote, "NO   idea");
 assert.equal(scope.answers.future_wording.evidence[0].quote, "what’s coming");
 assert.equal(scope.answers.unfavourable_future.status, "not_asked");
+const retired = await analyzeHybrid("The same gate was open and closed at noon.");
+assert.ok(retired.scopes.every(item =>
+ !Object.hasOwn(item.answers, "contradiction") &&
+ !Object.hasOwn(item.answers, "reason_fails") &&
+ item.patterns.every(pattern => !["contradictory_claims", "unsupported_conclusion"].includes(pattern.id))));
 
 const classify = async messages => {
  assert.equal(messages.length, 2);

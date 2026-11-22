@@ -30,7 +30,6 @@ const allowed = new Set([
  "/extension/techniques.json",
  "/extension/patterns.json",
  "/evaluation/matcher-examples.json",
- "/evaluation/inconsistency-examples.json",
  "/evaluation/positive-matcher-examples.json",
  "/evaluation/concealed-pattern-examples.json"
 ]);
