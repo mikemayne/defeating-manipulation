@@ -56,17 +56,63 @@ const response = Object.fromEntries(targets.map(key => {
   return [key, { n: points.length, rho: spearman(points),
     medianShift: points.length ? median(points.map(([a, b]) => b - a)) : null }];
 }));
-const holdoutErrors = predictor => threads.map((row, i) => {
-  const train = threads.filter((_, j) => i !== j);
-  return Math.abs(predictor(train, row) - Math.log1p(row.votes));
-});
-const baseline = mean(holdoutErrors(train => median(train.map(r => Math.log1p(r.votes)))));
+function solve(matrix, values) {
+  const rows = matrix.map((row, i) => [...row, values[i]]);
+  for (let i = 0; i < rows.length; i++) {
+    const pivot = rows[i][i];
+    rows[i] = rows[i].map(value => value / pivot);
+    for (let j = 0; j < rows.length; j++) {
+      if (j === i) continue;
+      const factor = rows[j][i];
+      rows[j] = rows[j].map((value, k) => value - factor * rows[i][k]);
+    }
+  }
+  return rows.map(row => row.at(-1));
+}
+
+function compareHoldouts(target) {
+  const available = threads.filter(row => Number.isFinite(target(row)));
+  if (available.length < 4) return null;
+  const errors = available.map((held, i) => {
+    const train = available.filter((_, j) => i !== j);
+    const y = train.map(target);
+    const averageY = mean(y);
+    const columns = keys(train.map(row => row.articleProfile)).flatMap(key => {
+      const values = train.map(row => row.articleProfile[key]).filter(Number.isFinite);
+      if (values.length < 2) return [];
+      const centre = mean(values);
+      const scale = Math.sqrt(mean(values.map(value => (value - centre) ** 2)));
+      return scale > 1e-9 ? [{ key, centre, scale }] : [];
+    });
+    const vector = row => columns.map(({ key, centre, scale }) => {
+      const value = row.articleProfile[key];
+      return Number.isFinite(value) ? (value - centre) / scale : 0;
+    });
+    const x = train.map(vector);
+    const heldX = vector(held);
+    const dot = (a, b) => sum(a.map((value, j) => value * b[j]));
+    const penalty = Math.max(columns.length, 1);
+    const kernel = x.map((row, j) => x.map((other, k) => dot(row, other) + (j === k ? penalty : 0)));
+    const weights = solve(kernel, y.map(value => value - averageY));
+    const prediction = averageY + sum(x.map((vector, j) => weights[j] * dot(heldX, vector)));
+    return [Math.abs(median(y) - target(held)), Math.abs(prediction - target(held))];
+  });
+  return { n: available.length, medianBaselineMAE: mean(errors.map(row => row[0])),
+    articleSignalsRidgeMAE: mean(errors.map(row => row[1])) };
+}
+const holdout = {
+  logVoteTotal: compareHoldouts(row => Math.log1p(row.votes)),
+  downvoteShare: compareHoldouts(row => row.downvoteShare),
+  neutral: compareHoldouts(row => row.commentProfile['emotion.neutral']),
+  disapproval: compareHoldouts(row => row.commentProfile['emotion.disapproval']),
+};
 const summary = { selection: 'Top five by upvotes plus downvotes among comments present in the release',
   articleCount: threads.length, commentCount: sum(threads.map(r => r.comments.length)),
   voteDistribution: { min: Math.min(...threads.map(r => r.votes)), median: median(threads.map(r => r.votes)),
     max: Math.max(...threads.map(r => r.votes)), total: sum(threads.map(r => r.votes)),
     downvotes: sum(threads.map(r => r.downvotes)) },
-  baselines: { logVoteMedianLeaveOneOutMAE: baseline,
+  holdout,
+  baselines: {
     bodyLengthRho: spearman(threads.map(r => [r.sentences, r.votes])),
     availableCommentCountRho: spearman(threads.map(r => [r.discussionCount, r.votes])) },
   magnitude, response, topic: scores.relationships.centroidCosine,

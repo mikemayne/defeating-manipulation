@@ -3,13 +3,18 @@ import { execFileSync } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { loadEngine } from './analyse.mjs';
+import { parseSentence } from './grammar.mjs';
+import nspell from 'nspell';
+import britishEnglish from 'dictionary-en-gb';
+
+const spellchecker = nspell(britishEnglish);
 
 const [inputPath, unitPath, contextPath] = process.argv.slice(2);
 const { articles, retrievedAt } = JSON.parse(await readFile(inputPath, 'utf8'));
 assert.equal(articles.length, 10);
 assert.equal(new Set(articles.map(a => a.url)).size, 10);
 const segmenter = new Intl.Segmenter('en-GB', { granularity: 'sentence' });
-const texts = [], pairs = [];
+const texts = [], pairs = [], syntax = [];
 
 function document(paragraphs) {
   const ids = [], pairIds = [];
@@ -19,6 +24,15 @@ function document(paragraphs) {
       if (!segment.trim()) continue;
       const id = texts.push(segment.trim()) - 1;
       ids.push(id);
+      const parsed = parseSentence(texts[id], previous === undefined ? '' : texts[previous], spellchecker);
+      syntax.push({
+        'grammar.flagged': Number(parsed.grammar.length > 0),
+        'spelling.flagged': Number(parsed.spelling.length > 0),
+        'syntax.explicitFutureClause': Number(parsed.explicitClause),
+        'syntax.pronounReference': Number(parsed.references.length > 0),
+        'syntax.unresolvedPronoun': Number(parsed.references.some(ref => ref.status === 'no_candidate_found')),
+        'syntax.ambiguousPronoun': Number(parsed.references.some(ref => ref.status === 'multiple_candidates')),
+      });
       if (previous !== undefined) pairIds.push(pairs.push([previous, id]) - 1);
       previous = id;
     }
@@ -70,7 +84,7 @@ function average(rows) {
     [key, mean(rows.map(row => row[key]).filter(Number.isFinite))]));
 }
 const sentenceScores = texts.map((_, i) => ({ ...prefix('emotion', emotions[i]), ...prefix('toxicity', toxicity[i]),
-  ...prefix('clickbaitBodyOutOfDomain', clickbait[i]), ...contextual.sentences[i] }));
+  ...prefix('clickbaitBodyOutOfDomain', clickbait[i]), ...contextual.sentences[i], ...syntax[i] }));
 const pairScores = pairs.map(([a, b], i) => ({ ...prefix('adjacentNli', withinNli[i]),
   'adjacentSimilarity.cosine': dot(embeddings[a], embeddings[b]), ...contextual.pairs[i] }));
 
@@ -105,10 +119,17 @@ const rows = stories.map((story, i) => {
   const ownMean = average(own.map(match => match.scores));
   const control = average(other);
   const profiles = story.comments.map(profile);
+  const articleProfile = profile(story.article);
+  const opening = emotions[story.article.ids[0]];
+  const closing = emotions[story.article.ids.at(-1)];
+  for (const key of ['anger', 'fear', 'disapproval', 'neutral']) {
+    articleProfile['opening.' + key] = opening[key] - articleProfile['emotion.' + key];
+    articleProfile['closing.' + key] = closing[key] - articleProfile['emotion.' + key];
+  }
   return {
     url: articles[i].url, discussionCount: articles[i].count, articleSentences: story.article.ids.length,
     headlineClickbait: headlines[i].CLICKBAIT,
-    articleProfile: profile(story.article), commentProfile: average(profiles),
+    articleProfile, commentProfile: average(profiles),
     own: ownMean, other: control,
     centroidRankOfOwnThread: 1 + other.filter(row => row.centroidCosine > ownMean.centroidCosine).length,
     comments: articles[i].comments.map(({ id, recommendations }, j) => ({ id, recommendations,
