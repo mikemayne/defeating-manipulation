@@ -1,0 +1,1987 @@
+{
+  "records": [
+    {
+      "id": "loaded_language",
+      "title": "Loaded language",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Words with strong positive or negative associations that encourage an emotional evaluation beyond the literal information conveyed.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "ad_hominem",
+      "title": "Ad hominem",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Attacking a person’s character or circumstances instead of addressing the substance of their argument.",
+      "required": [
+        "personal_attack_as_rebuttal"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "personal_attack_as_rebuttal",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "false_dilemma",
+      "title": "False dilemma",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Presenting two options as the only possibilities when other reasonable alternatives exist.",
+      "required": [
+        "two_options_as_exhaustive"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "two_options_as_exhaustive",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Requires evidence of another option in the passage.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "straw_man",
+      "title": "Straw man",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Recasting an opposing position in a weaker or distorted form that is easier to criticise.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "appeal_to_fear",
+      "title": "Appeal to fear",
+      "category": "Emotional appeals",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Using a threat or frightening possibility to influence judgement or action, particularly when supporting evidence is missing or unclear.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "bandwagon",
+      "title": "Bandwagon appeal",
+      "category": "Social influence",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Suggesting that a claim or action is correct because many people supposedly accept or do it.",
+      "required": [
+        "popularity_as_reason"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "popularity_as_reason",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "selective_presentation",
+      "title": "Selective presentation",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Highlighting evidence that supports a particular conclusion while leaving out relevant counterevidence or context.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": "information unavailable from text",
+      "status": "not_inferable",
+      "gap": "Relevant omitted evidence",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "out_of_context_quote",
+      "title": "Quote mining",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Using a quotation while omitting surrounding material that changes or qualifies its meaning.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": "information unavailable from text",
+      "status": "not_inferable",
+      "gap": "Original surrounding quotation",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "whataboutism",
+      "title": "Whataboutism",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Deflecting criticism by pointing to another alleged wrong rather than addressing the original point.",
+      "required": [
+        "criticism_redirected_to_other_wrong"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "criticism_redirected_to_other_wrong",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "false_authority",
+      "title": "Appeal to false authority",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Using a person’s status or claimed expertise as support where their expertise is not relevant or the authority is not established.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "conspiracy_framing",
+      "title": "Conspiracy framing",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Explaining events through an alleged hidden plan while relying on insinuation or claims that are difficult to test.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "repetition",
+      "title": "Repetition and familiarity",
+      "category": "Attention and memory",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Repeating a claim or phrase so that familiarity can make it easier to recall or feel more credible.",
+      "required": [
+        "verbatim_repeated_sentence"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "verbatim_repeated_sentence",
+          "version": 1,
+          "strategy": "javascript"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers exact repetition within a paragraph. The reader's response is unknown.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "priming",
+      "title": "Priming",
+      "category": "Attention and memory",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Presenting cues that make particular concepts or associations more accessible when a reader processes later information.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "presupposition",
+      "title": "Presupposition",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Embedding an assumption in a sentence so that it is treated as given rather than argued for.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "false_balance",
+      "title": "False balance",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Presenting positions as comparably supported when the available evidence is substantially unequal.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": "information unavailable from text",
+      "status": "not_inferable",
+      "gap": "Relative strength of the available evidence",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "anecdotal_evidence",
+      "title": "Anecdotal evidence",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Using an individual story as if it establishes a general pattern without adequate supporting data.",
+      "required": [
+        "story_used_as_general_proof"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "story_used_as_general_proof",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers an explicitly supplied individual story.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "slippery_slope",
+      "title": "Slippery slope",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Claiming that one step will lead to a chain of further consequences without adequately establishing the links.",
+      "required": [
+        "claim_chain_missing_links"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "claim_chain_missing_links",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "scapegoating",
+      "title": "Scapegoating",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Assigning broad blame for a complex problem to a person or group while simplifying or ignoring other causes.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "motte_bailey",
+      "title": "Motte-and-bailey",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Moving between a bold, controversial claim and a narrower, easier-to-defend claim as criticism arises.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "gish_gallop",
+      "title": "Gish gallop",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Overwhelming a discussion with numerous claims faster than they can reasonably be checked or answered.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "allegation_laundering",
+      "title": "Allegation laundering",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "An allegation is first reported as a claim, suspicion or accusation. Later references restate it as though the underlying event has been established. The wording changes the status of the information without adding independent evidence.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "insinuation_by_juxtaposition",
+      "title": "Insinuation by juxtaposition",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The article presents separate details in close proximity, allowing their arrangement to suggest a causal, moral or factual connection. The implied conclusion is carried by the juxtaposition rather than demonstrated by evidence.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "blame_reversal",
+      "title": "Blame reversal",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The account makes the complainant's response the main issue, while the original conduct receives less attention or is treated as justified by that response.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "retaliatory_discrediting",
+      "title": "Retaliatory discrediting of complainants",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The article frames a person as unreliable, malicious or troublesome because they made a complaint or report. The fact that a report is disputed or unsubstantiated is treated as evidence that it was knowingly false.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "manufactured_consensus",
+      "title": "Manufactured consensus",
+      "category": "Social influence",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text uses selected reactions, vague references to public opinion or unsupported claims of widespread agreement to create an impression of consensus.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "guilt_appeal",
+      "title": "Appeal to guilt",
+      "category": "Emotional appeals",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text connects disagreement, inaction or a particular choice with guilt for harm to others, without adequately establishing the reader's responsibility or the effectiveness of the proposed response.",
+      "required": [
+        "guilt_as_leverage"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "guilt_as_leverage",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "obfuscation",
+      "title": "Obfuscation and strategic vagueness",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text obscures the relevant actor, action, evidence or degree of certainty through vague language, nominalisations, passive constructions or undefined terms.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "semantic_diversion",
+      "title": "Semantic diversion",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text isolates a literal interpretation of a word or phrase, then uses that interpretation to dismiss the wider point. The disputed wording becomes a substitute for engaging with the underlying evidence.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "moving_goalposts",
+      "title": "Moving the goalposts",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The article or argument introduces a criterion, receives evidence meeting it, and then replaces it with a more demanding or different criterion without explaining why the change is justified.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "double_standards",
+      "title": "Double standards",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text treats similar actions differently depending on who performs them, or demands evidence from one side while accepting weaker support from another.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "poisoning_the_well",
+      "title": "Poisoning the well",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text introduces a source using a negative label or allegation that encourages readers to reject what the source says, without evaluating the substance of the evidence.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "criminalising_dissent",
+      "title": "Criminalising dissent",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text uses criminal labels or law-and-order language to associate a viewpoint or group with illegality, sometimes blurring the distinction between lawful dissent, alleged offences and proven criminal conduct.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "appearance_based_attack",
+      "title": "Appearance-based personal attack",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text directs ridicule or contempt at appearance rather than engaging with the person's claims or conduct relevant to the issue.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "disgust_appeal",
+      "title": "Appeal to disgust",
+      "category": "Emotional appeals",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text relies on descriptions associated with dirt, contamination, bodily functions or repulsiveness to influence judgement beyond what the factual account establishes.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "threat_framing",
+      "title": "Threat framing",
+      "category": "Emotional appeals",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text uses warnings, predictions of punishment or threatening language to make a particular response seem necessary. The consequence may be real, exaggerated, speculative or unsupported.",
+      "required": [
+        "unfavourable_future"
+      ],
+      "supporting": [
+        "addressee_lacks_knowledge",
+        "unspecified_future_event",
+        "conditional_penalty"
+      ],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "unfavourable_future",
+          "version": 1,
+          "strategy": "model"
+        },
+        {
+          "id": "addressee_lacks_knowledge",
+          "version": 1,
+          "strategy": "model"
+        },
+        {
+          "id": "unspecified_future_event",
+          "version": 1,
+          "strategy": "model"
+        },
+        {
+          "id": "conditional_penalty",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "premature_closure",
+      "title": "Premature closure",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text uses definitive language to close down further examination, despite unresolved evidence, unanswered questions or acknowledged uncertainty.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "narrative_reframing",
+      "title": "Narrative reframing",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The article selects a starting point, sequence, protagonists and causal links that create a particular account of events. The individual details may be accurate while the overall narrative gives them a selective meaning.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "quote_recontextualisation",
+      "title": "Quote recontextualisation",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The article selects a phrase, sentence or excerpt but omits surrounding context, qualifications or the question it answered. This can make a limited or conditional statement appear broader or more definite.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": "information unavailable from text",
+      "status": "not_inferable",
+      "gap": "Original and subsequent context",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "public_shaming",
+      "title": "Public shaming",
+      "category": "Social influence",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text invites readers to condemn or mock an identifiable person, often by foregrounding humiliating details or presenting social rejection as deserved.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "paternalistic_coercion_framing",
+      "title": "Paternalistic coercion framing",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text uses protective language to frame a restriction, punishment or demand as care, while giving little attention to consent, proportionality, alternatives or the interests of those affected.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "incitement_to_violence",
+      "title": "Incitement to violence",
+      "category": "Emotional appeals",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text urges, endorses or legitimises violent action against an identifiable person, group or category of people. It may use direct commands, calls for action, celebration of violence or language that presents violence as necessary or deserved.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "exaggeration_minimisation",
+      "title": "Exaggeration and minimisation",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The text amplifies or downplays the scale, severity, certainty or importance of something. This may happen through evaluative wording, selective comparisons, numerical presentation or omission of relevant context.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "firsthand_evidence_requirement",
+      "title": "Firsthand evidence requirement",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The argument dismisses or refuses to engage with evidence because the person presenting it did not personally witness the event. It treats direct observation as the only legitimate route to knowledge, rather than assessing what the available photographs, documents, recordings or other evidence can support. Firsthand observation may provide additional evidence, but its absence does not by itself invalidate other evidence.",
+      "required": [
+        "firsthand_as_prerequisite"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "firsthand_as_prerequisite",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "invoking_an_imagined_audience",
+      "title": "Invoking an imagined audience",
+      "category": "Social influence",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The speaker predicts or asserts how an absent person, institution or audience will react, and uses that imagined reaction to influence the listener. The audience may be a specific group, such as the press, a jury, the police or an employer, or a vague collective such as 'everyone'. Rather than addressing the issue directly, the statement imports the supposed judgement of others into the conversation. The prediction can make the listener feel watched, outnumbered, judged or threatened, even though the people whose reactions are invoked have not expressed those views.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "hasty_generalisation",
+      "title": "Hasty generalisation",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "A conclusion about a whole group or general pattern is drawn from a small, unrepresentative or otherwise inadequate sample. The examples may be real, but they do not justify the breadth of the conclusion.",
+      "required": [
+        "limited_sample_to_group"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "limited_sample_to_group",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "circular_reasoning",
+      "title": "Circular reasoning",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The argument assumes the point it is supposed to prove. Its supporting reason simply repeats the conclusion in different words rather than providing independent evidence.",
+      "required": [
+        "reason_restates_conclusion"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "reason_restates_conclusion",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "appeal_to_authority",
+      "title": "Appeal to authority",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "A claim is presented as established because a prominent or authoritative person endorses it. The person's status is substituted for relevant expertise, evidence or reasoning.",
+      "required": [
+        "authority_as_reason"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "authority_as_reason",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Evidence of an appeal alone cannot establish whether reliance on the authority is justified.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "post_hoc",
+      "title": "Post hoc (false cause)",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The argument treats a sequence in time as proof of causation. The fact that one event preceded another does not establish that it caused it.",
+      "required": [
+        "causal_from_sequence"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "causal_from_sequence",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "red_herring",
+      "title": "Red herring",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The argument shifts attention away from the original question by introducing a separate issue that does not answer it.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "appeal_to_emotion",
+      "title": "Appeal to emotion",
+      "category": "Emotional appeals",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The argument asks the audience to accept a conclusion because of the feelings it evokes, rather than because of evidence or reasoning that supports it.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "tu_quoque",
+      "title": "Tu quoque (hypocrisy)",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Instead of addressing whether the criticism is valid, the response points to the critic's own behaviour or inconsistency. A person's hypocrisy does not by itself make their argument false.",
+      "required": [
+        "critic_inconsistency_as_rebuttal"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "critic_inconsistency_as_rebuttal",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "appeal_to_ignorance",
+      "title": "Appeal to ignorance",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The absence of proof for one side is treated as proof for the other. A lack of disproof does not establish that a claim is true.",
+      "required": [
+        "absence_as_proof"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "absence_as_proof",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "false_equivalence",
+      "title": "False equivalence",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The argument presents two things as equivalent while overlooking differences that matter to the comparison. The comparison creates a misleading impression of similarity.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "cherry_picking",
+      "title": "Cherry picking",
+      "category": "Evidence and sourcing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The argument highlights favourable examples or data while excluding relevant contrary evidence, creating a misleading impression of what the full evidence shows.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": "information unavailable from text",
+      "status": "not_inferable",
+      "gap": "Relevant omitted evidence",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "preference_as_moral_obligation",
+      "title": "Preference as moral obligation",
+      "category": "Social influence",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "A speaker moves from 'I prefer this' to 'you must do this', then portrays disagreement or noncompliance as proof of disrespect or bad character. The personal preference is used as its own justification for a moral duty, without addressing context, proportionality or any independent reason for the demand.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "too_good_to_be_true",
+      "title": "Too good to be true",
+      "category": "Deceptive offers",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "An offer presents an exceptional financial gain, prize, inheritance or other benefit as readily available, then asks the recipient to pay a relatively small fee, follow a link, share sensitive information or take another apparently minor step to obtain it. The disproportionate reward can draw attention away from whether the offer is genuine. The pattern concerns the structure of the offer, not the literal phrase 'too good to be true'.",
+      "required": [
+        "disproportionate_reward_offer"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "disproportionate_reward_offer",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": false,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "deliberate_errors",
+      "title": "Deliberate errors",
+      "category": "Attention and memory",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Introducing a conspicuous spelling mistake or other apparent error can interrupt ordinary reading and draw extra attention to the affected word or sentence. A particularly important mechanism is correction bait: the reader feels prompted to point out the mistake, creating engagement with a message they might otherwise ignore. The exchange can divert attention from the original argument and, on some social platforms, may help distribute the post further. Mistakes can also make a prepared message appear spontaneous. These are possible effects, not proof that the error was intentional. A further possible effect follows when a correction becomes a personal insult: readers who identify with the speaker's position may experience the insult as directed at people like themselves. This can shift the discussion from the claim's merits to defending the speaker or group.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": "information unavailable from text",
+      "status": "not_inferable",
+      "gap": "Intent cannot be established from a spelling observation",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "moral_authority_instead_of_argument",
+      "title": "Moral authority as a substitute for argument",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "The speaker appeals to an important moral value, such as dignity, fairness or protecting others, and treats that value as sufficient reason to end a disagreement. Rather than explaining what is wrong with a particular claim, the speaker labels the act of questioning it as immoral. The principle may be entirely reasonable; the manipulation lies in using its moral authority as a substitute for reasoning. The result can be outward compliance without any change in belief.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": false,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "provoking_backlash",
+      "title": "Provoking backlash",
+      "category": "Social influence",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "A broadly defensible principle is presented together with a rigid, humiliating or disproportionate demand. People who might otherwise agree with the principle can come to associate it with coercion and react against it. The pressure can shift attention away from the reason for the principle and towards resistance to how it is enforced. This can be exploited by someone seeking to discredit the principle, but neither hostile intent nor a deliberate plan can be inferred from the wording alone.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": false,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "turning_disagreement_into_freedom_conflict",
+      "title": "Turning disagreement into a freedom conflict",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "A question about the accuracy, fairness or merits of a statement is reframed as a question about the speaker's freedom to express it. Criticism, disagreement, social pressure and actual restrictions on speech can be blurred together. If the audience feels its freedom is threatened, defending the right to speak may displace examination of the original claim. The freedom issue may sometimes be genuine; identifying this pattern means checking whether it has replaced, rather than answered, the original argument.",
+      "required": [
+        "freedom_to_speak_redirect"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "freedom_to_speak_redirect",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": false,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "manufactured_inevitability",
+      "title": "Manufactured inevitability",
+      "category": "Framing",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "A decision, rule or outcome is presented as though it cannot be changed, challenged or interpreted differently simply because it has already been named or declared. Repeating a term in an identity statement (X is X, or X means X) adds no premise that establishes necessity, yet can rhetorically suggest that alternatives are impossible or questioning is illegitimate. The pattern concerns the gap between this logically empty assertion and the stronger conclusion the reader is invited to accept. Genuine legal, technical or practical constraints are separate evidence and must be assessed on their merits.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "attack_conflation",
+      "title": "Attack conflation",
+      "category": "Argumentation",
+      "kind": "technique",
+      "source": "techniques.json",
+      "definition": "Attack conflation is a shift in what a criticism is taken to target. A remark about presentation (such as a spelling mistake) is used or understood as a judgement on the argument, then on the speaker's intelligence or character, and sometimes on anyone who shares the speaker's view. The shift can come from a critic treating an error as proof that the claim or its author is worthless, or from a respondent interpreting a narrow correction as a broader personal or group attack. The broader conclusion must be distinguished from what was actually criticised. This is a descriptive label for an observable change in meaning, not an established psychological diagnosis or evidence of deliberate intent.",
+      "required": [
+        "rebuttal_as_wider_attack"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "rebuttal_as_wider_attack",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": true,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "restoring_agency",
+      "title": "Restoring agency",
+      "category": "Autonomy",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The wording explicitly leaves the decision with the person affected.",
+      "required": [
+        "free_choice"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "free_choice",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers freely offered choices.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "welcoming_disagreement",
+      "title": "Welcoming disagreement",
+      "category": "Open discussion",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The speaker invites objections and engages with their substance without ridicule or penalty.",
+      "required": [
+        "disagreement_welcome"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "disagreement_welcome",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "separating_observation_from_interpretation",
+      "title": "Separating observation from interpretation",
+      "category": "Clarity and evidence",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The account labels observations, inferences and unanswered questions separately.",
+      "required": [
+        "distinguishes_inference"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "distinguishes_inference",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "acknowledging_uncertainty",
+      "title": "Acknowledging uncertainty",
+      "category": "Intellectual honesty",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The speaker identifies what they do not know and calibrates confidence to the available information.",
+      "required": [
+        "acknowledged_uncertainty"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "acknowledged_uncertainty",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "respecting_boundaries",
+      "title": "Respecting boundaries",
+      "category": "Consent and boundaries",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "After a boundary is stated, the speaker changes course or ends that line of discussion.",
+      "required": [
+        "plain_boundary_respect"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "plain_boundary_respect",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers explicit acceptance of a stated boundary.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "proportionate_response",
+      "title": "Proportionate response",
+      "category": "Perspective",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The language avoids inflating a minor problem and proposes a response appropriate to its likely impact.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "encouraging_independent_thought",
+      "title": "Encouraging independent thought",
+      "category": "Autonomy",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The speaker offers reasons or information while explicitly allowing independent assessment.",
+      "required": [
+        "independent_check"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "independent_check",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers invitations to verify evidence.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "validating_emotional_experience",
+      "title": "Validating emotional experience",
+      "category": "Emotional understanding",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The response acknowledges the feeling and its impact without asserting an unverified explanation.",
+      "required": [
+        "validating_feeling"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "validating_feeling",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "transparent_reasoning",
+      "title": "Transparent reasoning",
+      "category": "Clarity and evidence",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The speaker explains the evidence, assumptions and steps leading to their conclusion.",
+      "required": [
+        "reason_supports"
+      ],
+      "supporting": [
+        "reason_given"
+      ],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "reason_supports",
+          "version": 1,
+          "strategy": "model"
+        },
+        {
+          "id": "reason_given",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers a reason that supports a stated conclusion.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "supporting_informed_choice",
+      "title": "Supporting informed choice",
+      "category": "Autonomy",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The communication presents meaningful alternatives and material trade-offs without hiding inconvenient information.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "taking_responsibility",
+      "title": "Taking responsibility",
+      "category": "Accountability",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The speaker identifies what they did, recognises the impact and states a practical corrective step.",
+      "required": [
+        "ownership_of_harm"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "ownership_of_harm",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "respecting_attention",
+      "title": "Respecting attention",
+      "category": "Boundaries and attention",
+      "kind": "positive",
+      "source": "positive-patterns.json",
+      "definition": "The speaker makes the request clear, gives a reasonable timeframe and accepts that the person may respond later or decline.",
+      "required": [
+        "offered_attention_exit"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "offered_attention_exit",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers an explicit option to disengage.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": true
+      }
+    },
+    {
+      "id": "contradictory_claims",
+      "title": "Contradictory claims",
+      "category": "Inconsistency",
+      "kind": "inconsistency",
+      "source": "inconsistency-patterns.json",
+      "definition": "An argument is internally inconsistent when it asserts incompatible things under the same relevant conditions. Before identifying a contradiction, check that the claims concern the same subject and period and are made by the same source, rather than merely reporting that different people disagree.",
+      "required": [
+        "contradiction"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "contradiction",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Checks relationships within a paragraph.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "unsupported_conclusion",
+      "title": "Insufficient evidence for a conclusion",
+      "category": "Inconsistency",
+      "kind": "inconsistency",
+      "source": "inconsistency-patterns.json",
+      "definition": "A conclusion can be plausible or even true without being sufficiently supported by the evidence provided in the passage. The issue is the gap in the argument, not proof that the conclusion is false. The reader should be able to identify the premises and ask whether they justify the conclusion at the strength claimed.",
+      "required": [
+        "reason_fails"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "reason_fails",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers an offered but insufficient reason.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "supported_conclusion",
+      "title": "Conclusion supported by the premises",
+      "category": "Consistent reasoning",
+      "kind": "inconsistency",
+      "source": "inconsistency-patterns.json",
+      "definition": "The reasoning is consistent when its conclusion follows from the premises, or when the available evidence reasonably supports a qualified conclusion. This is a positive assessment of the argument's structure, not a guarantee that the premises are true or that no relevant evidence is missing.",
+      "required": [
+        "reason_supports"
+      ],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "reason_supports",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": null,
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": false
+      }
+    },
+    {
+      "id": "choice_with_coercion",
+      "title": "Freedom of choice followed by pressure",
+      "category": "concealed",
+      "kind": "concealed",
+      "source": "extension/src/concealed-patterns.json",
+      "definition": "Language that offers free choice is immediately undercut by a demand, penalty or threat tied to that choice.",
+      "required": [
+        "choice_with_linked_penalty"
+      ],
+      "supporting": [
+        "choice",
+        "conditional_penalty"
+      ],
+      "incompatible": [],
+      "questions": [
+        {
+          "id": "choice_with_linked_penalty",
+          "version": 1,
+          "strategy": "model"
+        },
+        {
+          "id": "choice",
+          "version": 1,
+          "strategy": "model"
+        },
+        {
+          "id": "conditional_penalty",
+          "version": 1,
+          "strategy": "model"
+        }
+      ],
+      "context": "paragraph",
+      "status": "implemented",
+      "gap": "Covers a penalty tied to declining the stated choice.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": false,
+        "positiveIds": [
+          "restoring_agency",
+          "respecting_attention",
+          "supporting_informed_choice"
+        ],
+        "negativeIds": [
+          "false_dilemma",
+          "appeal_to_fear",
+          "appeal_to_emotion"
+        ]
+      }
+    },
+    {
+      "id": "respect_with_penalty",
+      "title": "Respect for disagreement followed by punishment",
+      "category": "concealed",
+      "kind": "concealed",
+      "source": "extension/src/concealed-patterns.json",
+      "definition": "An invitation to disagree is immediately reversed by a rule or consequence punishing disagreement.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": false,
+        "positiveIds": [
+          "welcoming_disagreement",
+          "respecting_boundaries"
+        ],
+        "negativeIds": [
+          "false_dilemma",
+          "appeal_to_fear",
+          "ad_hominem"
+        ]
+      }
+    },
+    {
+      "id": "empathy_with_guilt",
+      "title": "Empathy followed by guilt or conditional approval",
+      "category": "concealed",
+      "kind": "concealed",
+      "source": "extension/src/concealed-patterns.json",
+      "definition": "Acknowledging someone's feelings is immediately followed by guilt or a demand presented as a test of loyalty or care.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": false,
+        "positiveIds": [
+          "validating_emotional_experience",
+          "taking_responsibility"
+        ],
+        "negativeIds": [
+          "appeal_to_emotion",
+          "appeal_to_fear"
+        ]
+      }
+    },
+    {
+      "id": "independence_with_control",
+      "title": "Independent thinking followed by enforced agreement",
+      "category": "concealed",
+      "kind": "concealed",
+      "source": "extension/src/concealed-patterns.json",
+      "definition": "An invitation to make up your own mind is followed by a demand that the reader accept the speaker's view.",
+      "required": [],
+      "supporting": [],
+      "incompatible": [],
+      "questions": [],
+      "context": null,
+      "status": "inventoried",
+      "gap": "Predicate and context mapping pending.",
+      "existing": {
+        "extensionCopy": null,
+        "changedCopyFields": [],
+        "regex": false,
+        "positiveIds": [
+          "encouraging_independent_thought",
+          "transparent_reasoning"
+        ],
+        "negativeIds": [
+          "appeal_to_authority",
+          "false_dilemma",
+          "bandwagon"
+        ]
+      }
+    }
+  ],
+  "runtimeOnly": [
+    {
+      "id": "argument_inconsistency",
+      "source": "extension/src/consistency.mjs",
+      "kind": "legacy_runtime_alias",
+      "canonical": "contradictory_claims",
+      "context": "article",
+      "status": "inventoried"
+    },
+    {
+      "id": "orthographic_attention_hook",
+      "source": "extension/src/text-preprocessing.mjs",
+      "kind": "preprocessing_diagnostic",
+      "context": "sentence",
+      "status": "implemented"
+    },
+    {
+      "id": "nonstandard_vocabulary",
+      "source": "extension/src/matcher-worker.js",
+      "kind": "preprocessing_diagnostic",
+      "context": "clause",
+      "status": "implemented"
+    }
+  ]
+}

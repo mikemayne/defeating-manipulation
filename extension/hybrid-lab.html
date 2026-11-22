@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Hybrid detector experiment</title>
+<h1>Hybrid detector experiment</h1>
+<form>
+ <p><label for="passage">Passage</label></p>
+ <textarea id="passage" rows="8" cols="68" maxlength="4800" required></textarea>
+ <p><label><input id="ollama" type="checkbox"> Ask local Ollama (Qwen 3.6 27B)</label></p>
+ <p><label><input id="complete" type="checkbox"> Run complete question bank</label></p>
+ <button id="run">Analyse</button>
+ <button id="cancel" type="button" disabled>Cancel</button>
+</form>
+<p id="status" role="status"></p>
+<ul id="findings"></ul>
+<details><summary>Evidence and question trace</summary><pre id="trace"></pre></details>
+<script type="module" src="./src/hybrid-lab.mjs"></script>
+</html>

@@ -1,0 +1,70 @@
+const semantic = (id, predicate, example, counterexample, cues = []) => ({
+ id, version: 1, predicate, scope: "paragraph", target: "relationship within the supplied passage",
+ prerequisites: [], states: ["yes", "no", "unknown", "not_applicable"],
+ strategy: "model", examples: { yes: example, no: counterexample }, cues
+});
+
+const literal = (id, expression, example, counterexample) => ({
+ id, version: 1, predicate: "Does this exact wording family occur?",
+ scope: "paragraph", target: "wording", prerequisites: [],
+ states: ["yes", "no", "unknown", "not_applicable"], strategy: "regex",
+ expression, examples: { yes: example, no: counterexample }
+});
+
+export const questions = [
+ {
+  id: "verbatim_repeated_sentence", version: 1,
+  predicate: "Does a sentence of at least four words repeat verbatim within this paragraph?",
+  scope: "paragraph", target: "two sentence positions", prerequisites: [],
+  states: ["yes", "no", "unknown", "not_applicable"], strategy: "javascript",
+  examples: { yes: "We can do this together. We can do this together.",
+   no: "We can do this together. It will take a week." }
+ },
+ literal("first_person", /\b(?:i|me|my|we|us|our)\b/gi, "We saw it.", "They saw it."),
+ literal("second_person", /\b(?:you|your|yours)\b/gi, "Are you ready?", "Is Sam ready?"),
+ literal("third_person", /\b(?:he|she|they|him|her|them|their|his)\b/gi, "They left.", "We left."),
+ literal("indefinite_person", /\b(?:someone|somebody|anyone|anybody|nobody|no one)\b/gi, "Someone called.", "Alex called."),
+ literal("missing_knowledge", /\b(?:no idea|no clue|don'?t know|doesn'?t know|haven't got a clue)\b/gi, "I've no clue.", "I know."),
+ literal("future_wording", /\b(?:will|gonna|going to|what's coming|won't)\b/gi, "See what's coming.", "It happened."),
+ literal("conditional_wording", /\b(?:if|unless|otherwise)\b/gi, "If it rains, stay in.", "I wonder whether it rained."),
+ literal("obligation_wording", /\b(?:must|have to|need to|should)\b/gi, "You must go.", "You could go."),
+ literal("urgency_wording", /\b(?:right now|immediately|last chance|by tonight|hurry)\b/gi, "Call right now.", "Call sometime."),
+ literal("reason_wording", /\b(?:because|therefore|since|so that)\b/gi, "Go because it's late.", "Go now."),
+ literal("uncertainty_wording", /\b(?:possibly|maybe|might|not sure|don't know)\b/gi, "Maybe later.", "Definitely later."),
+ semantic("addressee_lacks_knowledge", "Does the passage attribute a specific lack of knowledge to the person being addressed?", "You haven't got a clue what's next.", "I have no idea when you arrive.", ["missing_knowledge", "second_person"]),
+ semantic("unspecified_future_event", "Does the passage refer to a future event whose nature it leaves unspecified?", "Just wait till you see what happens.", "You don't know when the bus will arrive.", ["future_wording"]),
+ semantic("unfavourable_future", "Does the speaker explicitly or implicitly present a future outcome as bad for the person being addressed? A report of someone else's warning does not count as the speaker's own warning.", "You'll regret messing with me.", "You'll be pleased with what's coming.", ["future_wording", "second_person"]),
+ semantic("conditional_penalty", "Does the speaker make an adverse consequence for the addressee depend on refusing a request or instruction?", "Sign it or I'll dock your pay.", "If it rains, I'll close the windows.", ["conditional_wording", "obligation_wording"]),
+ semantic("choice", "Does the speaker explicitly offer the addressee a choice or permission to decline?", "It's up to you whether to come.", "You have to come."),
+ semantic("free_choice", "Does the speaker offer the addressee a choice without disparaging or penalizing one option in this passage?", "Come if you like. Either way is fine.", "It's your call, but I'll never forgive you if you go."),
+ semantic("disagreement_welcome", "Does the speaker invite the addressee to disagree or question the speaker's position?", "Tell me where you think I'm wrong.", "Tell me why you agree."),
+ semantic("acknowledged_uncertainty", "Does the speaker acknowledge a limit on their own certainty about a claim they are making?", "I think it's broken, but I might be wrong.", "You might be wrong about it.", ["uncertainty_wording"]),
+ semantic("independent_check", "Does the speaker encourage the addressee to check the evidence independently?", "Look up the figures yourself before deciding.", "Just take my word for it."),
+ semantic("reason_given", "Does the passage present one claim as a reason for accepting a distinct conclusion?", "It's cold outside, so take a coat.", "It's cold outside. The door is blue.", ["reason_wording"]),
+ semantic("reason_supports", "Does the passage supply a reason that genuinely supports a stated conclusion, using only information in the passage?", "All tickets expired yesterday, so mine is invalid today.", "My ticket is pink, so it has expired.", ["reason_wording"]),
+ semantic("reason_fails", "Does the passage supply a purported reason that fails to support the particular conclusion it is offered for?", "My ticket is pink, so it has expired.", "All tickets expired yesterday, so mine is invalid today.", ["reason_wording"]),
+ semantic("contradiction", "Does the passage assert incompatible things about the same subject, time and circumstances, without marking one as a correction or an opposing speaker's view?", "The shop was open at noon. The shop was closed at noon.", "It was open at noon and closed by three."),
+ semantic("personal_attack_as_rebuttal", "Does the speaker use an attack on a person to dismiss that person's argument?", "Ignore Lee's plan. Lee's an idiot.", "Lee's plan costs twice the budget."),
+ semantic("popularity_as_reason", "Does the speaker use a claim about popularity as a reason to adopt a belief or course of action?", "Everyone's buying one, so you should too.", "Everyone bought one last year."),
+ semantic("two_options_as_exhaustive", "Does the speaker insist there are only two options for a choice in which the passage itself supports a plausible third option?", "We can repair it ourselves, but the boss says we either buy a new one or go without.", "You can accept or decline this invitation."),
+ semantic("causal_from_sequence", "Does the speaker infer causation from temporal order alone?", "It crashed right after Jo called, so Jo's call caused it.", "It crashed after Jo called. We don't know why."),
+ semantic("absence_as_proof", "Does the speaker use the absence of contrary evidence as sufficient proof of their claim?", "Nobody proved it doesn't work, so it definitely works.", "Nobody has checked whether it works."),
+ semantic("authority_as_reason", "Does the speaker cite a person's credentials or position as a reason for accepting a claim?", "A professor said it, so it must be true.", "A professor asked where the station was."),
+ semantic("limited_sample_to_group", "Does the speaker generalize from a very small sample described in the passage to a broader population? A description limited to the sample does not qualify.", "Two drivers cut me off. Drivers here are all selfish.", "Two drivers cut me off today."),
+ semantic("reason_restates_conclusion", "Does a purported reason merely restate the conclusion it is offered to support?", "It's illegal because it's against the law.", "It's illegal because the new rule prohibits smoking inside."),
+ semantic("choice_with_linked_penalty", "Does the speaker offer someone a choice but also penalize that same person's refusal of the offered option?", "It's your decision, but say no and I'll dock your pay.", "You choose dinner. If Sam skips work, he'll lose pay."),
+ semantic("criticism_redirected_to_other_wrong", "Does the reply invoke a different alleged wrong to divert a criticism it leaves unanswered?", "Why did you break the window? Well, Sarah broke one last week!", "Sarah broke a window last week too. I'll pay for the one I broke."),
+ semantic("critic_inconsistency_as_rebuttal", "Does a reply use the critic's inconsistent conduct to dismiss the criticism itself?", "You do it too, so your criticism is rubbish.", "I agree I should stop. You should stop too."),
+ semantic("firsthand_as_prerequisite", "Does the speaker reject all other evidence on the ground that the addressee did not personally witness the event?", "You weren't there, so the footage and witness statements count for nothing.", "Were you there yourself or did someone tell you?"),
+ semantic("story_used_as_general_proof", "Does the speaker offer a specific personal experience recounted as a story as sufficient proof of a general factual claim? A popularity claim or a recommendation on its own does not qualify.", "My uncle smoked and lived to ninety, so smoking is safe.", "My uncle smoked and lived to ninety. That's one person's experience."),
+ semantic("claim_chain_missing_links", "Does the speaker present a chain of escalating consequences as inevitable without explaining how the steps lead to each other?", "Miss one class and you'll fail school, lose your job and end up homeless.", "If you miss the test, you lose its ten marks under the school rules."),
+ semantic("guilt_as_leverage", "Does the speaker use blame for another person's suffering to pressure the addressee into an action?", "If you cared that Grandma was lonely, you'd cancel your trip.", "Grandma is lonely. Could we arrange a call with her?"),
+ semantic("ownership_of_harm", "Does the speaker acknowledge their own role in causing a specific harm or problem without transferring responsibility to the affected person?", "I left you waiting. That was my fault.", "It's your fault I made you wait."),
+ semantic("validating_feeling", "Does the speaker acknowledge another person's expressed feeling as understandable without claiming it proves what happened?", "It makes sense that you felt left out.", "Feeling left out proves they did it deliberately."),
+ semantic("distinguishes_inference", "Does the speaker distinguish something they observed from their own interpretation of it?", "She left early. I took that to mean she was upset, but I don't know.", "She left early because she hates us."),
+ semantic("plain_boundary_respect", "Does the speaker explicitly accept a boundary that another person has set?", "You said you need space. I'll stop calling.", "You said you need space, but I'm coming over anyway."),
+ semantic("offered_attention_exit", "Does the speaker give the addressee permission to stop reading or disengage without a penalty?", "Skip the rest if you've got what you needed.", "If you stop reading here, you're part of the problem."),
+ semantic("rebuttal_as_wider_attack", "Does the speaker portray criticism of a specific claim or error as an attack on the entire argument, its author, or everyone who agrees?", "You corrected one figure, so clearly you're attacking everyone who believes this.", "That figure is wrong, but the rest of your argument may stand."),
+ semantic("freedom_to_speak_redirect", "Does the speaker respond to a challenge about whether a claim is sound by treating it as a challenge to their right to say the claim?", "You said my maths was wrong. So I'm not allowed to speak now?", "You said my maths was wrong. Let's check it."),
+ semantic("disproportionate_reward_offer", "Does the speaker promise an unusually large reward for a small payment, simple action or personal information without a credible basis in the passage?", "Send a pound now and you'll get a guaranteed thousand tomorrow.", "A pound buys one raffle ticket for a possible prize.")
+];

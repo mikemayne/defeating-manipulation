@@ -7,6 +7,18 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = "127.0.0.1", port = 4173;
 const allowed = new Set([
  "/extension/benchmark.html",
+ "/extension/hybrid-lab.html",
+ "/extension/src/hybrid-lab.mjs",
+ "/extension/src/hybrid-lab-worker.mjs",
+ "/extension/src/hybrid-detector.mjs",
+ "/extension/src/hybrid-questions.mjs",
+ "/extension/src/hybrid-mappings.mjs",
+ "/extension/src/hybrid-ollama.mjs",
+ "/extension/src/text-preprocessing.mjs",
+ "/extension/src/text-windows.mjs",
+ "/extension/src/spelling-bait.mjs",
+ "/extension/src/nonstandard-vocabulary.mjs",
+ "/extension/src/nonstandard-vocabulary.json",
  "/extension/real-data.html",
  "/extension/src/real-data-ui.mjs",
  "/evaluation/real-corpus.mjs",
