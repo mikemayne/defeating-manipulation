@@ -24,7 +24,7 @@ The catalogue is maintained in machine-readable form in `techniques.json`. Each 
 
 An AI system can use these definitions to compare text with recognised patterns, quote the relevant passage and explain why it matched. A match is an analytical indication, not a verdict about an entire article or its author.
 
-A planned browser extension will perform analysis locally in the reader's browser. The long-term aim is to avoid API keys, paid inference services and sending article text to a central server.
+The Firefox extension was an experiment in analysing articles locally in the browser. I haven't been able to get it working within the limits of my current hardware, and I'd be delighted if someone else could get it working.
 
 ## Principles
 
@@ -43,7 +43,7 @@ A planned browser extension will perform analysis locally in the reader's browse
 - `references.json` — bibliography and source metadata.
 - `docs/` — design and implementation notes.
 - [Potential analyser signals](docs/potential-signals.md) — research ideas and pilot results.
-- `extension/` — browser-extension planning and prototype.
+- `extension/` — experimental browser-extension prototype.
 - `analysis-schema.json` — structured format for analysis findings.
 - `evaluation/` — test examples and evaluation guidance.
 - `scripts/` — site generation and validation.
