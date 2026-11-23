@@ -65,6 +65,22 @@
       "year": "n.d.",
       "url": "https://dictionary.apa.org/distinctiveness-effect",
       "notes": "Defines the distinctiveness or von Restorff effect: isolated items can be better remembered. Does not establish that arbitrary misspellings cause persuasion."
+    },
+    {
+      "id": "kunda1990",
+      "title": "The Case for Motivated Reasoning",
+      "authors": "Ziva Kunda",
+      "year": 1990,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2270237/",
+      "notes": "Review of how goals can influence which beliefs and evidence people retrieve, construct and evaluate."
+    },
+    {
+      "id": "cohen2003",
+      "title": "Party Over Policy: The Dominating Impact of Group Influence on Political Beliefs",
+      "authors": "Geoffrey L. Cohen",
+      "year": 2003,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14599246/",
+      "notes": "Experiments on how a reference group's stated policy stance can influence how people evaluate a proposal."
     }
   ]
 }
