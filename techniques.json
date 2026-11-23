@@ -1283,6 +1283,110 @@
       ],
       "reader_effect": "Can turn a small correction into a dispute about credibility, self-worth or group loyalty. People who identify with the speaker or position may feel personally targeted and defend the person or group instead of assessing the claim. This escalation can occur without deliberate manipulation and is not inevitable. The relevant check is whether the original criticism actually justified each broader interpretation.",
       "references": []
+    },
+    {
+      "id": "identity_validation",
+      "title": "Identity Validation",
+      "category": "Social influence",
+      "summary": "Making agreement with a claim a sign of intelligence, virtue, status or belonging.",
+      "tags": [
+        "self-image",
+        "belonging",
+        "flattery"
+      ],
+      "status": "starter",
+      "definition": "The wording offers a favourable description of the people who accept a claim. Acknowledging a reader’s experience or sharing a value is ordinary communication when agreement with the claim is left open.",
+      "observable_features": [
+        "Supporters are called thoughtful, decent or perceptive specifically because they agree.",
+        "Agreement is presented as a way to show that you belong or live up to a valued trait."
+      ],
+      "example": "People who really care about the library support extending its weekend hours.",
+      "examples": [
+        "People who really care about the library support extending its weekend hours.",
+        "If you’re the kind of person who thinks ahead, you’ll back the new booking system."
+      ],
+      "reader_effect": "Agreement can affirm a valued self-image. That reward may make supporting reasons feel more convincing or make counterevidence easier to discount.",
+      "references": [
+        "kunda1990"
+      ]
+    },
+    {
+      "id": "identity_derogation",
+      "title": "Identity Derogation",
+      "category": "Social influence",
+      "summary": "Using someone’s position as grounds to demean their intelligence, character or social standing.",
+      "tags": [
+        "identity threat",
+        "ridicule",
+        "personal attack"
+      ],
+      "status": "starter",
+      "definition": "The wording casts people as inferior for holding a view. A specific objection, such as pointing out that a timetable leaves a route unserved, can be forceful while still addressing the proposal.",
+      "observable_features": [
+        "A disparaging label is applied to people on the basis of what they believe.",
+        "A mistake or disagreement is presented as evidence of a general defect in the people who hold the view."
+      ],
+      "example": "Only a fool would prefer the old timetable.",
+      "examples": [
+        "Only a fool would prefer the old timetable.",
+        "Anyone who questions the new booking system is too lazy to learn it."
+      ],
+      "reader_effect": "The personal judgement can make disagreement feel costly. A reader may stay quiet to avoid ridicule or defend their self-image by pushing back against the criticism.",
+      "references": [
+        "kunda1990"
+      ]
+    },
+    {
+      "id": "identity_polarisation",
+      "title": "Identity Polarisation",
+      "category": "Social influence",
+      "summary": "Framing opposing positions as rival social identities and treating agreement as a test of loyalty.",
+      "tags": [
+        "group loyalty",
+        "in-group",
+        "out-group"
+      ],
+      "status": "starter",
+      "definition": "The wording sorts people into opposing camps and treats a stance as evidence of where they belong. Describing genuine differences between groups is ordinary reporting when people can still weigh the issue and hold mixed views.",
+      "observable_features": [
+        "The positions are tied to opposing group labels such as ‘real members’ and ‘outsiders’.",
+        "Changing your view, expressing uncertainty or proposing a compromise is presented as disloyal."
+      ],
+      "example": "Real club members back the new venue. If you want to keep the old one, you’re siding with the outsiders.",
+      "examples": [
+        "Real club members back the new venue. If you want to keep the old one, you’re siding with the outsiders.",
+        "You’re either with the volunteers who want Saturday sessions or with the people who never support this club."
+      ],
+      "reader_effect": "When a position signals group membership, changing your mind can feel like risking belonging. Readers may give more weight to their group’s stance and less to the merits of a competing proposal.",
+      "references": [
+        "cohen2003"
+      ]
+    },
+    {
+      "id": "argument_displacement",
+      "title": "Argument Displacement",
+      "category": "Argumentation",
+      "summary": "Replacing examination of a claim or its evidence with a judgement about the people who hold it.",
+      "tags": [
+        "ad hominem",
+        "source credibility",
+        "evidence"
+      ],
+      "status": "starter",
+      "definition": "The wording uses praise or criticism of a person or group to settle a separate question. It overlaps with ad hominem when an attack substitutes for a rebuttal. Source credibility can matter when it bears directly on the evidence, such as whether a witness could see what happened.",
+      "observable_features": [
+        "A specific claim or reason is met with a judgement about its supporters, leaving the relevant point unanswered.",
+        "A character trait or supposed motive is offered as sufficient grounds to accept or dismiss the claim."
+      ],
+      "example": "‘The revised schedule adds two hours to each shift.’ ‘That came from the committee chair. She’s sensible, so there’s no need to check.’",
+      "examples": [
+        "‘The revised schedule adds two hours to each shift.’ ‘That came from the committee chair. She’s sensible, so there’s no need to check.’",
+        "‘The estimate leaves out delivery costs.’ ‘He always complains, so the estimate is fine.’"
+      ],
+      "reader_effect": "The character judgement supplies an easy answer to a different question. Attention can shift to defending or dismissing the speaker while the original claim remains untested.",
+      "references": [
+        "da2020"
+      ]
     }
   ]
 }
