@@ -1,3 +1,5 @@
+Historical research archive: the browser extension and its executable test infrastructure have been retired. Commands and paths in the notes below describe the former implementation and are no longer available on the current branch. The code remains accessible in Git history.
+
 # Evaluation fixtures
 
 Use the fictional cases in fixtures.json to test whether a model recognises relevant textual patterns without over-labelling ordinary writing. Include positive, negative and ambiguous examples. Measure precision and false positives, and test that every quotation is exact.

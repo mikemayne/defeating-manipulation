@@ -2,13 +2,7 @@ _site/
 .DS_Store
 *.log
 
-/extension/node_modules/
-/extension/ort/
-/extension/matcher-worker.js
-/extension/benchmark-worker.js
 
-/extension/spell-en-gb.aff
-/extension/spell-en-gb.dic
 
 # Local model scores and cross-validation diagnostics
 /evaluation/reader-join-fit.json
