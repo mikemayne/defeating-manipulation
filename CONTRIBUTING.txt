@@ -23,8 +23,7 @@ Original catalogue contributions are offered under CC0 1.0 Universal. Code is of
 
 ## Argument consistency pattern entries — paused
 
-The red category is temporarily absent from the public site and normal
-browser analysis. Its source catalogue and local research tools are retained.
+The red category is temporarily absent from the public site. Its source catalogue is retained for research.
 Research changes belong in `inconsistency-patterns.json`; the build validates
 these entries but does not publish red data, pages or discovery links.
 Describe observable relationships between premises, evidence and
