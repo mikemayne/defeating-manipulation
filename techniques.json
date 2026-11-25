@@ -1387,6 +1387,34 @@
       "references": [
         "da2020"
       ]
+    },
+    {
+      "id": "justification_by_transferred_agreement",
+      "title": "Justification by Transferred Agreement",
+      "category": "Argumentation",
+      "summary": "Reframing a challenge to an unanswered question as an unjustified interruption, then supplying an unrelated statement agreeable to the intended audience.",
+      "tags": [
+        "deflection",
+        "implied accusation",
+        "audience agreement",
+        "interviews"
+      ],
+      "status": "starter",
+      "definition": "When a questioner points out that a question has not been answered, the respondent objects with wording such as ‘If you'll let me finish’. The objection implies that the interruption was unjustified. The respondent then offers a statement that may appeal to the target audience without answering the original question or establishing that the interruption was unreasonable. Agreement with the new statement can transfer to the implied accusation. The statement need not appeal to everyone, be true, or be relevant to the question.",
+      "observable_features": [
+        "A direct question is followed by an answer that does not address it.",
+        "The questioner challenges the lack of an answer.",
+        "The respondent makes a procedural objection implying that the challenge is premature or unfair.",
+        "The subsequent statement appeals to an identifiable audience's values or priorities but does not establish that the objection was justified.",
+        "The original question remains unanswered after the respondent has had an opportunity to finish."
+      ],
+      "example": "Interviewer: ‘How much did the project cost?’ Respondent: ‘We have worked hard on this.’ Interviewer: ‘You haven't answered the question.’ Respondent: ‘If you'll let me finish, every child deserves a good education.’",
+      "examples": [
+        "Interviewer: ‘How much did the project cost?’ Respondent: ‘We have worked hard on this.’ Interviewer: ‘You haven't answered the question.’ Respondent: ‘If you'll let me finish, every child deserves a good education.’",
+        "Questioner: ‘Was the deadline missed?’ Respondent: ‘Our team is very committed.’ Questioner: ‘That doesn't answer my question.’ Respondent: ‘Let me finish. Hardworking staff deserve respect.’"
+      ],
+      "reader_effect": "An audience may confuse agreement with the subsequent statement with agreement that the interruption was unjustified. Neither agreement nor the statement's truth establishes that the questioner acted unfairly. To assess the exchange, separate the original question, the procedural objection and the new claim. A legitimate request to finish followed by a relevant answer is not the complete pattern. Analysis should identify these relationships rather than infer the respondent's intent or assume the audience actually agreed.",
+      "references": []
     }
   ]
 }
